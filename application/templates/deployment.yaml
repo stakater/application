@@ -1,0 +1,66 @@
+{{- if .Values.deployment }}
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  labels:
+{{ include "application.labels.stakater" . | indent 4 }}
+{{ include "application.labels.chart" . | indent 4 }}
+{{- if .Values.deployment.additionalLabels }}
+{{ toYaml .Values.deployment.additionalLabels | indent 4 }}
+{{- end }}
+{{- if .Values.deployment.annotations }}
+  annotations:
+{{ toYaml .Values.deployment.annotations | indent 4 }}
+{{- end }}
+  name: {{ template "application.name" . }}
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  template:
+    metadata:
+      labels:
+{{ toYaml .Values.deployment.podLabels | indent 8 }}
+    spec:
+      {{- if .Values.deployment.tolerations }}
+      tolerations:
+{{ toYaml .Values.deployment.tolerations | indent 8 -}}
+      {{- end }}
+      {{- if .Values.deployment.imagePullSecrets }}      
+      imagePullSecrets:
+      - name: {{ .Values.deployment.imagePullSecrets }}
+      {{- end }}
+      containers:
+      - name: {{ template "application.name" . }}
+        image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"    
+        imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+        {{- if .Values.deployment.env }}
+        env:
+{{ toYaml .Values.deployment.env | indent 10 }}
+        {{- end }}          
+        {{- with .Values.deployment.probes }}
+{{ toYaml . | indent 8 }}
+        {{- end }}
+        {{- if .Values.deployment.volumeMounts }}
+        volumeMounts:
+{{ toYaml .Values.deployment.volumeMounts | indent 10 }}
+        {{- end }}                
+        {{- with .Values.deployment.resources }}
+        resources:
+{{ toYaml . | indent 10 }}
+        {{- end }}
+        {{- if .Values.deployment.additionalContainers }}
+{{ toYaml .Values.deployment.additionalContainers | indent 8 }}
+        {{- end }}
+        {{- if .Values.deployment.securityContext }}
+      securityContext:      
+{{ toYaml .Values.deployment.securityContext | indent 8 }}
+          {{- end }}
+      {{- if .Values.deployment.volumes }}
+      volumes:
+{{ toYaml .Values.deployment.volumes | indent 8 }}
+        {{- end }}  
+      {{- if .Values.rbac.serviceAccount.name }}
+      serviceAccountName: {{ .Values.rbac.serviceAccount.name }}
+        {{- else }}
+      serviceAccountName: {{ template "application.name" . }}
+      {{- end }}
+{{- end }}        

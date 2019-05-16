@@ -1,6 +1,6 @@
 {{/* vim: set filetype=mustache: */}}
 {{/*
-Expand the name of the chart.
+Define the name of the chart/application.
 */}}
 {{- define "application.name" -}}
 {{- default .Chart.Name .Values.applicationName | trunc 63 | trimSuffix "-" -}}

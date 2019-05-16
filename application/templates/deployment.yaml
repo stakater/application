@@ -15,11 +15,27 @@ metadata:
   name: {{ template "application.name" . }}
 spec:
   replicas: {{ .Values.deployment.replicas }}
+  {{- if .Values.deployment.strategy }}
+  strategy:
+{{ toYaml .Values.deployment.strategy | indent 4 }}
+  {{- end }}
   template:
     metadata:
       labels:
+{{ include "application.labels.stakater" . | indent 8 }}
+{{ include "application.labels.chart" . | indent 8 }}
+{{- if .Values.deployment.podLabels }}
 {{ toYaml .Values.deployment.podLabels | indent 8 }}
+{{- end }}
     spec:
+      {{- if .Values.deployment.initContainers }}
+      initContainers:      
+{{ toYaml .Values.deployment.initContainers | indent 6 }}
+      {{- end }}
+      {{- if .Values.deployment.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.deployment.nodeSelector | indent 8 }}
+      {{- end }}
       {{- if .Values.deployment.tolerations }}
       tolerations:
 {{ toYaml .Values.deployment.tolerations | indent 8 -}}
@@ -48,7 +64,7 @@ spec:
 {{ toYaml . | indent 10 }}
         {{- end }}
         {{- if .Values.deployment.additionalContainers }}
-{{ toYaml .Values.deployment.additionalContainers | indent 8 }}
+{{ toYaml .Values.deployment.additionalContainers | indent 6 }}
         {{- end }}
         {{- if .Values.deployment.securityContext }}
       securityContext:      

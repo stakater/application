@@ -1,0 +1,208 @@
+applicationName: "application"
+
+# These labels will be added on all resources, and you can add additional labels from below on individual resource
+
+labels:
+  group: com.stakater.platform
+  provider: stakater
+  version: 1.0.0
+deployment:
+  # By default deploymentStrategy is set to rollingUpdate with maxSurge of 25% and maxUnavailable of 25% . you can change type to `Recreate` or can uncomment `rollingUpdate` specification and adjust them to your usage.
+  strategy: 
+    # rollingUpdate:
+    #   maxSurge: 25%
+    #   maxUnavailable: 25%
+    # type: RollingUpdate
+  
+  nodeSelector:
+    # cloud.google.com/gke-nodepool: default-pool  
+
+  initContainers: 
+  # - name: init-contaner
+  #   image: busybox
+  #   imagePullPolicy: IfNotPresent
+  #   command: ['/bin/sh']    
+
+  additionalLabels: 
+    # key: value
+  annotations:
+    reloader.stakater.com/auto: "true"
+  # Additional label added on pod which is used in Service's Label Selector
+  podLabels: 
+    app: application-name
+  replicas: 1
+  imagePullSecrets: ""
+  env: 
+  # - name: ENVIRONMENT
+  #   value: "dev"
+  
+  volumeMounts: 
+    # - mountPath: /path
+    #   name: volume-name
+  volumes: 
+    # - name: volume-name
+    #   emptyDir: {}
+    # - name: persistent-volume-name
+    #   persistentVolumeClaim:
+    #     claimName: claim-name
+
+  tolerations: 
+  
+  image:
+    repository: repository/image-name
+    tag: v1.0.0
+    pullPolicy: IfNotPresent
+  
+  probes: 
+    # readinessProbe:
+    #   failureThreshold: 3
+    #   periodSeconds: 10
+    #   successThreshold: 1
+    #   timeoutSeconds: 1
+    #   initialDelaySeconds: 10
+    #   httpGet:
+    #     path: /path
+    #     port: port
+    # livenessProbe:
+    #   failureThreshold: 3
+    #   periodSeconds: 10
+    #   successThreshold: 1
+    #   timeoutSeconds: 1
+    #   initialDelaySeconds: 10
+    #   httpGet:
+    #     path: /path
+    #     port: port
+  resources: 
+    # limits:
+    #   memory: "128Mi"
+    #   cpu: "0.5"
+    # requests:
+    #   memory: "64Mi"
+    #   cpu: "0.1"
+  
+  additionalContainers: 
+  # - name: sidecar-contaner
+  #   image: busybox
+  #   imagePullPolicy: IfNotPresent
+  #   command: ['/bin/sh']    
+
+  securityContext: 
+    #fsGroup: 2000  
+
+persistence:
+  enabled: false
+  accessMode: ReadWriteOnce
+  ## If defined, storageClass: <storageClass>
+  ## If set to "-", storageClass: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClass spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  # existingClaim:
+  additionalLabels: {}
+    # key: "value"
+  annotations:
+   "helm.sh/resource-policy": keep
+  # storageClass: "-"
+  storageSize: 8Gi
+
+service:
+  additionalLabels: 
+    expose: "true"
+  annotations: 
+    config.xposer.stakater.com/Domain: stakater.com
+    config.xposer.stakater.com/IngressNameTemplate: '{{.Service}}-{{.Namespace}}'
+    config.xposer.stakater.com/IngressURLPath: /
+    config.xposer.stakater.com/IngressURLTemplate: '{{.Service}}.{{.Namespace}}.{{.Domain}'
+    xposer.stakater.com/annotations: |-
+      kubernetes.io/ingress.class: external-ingress
+      ingress.kubernetes.io/rewrite-target: /
+      ingress.kubernetes.io/force-ssl-redirect: true
+  
+  ports:
+  - port: 8080
+    name: http
+    protocol: TCP
+    targetPort: 8080
+  # - port: 8081
+  #   name: http
+  #   protocol: TCP
+  #   targetPort: 8081
+
+ingress:
+  enabled: false
+  servicePort: 8080
+  hosts:
+    - chart-example.local
+  annotations: 
+    # kubernetes.io/ingress.class: external-ingress
+    # ingress.kubernetes.io/rewrite-target: /
+    # ingress.kubernetes.io/force-ssl-redirect: true
+  tls:
+    # Secrets must be manually created in the namespace.
+    # - secretName: chart-example-tls
+    #   hosts:
+    #     - chart-example.local
+
+rbac:
+  create: true
+  serviceAccount:
+    create: true
+    #name: "my-svc-account"
+    additionalLabels:
+      # key: value
+    annotations:
+      # key: value
+  roles: 
+  # - name: configmaps
+  #   rules:
+  #   - apiGroups:
+  #     - ""
+  #     resources:
+  #     - configmaps
+  #     verbs:
+  #     - get
+  # - name: secrets
+  #   rules:
+  #   - apiGroups:
+  #     - ""
+  #     resources:
+  #     - secrets
+  #     verbs:
+  #     - get
+  clusterroles:
+  # - name: configmaps
+  #   rules:
+  #   - apiGroups:
+  #     - ""
+  #     resources:
+  #     - configmaps
+  #     verbs:
+  #     - get
+  # - name: pods
+  #   rules:
+  #   - apiGroups:
+  #     - ""
+  #     resources:
+  #     - pods
+  #     verbs:
+  #     - get
+  #     - list
+  #     - watch
+
+configMap:
+  additionalLabels: 
+    # key: value
+  annotations: 
+    # key: value
+  data:
+    key1: value1
+    key2: value2
+secret: 
+  additionalLabels: 
+    # key: value
+  annotations: 
+    # key: value
+  data:
+    secretKey1: secretValue1
+    secretKey2: secretValue2

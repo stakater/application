@@ -1,0 +1,21 @@
+{{- if .Values.service }}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+{{ include "application.labels.stakater" . | indent 4 }}
+{{ include "application.labels.chart" . | indent 4 }}
+{{- if .Values.service.additionalLabels }}
+{{ toYaml .Values.service.additionalLabels | indent 4 }}
+{{- end }}
+{{- if .Values.service.annotations }}
+  annotations:
+{{ toYaml .Values.service.annotations | indent 4 }}
+{{- end }}
+  name: {{ template "application.name" . }}
+spec:
+  selector:
+{{ toYaml .Values.deployment.podLabels | indent 4 }}
+  ports:
+{{ toYaml .Values.service.ports | indent 4 }}
+{{- end }}

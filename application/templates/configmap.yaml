@@ -1,18 +1,25 @@
-{{- if and .Values.configMap .Values.configMap.data }}
+{{- if and .Values.configMap .Values.configMap.enabled }}
+{{- range .Values.configMap.files }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   labels:
-{{ include "application.labels.stakater" . | indent 4 }}
-{{ include "application.labels.chart" . | indent 4 }}
-{{- if .Values.configMap.additionalLabels }}
-{{ toYaml .Values.configMap.additionalLabels | indent 4 }}
+{{ include "application.labels.stakater" $ | indent 4 }}
+{{ include "application.labels.chart" $ | indent 4 }}
+{{- if $.Values.configMap.additionalLabels }}
+{{ toYaml $.Values.configMap.additionalLabels | indent 4 }}
 {{- end }}
-{{- if .Values.configMap.annotations }}
+{{- if $.Values.configMap.annotations }}
   annotations:
-{{ toYaml .Values.configMap.annotations | indent 4 }}
+{{ toYaml $.Values.configMap.annotations | indent 4 }}
 {{- end }}
-  name: {{ template "application.name" . }}
+  {{- if eq .nameSuffix ""  }}
+  name: {{ template "application.name" $ }}
+  {{- else }}
+  name: {{ template "application.name" $ }}-{{ .nameSuffix }}
+  {{- end }}
 data:
-{{ toYaml .Values.configMap.data | indent 2 }}
+{{ toYaml .data | indent 2 }}
+---
+{{- end }}
 {{- end }}

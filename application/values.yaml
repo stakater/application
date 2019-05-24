@@ -40,6 +40,12 @@ deployment:
     # - mountPath: /path
     #   name: volume-name
   volumes: 
+    - name: config-volume
+      configMap:        
+        name: configmap-name
+    - name: secret-volume
+      secret:        
+        secretName: secret-name
     # - name: volume-name
     #   emptyDir: {}
     # - name: persistent-volume-name
@@ -190,19 +196,33 @@ rbac:
   #     - list
   #     - watch
 
-configMap:
-  additionalLabels: 
-    # key: value
-  annotations: 
-    # key: value
-  data:
-    key1: value1
-    key2: value2
-secret: 
-  additionalLabels: 
-    # key: value
-  annotations: 
-    # key: value
-  data:
-    secretKey1: secretValue1
-    secretKey2: secretValue2
+configMap: {}
+  # enabled: true
+  # additionalLabels: 
+  #   # key: value
+  # annotations: 
+  #   # key: value
+  # files:
+  # - nameSuffix: code-config    
+  #   data:
+  #     key1: value1
+  #     key2: value2
+  # - nameSuffix: dev-config
+  #   data:
+  #     key1: value1
+  #     key2: value2
+secret: {} 
+  # enabled: true
+  # additionalLabels: 
+  #   # key: value
+  # annotations: 
+  #   # key: value
+  # files:    
+  # - nameSuffix: credentials
+  #   data:
+  #     secretKey1: secretValue1
+  #     secretKey2: secretValue2
+  # - nameSuffix: password
+  #   data:
+  #     secretKey1: secretValue1
+  #     secretKey2: secretValue2

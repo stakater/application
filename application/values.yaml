@@ -8,13 +8,13 @@ labels:
   version: 1.0.0
 deployment:
   # By default deploymentStrategy is set to rollingUpdate with maxSurge of 25% and maxUnavailable of 25% . you can change type to `Recreate` or can uncomment `rollingUpdate` specification and adjust them to your usage.
-  strategy: 
+  strategy: {}
     # rollingUpdate:
     #   maxSurge: 25%
     #   maxUnavailable: 25%
     # type: RollingUpdate
   
-  nodeSelector:
+  nodeSelector: {}
     # cloud.google.com/gke-nodepool: default-pool  
 
   initContainers: 
@@ -36,30 +36,35 @@ deployment:
   # - name: ENVIRONMENT
   #   value: "dev"
   
-  volumeMounts: 
+  volumeMounts: []
     # - mountPath: /path
     #   name: volume-name
-  volumes: 
-    - name: config-volume
-      configMap:        
-        name: configmap-name
-    - name: secret-volume
-      secret:        
-        secretName: secret-name
+  volumes: []
+    # - name: config-volume
+    #   configMap:        
+    #     name: configmap-name
+    # - name: secret-volume
+    #   secret:        
+    #     secretName: secret-name
     # - name: volume-name
     #   emptyDir: {}
     # - name: persistent-volume-name
     #   persistentVolumeClaim:
     #     claimName: claim-name
 
-  tolerations: 
-  
+  tolerations: []
+    # - key: "dedicated"
+    #   operator: "Equal"
+    #   value: "app"
+    #   effect: "NoSchedule" 
+
+
   image:
     repository: repository/image-name
     tag: v1.0.0
     pullPolicy: IfNotPresent
   
-  probes: 
+  probes: {}
     # readinessProbe:
     #   failureThreshold: 3
     #   periodSeconds: 10
@@ -107,29 +112,30 @@ persistence:
   # existingClaim:
   additionalLabels: {}
     # key: "value"
-  annotations:
-   "helm.sh/resource-policy": keep
+  annotations: {}
+  #  "helm.sh/resource-policy": keep
+  
   # storageClass: "-"
   storageSize: 8Gi
 
 service:
-  additionalLabels: 
-    expose: "true"
-  annotations: 
-    config.xposer.stakater.com/Domain: stakater.com
-    config.xposer.stakater.com/IngressNameTemplate: '{{.Service}}-{{.Namespace}}'
-    config.xposer.stakater.com/IngressURLPath: /
-    config.xposer.stakater.com/IngressURLTemplate: '{{.Service}}.{{.Namespace}}.{{.Domain}'
-    xposer.stakater.com/annotations: |-
-      kubernetes.io/ingress.class: external-ingress
-      ingress.kubernetes.io/rewrite-target: /
-      ingress.kubernetes.io/force-ssl-redirect: true
+  additionalLabels: {}
+    # expose: "true"
+  annotations: {}
+    # config.xposer.stakater.com/Domain: stakater.com
+    # config.xposer.stakater.com/IngressNameTemplate: '{{.Service}}-{{.Namespace}}'
+    # config.xposer.stakater.com/IngressURLPath: /
+    # config.xposer.stakater.com/IngressURLTemplate: '{{.Service}}.{{.Namespace}}.{{.Domain}'
+    # xposer.stakater.com/annotations: |-
+    #   kubernetes.io/ingress.class: external-ingress
+    #   ingress.kubernetes.io/rewrite-target: /
+    #   ingress.kubernetes.io/force-ssl-redirect: true
   
-  ports:
-  - port: 8080
-    name: http
-    protocol: TCP
-    targetPort: 8080
+  ports: []
+  # - port: 8080
+  #   name: http
+  #   protocol: TCP
+  #   targetPort: 8080
   # - port: 8081
   #   name: http
   #   protocol: TCP
@@ -151,9 +157,9 @@ ingress:
     #     - chart-example.local
 
 rbac:
-  create: true
+  create: false
   serviceAccount:
-    create: true
+    create: false
     #name: "my-svc-account"
     additionalLabels:
       # key: value
@@ -197,7 +203,7 @@ rbac:
   #     - watch
 
 configMap:
-  enabled: true
+  enabled: false
   additionalLabels: 
     # key: value
   annotations: 
@@ -212,7 +218,7 @@ configMap:
       key1: value1
       key2: value2
 secret: 
-  enabled: true
+  enabled: false
   additionalLabels: 
     # key: value
   annotations: 

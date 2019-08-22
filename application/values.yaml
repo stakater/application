@@ -59,10 +59,8 @@ deployment:
     #   effect: "NoSchedule" 
 
 
-  image:
-    repository: repository/image-name
-    tag: v1.0.0
-    pullPolicy: IfNotPresent
+  image: repository/image-name:v1.0.0
+  imagePullPolicy: IfNotPresent
   
   probes: {}
     # readinessProbe:

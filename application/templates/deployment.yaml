@@ -46,8 +46,8 @@ spec:
       {{- end }}
       containers:
       - name: {{ template "application.name" . }}
-        image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"    
-        imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+        image: "{{ .Values.deployment.image }}"    
+        imagePullPolicy: {{ .Values.deployment.imagePullPolicy }}
         {{- if .Values.deployment.env }}
         env:
 {{ toYaml .Values.deployment.env | indent 10 }}

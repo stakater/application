@@ -10,15 +10,33 @@ metadata:
 {{- end }}
 {{- if .Values.deployment.annotations }}
   annotations:
-{{- else if .Values.deployment.config }}
-  annotations:
+{{ toYaml .Values.deployment.annotations | indent 4 }}
 {{- end }}
-{{- with .Values.deployment }} 
-{{ toYaml .annotations | indent 4 }}
+  name: {{ template "application.name" . }}
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  {{- if .Values.deployment.strategy }}
+  strategy:
+{{ toYaml .Values.deployment.strategy | indent 4 }}
+  {{- end }}
+  template:
+    metadata:
+      labels:
+{{ include "application.labels.stakater" . | indent 8 }}
+{{ include "application.labels.chart" . | indent 8 }}
+{{- if .Values.deployment.podLabels }}
+{{ toYaml .Values.deployment.podLabels | indent 8 }}
 {{- end }}
-{{- with .Values.deployment.config }}
-{{- with .fluentd }}
-    fluentdConfiguration: >
+{{- if .Values.deployment.additionalPodAnnotations}}
+    annotations:
+{{- else if .Values.deployment.fluentdConfigAnnotations }}
+    annotations:
+{{- end }}
+{{- with .Values.deployment.additionalPodAnnotations }}
+{{ toYaml . | indent 6 }}
+{{- end }}
+{{- with .Values.deployment.fluentdConfigAnnotations }}
+      fluentdConfiguration: >
             [
               {
                 "containers":
@@ -41,23 +59,7 @@ metadata:
                 {{- end }}
               }
             ]
-{{- end }}
-{{- end }}
-  name: {{ template "application.name" . }}
-spec:
-  replicas: {{ .Values.deployment.replicas }}
-  {{- if .Values.deployment.strategy }}
-  strategy:
-{{ toYaml .Values.deployment.strategy | indent 4 }}
-  {{- end }}
-  template:
-    metadata:
-      labels:
-{{ include "application.labels.stakater" . | indent 8 }}
-{{ include "application.labels.chart" . | indent 8 }}
-{{- if .Values.deployment.podLabels }}
-{{ toYaml .Values.deployment.podLabels | indent 8 }}
-{{- end }}
+    {{- end }}
     spec:
       {{- if .Values.deployment.initContainers }}
       initContainers:      

@@ -62,6 +62,11 @@ deployment:
   image: repository/image-name:v1.0.0
   imagePullPolicy: IfNotPresent
   
+  # config:
+  #   fluentd:
+  #     regex: hello
+  #     timeFormat: world
+
   probes: {}
     # readinessProbe:
     #   failureThreshold: 3

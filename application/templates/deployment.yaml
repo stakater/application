@@ -10,7 +10,38 @@ metadata:
 {{- end }}
 {{- if .Values.deployment.annotations }}
   annotations:
-{{ toYaml .Values.deployment.annotations | indent 4 }}
+{{- else if .Values.deployment.config }}
+  annotations:
+{{- end }}
+{{- with .Values.deployment }} 
+{{ toYaml .annotations | indent 4 }}
+{{- end }}
+{{- with .Values.deployment.config }}
+{{- with .fluentd }}
+    fluentdConfiguration: >
+            [
+              {
+                "containers":
+                [
+                  {
+                    "expressionFirstLine": "{{ .regexFirstLine }}",
+                    "expression": "{{ .regex }}",
+                    "timeFormat": "{{ .timeFormat }}",
+                    "containerName": "spring-boot"
+                  }
+                ]{{- with .notifications }},
+                "notifications": {
+                  {{- with .slack }}
+                  "slack": {
+                    "webhookURL": "{{ .webhookURL }}",
+                    "channelName": "{{ .channelName }}"
+                  }
+                  {{- end }}
+                }
+                {{- end }}
+              }
+            ]
+{{- end }}
 {{- end }}
   name: {{ template "application.name" . }}
 spec:

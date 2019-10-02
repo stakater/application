@@ -27,6 +27,39 @@ spec:
 {{- if .Values.deployment.podLabels }}
 {{ toYaml .Values.deployment.podLabels | indent 8 }}
 {{- end }}
+{{- if .Values.deployment.additionalPodAnnotations}}
+    annotations:
+{{- else if .Values.deployment.fluentdConfigAnnotations }}
+    annotations:
+{{- end }}
+{{- with .Values.deployment.additionalPodAnnotations }}
+{{ toYaml . | indent 6 }}
+{{- end }}
+{{- with .Values.deployment.fluentdConfigAnnotations }}
+      fluentdConfiguration: >
+            [
+              {
+                "containers":
+                [
+                  {
+                    "expressionFirstLine": "{{ .regexFirstLine }}",
+                    "expression": "{{ .regex }}",
+                    "timeFormat": "{{ .timeFormat }}",
+                    "containerName": "spring-boot"
+                  }
+                ]{{- with .notifications }},
+                "notifications": {
+                  {{- with .slack }}
+                  "slack": {
+                    "webhookURL": "{{ .webhookURL }}",
+                    "channelName": "{{ .channelName }}"
+                  }
+                  {{- end }}
+                }
+                {{- end }}
+              }
+            ]
+    {{- end }}
     spec:
       {{- if .Values.deployment.initContainers }}
       initContainers:      

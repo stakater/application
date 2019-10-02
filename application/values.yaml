@@ -25,11 +25,18 @@ deployment:
 
   additionalLabels: 
     # key: value
-  annotations:
-    reloader.stakater.com/auto: "true"
   # Additional label added on pod which is used in Service's Label Selector
   podLabels: 
     app: application-name
+  annotations:
+    reloader.stakater.com/auto: "true"
+  # Additional Pod Annotations added on pod
+  additionalPodAnnotations:
+    #key: value
+  fluentdConfigAnnotations:
+    # fluentd:
+    #   regex: hello
+    #   timeFormat: world
   replicas: 1
   imagePullSecrets: ""
   env: 
@@ -61,7 +68,7 @@ deployment:
 
   image: repository/image-name:v1.0.0
   imagePullPolicy: IfNotPresent
-  
+
   probes: {}
     # readinessProbe:
     #   failureThreshold: 3

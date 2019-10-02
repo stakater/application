@@ -68,10 +68,6 @@ deployment:
 
   image: repository/image-name:v1.0.0
   imagePullPolicy: IfNotPresent
-  
-  fluentdConfigurations:
-    regex: hello
-    timeFormat: world
 
   probes: {}
     # readinessProbe:

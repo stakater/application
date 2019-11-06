@@ -161,6 +161,29 @@ ingress:
     #   hosts:
     #     - chart-example.local
 
+routes:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: external-ingress
+    # ingress.kubernetes.io/rewrite-target: /
+    # ingress.kubernetes.io/force-ssl-redirect: true
+  additionalLabels: {}
+  host: chart-example.local
+  port:
+    targetPort: docker
+  termination: edge
+  to:
+    kind: Service
+    name: example-service
+    weight: 100
+  tls:
+    caCertificate: |-
+      ca-certificate base64 string
+    certificate: |-
+      certificate base64 string
+    key: |-
+      key base64 string
+
 rbac:
   create: false
   serviceAccount:

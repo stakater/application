@@ -16,13 +16,13 @@ metadata:
 spec:
   host: {{ .Values.routes.host }}
   port:
-{{ toYaml .Values.routes.port | indent 4 -}}
+{{ toYaml .Values.routes.port | indent 4 }}
   termination: {{ .Values.routes.termination }}
   to:
     kind: {{ .Values.routes.to.kind }}
     name: {{ .Values.routes.to.name }}
     weight: {{ .Values.routes.to.weight }}
-{{- if .Values.routes.wildcardPolicy -}}
+{{- if .Values.routes.wildcardPolicy }}
   wildcardPolicy: {{ .Values.routes.wildcardPolicy }}
 {{- end -}}
   {{- if .Values.routes.tls }}

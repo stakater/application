@@ -28,12 +28,12 @@ spec:
 {{ toYaml .Values.deployment.podLabels | indent 8 }}
 {{- end }}
 {{- if .Values.deployment.additionalPodAnnotations}}
-    annotations:
+      annotations:
 {{- else if .Values.deployment.fluentdConfigAnnotations }}
-    annotations:
+      annotations:
 {{- end }}
 {{- with .Values.deployment.additionalPodAnnotations }}
-{{ toYaml . | indent 6 }}
+{{ toYaml . | indent 8 }}
 {{- end }}
 {{- with .Values.deployment.fluentdConfigAnnotations }}
       fluentdConfiguration: >

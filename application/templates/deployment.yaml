@@ -27,14 +27,13 @@ spec:
 {{- if .Values.deployment.podLabels }}
 {{ toYaml .Values.deployment.podLabels | indent 8 }}
 {{- end }}
-{{- if .Values.deployment.additionalPodAnnotations}}
-      annotations:
-{{- else if .Values.deployment.fluentdConfigAnnotations }}
+{{- if or .Values.deployment.additionalPodAnnotations .Values.deployment.fluentdConfigAnnotations }}
       annotations:
 {{- end }}
 {{- with .Values.deployment.additionalPodAnnotations }}
 {{ toYaml . | indent 8 }}
 {{- end }}
+{{- if .Values.deployment.fluentdConfigAnnotations }}
         fluentdConfiguration: >
           [
             {
@@ -58,6 +57,7 @@ spec:
               {{- end }}
             }
           ]
+{{- end }}
     spec:
       {{- if .Values.deployment.initContainers }}
       initContainers:      

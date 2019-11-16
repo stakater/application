@@ -27,39 +27,37 @@ spec:
 {{- if .Values.deployment.podLabels }}
 {{ toYaml .Values.deployment.podLabels | indent 8 }}
 {{- end }}
-{{- if .Values.deployment.additionalPodAnnotations}}
-      annotations:
-{{- else if .Values.deployment.fluentdConfigAnnotations }}
+{{- if or .Values.deployment.additionalPodAnnotations .Values.deployment.fluentdConfigAnnotations }}
       annotations:
 {{- end }}
 {{- with .Values.deployment.additionalPodAnnotations }}
 {{ toYaml . | indent 8 }}
 {{- end }}
-{{- with .Values.deployment.fluentdConfigAnnotations }}
-      fluentdConfiguration: >
-            [
-              {
-                "containers":
-                [
-                  {
-                    "expressionFirstLine": "{{ .regexFirstLine }}",
-                    "expression": "{{ .regex }}",
-                    "timeFormat": "{{ .timeFormat }}",
-                    "containerName": "spring-boot"
-                  }
-                ]{{- with .notifications }},
-                "notifications": {
-                  {{- with .slack }}
-                  "slack": {
-                    "webhookURL": "{{ .webhookURL }}",
-                    "channelName": "{{ .channelName }}"
-                  }
-                  {{- end }}
+{{- if .Values.deployment.fluentdConfigAnnotations }}
+        fluentdConfiguration: >
+          [
+            {
+              "containers":
+              [
+                {
+                  "expressionFirstLine": "{{ .Values.deployment.fluentdConfigAnnotations.regexFirstLine }}",
+                  "expression": "{{ .Values.deployment.fluentdConfigAnnotations.regex }}",
+                  "timeFormat": "{{ .Values.deployment.fluentdConfigAnnotations.timeFormat }}",
+                  "containerName": "{{ template "application.name" . }}"
+                }
+              ]{{- with .Values.deployment.fluentdConfigAnnotations.notifications }},
+              "notifications": {
+                {{- with .slack }}
+                "slack": {
+                  "webhookURL": "{{ .webhookURL }}",
+                  "channelName": "{{ .channelName }}"
                 }
                 {{- end }}
               }
-            ]
-    {{- end }}
+              {{- end }}
+            }
+          ]
+{{- end }}
     spec:
       {{- if .Values.deployment.initContainers }}
       initContainers:      

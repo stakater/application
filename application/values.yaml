@@ -31,6 +31,8 @@ deployment:
   annotations:
     reloader.stakater.com/auto: "true"
   # Additional Pod Annotations added on pod
+  additionalPodLabels:
+    # key: value
   additionalPodAnnotations:
     #key: value
   fluentdConfigAnnotations:

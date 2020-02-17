@@ -24,6 +24,9 @@ spec:
       labels:
 {{ include "application.labels.stakater" . | indent 8 }}
 {{ include "application.labels.chart" . | indent 8 }}
+{{- if .Values.deployment.additionalPodLabels }}
+{{ toYaml .Values.deployment.additionalPodLabels | indent 8 }}
+{{- end }}
 {{- if .Values.deployment.podLabels }}
 {{ toYaml .Values.deployment.podLabels | indent 8 }}
 {{- end }}

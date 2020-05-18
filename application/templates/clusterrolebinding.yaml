@@ -13,11 +13,11 @@ metadata:
   annotations:
 {{ toYaml $.Values.rbac.annotations | indent 4 }}
 {{- end }}
-  name: {{ template "application.name" $ }}-clusterrole-{{ .name }}
+  name: {{ template "application.name" $ }}-clusterrolebinding-{{ .name }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ template "application.name" $ }}-clusterrolebinding-{{ .name }}
+  name: {{ template "application.name" $ }}-clusterrole-{{ .name }}
 subjects:
   - kind: ServiceAccount
   {{- if $.Values.rbac.serviceAccount.name }}

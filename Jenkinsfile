@@ -1,5 +1,5 @@
 #!/usr/bin/groovy
-@Library('github.com/stakater/stakater-pipeline-library@v2.16.26')
+@Library('github.com/stakater/stakater-pipeline-library@charts-stakater-node')
 
 def dummy = ""
 

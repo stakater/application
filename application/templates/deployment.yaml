@@ -8,9 +8,14 @@ metadata:
 {{- if .Values.deployment.additionalLabels }}
 {{ toYaml .Values.deployment.additionalLabels | indent 4 }}
 {{- end }}
-{{- if .Values.deployment.annotations }}
+{{- if or .Values.deployment.annotations .Values.deployment.reloadOnChange }}
   annotations:
+{{- end }}
+{{- if .Values.deployment.annotations }}
 {{ toYaml .Values.deployment.annotations | indent 4 }}
+{{- end }}
+{{- if .Values.deployment.reloadOnChange }} 
+    reloader.stakater.com/auto: "true"
 {{- end }}
   name: {{ template "application.name" . }}
 spec:

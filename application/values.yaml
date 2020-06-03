@@ -14,6 +14,9 @@ deployment:
     #   maxUnavailable: 25%
     # type: RollingUpdate
   
+  # Reload deployment if config/secret changes
+  reloadOnChange: true
+
   nodeSelector: {}
     # cloud.google.com/gke-nodepool: default-pool  
 
@@ -28,8 +31,10 @@ deployment:
   # Additional label added on pod which is used in Service's Label Selector
   podLabels: 
     app: application-name
-  annotations:
-    reloader.stakater.com/auto: "true"
+
+  # Annotations on deployments
+  annotations: {}
+
   # Additional Pod Annotations added on pod
   additionalPodAnnotations:
     #key: value

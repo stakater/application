@@ -1,5 +1,5 @@
 {{- if .Values.deployment }}
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
@@ -20,7 +20,14 @@ metadata:
   name: {{ template "application.name" . }}
 spec:
   replicas: {{ .Values.deployment.replicas }}
-  {{- if .Values.deployment.strategy }}
+  selector:
+    matchLabels:
+{{ include "application.labels.stakater" . | indent 6 }}
+{{ include "application.labels.chart" . | indent 6 }}
+{{- if .Values.deployment.additionalLabels }}
+{{ toYaml .Values.deployment.additionalLabels | indent 6 }}
+{{- end }}
+{{- if .Values.deployment.strategy }}
   strategy:
 {{ toYaml .Values.deployment.strategy | indent 4 }}
   {{- end }}

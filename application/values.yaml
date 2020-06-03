@@ -1,33 +1,40 @@
+# Name of the application.
 applicationName: "application"
 
 # These labels will be added on all resources, and you can add additional labels from below on individual resource
-
 labels:
   group: com.stakater.platform
   provider: stakater
   version: 1.0.0
+
 deployment:
-  # By default deploymentStrategy is set to rollingUpdate with maxSurge of 25% and maxUnavailable of 25% . you can change type to `Recreate` or can uncomment `rollingUpdate` specification and adjust them to your usage.
-  strategy: {}
+
+  # By default deploymentStrategy is set to rollingUpdate with maxSurge of 25% and maxUnavailable of 25%
+  # You can change type to `Recreate` or can uncomment `rollingUpdate` specification and adjust them to your usage.
+  strategy:
+    type: RollingUpdate
     # rollingUpdate:
     #   maxSurge: 25%
     #   maxUnavailable: 25%
-    # type: RollingUpdate
   
-  # Reload deployment if config/secret changes
+  # Reload deployment if configMap/secret updates
   reloadOnChange: true
 
+  # Select nodes to deploy which matches the following labels  
   nodeSelector: {}
     # cloud.google.com/gke-nodepool: default-pool  
 
+  # Init container which runs before the app container
   initContainers: 
   # - name: init-contaner
   #   image: busybox
   #   imagePullPolicy: IfNotPresent
   #   command: ['/bin/sh']    
 
+  # Additional labels for Deployment
   additionalLabels: 
     # key: value
+  
   # Additional label added on pod which is used in Service's Label Selector
   podLabels: 
     app: application-name
@@ -35,22 +42,28 @@ deployment:
   # Annotations on deployments
   annotations: {}
 
-  # Additional Pod Annotations added on pod
+  # Additional Pod Annotations added on pod created by this Deployment
   additionalPodAnnotations:
     #key: value
+  
+  # Annotations for fluentd Configurations 
   fluentdConfigAnnotations:
     # fluentd:
     #   regex: hello
     #   timeFormat: world
-  replicas: 1
+
+  # Replicas to be created
+  replicas: 2
+
+  # Secrets used to pull image
   imagePullSecrets: ""
+
+  # Environment variables to be passed to the app container
   env: 
   # - name: ENVIRONMENT
   #   value: "dev"
   
-  volumeMounts: []
-    # - mountPath: /path
-    #   name: volume-name
+  # Volumes to be added to the pod
   volumes: []
     # - name: config-volume
     #   configMap:        
@@ -64,18 +77,25 @@ deployment:
     #   persistentVolumeClaim:
     #     claimName: claim-name
 
+  # Mount path for Volumes 
+  volumeMounts: []
+    # - mountPath: /path
+    #   name: volume-name
+
+  # Taint tolerations for nodes
   tolerations: []
     # - key: "dedicated"
     #   operator: "Equal"
     #   value: "app"
     #   effect: "NoSchedule" 
 
-
+  # Image of the app container
   image: 
     repository: repository/image-name
     tag: v1.0.0
     pullPolicy: IfNotPresent
 
+  # Readiness and Liveness probes
   probes: {}
     # readinessProbe:
     #   failureThreshold: 3
@@ -95,6 +115,8 @@ deployment:
     #   httpGet:
     #     path: /path
     #     port: port
+
+  # Resources to be defined for pod 
   resources: 
     # limits:
     #   memory: "128Mi"
@@ -103,15 +125,18 @@ deployment:
     #   memory: "64Mi"
     #   cpu: "0.1"
   
+  # Add additional containers besides init and app containers
   additionalContainers: 
   # - name: sidecar-contaner
   #   image: busybox
   #   imagePullPolicy: IfNotPresent
   #   command: ['/bin/sh']    
 
+  # Security Context for the pod
   securityContext: 
     #fsGroup: 2000  
 
+# Add Storage volumes to the pods
 persistence:
   enabled: false
   accessMode: ReadWriteOnce
@@ -130,6 +155,7 @@ persistence:
   # storageClass: "-"
   storageSize: 8Gi
 
+# Service object for pods
 service:
   additionalLabels: {}
     # expose: "true"
@@ -153,36 +179,58 @@ service:
   #   protocol: TCP
   #   targetPort: 8081
 
+# Ingress object for exposing services
 ingress:
   enabled: false
+  
+  # Port of the service that serves pods
   servicePort: 8080
+  
+  # List of host addresses to be exposed by this Ingress
   hosts:
     - chart-example.local
+  
+  # Add annotations to this Ingress
   annotations: 
     # kubernetes.io/ingress.class: external-ingress
     # ingress.kubernetes.io/rewrite-target: /
     # ingress.kubernetes.io/force-ssl-redirect: true
+
+  # TLS details for this Ingress
   tls:
     # Secrets must be manually created in the namespace.
     # - secretName: chart-example-tls
     #   hosts:
     #     - chart-example.local
 
+# Route object for exposing services (OpenShift only)
 routes:
   enabled: false
+
+  # Add annotations to this Route
   annotations: {}
     # kubernetes.io/ingress.class: external-ingress
     # ingress.kubernetes.io/rewrite-target: /
     # ingress.kubernetes.io/force-ssl-redirect: true
+  
+  # Additional labels for this Route
   additionalLabels: {}
+
+  # Host addresses to be exposed by this Route
   host: chart-example.local
+
+  # Port of the service that serves pods
   port:
     targetPort: docker
-  termination: edge
   to:
     kind: Service
-    name: example-service
-    weight: 100
+    name: example-service  # Service to route to
+    weight: 100            # A number between 0 and 255 that depicts relative weight compared with other targets.
+
+  # TLS Termination strategy
+  termination: edge
+
+  # TLS cert details
   tls:
     caCertificate: |-
       ca-certificate base64 string
@@ -191,15 +239,24 @@ routes:
     key: |-
       key base64 string
 
+# Role Based Access Control
 rbac:
   create: false
+
+  # Service Account to use by pods
   serviceAccount:
     create: false
     #name: "my-svc-account"
+
+    # Additional Labels on service account
     additionalLabels:
       # key: value
+    
+    # Annotations on service account 
     annotations:
       # key: value
+
+  # Create Roles (Namespaced)
   roles: 
   # - name: configmaps
   #   rules:
@@ -217,6 +274,8 @@ rbac:
   #     - secrets
   #     verbs:
   #     - get
+
+  # Create ClusterRoles (Clusterwide)
   clusterroles:
   # - name: configmaps
   #   rules:
@@ -236,6 +295,8 @@ rbac:
   #     - get
   #     - list
   #     - watch
+
+# Additional ConfigMaps  
 configMap: {}
   # enabled: true
   # additionalLabels: 
@@ -251,6 +312,8 @@ configMap: {}
   #   data:
   #     key1: value1
   #     key2: value2
+
+# Additional Secrets
 secret: {} 
   # enabled: true
   # additionalLabels: 

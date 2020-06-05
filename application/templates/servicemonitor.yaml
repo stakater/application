@@ -1,0 +1,29 @@
+{{- if .Values.serviceMonitor }}
+apiVersion: "monitoring.coreos.com/v1"
+kind: ServiceMonitor
+metadata:
+  name: {{ template "application.name" . }}-svc-monitor
+  labels:
+{{ include "application.labels.stakater" . | indent 4 }}
+{{ include "application.labels.chart" . | indent 4 }}
+{{- if .Values.serviceMonitor.additionalLabels }}
+{{ toYaml .Values.serviceMonitor.additionalLabels | indent 4 }}
+{{- end }}
+{{- if or .Values.serviceMonitor.annotations .Values.forecastle.enabled }}
+  annotations:
+{{- end }}
+{{- if or .Values.serviceMonitor.annotations }}
+{{ toYaml .Values.serviceMonitor.annotations | indent 4 }}
+{{- end }}
+spec:
+{{- $jobLabel := .Values.serviceMonitor.jobLabel }}
+  jobLabel: {{ $jobLabel }}
+  selector:
+    matchLabels:
+      {{ $jobLabel }}: {{ template "application.name" . }}
+  namespaceSelector:
+    matchNames:
+    - {{ .Release.Namespace }}
+  endpoints:
+{{ toYaml .Values.serviceMonitor.endpoints | indent 4 }}
+{{- end }}

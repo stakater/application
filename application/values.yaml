@@ -96,25 +96,25 @@ deployment:
     pullPolicy: IfNotPresent
 
   # Readiness and Liveness probes
-  probes: {}
-    # readinessProbe:
-    #   failureThreshold: 3
-    #   periodSeconds: 10
-    #   successThreshold: 1
-    #   timeoutSeconds: 1
-    #   initialDelaySeconds: 10
-    #   httpGet:
-    #     path: /path
-    #     port: port
-    # livenessProbe:
-    #   failureThreshold: 3
-    #   periodSeconds: 10
-    #   successThreshold: 1
-    #   timeoutSeconds: 1
-    #   initialDelaySeconds: 10
-    #   httpGet:
-    #     path: /path
-    #     port: port
+  probes:
+    readinessProbe:
+      failureThreshold: 3
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+      initialDelaySeconds: 10
+      httpGet:
+        path: /path
+        port: 8080
+    livenessProbe:
+      failureThreshold: 3
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+      initialDelaySeconds: 10
+      httpGet:
+        path: /path
+        port: 8080
 
   # Resources to be defined for pod 
   resources: 
@@ -155,7 +155,7 @@ persistence:
   # storageClass: "-"
   storageSize: 8Gi
 
-# Service object for pods
+# Service object for servicing pods
 service:
   additionalLabels: {}
     # expose: "true"
@@ -238,6 +238,24 @@ routes:
       certificate base64 string
     key: |-
       key base64 string
+
+
+# Expose Application on Forecastle Dashboard
+forecastle:
+  enabled: false
+  
+  # URL of the icon for the custom appd
+  icon: https://raw.githubusercontent.com/stakater/ForecastleIcons/master/stakater-big.png
+  
+  # Name of the application to be displayed on the Forecastle Dashboard
+  displayName: "application"
+  
+  # Group for the custom app (default: .Release.Namespace)
+  group: ""
+  
+  # Whether app is network restricted or not
+  networkRestricted: false
+
 
 # Role Based Access Control
 rbac:
@@ -329,3 +347,21 @@ secret: {}
   #   data:
   #     secretKey1: secretValue1
   #     secretKey2: secretValue2
+
+# Service Monitor to collect Prometheus metrices
+serviceMonitor:
+  enabled: false
+  
+  # Additional labels
+  additionalLabels: {}
+  
+  # Additional annotations
+  annotations: {}
+
+  jobLabel: k8s-app
+  
+  # List of the endpoints of service from which prometheus will scrape data
+  endpoints:
+  - interval: 5s
+    path: /actuator/prometheus     
+    port: web

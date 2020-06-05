@@ -259,11 +259,11 @@ forecastle:
 
 # Role Based Access Control
 rbac:
-  create: false
+  enabled: true
 
   # Service Account to use by pods
   serviceAccount:
-    create: false
+    enabled: false
     #name: "my-svc-account"
 
     # Additional Labels on service account

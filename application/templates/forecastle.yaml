@@ -1,0 +1,20 @@
+{{- if or .Values.ingress.enabled .Values.routes.enabled }}
+apiVersion: forecastle.stakater.com/v1alpha1
+kind: ForecastleApp
+metadata:
+  labels:
+{{ include "application.labels.stakater" $ | indent 4 }}
+{{ include "application.labels.chart" $ | indent 4 }}
+  name: {{ template "application.name" . }}
+spec:
+  name: {{ .Values.forecastle.displayName }}
+  group: {{ default .Release.Namespace .Values.forecastle.group }}
+  icon: {{ .Values.forecastle.icon }}
+  urlFrom:
+  {{- if .Values.ingress.enabled }}
+    ingressRef: {{ template "application.name" . }}
+  {{- else }}
+    routeRef: {{ template "application.name" . }}
+  {{- end }}
+  networkRestricted: {{ .Values.forecastle.networkRestricted }}
+{{- end -}}

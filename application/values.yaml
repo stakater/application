@@ -116,14 +116,14 @@ deployment:
         path: /path
         port: 8080
 
-  # Resources to be defined for pod 
+  # Resources to be defined for pod
   resources: 
-    # limits:
-    #   memory: "128Mi"
-    #   cpu: "0.5"
-    # requests:
-    #   memory: "64Mi"
-    #   cpu: "0.1"
+    limits:
+      memory: 256Mi
+      cpu: 1
+    requests:
+      memory: 128Mi
+      cpu: 0.5
   
   # Add additional containers besides init and app containers
   additionalContainers: 

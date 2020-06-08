@@ -9,6 +9,12 @@ To install the chart with the release name my-application in namespace test:
     helm repo update
     helm install my-application stakater/application --namespace test
 
+# Uninstall the Chart
+
+To uninstall the chart:
+
+    helm delete <name-of-the-chart>
+
 # Configuration
 
 | Parameter | Description | Default |

@@ -5,7 +5,8 @@ applicationName: "application"
 labels:
   group: com.stakater.platform
   provider: stakater
-  version: 1.0.0
+  team: stakater
+  appVersion: 1.0.0
 
 deployment:
 
@@ -159,6 +160,7 @@ persistence:
 service:
   additionalLabels: {}
     # expose: "true"
+
   annotations: {}
     # config.xposer.stakater.com/Domain: stakater.com
     # config.xposer.stakater.com/IngressNameTemplate: '{{.Service}}-{{.Namespace}}'

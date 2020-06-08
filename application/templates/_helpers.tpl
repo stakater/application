@@ -9,7 +9,7 @@ Define the name of the chart/application.
 {{- define "application.labels.selector" -}}
 app: {{ template "application.name" . }}
 group: {{ .Values.labels.group }}
-provider: {{ .Values.labels.provider }}
+provider: stakater
 team: {{ .Values.labels.team }}
 {{- end -}}
 

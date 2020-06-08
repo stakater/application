@@ -4,7 +4,6 @@ applicationName: "application"
 # These labels will be added on all resources, and you can add additional labels from below on individual resource
 labels:
   group: com.stakater.platform
-  provider: stakater
   team: stakater
 
 deployment:

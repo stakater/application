@@ -25,7 +25,7 @@ To uninstall the chart:
 | labels.team | Label to define team | `stakater` |
 | labels.appVersion | Label to define application version | `1.0.0` |
 | deployment.strategy.type | Strategy for updating deployments |`RollingUpdate`|
-| deployment.strategy.rollingUpdate | Rolling update settings | rollingUpdate:<br>&nbsp;&nbsp;maxSurge: 25%<br>&nbsp;&nbsp;maxUnavailable: 25% |
+| deployment.strategy.rollingUpdate | Rolling update configuration | rollingUpdate:<br>&nbsp;&nbsp;maxSurge: 25%<br>&nbsp;&nbsp;maxUnavailable: 25% |
 | deployment.reloadOnChange| Reload deployment if configMap/secret mounted are updated | `true` |
 | deployment.nodeSelector | Select node to deploy this application | `{}` |
 | deployment.initContainers | Init containers which runs before the app container | `[]` |
@@ -45,7 +45,7 @@ To uninstall the chart:
 | deployment.pullPolicy | Pull policy for the application image | `IfNotPresent` |
 | deployment.probes.readinessProbes.failureThreshold| Minimum consecutive failures for the probe to be considered failed after having succeeded. | `3` |
 | deployment.probes.readinessProbes.periodSeconds | How often to perform the probe | `10` |
-| deployment.probes.readinessProbes.successThreshold | Minimum consecutive successes for the probe to be considered successful after having failed.	| `1` |
+| deployment.probes.readinessProbes.successThreshold | Minimum consecutive successes for the probe to be considered successful after having failed	| `1` |
 | deployment.probes.readinessProbes.timeoutSeconds | When the probe times out | `1` |
 | deployment.probes.readinessProbes.initialDelaySeconds | Delay before readiness probe is initiated | `10` |
 | deployment.probes.readinessProbes.httpGet.path | The path of the application where readiness probe will send request | `8080` |
@@ -57,7 +57,7 @@ To uninstall the chart:
 | deployment.probes.livenessProbes.initialDelaySeconds | Delay before liveness probe is initiated | `10` |
 | deployment.probes.livenessProbes.httpGet.path | The path of the application where liveness probe will send request | `8080` |
 | deployment.probes.livenessProbes.httpGet.port | The port number that the liveness probe will listen on | `8080` |
-| deployment.resources | application pod resource requests & limits |     limits:<br>&nbsp;&nbsp;memory: 256Mi<br>&nbsp;&nbsp;cpu: 1<br>requests:<br>&nbsp;&nbsp;memory: 128Mi<br>&nbsp;&nbsp;cpu: 0.5 |
+| deployment.resources | Application pod resource requests & limits |     limits:<br>&nbsp;&nbsp;memory: 256Mi<br>&nbsp;&nbsp;cpu: 1<br>requests:<br>&nbsp;&nbsp;memory: 128Mi<br>&nbsp;&nbsp;cpu: 0.5 |
 | deployment.additionalContainers | Add additional containers besides init and app containers | `[]` |
 | deployment.securityContext | Security Context for the pod | `{}` |
 | persistence.enabled | Enable persistence | `false` |
@@ -109,6 +109,6 @@ To uninstall the chart:
 | secret.files | Array of secret files with suffixes and data contained in those files | `[]` |
 | serviceMonitor.enabled | Enable serviceMonitor | `false` |
 | serviceMonitor.additionalLabels | Labels for serviceMonitor | `{}` |
-| serviceMonitor.annotations | annotations for serviceMonitor | `{}` |
+| serviceMonitor.annotations | Annotations for serviceMonitor | `{}` |
 | serviceMonitor.jobLabel | Job Label used for application selector | `k8s-app` |
 | serviceMonitor.endpoints | Array of endpoints to be scraped by prometheus |   - interval: 5s<br>&nbsp;&nbsp;path: /actuator/prometheus<br>&nbsp;&nbsp;port: web |

@@ -1,32 +1,32 @@
-{{- if .Values.routes.enabled -}}
+{{- if .Values.route.enabled -}}
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: {{ template "application.name" . }}
+  name: {{ template "application.name" $ }}
   labels:
-{{ include "application.labels.stakater" . | indent 4 }}
-{{ include "application.labels.chart" . | indent 4 }}
-{{- if .Values.routes.additionalLabels }}
-{{ toYaml .Values.routes.additionalLabels | indent 4 }}
+{{ include "application.labels.stakater" $ | indent 4 }}
+{{ include "application.labels.chart" $ | indent 4 }}
+{{- if .Values.route.additionalLabels }}
+{{ toYaml .Values.route.additionalLabels | indent 4 }}
 {{- end }}
-{{- if .Values.routes.annotations }}
+{{- if .Values.route.annotations }}
   annotations:
-{{ toYaml .Values.routes.annotations | indent 4 }}
+{{ toYaml .Values.route.annotations | indent 4 }}
 {{- end }}
 spec:
-  host: {{ .Values.routes.host }}
+  host: {{ .Values.route.host }}
   port:
-{{ toYaml .Values.routes.port | indent 4 }}
-  termination: {{ .Values.routes.termination }}
+{{ toYaml .Values.route.port | indent 4 }}
+  termination: {{ .Values.route.termination }}
   to:
-    kind: {{ .Values.routes.to.kind }}
-    name: {{ .Values.routes.to.name }}
-    weight: {{ .Values.routes.to.weight }}
-{{- if .Values.routes.wildcardPolicy }}
-  wildcardPolicy: {{ .Values.routes.wildcardPolicy }}
+    kind: {{ .Values.route.to.kind }}
+    name: {{ .Values.route.to.name }}
+    weight: {{ .Values.route.to.weight }}
+{{- if .Values.route.wildcardPolicy }}
+  wildcardPolicy: {{ .Values.route.wildcardPolicy }}
 {{- end -}}
-  {{- if .Values.routes.tls }}
+  {{- if .Values.route.tls }}
   tls:
-{{ toYaml .Values.routes.tls | indent 4 }}
+{{ toYaml .Values.route.tls | indent 4 }}
   {{- end -}}
 {{- end -}}

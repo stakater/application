@@ -3,8 +3,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-{{ include "application.labels.stakater" . | indent 4 }}
-{{ include "application.labels.chart" . | indent 4 }}
+{{ include "application.labels.stakater" $ | indent 4 }}
+{{ include "application.labels.chart" $ | indent 4 }}
 {{- if .Values.deployment.additionalLabels }}
 {{ toYaml .Values.deployment.additionalLabels | indent 4 }}
 {{- end }}
@@ -17,13 +17,13 @@ metadata:
 {{- if .Values.deployment.reloadOnChange }} 
     reloader.stakater.com/auto: "true"
 {{- end }}
-  name: {{ template "application.name" . }}
+  name: {{ template "application.name" $ }}
 spec:
   replicas: {{ .Values.deployment.replicas }}
   selector:
     matchLabels:
-{{ include "application.labels.stakater" . | indent 6 }}
-{{ include "application.labels.chart" . | indent 6 }}
+{{ include "application.labels.stakater" $ | indent 6 }}
+{{ include "application.labels.chart" $ | indent 6 }}
 {{- if .Values.deployment.additionalLabels }}
 {{ toYaml .Values.deployment.additionalLabels | indent 6 }}
 {{- end }}
@@ -34,8 +34,8 @@ spec:
   template:
     metadata:
       labels:
-{{ include "application.labels.stakater" . | indent 8 }}
-{{ include "application.labels.chart" . | indent 8 }}
+{{ include "application.labels.stakater" $ | indent 8 }}
+{{ include "application.labels.chart" $ | indent 8 }}
 {{- if .Values.deployment.podLabels }}
 {{ toYaml .Values.deployment.podLabels | indent 8 }}
 {{- end }}
@@ -88,7 +88,7 @@ spec:
       - name: {{ .Values.deployment.imagePullSecrets }}
       {{- end }}
       containers:
-      - name: {{ template "application.name" . }}
+      - name: {{ template "application.name" $ }}
         image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
         imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
         {{- if .Values.deployment.env }}
@@ -120,6 +120,6 @@ spec:
       {{- if .Values.rbac.serviceAccount.name }}
       serviceAccountName: {{ .Values.rbac.serviceAccount.name }}
         {{- else }}
-      serviceAccountName: {{ template "application.name" . }}
+      serviceAccountName: {{ template "application.name" $ }}
       {{- end }}
 {{- end }}        

@@ -6,6 +6,7 @@ labels:
   group: com.stakater.platform
   provider: stakater
   team: stakater
+  app: application
   appVersion: 1.0.0
 
 deployment:
@@ -206,7 +207,7 @@ ingress:
     #     - chart-example.local
 
 # Route object for exposing services (OpenShift only)
-routes:
+route:
   enabled: false
 
   # Add annotations to this Route
@@ -245,6 +246,9 @@ routes:
 # Expose Application on Forecastle Dashboard
 forecastle:
   enabled: false
+
+  # Add additional labels on Forecastle Custom Resource
+  additionalLabels: {}
   
   # URL of the icon for the custom appd
   icon: https://raw.githubusercontent.com/stakater/ForecastleIcons/master/stakater-big.png

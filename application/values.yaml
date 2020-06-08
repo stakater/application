@@ -257,6 +257,9 @@ forecastle:
   
   # Group for the custom app (default: .Release.Namespace)
   group: ""
+
+  # Add properties to Custom Resource
+  properties: {}
   
   # Whether app is network restricted or not
   networkRestricted: false

@@ -20,4 +20,8 @@ spec:
     routeRef: {{ template "application.name" $ }}
   {{- end }}
   networkRestricted: {{ .Values.forecastle.networkRestricted }}
+  {{- if .Values.forecastle.properties }}
+  properties:
+{{ toYaml .Values.forecastle.properties | indent 4 }}
+  {{- end }}
 {{- end -}}

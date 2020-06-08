@@ -4,8 +4,8 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   labels:
-{{ include "application.labels.stakater" . | indent 4 }}
-{{ include "application.labels.chart" . | indent 4 }}
+{{ include "application.labels.stakater" $ | indent 4 }}
+{{ include "application.labels.chart" $ | indent 4 }}
 {{- if $.Values.configMap.additionalLabels }}
 {{ toYaml $.Values.configMap.additionalLabels | indent 4 }}
 {{- end }}
@@ -14,9 +14,9 @@ metadata:
 {{ toYaml $.Values.configMap.annotations | indent 4 }}
 {{- end }}
   {{- if eq .nameSuffix ""  }}
-  name: {{ template "application.name" . }}
+  name: {{ template "application.name" $ }}
   {{- else }}
-  name: {{ template "application.name" . }}-{{ .nameSuffix }}
+  name: {{ template "application.name" $ }}-{{ .nameSuffix }}
   {{- end }}
 data:
 {{ toYaml .data | indent 2 }}

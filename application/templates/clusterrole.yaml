@@ -4,8 +4,8 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   labels:
-{{ include "application.labels.stakater" $ | indent 4 }}
-{{ include "application.labels.chart" $ | indent 4 }}
+{{ include "application.labels.stakater" . | indent 4 }}
+{{ include "application.labels.chart" . | indent 4 }}
 {{- if $.Values.rbac.additionalLabels }}
 {{ toYaml $.Values.rbac.additionalLabels | indent 4 }}
 {{- end }}
@@ -13,7 +13,7 @@ metadata:
   annotations:
 {{ toYaml $.Values.rbac.annotations | indent 4 }}
 {{- end }}
-  name: {{ template "application.name" $ }}-clusterrole-{{ .name }}
+  name: {{ template "application.name" . }}-clusterrole-{{ .name }}
 rules:
 {{ toYaml .rules | indent 2 }}
 ---

@@ -3,8 +3,8 @@ apiVersion: "monitoring.coreos.com/v1"
 kind: ServiceMonitor
 metadata:
   labels:
-{{ include "application.labels.stakater" $ | indent 4 }}
-{{ include "application.labels.chart" $ | indent 4 }}
+{{ include "application.labels.stakater" . | indent 4 }}
+{{ include "application.labels.chart" . | indent 4 }}
 {{- if .Values.serviceMonitor.additionalLabels }}
 {{ toYaml .Values.serviceMonitor.additionalLabels | indent 4 }}
 {{- end }}
@@ -14,13 +14,13 @@ metadata:
 {{- if or .Values.serviceMonitor.annotations }}
 {{ toYaml .Values.serviceMonitor.annotations | indent 4 }}
 {{- end }}
-  name: {{ template "application.name" $ }}-svc-monitor
+  name: {{ template "application.name" . }}-svc-monitor
 spec:
 {{- $jobLabel := .Values.serviceMonitor.jobLabel }}
   jobLabel: {{ $jobLabel }}
   selector:
     matchLabels:
-      {{ $jobLabel }}: {{ template "application.name" $ }}
+      {{ $jobLabel }}: {{ template "application.name" . }}
   namespaceSelector:
     matchNames:
     - {{ .Release.Namespace }}

@@ -3,10 +3,10 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ template "application.name" $ }}
+  name: {{ template "application.name" . }}
   labels:
-{{ include "application.labels.stakater" $ | indent 4 }}
-{{ include "application.labels.chart" $ | indent 4 }}
+{{ include "application.labels.stakater" . | indent 4 }}
+{{ include "application.labels.chart" . | indent 4 }}
 {{- if .Values.ingress.additionalLabels }}
 {{ toYaml .Values.ingress.additionalLabels | indent 4 }}
 {{- end }}
@@ -22,7 +22,7 @@ spec:
         paths:
           - path: /
             backend:
-              serviceName: {{ template "application.name" $ }}
+              serviceName: {{ template "application.name" . }}
               servicePort: {{ $servicePort }}
     {{- end -}}
   {{- if .Values.ingress.tls }}

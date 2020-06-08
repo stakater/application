@@ -2,10 +2,10 @@
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: {{ template "application.name" $ }}
+  name: {{ template "application.name" . }}
   labels:
-{{ include "application.labels.stakater" $ | indent 4 }}
-{{ include "application.labels.chart" $ | indent 4 }}
+{{ include "application.labels.stakater" . | indent 4 }}
+{{ include "application.labels.chart" . | indent 4 }}
 {{- if .Values.route.additionalLabels }}
 {{ toYaml .Values.route.additionalLabels | indent 4 }}
 {{- end }}

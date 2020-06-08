@@ -7,14 +7,14 @@ Define the name of the chart/application.
 {{- end -}}
 
 {{- define "application.labels.selector" -}}
-app: {{ template "application.name" $ }}
+app: {{ template "application.name" . }}
 group: {{ .Values.labels.group }}
 provider: {{ .Values.labels.provider }}
 team: {{ .Values.labels.team }}
 {{- end -}}
 
 {{- define "application.labels.stakater" -}}
-{{ template "application.labels.selector" $ }}
+{{ template "application.labels.selector" . }}
 appVersion: "{{ .Values.labels.appVersion }}"
 {{- end -}}
 

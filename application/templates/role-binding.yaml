@@ -4,8 +4,8 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   labels:
-{{ include "application.labels.stakater" $ | indent 4 }}
-{{ include "application.labels.chart" $ | indent 4 }}
+{{ include "application.labels.stakater" . | indent 4 }}
+{{ include "application.labels.chart" . | indent 4 }}
 {{- if $.Values.rbac.additionalLabels }}
 {{ toYaml $.Values.rbac.additionalLabels | indent 4 }}
 {{- end }}
@@ -13,17 +13,17 @@ metadata:
   annotations:
 {{ toYaml $.Values.rbac.annotations | indent 4 }}
 {{- end }}
-  name: {{ template "application.name" $ }}-rolebinding-{{ .name }}
+  name: {{ template "application.name" . }}-rolebinding-{{ .name }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: {{ template "application.name" $ }}-role-{{ .name }}
+  name: {{ template "application.name" . }}-role-{{ .name }}
 subjects:
   - kind: ServiceAccount
   {{- if $.Values.rbac.serviceAccount.name }}
     name: {{ $.Values.rbac.serviceAccount.name }}
   {{- else }}
-    name: {{ template "application.name" $ }}
+    name: {{ template "application.name" . }}
   {{- end }}
     namespace: {{ $.Release.Namespace }}
 ---

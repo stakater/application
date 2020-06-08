@@ -15,7 +15,7 @@ team: {{ .Values.labels.team }}
 
 {{- define "application.labels.stakater" -}}
 {{ template "application.labels.selector" . }}
-appVersion: "{{ .Values.labels.appVersion }}"
+appVersion: "{{ .Values.deployment.image.tag }}"
 {{- end -}}
 
 {{- define "application.labels.chart" -}}

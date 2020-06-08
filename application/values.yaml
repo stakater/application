@@ -6,7 +6,6 @@ labels:
   group: com.stakater.platform
   provider: stakater
   team: stakater
-  app: application
   appVersion: 1.0.0
 
 deployment:

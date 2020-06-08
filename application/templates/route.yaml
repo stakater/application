@@ -17,16 +17,12 @@ spec:
   host: {{ .Values.route.host }}
   port:
 {{ toYaml .Values.route.port | indent 4 }}
-  termination: {{ .Values.route.termination }}
   to:
     kind: {{ .Values.route.to.kind }}
     name: {{ .Values.route.to.name }}
     weight: {{ .Values.route.to.weight }}
-{{- if .Values.route.wildcardPolicy }}
   wildcardPolicy: {{ .Values.route.wildcardPolicy }}
-{{- end -}}
-  {{- if .Values.route.tls }}
   tls:
-{{ toYaml .Values.route.tls | indent 4 }}
-  {{- end -}}
+    termination: {{ .Values.route.tls.termination }}
+    insecureEdgeTerminationPolicy: {{ .Values.route.tls.insecureEdgeTerminationPolicy }}
 {{- end -}}

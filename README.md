@@ -21,9 +21,7 @@ To uninstall the chart:
 |:---|:---|:----|
 | applicationName | Name of the application | `application` |
 | labels.group | Label to define application group | `com.stakater.platform` |
-| labels.provider | Label to define application provider | `stakater` |
 | labels.team | Label to define team | `stakater` |
-| labels.appVersion | Label to define application version | `1.0.0` |
 | deployment.strategy.type | Strategy for updating deployments |`RollingUpdate`|
 | deployment.strategy.rollingUpdate | Rolling update configuration | rollingUpdate:<br>&nbsp;&nbsp;maxSurge: 25%<br>&nbsp;&nbsp;maxUnavailable: 25% |
 | deployment.reloadOnChange| Reload deployment if configMap/secret mounted are updated | `true` |
@@ -68,7 +66,7 @@ To uninstall the chart:
 | persistence.storageSize | Size of the persistent volume | `8Gi` |
 | service.additionalLabels | Additional labels for service | `{}` |
 | service.annotations | Annotations for service | `{}` |
-| service.ports | Ports for applications service | `[]` |
+| service.ports | Ports for applications service | - port: 8080<br>&nbsp;&nbsp;name: http<br>&nbsp;&nbsp;protocol: TCP<br>&nbsp;&nbsp;targetPort: 8080 |
 | ingress.enabled | Enable ingress | `false` |
 | ingress.servicePort | Port of the service that serves pod | `8080` |
 | ingress.hosts | Array of FQDN hosts to be served by this ingress | `- chart-example.local` |
@@ -77,14 +75,10 @@ To uninstall the chart:
 | route.enabled | Enable Route incase of Openshift | `false` |
 | route.annotations | Annotations for route | `{}` |
 | route.additionalLables | Labels for route | `{}` |
-| route.host | FQDN host for this Route | `chart-example.local` |
 | route.port.targetPort | Port of the service that serves pods | `http` |
-| route.to.Kind | Forward requests to resource type | `Service` |
-| route.to.name | Name of the resource type | `application` |
-| route.to.weight | A number between 0 and 255 that depicts relative weight compared with other targets. | `100` |
 | route.wildcardPolicy | Route wildcard policy | `None` |
 | route.tls.termination | TLS termination strategy | `edge` |
-| route.tls.insecureEdgeTerminationPolicy | TLS termination poloicy for insecure traffic | `Redirect` |
+| route.tls.insecureEdgeTerminationPolicy | TLS termination policy for insecure traffic | `Redirect` |
 | forecastle.enabled | Enable Forecastle | `false` |
 | forecastle.additionalLabels | Additional labels for Forecastle Custom Resource | `{}` |
 | forecastle.icon | URL of application icon display on forecastle dashboard | `https://raw.githubusercontent.com/stakater/ForecastleIcons/master/stakater-big.png` |

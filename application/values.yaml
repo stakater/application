@@ -1,52 +1,69 @@
+# Name of the application.
 applicationName: "application"
 
 # These labels will be added on all resources, and you can add additional labels from below on individual resource
-
 labels:
   group: com.stakater.platform
-  provider: stakater
-  version: 1.0.0
+  team: stakater
+
 deployment:
-  # By default deploymentStrategy is set to rollingUpdate with maxSurge of 25% and maxUnavailable of 25% . you can change type to `Recreate` or can uncomment `rollingUpdate` specification and adjust them to your usage.
-  strategy: {}
-    # rollingUpdate:
-    #   maxSurge: 25%
-    #   maxUnavailable: 25%
-    # type: RollingUpdate
+
+  # By default deploymentStrategy is set to rollingUpdate with maxSurge of 25% and maxUnavailable of 25%
+  # You can change type to `Recreate` or can uncomment `rollingUpdate` specification and adjust them to your usage.
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
   
-  nodeSelector: {}
+  # Reload deployment if configMap/secret updates
+  reloadOnChange: true
+
+  # Select nodes to deploy which matches the following labels  
+  nodeSelector:
     # cloud.google.com/gke-nodepool: default-pool  
 
-  initContainers: 
+  # Init containers which runs before the app container
+  initContainers:
   # - name: init-contaner
   #   image: busybox
   #   imagePullPolicy: IfNotPresent
   #   command: ['/bin/sh']    
 
-  additionalLabels: 
+  # Additional labels for Deployment
+  additionalLabels:
     # key: value
+  
   # Additional label added on pod which is used in Service's Label Selector
   podLabels: 
     app: application-name
+
+  # Annotations on deployments
   annotations:
-    reloader.stakater.com/auto: "true"
-  # Additional Pod Annotations added on pod
+
+  # Additional Pod Annotations added on pod created by this Deployment
   additionalPodAnnotations:
-    #key: value
+    # key: value
+  
+  # Annotations for fluentd Configurations
   fluentdConfigAnnotations:
     # fluentd:
     #   regex: hello
     #   timeFormat: world
-  replicas: 1
+
+  # Replicas to be created
+  replicas: 2
+
+  # Secrets used to pull image
   imagePullSecrets: ""
-  env: 
+
+  # Environment variables to be passed to the app container
+  env:
   # - name: ENVIRONMENT
   #   value: "dev"
   
-  volumeMounts: []
-    # - mountPath: /path
-    #   name: volume-name
-  volumes: []
+  # Volumes to be added to the pod
+  volumes:
     # - name: config-volume
     #   configMap:        
     #     name: configmap-name
@@ -59,54 +76,66 @@ deployment:
     #   persistentVolumeClaim:
     #     claimName: claim-name
 
-  tolerations: []
+  # Mount path for Volumes 
+  volumeMounts:
+    # - mountPath: /path
+    #   name: volume-name
+
+  # Taint tolerations for nodes
+  tolerations:
     # - key: "dedicated"
     #   operator: "Equal"
     #   value: "app"
     #   effect: "NoSchedule" 
 
-
+  # Image of the app container
   image: 
     repository: repository/image-name
     tag: v1.0.0
     pullPolicy: IfNotPresent
 
-  probes: {}
-    # readinessProbe:
-    #   failureThreshold: 3
-    #   periodSeconds: 10
-    #   successThreshold: 1
-    #   timeoutSeconds: 1
-    #   initialDelaySeconds: 10
-    #   httpGet:
-    #     path: /path
-    #     port: port
-    # livenessProbe:
-    #   failureThreshold: 3
-    #   periodSeconds: 10
-    #   successThreshold: 1
-    #   timeoutSeconds: 1
-    #   initialDelaySeconds: 10
-    #   httpGet:
-    #     path: /path
-    #     port: port
+  # Readiness and Liveness probes
+  probes:
+    readinessProbe:
+      failureThreshold: 3
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+      initialDelaySeconds: 10
+      httpGet:
+        path: /path
+        port: 8080
+    livenessProbe:
+      failureThreshold: 3
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+      initialDelaySeconds: 10
+      httpGet:
+        path: /path
+        port: 8080
+
+  # Resources to be defined for pod
   resources: 
-    # limits:
-    #   memory: "128Mi"
-    #   cpu: "0.5"
-    # requests:
-    #   memory: "64Mi"
-    #   cpu: "0.1"
+    limits:
+      memory: 256Mi
+      cpu: 0.5
+    requests:
+      memory: 128Mi
+      cpu: 0.1
   
-  additionalContainers: 
+  # Add additional containers besides init and app containers
+  additionalContainers:
   # - name: sidecar-contaner
   #   image: busybox
   #   imagePullPolicy: IfNotPresent
   #   command: ['/bin/sh']    
 
-  securityContext: 
-    #fsGroup: 2000  
+  # Security Context for the pod
+  securityContext:
+    # fsGroup: 2000
 
+# Add Storage volumes to the pods
 persistence:
   enabled: false
   accessMode: ReadWriteOnce
@@ -116,19 +145,19 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  # existingClaim:
-  additionalLabels: {}
+  storageClass: "-"
+  additionalLabels:
     # key: "value"
-  annotations: {}
+  annotations:
   #  "helm.sh/resource-policy": keep
-  
-  # storageClass: "-"
   storageSize: 8Gi
 
+# Service object for servicing pods
 service:
-  additionalLabels: {}
+  additionalLabels:
     # expose: "true"
-  annotations: {}
+
+  annotations:
     # config.xposer.stakater.com/Domain: stakater.com
     # config.xposer.stakater.com/IngressNameTemplate: '{{.Service}}-{{.Namespace}}'
     # config.xposer.stakater.com/IngressURLPath: /
@@ -138,64 +167,103 @@ service:
     #   ingress.kubernetes.io/rewrite-target: /
     #   ingress.kubernetes.io/force-ssl-redirect: true
   
-  ports: []
-  # - port: 8080
-  #   name: http
-  #   protocol: TCP
-  #   targetPort: 8080
-  # - port: 8081
-  #   name: http
-  #   protocol: TCP
-  #   targetPort: 8081
+  ports:
+    - port: 8080
+      name: http
+      protocol: TCP
+      targetPort: 8080
 
+# Ingress object for exposing services
 ingress:
   enabled: false
-  servicePort: 8080
+  
+  # Port of the service that serves pods
+  servicePort: http
+  
+  # List of host addresses to be exposed by this Ingress
   hosts:
     - chart-example.local
-  annotations: 
+  
+  # Add annotations to this Ingress
+  annotations:
     # kubernetes.io/ingress.class: external-ingress
     # ingress.kubernetes.io/rewrite-target: /
     # ingress.kubernetes.io/force-ssl-redirect: true
+
+  # TLS details for this Ingress
   tls:
     # Secrets must be manually created in the namespace.
     # - secretName: chart-example-tls
     #   hosts:
     #     - chart-example.local
 
-routes:
+# Route object for exposing services (OpenShift only)
+route:
   enabled: false
-  annotations: {}
+
+  # Add annotations to this Route
+  annotations:
     # kubernetes.io/ingress.class: external-ingress
     # ingress.kubernetes.io/rewrite-target: /
     # ingress.kubernetes.io/force-ssl-redirect: true
-  additionalLabels: {}
-  host: chart-example.local
-  port:
-    targetPort: docker
-  termination: edge
-  to:
-    kind: Service
-    name: example-service
-    weight: 100
-  tls:
-    caCertificate: |-
-      ca-certificate base64 string
-    certificate: |-
-      certificate base64 string
-    key: |-
-      key base64 string
+  
+  # Additional labels for this Route
+  additionalLabels:
 
+  # Port of the service that serves pods
+  port:
+    targetPort: http
+
+  wildcardPolicy: None
+
+  tls:
+    # TLS Termination strategy
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+
+
+# Expose Application on Forecastle Dashboard
+forecastle:
+  enabled: false
+
+  # Add additional labels on Forecastle Custom Resource
+  additionalLabels:
+  
+  # URL of the icon for the custom app
+  icon: https://raw.githubusercontent.com/stakater/ForecastleIcons/master/stakater-big.png
+  
+  # Name of the application to be displayed on the Forecastle Dashboard
+  displayName: "application"
+  
+  # Group for the custom app (default: .Release.Namespace)
+  group: ""
+
+  # Add properties to Custom Resource
+  properties:
+  
+  # Whether app is network restricted or not
+  networkRestricted: false
+
+
+# Role Based Access Control
 rbac:
-  create: false
+  enabled: true
+
+  # Service Account to use by pods
   serviceAccount:
-    create: false
-    #name: "my-svc-account"
+    enabled: false
+    name: ""
+
+    # Additional Labels on service account
     additionalLabels:
       # key: value
+    
+    # Annotations on service account 
     annotations:
       # key: value
-  roles: 
+
+  # Create Roles (Namespaced)
+  roles:
   # - name: configmaps
   #   rules:
   #   - apiGroups:
@@ -212,6 +280,8 @@ rbac:
   #     - secrets
   #     verbs:
   #     - get
+
+  # Create ClusterRoles (Clusterwide)
   clusterroles:
   # - name: configmaps
   #   rules:
@@ -231,13 +301,15 @@ rbac:
   #     - get
   #     - list
   #     - watch
-configMap: {}
-  # enabled: true
-  # additionalLabels: 
-  #   # key: value
-  # annotations: 
-  #   # key: value
-  # files:
+
+# Additional ConfigMaps  
+configMap:
+  enabled: false
+  additionalLabels: 
+    # key: value
+  annotations: 
+    # key: value
+  files:
   # - nameSuffix: code-config    
   #   data:
   #     key1: value1
@@ -246,13 +318,15 @@ configMap: {}
   #   data:
   #     key1: value1
   #     key2: value2
-secret: {} 
-  # enabled: true
-  # additionalLabels: 
-  #   # key: value
-  # annotations: 
-  #   # key: value
-  # files:    
+
+# Additional Secrets
+secret:
+  enabled: false
+  additionalLabels: 
+    # key: value
+  annotations: 
+    # key: value
+  files:    
   # - nameSuffix: credentials
   #   data:
   #     secretKey1: secretValue1
@@ -261,3 +335,24 @@ secret: {}
   #   data:
   #     secretKey1: secretValue1
   #     secretKey2: secretValue2
+
+# Service Monitor to collect Prometheus metrices
+serviceMonitor:
+  enabled: false
+  
+  # Additional labels
+  additionalLabels:
+    # key: value
+
+  # Additional annotations
+  annotations:
+    # key: value
+
+  # Job Label used for application selector
+  jobLabel: k8s-app
+  
+  # List of the endpoints of service from which prometheus will scrape data
+  endpoints:
+  - interval: 5s
+    path: /actuator/prometheus
+    port: http

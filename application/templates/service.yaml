@@ -8,6 +8,9 @@ metadata:
 {{- if .Values.service.additionalLabels }}
 {{ toYaml .Values.service.additionalLabels | indent 4 }}
 {{- end }}
+{{- if .Values.serviceMonitor.enabled }}
+    {{ .Values.serviceMonitor.jobLabel }}: {{ template "application.name" . }}
+{{- end }}
 {{- if .Values.service.annotations }}
   annotations:
 {{ toYaml .Values.service.annotations | indent 4 }}

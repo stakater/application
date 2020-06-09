@@ -1,0 +1,27 @@
+{{- if .Values.route.enabled -}}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ template "application.name" . }}
+  labels:
+{{ include "application.labels.stakater" . | indent 4 }}
+{{ include "application.labels.chart" . | indent 4 }}
+{{- if .Values.route.additionalLabels }}
+{{ toYaml .Values.route.additionalLabels | indent 4 }}
+{{- end }}
+{{- if .Values.route.annotations }}
+  annotations:
+{{ toYaml .Values.route.annotations | indent 4 }}
+{{- end }}
+spec:
+  port:
+{{ toYaml .Values.route.port | indent 4 }}
+  to:
+    kind: Service
+    name: {{ template "application.name" . }}
+    weight: 100
+  wildcardPolicy: {{ .Values.route.wildcardPolicy }}
+  tls:
+    termination: {{ .Values.route.tls.termination }}
+    insecureEdgeTerminationPolicy: {{ .Values.route.tls.insecureEdgeTerminationPolicy }}
+{{- end -}}

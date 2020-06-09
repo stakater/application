@@ -1,4 +1,4 @@
-{{- if and .Values.rbac.create .Values.rbac.roles }}
+{{- if and .Values.rbac.enabled .Values.rbac.roles }}
 {{- range .Values.rbac.roles }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role

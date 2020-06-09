@@ -9,12 +9,13 @@ Define the name of the chart/application.
 {{- define "application.labels.selector" -}}
 app: {{ template "application.name" . }}
 group: {{ .Values.labels.group }}
-provider: {{ .Values.labels.provider }}
+provider: stakater
+team: {{ .Values.labels.team }}
 {{- end -}}
 
 {{- define "application.labels.stakater" -}}
 {{ template "application.labels.selector" . }}
-version: "{{ .Values.labels.version }}"
+appVersion: "{{ .Values.deployment.image.tag }}"
 {{- end -}}
 
 {{- define "application.labels.chart" -}}

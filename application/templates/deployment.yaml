@@ -1,5 +1,5 @@
 {{- if .Values.deployment }}
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
@@ -8,13 +8,25 @@ metadata:
 {{- if .Values.deployment.additionalLabels }}
 {{ toYaml .Values.deployment.additionalLabels | indent 4 }}
 {{- end }}
-{{- if .Values.deployment.annotations }}
+{{- if or .Values.deployment.annotations .Values.deployment.reloadOnChange }}
   annotations:
+{{- end }}
+{{- if .Values.deployment.annotations }}
 {{ toYaml .Values.deployment.annotations | indent 4 }}
+{{- end }}
+{{- if .Values.deployment.reloadOnChange }} 
+    reloader.stakater.com/auto: "true"
 {{- end }}
   name: {{ template "application.name" . }}
 spec:
   replicas: {{ .Values.deployment.replicas }}
+  selector:
+    matchLabels:
+{{ include "application.labels.stakater" . | indent 6 }}
+{{ include "application.labels.chart" . | indent 6 }}
+{{- if .Values.deployment.additionalLabels }}
+{{ toYaml .Values.deployment.additionalLabels | indent 6 }}
+{{- end }}
   {{- if .Values.deployment.strategy }}
   strategy:
 {{ toYaml .Values.deployment.strategy | indent 4 }}
@@ -83,17 +95,35 @@ spec:
         env:
 {{ toYaml .Values.deployment.env | indent 10 }}
         {{- end }}          
-        {{- with .Values.deployment.probes }}
-{{ toYaml . | indent 8 }}
-        {{- end }}
+        livenessProbe:
+          failureThreshold: {{ .Values.deployment.probes.livenessProbe.failureThreshold }}
+          periodSeconds: {{ .Values.deployment.probes.livenessProbe.periodSeconds }}
+          successThreshold: {{ .Values.deployment.probes.livenessProbe.successThreshold }}
+          timeoutSeconds: {{ .Values.deployment.probes.livenessProbe.timeoutSeconds }}
+          initialDelaySeconds: {{ .Values.deployment.probes.livenessProbe.initialDelaySeconds }}
+          httpGet:
+            path: {{ .Values.deployment.probes.livenessProbe.httpGet.path }}
+            port: {{ .Values.deployment.probes.livenessProbe.httpGet.port }}
+        readinessProbe:
+          failureThreshold: {{ .Values.deployment.probes.readinessProbe.failureThreshold }}
+          periodSeconds: {{ .Values.deployment.probes.readinessProbe.periodSeconds }}
+          successThreshold: {{ .Values.deployment.probes.readinessProbe.successThreshold }}
+          timeoutSeconds: {{ .Values.deployment.probes.readinessProbe.timeoutSeconds }}
+          initialDelaySeconds: {{ .Values.deployment.probes.readinessProbe.initialDelaySeconds }}
+          httpGet:
+            path: {{ .Values.deployment.probes.readinessProbe.httpGet.path }}
+            port: {{ .Values.deployment.probes.readinessProbe.httpGet.port }}
         {{- if .Values.deployment.volumeMounts }}
         volumeMounts:
 {{ toYaml .Values.deployment.volumeMounts | indent 10 }}
-        {{- end }}                
-        {{- with .Values.deployment.resources }}
-        resources:
-{{ toYaml . | indent 10 }}
         {{- end }}
+        resources:
+          limits:
+            memory: {{ .Values.deployment.resources.limits.memory }}
+            cpu: {{ .Values.deployment.resources.limits.cpu }}
+          requests:
+            memory: {{ .Values.deployment.resources.requests.memory }}
+            cpu: {{ .Values.deployment.resources.requests.cpu }}
         {{- if .Values.deployment.additionalContainers }}
 {{ toYaml .Values.deployment.additionalContainers | indent 6 }}
         {{- end }}

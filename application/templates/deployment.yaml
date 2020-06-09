@@ -95,17 +95,35 @@ spec:
         env:
 {{ toYaml .Values.deployment.env | indent 10 }}
         {{- end }}          
-        {{- with .Values.deployment.probes }}
-{{ toYaml . | indent 8 }}
-        {{- end }}
+        livenessProbe:
+          failureThreshold: {{ .Values.deployment.probes.livenessProbe.failureThreshold }}
+          periodSeconds: {{ .Values.deployment.probes.livenessProbe.periodSeconds }}
+          successThreshold: {{ .Values.deployment.probes.livenessProbe.successThreshold }}
+          timeoutSeconds: {{ .Values.deployment.probes.livenessProbe.timeoutSeconds }}
+          initialDelaySeconds: {{ .Values.deployment.probes.livenessProbe.initialDelaySeconds }}
+          httpGet:
+            path: {{ .Values.deployment.probes.livenessProbe.httpGet.path }}
+            port: {{ .Values.deployment.probes.livenessProbe.httpGet.port }}
+        readinessProbe:
+          failureThreshold: {{ .Values.deployment.probes.readinessProbe.failureThreshold }}
+          periodSeconds: {{ .Values.deployment.probes.readinessProbe.periodSeconds }}
+          successThreshold: {{ .Values.deployment.probes.readinessProbe.successThreshold }}
+          timeoutSeconds: {{ .Values.deployment.probes.readinessProbe.timeoutSeconds }}
+          initialDelaySeconds: {{ .Values.deployment.probes.readinessProbe.initialDelaySeconds }}
+          httpGet:
+            path: {{ .Values.deployment.probes.readinessProbe.httpGet.path }}
+            port: {{ .Values.deployment.probes.readinessProbe.httpGet.port }}
         {{- if .Values.deployment.volumeMounts }}
         volumeMounts:
 {{ toYaml .Values.deployment.volumeMounts | indent 10 }}
-        {{- end }}                
-        {{- with .Values.deployment.resources }}
-        resources:
-{{ toYaml . | indent 10 }}
         {{- end }}
+        resources:
+          limits:
+            memory: {{ .Values.deployment.resources.limits.memory }}
+            cpu: {{ .Values.deployment.resources.limits.cpu }}
+          requests:
+            memory: {{ .Values.deployment.resources.requests.memory }}
+            cpu: {{ .Values.deployment.resources.requests.cpu }}
         {{- if .Values.deployment.additionalContainers }}
 {{ toYaml .Values.deployment.additionalContainers | indent 6 }}
         {{- end }}

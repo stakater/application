@@ -41,8 +41,8 @@ To uninstall the chart:
 | deployment.volumeMounts | Mount path for Volumes | `[]` |
 | deployment.tolerations | Taint tolerations for nodes | `[]` |
 | deployment.image.repository | Image repository for the application | `repository/image-name` |
-| deployment.tag | Tag of the application Image | `v1.0.0` |
-| deployment.pullPolicy | Pull policy for the application image | `IfNotPresent` |
+| deployment.image.tag | Tag of the application Image | `v1.0.0` |
+| deployment.image.pullPolicy | Pull policy for the application image | `IfNotPresent` |
 | deployment.probes.readinessProbes.failureThreshold| Minimum consecutive failures for the probe to be considered failed after having succeeded. | `3` |
 | deployment.probes.readinessProbes.periodSeconds | How often to perform the probe | `10` |
 | deployment.probes.readinessProbes.successThreshold | Minimum consecutive successes for the probe to be considered successful after having failed	| `1` |

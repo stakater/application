@@ -18,9 +18,9 @@ spec:
   port:
 {{ toYaml .Values.route.port | indent 4 }}
   to:
-    kind: {{ .Values.route.to.kind }}
-    name: {{ .Values.route.to.name }}
-    weight: {{ .Values.route.to.weight }}
+    kind: Service
+    name: {{ template "application.name" . }}
+    weight: 100
   wildcardPolicy: {{ .Values.route.wildcardPolicy }}
   tls:
     termination: {{ .Values.route.tls.termination }}

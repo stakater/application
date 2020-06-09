@@ -168,21 +168,17 @@ service:
     #   ingress.kubernetes.io/force-ssl-redirect: true
   
   ports:
-  # - port: 8080
-  #   name: http
-  #   protocol: TCP
-  #   targetPort: 8080
-  # - port: 8081
-  #   name: http
-  #   protocol: TCP
-  #   targetPort: 8081
+    - port: 8080
+      name: http
+      protocol: TCP
+      targetPort: 8080
 
 # Ingress object for exposing services
 ingress:
   enabled: false
   
   # Port of the service that serves pods
-  servicePort: 8080
+  servicePort: http
   
   # List of host addresses to be exposed by this Ingress
   hosts:
@@ -215,16 +211,11 @@ route:
   additionalLabels:
 
   # Host addresses to be exposed by this Route
-  host: chart-example.local
+  host: ""
 
   # Port of the service that serves pods
   port:
     targetPort: http
-
-  to:
-    kind: Service
-    name: application      # Service to route to
-    weight: 100            # A number between 0 and 255 that depicts relative weight compared with other targets.
 
   wildcardPolicy: None
 
@@ -366,5 +357,5 @@ serviceMonitor:
   # List of the endpoints of service from which prometheus will scrape data
   endpoints:
   - interval: 5s
-    path: /actuator/prometheus     
-    port: web
+    path: /actuator/prometheus
+    port: http

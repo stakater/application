@@ -210,9 +210,6 @@ route:
   # Additional labels for this Route
   additionalLabels:
 
-  # Host addresses to be exposed by this Route
-  host: ""
-
   # Port of the service that serves pods
   port:
     targetPort: http

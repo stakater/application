@@ -14,7 +14,6 @@ metadata:
 {{ toYaml .Values.route.annotations | indent 4 }}
 {{- end }}
 spec:
-  host: {{ .Values.route.host }}
   port:
 {{ toYaml .Values.route.port | indent 4 }}
   to:

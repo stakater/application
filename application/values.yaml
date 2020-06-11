@@ -348,9 +348,6 @@ serviceMonitor:
   annotations:
     # key: value
 
-  # Job Label used for application selector
-  jobLabel: k8s-app
-  
   # List of the endpoints of service from which prometheus will scrape data
   endpoints:
   - interval: 5s

@@ -16,11 +16,9 @@ metadata:
 {{- end }}
   name: {{ template "application.name" . }}-svc-monitor
 spec:
-{{- $jobLabel := .Values.serviceMonitor.jobLabel }}
-  jobLabel: {{ $jobLabel }}
   selector:
     matchLabels:
-      {{ $jobLabel }}: {{ template "application.name" . }}
+      app: {{ template "application.name" . }}
   namespaceSelector:
     matchNames:
     - {{ .Release.Namespace }}

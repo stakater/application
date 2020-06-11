@@ -105,4 +105,4 @@ To uninstall the chart:
 | serviceMonitor.additionalLabels | Labels for serviceMonitor | `{}` |
 | serviceMonitor.annotations | Annotations for serviceMonitor | `{}` |
 | serviceMonitor.jobLabel | Job Label used for application selector | `k8s-app` |
-| serviceMonitor.endpoints | Array of endpoints to be scraped by prometheus |   - interval: 5s<br>&nbsp;&nbsp;path: /actuator/prometheus<br>&nbsp;&nbsp;port: web |
+| serviceMonitor.endpoints | Array of endpoints to be scraped by prometheus |   - interval: 5s<br>&nbsp;&nbsp;path: /actuator/prometheus<br>&nbsp;&nbsp;port: http |

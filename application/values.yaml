@@ -1,5 +1,5 @@
 # Name of the application.
-applicationName: "gac-eyeshare-integration"
+applicationName: "application"
 
 # These labels will be added on all resources, and you can add additional labels from below on individual resource
 labels:

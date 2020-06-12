@@ -106,3 +106,9 @@ To uninstall the chart:
 | serviceMonitor.annotations | Annotations for serviceMonitor | `{}` |
 | serviceMonitor.jobLabel | Job Label used for application selector | `k8s-app` |
 | serviceMonitor.endpoints | Array of endpoints to be scraped by prometheus |   - interval: 5s<br>&nbsp;&nbsp;path: /actuator/prometheus<br>&nbsp;&nbsp;port: http |
+| autoscaling.enabled | Enable horizontal pod autoscaler | `false` |
+| autoscaling.additionalLabels | Labels for horizontal pod autoscaler | `{}` |
+| autoscaling.annotations | Annotations for horizontal pod autoscaler | `{}` |
+| autoscaling.minReplicas | Sets minimum replica cound when autoscaling is enabled | `1` |
+| autoscaling.maxReplicas | Sets maximum replica cound when autoscaling is enabled | `10` |
+| autoscaling.metrics | Configuration for hpa metrics, set when autoscaling is enabled | `{}` |

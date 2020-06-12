@@ -353,3 +353,27 @@ serviceMonitor:
   - interval: 5s
     path: /actuator/prometheus
     port: http
+
+# Horizonal Pod Autoscaler for Autoscaling pods
+autoscaling:
+  enabled: false
+
+  # Additional Labels
+  additionalLabels: 
+    # key: value
+    
+  # Annotations
+  annotations: 
+    # key: value
+
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      targetAverageUtilization: 60
+  - type: Resource
+    resource:
+      name: memory
+      targetAverageUtilization: 60

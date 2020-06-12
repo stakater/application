@@ -127,9 +127,9 @@ spec:
         {{- if .Values.deployment.additionalContainers }}
 {{ toYaml .Values.deployment.additionalContainers | indent 6 }}
         {{- end }}
-        {{- if .Values.deployment.securityContext }}
+        {{- if .Values.deployment.securityContext.enabled }}
       securityContext:      
-{{ toYaml .Values.deployment.securityContext | indent 8 }}
+        fsGroup: {{ .Values.deployment.securityContext.fsGroup }}   
           {{- end }}
       {{- if .Values.deployment.volumes }}
       volumes:

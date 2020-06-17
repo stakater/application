@@ -73,6 +73,7 @@ To uninstall the chart:
 | ingress.annotations | Annotations for ingress | `{}` |
 | ingress.tls | TLS block for ingress | `[]` |
 | route.enabled | Enable Route incase of Openshift | `false` |
+| route.host | Host of route | nil |
 | route.annotations | Annotations for route | `{}` |
 | route.additionalLables | Labels for route | `{}` |
 | route.port.targetPort | Port of the service that serves pods | `http` |

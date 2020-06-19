@@ -1,7 +1,7 @@
 apiVersion: v1
 name: application
 description: Generic helm chart for all kind of applications
-version: 0.0.20
+version: 0.0.21
 keywords:
   - java
   - node

@@ -38,6 +38,7 @@ To uninstall the chart:
 | deployment.volumes | Volumes to be added to the pod | `[]` |
 | deployment.volumeMounts | Mount path for Volumes | `[]` |
 | deployment.tolerations | Taint tolerations for nodes | `[]` |
+| deployment.affinity | Affinity for pod/node | `[]` |
 | deployment.image.repository | Image repository for the application | `repository/image-name` |
 | deployment.image.tag | Tag of the application Image | `v1.0.0` |
 | deployment.image.pullPolicy | Pull policy for the application image | `IfNotPresent` |
@@ -73,6 +74,7 @@ To uninstall the chart:
 | ingress.annotations | Annotations for ingress | `{}` |
 | ingress.tls | TLS block for ingress | `[]` |
 | route.enabled | Enable Route incase of Openshift | `false` |
+| route.host | Host of route | nil |
 | route.annotations | Annotations for route | `{}` |
 | route.additionalLables | Labels for route | `{}` |
 | route.port.targetPort | Port of the service that serves pods | `http` |

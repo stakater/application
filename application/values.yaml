@@ -86,7 +86,18 @@ deployment:
     # - key: "dedicated"
     #   operator: "Equal"
     #   value: "app"
-    #   effect: "NoSchedule" 
+    #   effect: "NoSchedule"
+
+  # Pod affinity and pod anti-affinity allow you to specify rules about how pods should be placed relative to other pods.
+  affinity:
+  #  nodeAffinity:
+  #    requiredDuringSchedulingIgnoredDuringExecution:
+  #      nodeSelectorTerms:
+  #      - matchExpressions:
+  #        - key: disktype
+  #          operator: In
+  #          values:
+  #          - ssd
 
   # Image of the app container
   image: 

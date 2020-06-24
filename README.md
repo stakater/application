@@ -38,6 +38,7 @@ To uninstall the chart:
 | deployment.volumes | Volumes to be added to the pod | `[]` |
 | deployment.volumeMounts | Mount path for Volumes | `[]` |
 | deployment.tolerations | Taint tolerations for nodes | `[]` |
+| deployment.affinity | Affinity for pod/node | `[]` |
 | deployment.image.repository | Image repository for the application | `repository/image-name` |
 | deployment.image.tag | Tag of the application Image | `v1.0.0` |
 | deployment.image.pullPolicy | Pull policy for the application image | `IfNotPresent` |

@@ -364,3 +364,28 @@ serviceMonitor:
   - interval: 5s
     path: /actuator/prometheus
     port: http
+
+# autoscaling is used for horizonal pod autoscaling
+autoscaling:
+# enabled is a boolean flag for enabling or disabling autoscaling 
+  enabled: false
+# additionalLabels defines additional labels
+  additionalLabels: 
+    # key: value
+# annotations defines annotations in key value pair
+  annotations: 
+    # key: value
+# minReplicas sets the minimum number of replicas
+  minReplicas: 1
+# maxReplicas sets the maximum number of replicas
+  maxReplicas: 10
+# metrics is the list of metrics used for hpa
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      targetAverageUtilization: 60
+  - type: Resource
+    resource:
+      name: memory
+      targetAverageUtilization: 60

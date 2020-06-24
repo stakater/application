@@ -79,6 +79,10 @@ spec:
       tolerations:
 {{ toYaml .Values.deployment.tolerations | indent 8 -}}
       {{- end }}
+      {{- if .Values.deployment.affinity }}
+      affinity:
+      {{ toYaml .Values.deployment.affinity | indent 8 -}}
+      {{- end }}
       {{- if .Values.deployment.imagePullSecrets }}      
       imagePullSecrets:
       - name: {{ .Values.deployment.imagePullSecrets }}

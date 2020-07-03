@@ -1,3 +1,4 @@
+{{- if .Values.route -}}
 {{- if .Values.route.enabled -}}
 apiVersion: route.openshift.io/v1
 kind: Route
@@ -27,4 +28,5 @@ spec:
   tls:
     termination: {{ .Values.route.tls.termination }}
     insecureEdgeTerminationPolicy: {{ .Values.route.tls.insecureEdgeTerminationPolicy }}
+{{- end -}}
 {{- end -}}

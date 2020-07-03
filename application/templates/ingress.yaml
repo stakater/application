@@ -1,3 +1,4 @@
+{{- if .Values.ingress -}}
 {{- if .Values.ingress.enabled -}}
 {{- $servicePort := .Values.ingress.servicePort -}}
 apiVersion: extensions/v1beta1
@@ -29,4 +30,5 @@ spec:
   tls:
 {{ toYaml .Values.ingress.tls | indent 4 }}
   {{- end -}}
+{{- end -}}
 {{- end -}}

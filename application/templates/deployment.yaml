@@ -137,10 +137,17 @@ spec:
       securityContext:      
 {{ toYaml .Values.deployment.securityContext | indent 8 }}
           {{- end }}
-      {{- if .Values.deployment.volumes }}
+      {{- if or (.Values.deployment.volumes) (and (eq .Values.persistence.enabled true) (eq .Values.persistence.mountPVC true) )}} 
       volumes:
+        {{- if (eq .Values.persistence.mountPVC true) }}
+      - name: {{ template "application.name" . }}-data
+        persistentVolumeClaim:
+          claimName: {{ template "application.name" . }}-data
+        {{- end }}
+        {{- if .Values.deployment.volumes }}
 {{ toYaml .Values.deployment.volumes | indent 8 }}
-        {{- end }}  
+        {{- end }}
+      {{- end }}  
       {{- if .Values.rbac.serviceAccount.name }}
       serviceAccountName: {{ .Values.rbac.serviceAccount.name }}
         {{- else }}

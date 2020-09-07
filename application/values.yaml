@@ -12,9 +12,9 @@ deployment:
   # You can change type to `Recreate` or can uncomment `rollingUpdate` specification and adjust them to your usage.
   strategy:
     type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
+    # rollingUpdate:
+    #   maxSurge: 25%
+    #   maxUnavailable: 25%
   
   # Reload deployment if configMap/secret updates
   reloadOnChange: true

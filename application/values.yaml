@@ -149,6 +149,8 @@ deployment:
 # Add Storage volumes to the pods
 persistence:
   enabled: false
+  mountPVC: false
+  mountPath: "/"
   accessMode: ReadWriteOnce
   ## If defined, storageClass: <storageClass>
   ## If set to "-", storageClass: "", which disables dynamic provisioning

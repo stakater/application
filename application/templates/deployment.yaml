@@ -113,10 +113,16 @@ spec:
           httpGet:
             path: {{ .Values.deployment.probes.readinessProbe.httpGet.path }}
             port: {{ .Values.deployment.probes.readinessProbe.httpGet.port }}
-        {{- if .Values.deployment.volumeMounts }}
+      {{- if or (.Values.deployment.volumeMounts) (and (eq .Values.persistence.enabled true) (eq .Values.persistence.mountPVC true) )}} 
         volumeMounts:
+        {{- if (eq .Values.persistence.mountPVC true) }}
+        - mountPath: {{ .Values.persistence.mountPath }}
+          name: {{ template "application.name" . }}-data
+        {{- end }}
+        {{- if .Values.deployment.volumeMounts }}
 {{ toYaml .Values.deployment.volumeMounts | indent 10 }}
         {{- end }}
+      {{- end }}
         resources:
           limits:
             memory: {{ .Values.deployment.resources.limits.memory }}

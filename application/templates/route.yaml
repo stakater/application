@@ -1,3 +1,4 @@
+{{- if .Values.route -}}
 {{- if .Values.route.enabled -}}
 apiVersion: route.openshift.io/v1
 kind: Route
@@ -14,6 +15,9 @@ metadata:
 {{ toYaml .Values.route.annotations | indent 4 }}
 {{- end }}
 spec:
+{{- if .Values.route.host }}
+  host: {{ .Values.route.host }}
+{{- end }}
   port:
 {{ toYaml .Values.route.port | indent 4 }}
   to:
@@ -24,4 +28,5 @@ spec:
   tls:
     termination: {{ .Values.route.tls.termination }}
     insecureEdgeTerminationPolicy: {{ .Values.route.tls.insecureEdgeTerminationPolicy }}
+{{- end -}}
 {{- end -}}

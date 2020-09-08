@@ -1,3 +1,4 @@
+{{- if .Values.forecastle }}
 {{- if and (or .Values.ingress.enabled .Values.route.enabled) .Values.forecastle.enabled }}
 apiVersion: forecastle.stakater.com/v1alpha1
 kind: ForecastleApp
@@ -15,13 +16,16 @@ spec:
   icon: {{ .Values.forecastle.icon }}
   urlFrom:
   {{- if .Values.ingress.enabled }}
-    ingressRef: {{ template "application.name" . }}
+    ingressRef:
+      name: {{ template "application.name" . }}
   {{- else }}
-    routeRef: {{ template "application.name" . }}
+    routeRef:
+      name: {{ template "application.name" . }}
   {{- end }}
   networkRestricted: {{ .Values.forecastle.networkRestricted }}
   {{- if .Values.forecastle.properties }}
   properties:
 {{ toYaml .Values.forecastle.properties | indent 4 }}
   {{- end }}
+{{- end -}}
 {{- end -}}

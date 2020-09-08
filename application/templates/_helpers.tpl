@@ -8,9 +8,6 @@ Define the name of the chart/application.
 
 {{- define "application.labels.selector" -}}
 app: {{ template "application.name" . }}
-group: {{ .Values.labels.group }}
-provider: stakater
-team: {{ .Values.labels.team }}
 {{- end -}}
 
 {{- define "application.labels.stakater" -}}
@@ -19,6 +16,9 @@ appVersion: "{{ .Values.deployment.image.tag }}"
 {{- end -}}
 
 {{- define "application.labels.chart" -}}
+group: {{ .Values.labels.group }}
+provider: stakater
+team: {{ .Values.labels.team }}
 chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
 release: {{ .Release.Name | quote }}
 heritage: {{ .Release.Service | quote }}

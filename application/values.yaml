@@ -12,9 +12,9 @@ deployment:
   # You can change type to `Recreate` or can uncomment `rollingUpdate` specification and adjust them to your usage.
   strategy:
     type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
+    # rollingUpdate:
+    #   maxSurge: 25%
+    #   maxUnavailable: 25%
   
   # Reload deployment if configMap/secret updates
   reloadOnChange: true
@@ -36,7 +36,7 @@ deployment:
   
   # Additional label added on pod which is used in Service's Label Selector
   podLabels: 
-    app: application-name
+    # env: prod
 
   # Annotations on deployments
   annotations:
@@ -86,7 +86,18 @@ deployment:
     # - key: "dedicated"
     #   operator: "Equal"
     #   value: "app"
-    #   effect: "NoSchedule" 
+    #   effect: "NoSchedule"
+
+  # Pod affinity and pod anti-affinity allow you to specify rules about how pods should be placed relative to other pods.
+  affinity:
+  #  nodeAffinity:
+  #    requiredDuringSchedulingIgnoredDuringExecution:
+  #      nodeSelectorTerms:
+  #      - matchExpressions:
+  #        - key: disktype
+  #          operator: In
+  #          values:
+  #          - ssd
 
   # Image of the app container
   image: 
@@ -139,6 +150,8 @@ deployment:
 # Add Storage volumes to the pods
 persistence:
   enabled: false
+  mountPVC: false
+  mountPath: "/"
   accessMode: ReadWriteOnce
   ## If defined, storageClass: <storageClass>
   ## If set to "-", storageClass: "", which disables dynamic provisioning
@@ -354,3 +367,28 @@ serviceMonitor:
   - interval: 5s
     path: /actuator/prometheus
     port: http
+
+# autoscaling is used for horizonal pod autoscaling
+autoscaling:
+# enabled is a boolean flag for enabling or disabling autoscaling 
+  enabled: false
+# additionalLabels defines additional labels
+  additionalLabels: 
+    # key: value
+# annotations defines annotations in key value pair
+  annotations: 
+    # key: value
+# minReplicas sets the minimum number of replicas
+  minReplicas: 1
+# maxReplicas sets the maximum number of replicas
+  maxReplicas: 10
+# metrics is the list of metrics used for hpa
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      targetAverageUtilization: 60
+  - type: Resource
+    resource:
+      name: memory
+      targetAverageUtilization: 60

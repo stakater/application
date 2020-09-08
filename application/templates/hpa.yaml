@@ -1,0 +1,27 @@
+{{- if .Values.autoscaling }}
+{{- if and .Values.autoscaling.enabled .Values.deployment }}
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ template "application.name" . }}
+  labels:
+    {{ include "application.labels.stakater" . | nindent 4 }}
+    {{ include "application.labels.chart" . | nindent 4 }}
+  {{- if .Values.autoscaling.additionalLabels }}
+    {{- toYaml .Values.autoscaling.additionalLabels | nindent 4 }}
+  {{- end }}
+  {{- if .Values.autoscaling.annotations }}
+  annotations:
+    {{- toYaml .Values.autoscaling.annotations | nindent 4 }}
+  {{- end }}    
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ template "application.name" . }}
+  minReplicas: {{ .Values.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.autoscaling.maxReplicas }}
+  metrics:
+    {{- toYaml .Values.autoscaling.metrics | nindent 4 }}
+{{- end }}
+{{- end }}

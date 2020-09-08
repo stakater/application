@@ -22,11 +22,7 @@ spec:
   replicas: {{ .Values.deployment.replicas }}
   selector:
     matchLabels:
-{{ include "application.labels.stakater" . | indent 6 }}
-{{ include "application.labels.chart" . | indent 6 }}
-{{- if .Values.deployment.additionalLabels }}
-{{ toYaml .Values.deployment.additionalLabels | indent 6 }}
-{{- end }}
+{{ include "application.labels.selector" . | indent 6 }}
   {{- if .Values.deployment.strategy }}
   strategy:
 {{ toYaml .Values.deployment.strategy | indent 4 }}
@@ -34,8 +30,7 @@ spec:
   template:
     metadata:
       labels:
-{{ include "application.labels.stakater" . | indent 8 }}
-{{ include "application.labels.chart" . | indent 8 }}
+{{ include "application.labels.selector" . | indent 8 }}
 {{- if .Values.deployment.podLabels }}
 {{ toYaml .Values.deployment.podLabels | indent 8 }}
 {{- end }}
@@ -83,6 +78,10 @@ spec:
       tolerations:
 {{ toYaml .Values.deployment.tolerations | indent 8 -}}
       {{- end }}
+      {{- if .Values.deployment.affinity }}
+      affinity:
+      {{ toYaml .Values.deployment.affinity | indent 8 -}}
+      {{- end }}
       {{- if .Values.deployment.imagePullSecrets }}      
       imagePullSecrets:
       - name: {{ .Values.deployment.imagePullSecrets }}
@@ -113,10 +112,16 @@ spec:
           httpGet:
             path: {{ .Values.deployment.probes.readinessProbe.httpGet.path }}
             port: {{ .Values.deployment.probes.readinessProbe.httpGet.port }}
-        {{- if .Values.deployment.volumeMounts }}
+      {{- if or (.Values.deployment.volumeMounts) (and (eq .Values.persistence.enabled true) (eq .Values.persistence.mountPVC true) )}} 
         volumeMounts:
-{{ toYaml .Values.deployment.volumeMounts | indent 10 }}
+        {{- if (eq .Values.persistence.mountPVC true) }}
+        - mountPath: {{ .Values.persistence.mountPath }}
+          name: {{ template "application.name" . }}-data
         {{- end }}
+        {{- if .Values.deployment.volumeMounts }}
+{{ toYaml .Values.deployment.volumeMounts | indent 8 }}
+        {{- end }}
+      {{- end }}
         resources:
           limits:
             memory: {{ .Values.deployment.resources.limits.memory }}
@@ -131,10 +136,17 @@ spec:
       securityContext:      
         fsGroup: {{ .Values.deployment.securityContext.fsGroup }}   
           {{- end }}
-      {{- if .Values.deployment.volumes }}
+      {{- if or (.Values.deployment.volumes) (and (eq .Values.persistence.enabled true) (eq .Values.persistence.mountPVC true) )}} 
       volumes:
-{{ toYaml .Values.deployment.volumes | indent 8 }}
-        {{- end }}  
+        {{- if (eq .Values.persistence.mountPVC true) }}
+      - name: {{ template "application.name" . }}-data
+        persistentVolumeClaim:
+          claimName: {{ template "application.name" . }}-data
+        {{- end }}
+        {{- if .Values.deployment.volumes }}
+{{ toYaml .Values.deployment.volumes | indent 6 }}
+        {{- end }}
+      {{- end }}  
       {{- if .Values.rbac.serviceAccount.name }}
       serviceAccountName: {{ .Values.rbac.serviceAccount.name }}
         {{- else }}

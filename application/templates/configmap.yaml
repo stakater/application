@@ -1,4 +1,5 @@
-{{- if and .Values.configMap .Values.configMap.enabled }}
+{{- if .Values.configMap }}
+{{- if .Values.configMap.enabled }}
 {{- range .Values.configMap.files }}
 apiVersion: v1
 kind: ConfigMap
@@ -21,5 +22,6 @@ metadata:
 data:
 {{ toYaml .data | indent 2 }}
 ---
+{{- end }}
 {{- end }}
 {{- end }}

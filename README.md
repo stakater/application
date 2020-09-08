@@ -22,13 +22,12 @@ To uninstall the chart:
 | applicationName | Name of the application | `application` |
 | labels.group | Label to define application group | `com.stakater.platform` |
 | labels.team | Label to define team | `stakater` |
-| deployment.strategy.type | Strategy for updating deployments |`RollingUpdate`|
-| deployment.strategy.rollingUpdate | Rolling update configuration | rollingUpdate:<br>&nbsp;&nbsp;maxSurge: 25%<br>&nbsp;&nbsp;maxUnavailable: 25% |
+| deployment.strategy | Strategy for updating deployments |`RollingUpdate`|
 | deployment.reloadOnChange| Reload deployment if configMap/secret mounted are updated | `true` |
 | deployment.nodeSelector | Select node to deploy this application | `{}` |
 | deployment.initContainers | Init containers which runs before the app container | `[]` |
 | deployment.additionalLabels | Additional labels for Deployment | `{}` |
-| deployment.podLables | Additional label added on pod which is used in Service's Label Selector | `app: application-name` |
+| deployment.podLables | Additional label added on pod which is used in Service's Label Selector | {} |
 | deployment.annotations | Annotations on deployments | `{}` |
 | deployment.additionalPodAnnotation  | Additional Pod Annotations added on pod created by this Deployment | `{}` |
 | deployment.fluentdConfigAnnotations | Annotations for fluentd Configurations | `{}` |
@@ -38,6 +37,7 @@ To uninstall the chart:
 | deployment.volumes | Volumes to be added to the pod | `[]` |
 | deployment.volumeMounts | Mount path for Volumes | `[]` |
 | deployment.tolerations | Taint tolerations for nodes | `[]` |
+| deployment.affinity | Affinity for pod/node | `[]` |
 | deployment.image.repository | Image repository for the application | `repository/image-name` |
 | deployment.image.tag | Tag of the application Image | `v1.0.0` |
 | deployment.image.pullPolicy | Pull policy for the application image | `IfNotPresent` |
@@ -59,6 +59,8 @@ To uninstall the chart:
 | deployment.additionalContainers | Add additional containers besides init and app containers | `[]` |
 | deployment.securityContext | Security Context for the pod | `{}` |
 | persistence.enabled | Enable persistence | `false` |
+| persistence.mountPVC | Whether to mount the created PVC to the deployment | `false` |
+| persistence.mountPath | If `persistence.mountPVC` is set, so where to mount the volume in the deployment | `/` |
 | persistence.accessMode | Access mode for volume | `ReadWriteOnce` |
 | persistence.storageClass | StorageClass of the volume  | `-` |
 | persistence.additionalLabels | Additional labels for persistent volume | `{}` |
@@ -73,6 +75,7 @@ To uninstall the chart:
 | ingress.annotations | Annotations for ingress | `{}` |
 | ingress.tls | TLS block for ingress | `[]` |
 | route.enabled | Enable Route incase of Openshift | `false` |
+| route.host | Host of route | nil |
 | route.annotations | Annotations for route | `{}` |
 | route.additionalLables | Labels for route | `{}` |
 | route.port.targetPort | Port of the service that serves pods | `http` |
@@ -106,3 +109,9 @@ To uninstall the chart:
 | serviceMonitor.annotations | Annotations for serviceMonitor | `{}` |
 | serviceMonitor.jobLabel | Job Label used for application selector | `k8s-app` |
 | serviceMonitor.endpoints | Array of endpoints to be scraped by prometheus |   - interval: 5s<br>&nbsp;&nbsp;path: /actuator/prometheus<br>&nbsp;&nbsp;port: http |
+| autoscaling.enabled | Enable horizontal pod autoscaler | `false` |
+| autoscaling.additionalLabels | Labels for horizontal pod autoscaler | `{}` |
+| autoscaling.annotations | Annotations for horizontal pod autoscaler | `{}` |
+| autoscaling.minReplicas | Sets minimum replica count when autoscaling is enabled | `1` |
+| autoscaling.maxReplicas | Sets maximum replica count when autoscaling is enabled | `10` |
+| autoscaling.metrics | Configuration for hpa metrics, set when autoscaling is enabled | `{}` |

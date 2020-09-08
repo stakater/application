@@ -15,7 +15,7 @@ metadata:
   name: {{ template "application.name" . }}
 spec:
   selector:
-{{ include "application.labels.stakater" . | indent 4 }}
+{{ include "application.labels.selector" . | indent 4 }}
 {{- if .Values.deployment.podLabels }}
 {{ toYaml .Values.deployment.podLabels | indent 4 }}
 {{- end }}

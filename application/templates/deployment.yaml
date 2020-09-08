@@ -22,7 +22,7 @@ spec:
   replicas: {{ .Values.deployment.replicas }}
   selector:
     matchLabels:
-{{ include "application.labels.stakater" . | indent 6 }}
+{{ include "application.labels.selector" . | indent 6 }}
   {{- if .Values.deployment.strategy }}
   strategy:
 {{ toYaml .Values.deployment.strategy | indent 4 }}
@@ -30,7 +30,7 @@ spec:
   template:
     metadata:
       labels:
-{{ include "application.labels.stakater" . | indent 8 }}
+{{ include "application.labels.selector" . | indent 8 }}
 {{- if .Values.deployment.podLabels }}
 {{ toYaml .Values.deployment.podLabels | indent 8 }}
 {{- end }}

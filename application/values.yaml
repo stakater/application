@@ -12,9 +12,9 @@ deployment:
   # You can change type to `Recreate` or can uncomment `rollingUpdate` specification and adjust them to your usage.
   strategy:
     type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
+    # rollingUpdate:
+    #   maxSurge: 25%
+    #   maxUnavailable: 25%
   
   # Reload deployment if configMap/secret updates
   reloadOnChange: true
@@ -36,7 +36,7 @@ deployment:
   
   # Additional label added on pod which is used in Service's Label Selector
   podLabels: 
-    app: application-name
+    # env: prod
 
   # Annotations on deployments
   annotations:
@@ -149,6 +149,8 @@ deployment:
 # Add Storage volumes to the pods
 persistence:
   enabled: false
+  mountPVC: false
+  mountPath: "/"
   accessMode: ReadWriteOnce
   ## If defined, storageClass: <storageClass>
   ## If set to "-", storageClass: "", which disables dynamic provisioning

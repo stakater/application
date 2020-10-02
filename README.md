@@ -56,6 +56,9 @@ To uninstall the chart:
 | deployment.probes.livenessProbes.httpGet.path | The path of the application where liveness probe will send request | `8080` |
 | deployment.probes.livenessProbes.httpGet.port | The port number that the liveness probe will listen on | `8080` |
 | deployment.resources | Application pod resource requests & limits |     limits:<br>&nbsp;&nbsp;memory: 256Mi<br>&nbsp;&nbsp;cpu: 1<br>requests:<br>&nbsp;&nbsp;memory: 128Mi<br>&nbsp;&nbsp;cpu: 0.5 |
+| deployment.openshiftOAuthProxy.enabled | Add Openshift OAuth Proxy as SideCar Container | `false` |
+| deployment.openshiftOAuthProxy.port | Application port so proxy should forward to this port | `8080` |
+| deployment.openshiftOAuthProxy.secretName | Secret name containing the TLS cert | `openshift-oauth-proxy-tls` |
 | deployment.additionalContainers | Add additional containers besides init and app containers | `[]` |
 | deployment.securityContext | Security Context for the pod | `{}` |
 | persistence.enabled | Enable persistence | `false` |

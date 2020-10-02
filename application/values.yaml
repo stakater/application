@@ -396,3 +396,15 @@ autoscaling:
     resource:
       name: memory
       targetAverageUtilization: 60
+
+# EndpointMonitor for IMC (https://github.com/stakater/IngressMonitorController)
+endpointMonitor:
+  enabled: false
+  
+  # Additional labels
+  additionalLabels:
+    # key: value
+
+  # Additional annotations
+  annotations:
+    # key: value

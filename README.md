@@ -118,3 +118,6 @@ To uninstall the chart:
 | autoscaling.minReplicas | Sets minimum replica count when autoscaling is enabled | `1` |
 | autoscaling.maxReplicas | Sets maximum replica count when autoscaling is enabled | `10` |
 | autoscaling.metrics | Configuration for hpa metrics, set when autoscaling is enabled | `{}` |
+| endpointMonitor.enabled | Enable endpointMonitor for IMC (https://github.com/stakater/IngressMonitorController) | `false` |
+| endpointMonitor.additionalLabels | Labels for endpointMonitor | `{}` |
+| endpointMonitor.annotations | Annotations for endpointMonitor | `{}` |

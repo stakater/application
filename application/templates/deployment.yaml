@@ -87,6 +87,25 @@ spec:
       - name: {{ .Values.deployment.imagePullSecrets }}
       {{- end }}
       containers:
+        {{- if .Values.deployment.openshiftOAuthProxy.enabled }}
+      - args:
+        - --https-address=:8443
+        - --provider=openshift
+        - --upstream=http://localhost:{{ .Values.deployment.openshiftOAuthProxy.port }}
+        - --openshift-service-account={{ template "application.name" . }}
+        - --tls-cert=/etc/tls/private/tls.crt
+        - --tls-key=/etc/tls/private/tls.key
+        - --cookie-secret=SECRET
+        image: openshift/oauth-proxy:latest
+        imagePullPolicy: IfNotPresent
+        name: oauth-proxy
+        ports:
+        - containerPort: 8443
+          name: proxy
+        volumeMounts:
+        - mountPath: /etc/tls/private
+          name: proxy-tls 
+        {{- end }}
       - name: {{ template "application.name" . }}
         image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
         imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
@@ -136,8 +155,13 @@ spec:
       securityContext:      
 {{ toYaml .Values.deployment.securityContext | indent 8 }}
           {{- end }}
-      {{- if or (.Values.deployment.volumes) (and (eq .Values.persistence.enabled true) (eq .Values.persistence.mountPVC true) )}} 
+      {{- if or (.Values.deployment.openshiftOAuthProxy.enabled) (.Values.deployment.volumes) (and (eq .Values.persistence.enabled true) (eq .Values.persistence.mountPVC true) )}} 
       volumes:
+        {{- if .Values.deployment.openshiftOAuthProxy.enabled }}
+      - name: proxy-tls
+        secret:
+          secretName: {{ .Values.deployment.openshiftOAuthProxy.secretName }}
+        {{- end }}
         {{- if (eq .Values.persistence.mountPVC true) }}
       - name: {{ template "application.name" . }}-data
         persistentVolumeClaim:

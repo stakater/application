@@ -135,6 +135,11 @@ deployment:
       memory: 128Mi
       cpu: 0.1
   
+  openshiftOAuthProxy: 
+    enabled: false
+    port: 8080
+    secretName: "openshift-oauth-proxy-tls"
+
   # Add additional containers besides init and app containers
   additionalContainers:
   # - name: sidecar-contaner

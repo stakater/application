@@ -1,0 +1,9 @@
+apiVersion: endpointmonitor.stakater.com/v1alpha1
+kind: EndpointMonitor
+metadata:
+  name: frontend
+spec:
+  forceHttps: true
+  urlFrom:
+    routeRef:
+      name: frontend

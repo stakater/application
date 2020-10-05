@@ -19,13 +19,13 @@ metadata:
 spec:
   forceHttps: true
   urlFrom:
-{{- if .Values.route -}}
-{{- if .Values.route.enabled -}}
+{{- if .Values.route }}
+{{- if .Values.route.enabled }}
     routeRef:
 {{- end }}
 {{- end }}
-{{- if .Values.ingress -}}
-{{- if .Values.ingress.enabled -}}
+{{- if .Values.ingress }}
+{{- if .Values.ingress.enabled }}
     ingressRef:
 {{- end }}
 {{- end }}    

@@ -1,5 +1,4 @@
-{{- if .Values.endpointMonitor }}
-{{- if .Values.endpointMonitor.enabled }}
+{{- if and .Values.endpointMonitor .Values.endpointMonitor.enabled }}
 apiVersion: endpointmonitor.stakater.com/v1alpha1
 kind: EndpointMonitor
 metadata:
@@ -9,26 +8,19 @@ metadata:
 {{- if .Values.endpointMonitor.additionalLabels }}
 {{ toYaml .Values.endpointMonitor.additionalLabels | indent 4 }}
 {{- end }}
-{{- if or .Values.endpointMonitor.annotations }}
+{{- if .Values.endpointMonitor.annotations }}
   annotations:
-{{- end }}
-{{- if or .Values.endpointMonitor.annotations }}
 {{ toYaml .Values.endpointMonitor.annotations | indent 4 }}
 {{- end }}
-  name: {{ template "application.name" . }}-ep-monitor
+  name: {{ template "application.name" . }}
 spec:
   forceHttps: true
   urlFrom:
-{{- if .Values.route -}}
-{{- if .Values.route.enabled -}}
+{{- if and .Values.route .Values.route.enabled }}
     routeRef:
 {{- end }}
-{{- end }}
-{{- if .Values.ingress -}}
-{{- if .Values.ingress.enabled -}}
+{{- if and .Values.ingress .Values.ingress.enabled }}
     ingressRef:
 {{- end }}
-{{- end }}    
       name:  {{ template "application.name" . }}
-{{- end }}
 {{- end }}

@@ -8,14 +8,9 @@ metadata:
 {{- if .Values.service.additionalLabels }}
 {{ toYaml .Values.service.additionalLabels | indent 4 }}
 {{- end }}
-{{- if or .Values.service.annotations .Values.deployment.openshiftOAuthProxy.enabled }}
+{{- if .Values.service.annotations }}
   annotations:
-  {{- if .Values.service.annotations }}
 {{ toYaml .Values.service.annotations | indent 4 }}
-  {{- end }}
-  {{- if .Values.deployment.openshiftOAuthProxy.enabled }}
-    service.alpha.openshift.io/serving-cert-secret-name: {{ .Values.deployment.openshiftOAuthProxy.secretName }}
-  {{- end }}
 {{- end }}
   name: {{ template "application.name" . }}
 spec:

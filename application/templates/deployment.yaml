@@ -114,23 +114,9 @@ spec:
 {{ toYaml .Values.deployment.env | indent 10 }}
         {{- end }}          
         livenessProbe:
-          failureThreshold: {{ .Values.deployment.probes.livenessProbe.failureThreshold }}
-          periodSeconds: {{ .Values.deployment.probes.livenessProbe.periodSeconds }}
-          successThreshold: {{ .Values.deployment.probes.livenessProbe.successThreshold }}
-          timeoutSeconds: {{ .Values.deployment.probes.livenessProbe.timeoutSeconds }}
-          initialDelaySeconds: {{ .Values.deployment.probes.livenessProbe.initialDelaySeconds }}
-          httpGet:
-            path: {{ .Values.deployment.probes.livenessProbe.httpGet.path }}
-            port: {{ .Values.deployment.probes.livenessProbe.httpGet.port }}
+{{ toYaml .Values.deployment.probes.livenessProbe | indent 10 }}
         readinessProbe:
-          failureThreshold: {{ .Values.deployment.probes.readinessProbe.failureThreshold }}
-          periodSeconds: {{ .Values.deployment.probes.readinessProbe.periodSeconds }}
-          successThreshold: {{ .Values.deployment.probes.readinessProbe.successThreshold }}
-          timeoutSeconds: {{ .Values.deployment.probes.readinessProbe.timeoutSeconds }}
-          initialDelaySeconds: {{ .Values.deployment.probes.readinessProbe.initialDelaySeconds }}
-          httpGet:
-            path: {{ .Values.deployment.probes.readinessProbe.httpGet.path }}
-            port: {{ .Values.deployment.probes.readinessProbe.httpGet.port }}
+{{ toYaml .Values.deployment.probes.readinessProbe | indent 10 }}
       {{- if or (.Values.deployment.volumeMounts) (and (eq .Values.persistence.enabled true) (eq .Values.persistence.mountPVC true) )}} 
         volumeMounts:
         {{- if (eq .Values.persistence.mountPVC true) }}

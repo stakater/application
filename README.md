@@ -41,20 +41,8 @@ To uninstall the chart:
 | deployment.image.repository | Image repository for the application | `repository/image-name` |
 | deployment.image.tag | Tag of the application Image | `v1.0.0` |
 | deployment.image.pullPolicy | Pull policy for the application image | `IfNotPresent` |
-| deployment.probes.readinessProbes.failureThreshold| Minimum consecutive failures for the probe to be considered failed after having succeeded. | `3` |
-| deployment.probes.readinessProbes.periodSeconds | How often to perform the probe | `10` |
-| deployment.probes.readinessProbes.successThreshold | Minimum consecutive successes for the probe to be considered successful after having failed	| `1` |
-| deployment.probes.readinessProbes.timeoutSeconds | When the probe times out | `1` |
-| deployment.probes.readinessProbes.initialDelaySeconds | Delay before readiness probe is initiated | `10` |
-| deployment.probes.readinessProbes.httpGet.path | The path of the application where readiness probe will send request | `8080` |
-| deployment.probes.readinessProbes.httpGet.port | The port number that the readiness probe will listen on | `8080` |
-| deployment.probes.livenessProbes.failureThreshold| Minimum consecutive failures for the probe to be considered failed after having succeeded. | `3` |
-| deployment.probes.livenessProbes.periodSeconds | How often to perform the probe | `10` |
-| deployment.probes.livenessProbes.successThreshold | Minimum consecutive successes for the probe to be considered successful after having failed.	| `1` |
-| deployment.probes.livenessProbes.timeoutSeconds | When the probe times out | `1` |
-| deployment.probes.livenessProbes.initialDelaySeconds | Delay before liveness probe is initiated | `10` |
-| deployment.probes.livenessProbes.httpGet.path | The path of the application where liveness probe will send request | `8080` |
-| deployment.probes.livenessProbes.httpGet.port | The port number that the liveness probe will listen on | `8080` |
+| deployment.probes.readinessProbe | The readiness probe block | `{"failureThreshold":3,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":1,"initialDelaySeconds":"10\nhttpGet:\n  path: /path\n  port: 8080"}` |
+| deployment.probes.livenessProbe| The livenessness probe block. | `{"failureThreshold":3,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":1,"initialDelaySeconds":"10\nhttpGet:\n  path: /path\n  port: 8080"}` |
 | deployment.resources | Application pod resource requests & limits |     limits:<br>&nbsp;&nbsp;memory: 256Mi<br>&nbsp;&nbsp;cpu: 1<br>requests:<br>&nbsp;&nbsp;memory: 128Mi<br>&nbsp;&nbsp;cpu: 0.5 |
 | deployment.openshiftOAuthProxy.enabled | Add Openshift OAuth Proxy as SideCar Container | `false` |
 | deployment.openshiftOAuthProxy.port | Application port so proxy should forward to this port | `8080` |

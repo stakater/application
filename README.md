@@ -33,6 +33,9 @@ To uninstall the chart:
 | deployment.fluentdConfigAnnotations | Annotations for fluentd Configurations | `{}` |
 | deployment.replicas | Replicas to be created | `2` |
 | deployment.imagePullSecrets | Secrets used to pull image | `""` |
+| deployment.envFrom | Environment variables to be picked from configmap or secret | `[]` |
+| deployment.envFrom.type | Type of data i.e. Configmap or Secret | `` |
+| deployment.envFrom.name | Name of Configmap or Secret, if set empty, set to application name | `` |
 | deployment.env | Environment variables to be passed to the app container | `[]` |
 | deployment.volumes | Volumes to be added to the pod | `[]` |
 | deployment.volumeMounts | Mount path for Volumes | `[]` |

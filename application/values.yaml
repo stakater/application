@@ -57,6 +57,13 @@ deployment:
   # Secrets used to pull image
   imagePullSecrets: ""
 
+  # If want to mount Envs from configmap or secret
+  envFrom: []
+  # - type: configmap
+  #   name: my-configmap
+  # - type: secret
+  #   name: my-secret
+
   # Environment variables to be passed to the app container
   env:
   # - name: ENVIRONMENT

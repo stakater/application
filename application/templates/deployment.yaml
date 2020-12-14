@@ -109,10 +109,31 @@ spec:
       - name: {{ template "application.name" . }}
         image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
         imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+        {{- if .Values.deployment.envFrom }}
+        envFrom:
+        {{- range .Values.deployment.envFrom }}
+        {{- if (eq .type "configmap") }}
+        - configMapRef:
+            {{- if .name }}
+            name: {{ .name }}
+            {{- else }}
+            name: {{ template "application.name" $ }}
+            {{- end }}
+        {{- end }}
+        {{- if (eq .type "secret") }}
+        - secretRef:
+            {{- if .name }}
+            name: {{ .name }}
+            {{- else }}
+            name: {{ template "application.name" $ }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- end }}
         {{- if .Values.deployment.env }}
         env:
 {{ toYaml .Values.deployment.env | indent 10 }}
-        {{- end }}          
+        {{- end }}
         livenessProbe:
 {{ toYaml .Values.deployment.probes.livenessProbe | indent 10 }}
         readinessProbe:

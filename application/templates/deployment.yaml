@@ -175,7 +175,7 @@ spec:
           claimName: {{ template "application.name" . }}-data
         {{- end }}
         {{- if .Values.deployment.volumes }}
-{{ toYaml .Values.deployment.volumes | indent 6 }}
+{{ include "application.tplvalues.render" ( dict "value" .Values.deployment.volumes "context" $ ) | indent 6 }}
         {{- end }}
       {{- end }}  
       {{- if .Values.rbac.serviceAccount.name }}

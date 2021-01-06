@@ -6,7 +6,7 @@ on:
       - master
 
 env:
-  KIND_VERSION: "0.7.0"
+  CHART_NAME: "application"
 
 jobs:
   build:
@@ -16,6 +16,29 @@ jobs:
     steps:
     - name: Check out code
       uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    # Set Up Helm
+    - name: Set up Helm
+      uses: azure/setup-helm@v1
+      with:
+        version: v3.4.0
+
+    # Lint
+    - name: Helm Lint
+      run: |
+        helm lint ${CHART_NAME}
+
+    # Dry run to ensure that manifests are generated successfully 
+    - name: Dry Run Chart
+      run: |
+        helm install ${CHART_NAME} ${CHART_NAME} --dry-run --debug
+
+    # package
+    - name: Helm Package
+      run: |
+        helm package ${CHART_NAME}    
 
     - name: Comment on PR
       uses: mshick/add-pr-comment@v1

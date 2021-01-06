@@ -82,7 +82,7 @@ jobs:
         repository: stakater-charts
         target_dir: docs
         token: ${{ secrets.GITHUB_TOKEN }}
-        charts_dir: charts
+        charts_dir: application
         charts_url: https://stakater.github.io/stakater-charts
         owner: stakater
         linting: off 

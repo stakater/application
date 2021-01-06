@@ -1,0 +1,45 @@
+name: Pull Request
+
+on:
+  pull_request:
+    branches:
+      - master
+
+env:
+  KIND_VERSION: "0.7.0"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest 
+    name: Build
+    if: "! contains(toJSON(github.event.commits.*.message), '[skip-ci]')"    
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Comment on PR
+      uses: mshick/add-pr-comment@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.STAKATER_GITHUB_TOKEN }}
+      with:
+        message: '@${{ github.actor }} Image is available for testing. `docker pull ${{ github.repository }}:${{ steps.generate_tag.outputs.GIT_TAG }}`'
+        allow-repeats: false
+
+    - name: Notify Failure
+      if: failure()
+      uses: mshick/add-pr-comment@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.STAKATER_GITHUB_TOKEN }}
+      with:
+        message: '@${{ github.actor }} Yikes! You better fix it before anyone else finds out! [Build](https://github.com/${{ github.repository }}/commit/${{ github.event.pull_request.head.sha }}/checks) has Failed!'
+        allow-repeats: false
+
+    - name: Notify Slack
+      uses: 8398a7/action-slack@v3
+      if: always() # Pick up events even if the job fails or is canceled.
+      with:
+        status: ${{ job.status }}
+        fields: repo,author,action,eventName,ref,workflow
+      env:
+        GITHUB_TOKEN: ${{ secrets.STAKATER_GITHUB_TOKEN }}
+        SLACK_WEBHOOK_URL: ${{ secrets.STAKATER_DELIVERY_SLACK_WEBHOOK }}

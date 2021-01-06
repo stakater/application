@@ -1,0 +1,81 @@
+name: Push
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build
+    if: "! contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+      with:
+        persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
+        fetch-depth: 0 # otherwise, you will fail to push refs to dest repo
+
+    - name: Generate Tag
+      id: generate_tag
+      uses: anothrNick/github-tag-action@1.26.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.STAKATER_GITHUB_TOKEN }}
+        WITH_V: true
+        DEFAULT_BUMP: patch
+        DRY_RUN: true
+    
+      
+    # Update chart tag to the latest semver tag
+    - name: Update Chart Version
+      env:
+        VERSION: ${{ steps.generate_operator_tag.outputs.new_tag }}
+      run: make bump-chart
+
+    # Publish helm chart
+    - name: Publish Helm chart
+      uses: stefanprodan/helm-gh-pages@master
+      with:
+        branch: master
+        repository: stakater-charts
+        target_dir: docs
+        token: ${{ secrets.STAKATER_GITHUB_TOKEN }}
+        charts_dir: charts
+        charts_url: https://stakater.github.io/stakater-charts
+        owner: stakater
+        linting: off
+        commit_username: stakater-user
+        commit_email: stakater@gmail.com
+
+    # Commit back changes
+    - name: Commit files
+      run: |
+        git config --local user.email "stakater@gmail.com"
+        git config --local user.name "stakater-user"
+        git status 
+        git add .
+        git commit -m "[skip-ci] Update artifacts" -a
+
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.STAKATER_GITHUB_TOKEN }}
+
+    - name: Push Latest Tag
+      uses: anothrNick/github-tag-action@1.26.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.STAKATER_GITHUB_TOKEN }}
+        WITH_V: true
+        DEFAULT_BUMP: patch
+
+    - name: Notify Slack
+      uses: 8398a7/action-slack@v3
+      if: always() # Pick up events even if the job fails or is canceled.
+      with:
+        status: ${{ job.status }}
+        fields: repo,author,action,eventName,ref,workflow
+      env:
+        GITHUB_TOKEN: ${{ secrets.STAKATER_GITHUB_TOKEN }}
+        SLACK_WEBHOOK_URL: ${{ secrets.STAKATER_DELIVERY_SLACK_WEBHOOK }}

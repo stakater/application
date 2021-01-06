@@ -112,3 +112,5 @@ To uninstall the chart:
 | endpointMonitor.enabled | Enable endpointMonitor for IMC (https://github.com/stakater/IngressMonitorController) | `false` |
 | endpointMonitor.additionalLabels | Labels for endpointMonitor | `{}` |
 | endpointMonitor.annotations | Annotations for endpointMonitor | `{}` |
+| namespace.create | Enable namespace | `false` |
+| namespace.name | Name of Namespace | `{}` |

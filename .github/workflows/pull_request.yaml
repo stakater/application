@@ -9,7 +9,7 @@ env:
   CHART_NAME: "application"
   KUBERNETES_VERSION: "1.18.0"
   KIND_VERSION: "0.7.0"
-  
+
 jobs:
   build:
     runs-on: ubuntu-latest 
@@ -63,16 +63,16 @@ jobs:
     - name: Comment on PR
       uses: mshick/add-pr-comment@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.STAKATER_GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        message: '@${{ github.actor }} Image is available for testing. `docker pull ${{ github.repository }}:${{ steps.generate_tag.outputs.GIT_TAG }}`'
+        message: '@${{ github.actor }} Validation Successful'
         allow-repeats: false
 
     - name: Notify Failure
       if: failure()
       uses: mshick/add-pr-comment@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.STAKATER_GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         message: '@${{ github.actor }} Yikes! You better fix it before anyone else finds out! [Build](https://github.com/${{ github.repository }}/commit/${{ github.event.pull_request.head.sha }}/checks) has Failed!'
         allow-repeats: false

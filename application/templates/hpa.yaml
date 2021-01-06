@@ -4,6 +4,9 @@ apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ template "application.name" . }}
+{{- if .Values.namespace.enabled }}
+  namespace: {{ .Values.namespace.name }}
+{{- end }}
   labels:
     {{ include "application.labels.stakater" . | nindent 4 }}
     {{ include "application.labels.chart" . | nindent 4 }}

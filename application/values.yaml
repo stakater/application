@@ -5,7 +5,9 @@ applicationName: "application"
 labels:
   group: com.stakater.platform
   team: stakater
-
+namespace:
+   enabled: false
+   name: 
 deployment:
 
   # By default deploymentStrategy is set to rollingUpdate with maxSurge of 25% and maxUnavailable of 25%

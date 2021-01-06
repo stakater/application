@@ -16,6 +16,9 @@ metadata:
 {{ toYaml .Values.serviceMonitor.annotations | indent 4 }}
 {{- end }}
   name: {{ template "application.name" . }}-svc-monitor
+{{- if .Values.namespace.enabled }}
+  namespace: {{ .Values.namespace.name }}
+{{- end }}
 spec:
   selector:
     matchLabels:

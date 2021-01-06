@@ -12,6 +12,9 @@ metadata:
   annotations:
 {{ toYaml .Values.endpointMonitor.annotations | indent 4 }}
 {{- end }}
+{{- if .Values.namespace.enabled }}
+  namespace: {{ .Values.namespace.name }}
+{{- end }}
   name: {{ template "application.name" . }}
 spec:
   forceHttps: true

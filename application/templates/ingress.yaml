@@ -5,6 +5,9 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: {{ template "application.name" . }}
+{{- if .Values.namespace.enabled }}
+  namespace: {{ .Values.namespace.name }}
+{{- end }}
   labels:
 {{ include "application.labels.stakater" . | indent 4 }}
 {{ include "application.labels.chart" . | indent 4 }}

@@ -7,7 +7,12 @@ labels:
   team: stakater
 namespace:
    enabled: false
+   #Name of namespace
    name: 
+   #Additional labels for namespace
+   additionalLabels:
+   #Annotations on namespace
+   annotations:
 deployment:
 
   # By default deploymentStrategy is set to rollingUpdate with maxSurge of 25% and maxUnavailable of 25%

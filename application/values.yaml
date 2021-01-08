@@ -81,6 +81,9 @@ deployment:
     # - name: config-volume
     #   configMap:        
     #     name: configmap-name
+    # - name: configmap-volume
+    #   configMap:
+    #     name: '{{ template "application.name" . }}-configmap-nameSuffix'
     # - name: secret-volume
     #   secret:        
     #     secretName: secret-name

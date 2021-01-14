@@ -14,9 +14,6 @@ metadata:
 {{ toYaml $.Values.rbac.annotations | indent 4 }}
 {{- end }}
   name: {{ template "application.name" $ }}-role-{{ .name }}
-{{- if $.Values.namespace.enabled }}
-  namespace: {{ $.Values.namespace.name }}
-{{- end }}
 rules:
 {{ toYaml .rules | indent 2 }}
 ---

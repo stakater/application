@@ -14,9 +14,6 @@ metadata:
 {{ toYaml .Values.persistence.annotations | indent 4 }}
 {{- end }}
   name: {{ template "application.name" . }}-data
-{{- if .Values.namespace.enabled }}
-  namespace: {{ .Values.namespace.name }}
-{{- end }}
 spec:
   accessModes:
     - {{ .Values.persistence.accessMode | quote }}

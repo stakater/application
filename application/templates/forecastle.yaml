@@ -10,9 +10,6 @@ metadata:
 {{ toYaml .Values.forecastle.additionalLabels | indent 4 }}
 {{- end }}
   name: {{ template "application.name" . }}
-{{- if .Values.namespace.enabled }}
-  namespace: {{ .Values.namespace.name }}
-{{- end }}
 spec:
   name: {{ .Values.forecastle.displayName }}
   group: {{ default .Release.Namespace .Values.forecastle.group }}

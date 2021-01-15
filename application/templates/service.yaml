@@ -13,7 +13,7 @@ metadata:
 {{ toYaml .Values.service.annotations | indent 4 }}
 {{- end }}
   name: {{ template "application.name" . }}
-
+  namespace: {{ template "application.namespace" $ }}
 spec:
   selector:
 {{ include "application.labels.selector" . | indent 4 }}

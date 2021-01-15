@@ -13,6 +13,7 @@ metadata:
 {{ toYaml .Values.endpointMonitor.annotations | indent 4 }}
 {{- end }}
   name: {{ template "application.name" . }}
+  namespace: {{ template "application.namespace" . }}
 spec:
   forceHttps: true
   urlFrom:

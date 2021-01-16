@@ -18,7 +18,7 @@ metadata:
     reloader.stakater.com/auto: "true"
 {{- end }}
   name: {{ template "application.name" . }}
-
+  namespace: {{ template "application.namespace" . }}
 spec:
   replicas: {{ .Values.deployment.replicas }}
   selector:

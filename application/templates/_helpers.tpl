@@ -23,7 +23,6 @@ chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
 release: {{ .Release.Name | quote }}
 heritage: {{ .Release.Service | quote }}
 {{- end -}}
-
 {{/*
 Renders a value that contains template.
 Usage:
@@ -36,3 +35,14 @@ Usage:
         {{- tpl (.value | toYaml) .context }}
     {{- end }}
 {{- end -}}
+
+{{- define "application.namespace" -}}
+    
+        {{- if .Values.namespaceOverride }}
+            {{- .Values.namespaceOverride -}}
+        {{- else -}}
+            {{- .Release.Namespace -}}
+        {{- end -}}
+
+{{- end }}
+

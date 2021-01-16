@@ -14,6 +14,7 @@ metadata:
   annotations:
     {{- toYaml .Values.autoscaling.annotations | nindent 4 }}
   {{- end }}    
+  namespace: {{ template "application.namespace" . }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1

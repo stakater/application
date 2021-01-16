@@ -19,6 +19,7 @@ metadata:
   {{- else }}
   name: {{ template "application.name" $ }}-{{ .nameSuffix }}
   {{- end }}
+  namespace: {{ template "application.namespace" $ }}
 data:
 {{ toYaml .data | indent 2 }}
 ---

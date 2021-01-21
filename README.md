@@ -20,6 +20,7 @@ To uninstall the chart:
 | Parameter | Description | Default |
 |:---|:---|:----|
 | applicationName | Name of the application | `application` |
+| namespaceOverride | Override default release namespace with a custom value | `application` |
 | labels.group | Label to define application group | `com.stakater.platform` |
 | labels.team | Label to define team | `stakater` |
 | deployment.strategy | Strategy for updating deployments |`RollingUpdate`|

@@ -24,7 +24,7 @@ spec:
     ingressRef:
 {{- end }}
       name:  {{ template "application.name" . }}
-{{- end }}
 {{- if .Values.endpointMonitor.additionalConfig }}
 {{ toYaml .Values.endpointMonitor.additionalConfig | indent 2 }}
+{{- end }}
 {{- end }}

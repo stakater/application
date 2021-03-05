@@ -118,5 +118,9 @@ To uninstall the chart:
 | space.additionalLabels | Additional labels for Space Custom Resource | `{}` |
 | space.annotations | Annotations for Space Custom Resource | `{}` |
 | space.tenant | Tenant associated with Space Custom Resource | `""` |
+| sealedSecret.enabled | Enable sealed secret | `false` |
+| sealedSecret.additionalLabels | Labels for sealed secret | `{}` |
+| sealedSecret.annotations | Annotations for sealed secret | `{}` |
+| sealedSecret.files | Array of secret files with name and encrypted data contained in those files | `[]` |
 
 

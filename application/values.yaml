@@ -8,7 +8,7 @@ labels:
   group: com.stakater.platform
   team: stakater
 deployment:
-
+  
   # By default deploymentStrategy is set to rollingUpdate with maxSurge of 25% and maxUnavailable of 25%
   # You can change type to `Recreate` or can uncomment `rollingUpdate` specification and adjust them to your usage.
   strategy:
@@ -273,6 +273,16 @@ forecastle:
   # Whether app is network restricted or not
   networkRestricted: false
 
+space:
+  enabled: false
+  # Additional labels on space
+  additionalLabels:
+    # key: value
+  # Annotations on space 
+  annotations: 
+     # key: value
+  # Tenants associated with space
+  tenant: ""
 
 # Role Based Access Control
 rbac:

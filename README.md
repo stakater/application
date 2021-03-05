@@ -114,3 +114,9 @@ To uninstall the chart:
 | endpointMonitor.additionalLabels | Labels for endpointMonitor | `{}` |
 | endpointMonitor.annotations | Annotations for endpointMonitor | `{}` |
 | endpointMonitor.additionalConfig | Additional Config for endpointMonitor | `{}` |
+| space.enabled | Enable Space Custom Resource | `false` |
+| space.additionalLabels | Additional labels for Space Custom Resource | `{}` |
+| space.annotations | Annotations for Space Custom Resource | `{}` |
+| space.tenant | Tenant associated with Space Custom Resource | `""` |
+
+

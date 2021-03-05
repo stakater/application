@@ -1,0 +1,18 @@
+{{- if .Values.space.enabled }}
+apiVersion: tenantoperator.stakater.com/v1alpha1
+kind: Space
+metadata:
+  name: {{ template "application.namespace" . }}
+  labels:
+{{ include "application.labels.stakater" . | indent 4 }}
+{{ include "application.labels.chart" . | indent 4 }}
+{{- if .Values.space.additionalLabels }}
+{{ toYaml .Values.space.additionalLabels | indent 4 }}
+{{- end }}
+  annotations:
+{{- if or .Values.space.annotations }}
+{{ toYaml .Values.space.annotations | indent 4 }}
+{{- end }}
+spec:
+  tenant: {{ .Values.space.tenant }}
+{{- end }}

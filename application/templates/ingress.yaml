@@ -1,9 +1,11 @@
+{{- if .Values.ingress -}}
 {{- if .Values.ingress.enabled -}}
 {{- $servicePort := .Values.ingress.servicePort -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: {{ template "application.name" . }}
+  namespace: {{ template "application.namespace" . }}
   labels:
 {{ include "application.labels.stakater" . | indent 4 }}
 {{ include "application.labels.chart" . | indent 4 }}
@@ -29,4 +31,5 @@ spec:
   tls:
 {{ toYaml .Values.ingress.tls | indent 4 }}
   {{- end -}}
+{{- end -}}
 {{- end -}}

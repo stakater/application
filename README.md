@@ -20,20 +20,23 @@ To uninstall the chart:
 | Parameter | Description | Default |
 |:---|:---|:----|
 | applicationName | Name of the application | `application` |
+| namespaceOverride | Override default release namespace with a custom value | `application` |
 | labels.group | Label to define application group | `com.stakater.platform` |
 | labels.team | Label to define team | `stakater` |
-| deployment.strategy.type | Strategy for updating deployments |`RollingUpdate`|
-| deployment.strategy.rollingUpdate | Rolling update configuration | rollingUpdate:<br>&nbsp;&nbsp;maxSurge: 25%<br>&nbsp;&nbsp;maxUnavailable: 25% |
+| deployment.strategy | Strategy for updating deployments |`RollingUpdate`|
 | deployment.reloadOnChange| Reload deployment if configMap/secret mounted are updated | `true` |
 | deployment.nodeSelector | Select node to deploy this application | `{}` |
 | deployment.initContainers | Init containers which runs before the app container | `[]` |
 | deployment.additionalLabels | Additional labels for Deployment | `{}` |
-| deployment.podLables | Additional label added on pod which is used in Service's Label Selector | `app: application-name` |
+| deployment.podLables | Additional label added on pod which is used in Service's Label Selector | {} |
 | deployment.annotations | Annotations on deployments | `{}` |
 | deployment.additionalPodAnnotation  | Additional Pod Annotations added on pod created by this Deployment | `{}` |
 | deployment.fluentdConfigAnnotations | Annotations for fluentd Configurations | `{}` |
 | deployment.replicas | Replicas to be created | `2` |
 | deployment.imagePullSecrets | Secrets used to pull image | `""` |
+| deployment.envFrom | Environment variables to be picked from configmap or secret | `[]` |
+| deployment.envFrom.type | Type of data i.e. Configmap or Secret | `` |
+| deployment.envFrom.name | Name of Configmap or Secret, if set empty, set to application name | `` |
 | deployment.env | Environment variables to be passed to the app container | `[]` |
 | deployment.volumes | Volumes to be added to the pod | `[]` |
 | deployment.volumeMounts | Mount path for Volumes | `[]` |
@@ -42,24 +45,17 @@ To uninstall the chart:
 | deployment.image.repository | Image repository for the application | `repository/image-name` |
 | deployment.image.tag | Tag of the application Image | `v1.0.0` |
 | deployment.image.pullPolicy | Pull policy for the application image | `IfNotPresent` |
-| deployment.probes.readinessProbes.failureThreshold| Minimum consecutive failures for the probe to be considered failed after having succeeded. | `3` |
-| deployment.probes.readinessProbes.periodSeconds | How often to perform the probe | `10` |
-| deployment.probes.readinessProbes.successThreshold | Minimum consecutive successes for the probe to be considered successful after having failed	| `1` |
-| deployment.probes.readinessProbes.timeoutSeconds | When the probe times out | `1` |
-| deployment.probes.readinessProbes.initialDelaySeconds | Delay before readiness probe is initiated | `10` |
-| deployment.probes.readinessProbes.httpGet.path | The path of the application where readiness probe will send request | `8080` |
-| deployment.probes.readinessProbes.httpGet.port | The port number that the readiness probe will listen on | `8080` |
-| deployment.probes.livenessProbes.failureThreshold| Minimum consecutive failures for the probe to be considered failed after having succeeded. | `3` |
-| deployment.probes.livenessProbes.periodSeconds | How often to perform the probe | `10` |
-| deployment.probes.livenessProbes.successThreshold | Minimum consecutive successes for the probe to be considered successful after having failed.	| `1` |
-| deployment.probes.livenessProbes.timeoutSeconds | When the probe times out | `1` |
-| deployment.probes.livenessProbes.initialDelaySeconds | Delay before liveness probe is initiated | `10` |
-| deployment.probes.livenessProbes.httpGet.path | The path of the application where liveness probe will send request | `8080` |
-| deployment.probes.livenessProbes.httpGet.port | The port number that the liveness probe will listen on | `8080` |
+| deployment.probes.readinessProbe | The readiness probe block | `{"failureThreshold":3,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":1,"initialDelaySeconds":"10\nhttpGet:\n  path: /path\n  port: 8080"}` |
+| deployment.probes.livenessProbe| The livenessness probe block. | `{"failureThreshold":3,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":1,"initialDelaySeconds":"10\nhttpGet:\n  path: /path\n  port: 8080"}` |
 | deployment.resources | Application pod resource requests & limits |     limits:<br>&nbsp;&nbsp;memory: 256Mi<br>&nbsp;&nbsp;cpu: 1<br>requests:<br>&nbsp;&nbsp;memory: 128Mi<br>&nbsp;&nbsp;cpu: 0.5 |
+| deployment.openshiftOAuthProxy.enabled | Add Openshift OAuth Proxy as SideCar Container | `false` |
+| deployment.openshiftOAuthProxy.port | Application port so proxy should forward to this port | `8080` |
+| deployment.openshiftOAuthProxy.secretName | Secret name containing the TLS cert | `openshift-oauth-proxy-tls` |
 | deployment.additionalContainers | Add additional containers besides init and app containers | `[]` |
 | deployment.securityContext | Security Context for the pod | `{}` |
 | persistence.enabled | Enable persistence | `false` |
+| persistence.mountPVC | Whether to mount the created PVC to the deployment | `false` |
+| persistence.mountPath | If `persistence.mountPVC` is set, so where to mount the volume in the deployment | `/` |
 | persistence.accessMode | Access mode for volume | `ReadWriteOnce` |
 | persistence.storageClass | StorageClass of the volume  | `-` |
 | persistence.additionalLabels | Additional labels for persistent volume | `{}` |
@@ -114,3 +110,17 @@ To uninstall the chart:
 | autoscaling.minReplicas | Sets minimum replica count when autoscaling is enabled | `1` |
 | autoscaling.maxReplicas | Sets maximum replica count when autoscaling is enabled | `10` |
 | autoscaling.metrics | Configuration for hpa metrics, set when autoscaling is enabled | `{}` |
+| endpointMonitor.enabled | Enable endpointMonitor for IMC (https://github.com/stakater/IngressMonitorController) | `false` |
+| endpointMonitor.additionalLabels | Labels for endpointMonitor | `{}` |
+| endpointMonitor.annotations | Annotations for endpointMonitor | `{}` |
+| endpointMonitor.additionalConfig | Additional Config for endpointMonitor | `{}` |
+| space.enabled | Enable Space Custom Resource | `false` |
+| space.additionalLabels | Additional labels for Space Custom Resource | `{}` |
+| space.annotations | Annotations for Space Custom Resource | `{}` |
+| space.tenant | Tenant associated with Space Custom Resource | `""` |
+| sealedSecret.enabled | Enable sealed secret | `false` |
+| sealedSecret.additionalLabels | Labels for sealed secret | `{}` |
+| sealedSecret.annotations | Annotations for sealed secret | `{}` |
+| sealedSecret.files | Array of secret files with name and encrypted data contained in those files | `[]` |
+
+

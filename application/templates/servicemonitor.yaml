@@ -1,3 +1,4 @@
+{{- if .Values.serviceMonitor }}
 {{- if .Values.serviceMonitor.enabled }}
 apiVersion: "monitoring.coreos.com/v1"
 kind: ServiceMonitor
@@ -15,6 +16,7 @@ metadata:
 {{ toYaml .Values.serviceMonitor.annotations | indent 4 }}
 {{- end }}
   name: {{ template "application.name" . }}-svc-monitor
+  namespace: {{ template "application.namespace" . }}
 spec:
   selector:
     matchLabels:
@@ -24,4 +26,5 @@ spec:
     - {{ .Release.Namespace }}
   endpoints:
 {{ toYaml .Values.serviceMonitor.endpoints | indent 4 }}
+{{- end }}
 {{- end }}

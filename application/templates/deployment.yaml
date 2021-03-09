@@ -18,6 +18,7 @@ metadata:
     reloader.stakater.com/auto: "true"
 {{- end }}
   name: {{ template "application.name" . }}
+  namespace: {{ template "application.namespace" . }}
 spec:
   replicas: {{ .Values.deployment.replicas }}
   selector:
@@ -30,8 +31,7 @@ spec:
   template:
     metadata:
       labels:
-{{ include "application.labels.stakater" . | indent 8 }}
-{{ include "application.labels.chart" . | indent 8 }}
+{{ include "application.labels.selector" . | indent 8 }}
 {{- if .Values.deployment.podLabels }}
 {{ toYaml .Values.deployment.podLabels | indent 8 }}
 {{- end }}
@@ -90,35 +90,67 @@ spec:
       - name: {{ .Values.deployment.imagePullSecrets }}
       {{- end }}
       containers:
+        {{- if .Values.deployment.openshiftOAuthProxy.enabled }}
+      - args:
+        - --https-address=:8443
+        - --provider=openshift
+        - --upstream=http://localhost:{{ .Values.deployment.openshiftOAuthProxy.port }}
+        - --openshift-service-account={{ template "application.name" . }}
+        - --tls-cert=/etc/tls/private/tls.crt
+        - --tls-key=/etc/tls/private/tls.key
+        - --cookie-secret=SECRET
+        image: openshift/oauth-proxy:latest
+        imagePullPolicy: IfNotPresent
+        name: oauth-proxy
+        ports:
+        - containerPort: 8443
+          name: proxy
+        volumeMounts:
+        - mountPath: /etc/tls/private
+          name: proxy-tls 
+        {{- end }}
       - name: {{ template "application.name" . }}
         image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
         imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+        {{- if .Values.deployment.envFrom }}
+        envFrom:
+        {{- range .Values.deployment.envFrom }}
+        {{- if (eq .type "configmap") }}
+        - configMapRef:
+            {{- if .name }}
+            name: {{ .name }}
+            {{- else }}
+            name: {{ template "application.name" $ }}
+            {{- end }}
+        {{- end }}
+        {{- if (eq .type "secret") }}
+        - secretRef:
+            {{- if .name }}
+            name: {{ .name }}
+            {{- else }}
+            name: {{ template "application.name" $ }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- end }}
         {{- if .Values.deployment.env }}
         env:
 {{ toYaml .Values.deployment.env | indent 10 }}
-        {{- end }}          
-        livenessProbe:
-          failureThreshold: {{ .Values.deployment.probes.livenessProbe.failureThreshold }}
-          periodSeconds: {{ .Values.deployment.probes.livenessProbe.periodSeconds }}
-          successThreshold: {{ .Values.deployment.probes.livenessProbe.successThreshold }}
-          timeoutSeconds: {{ .Values.deployment.probes.livenessProbe.timeoutSeconds }}
-          initialDelaySeconds: {{ .Values.deployment.probes.livenessProbe.initialDelaySeconds }}
-          httpGet:
-            path: {{ .Values.deployment.probes.livenessProbe.httpGet.path }}
-            port: {{ .Values.deployment.probes.livenessProbe.httpGet.port }}
-        readinessProbe:
-          failureThreshold: {{ .Values.deployment.probes.readinessProbe.failureThreshold }}
-          periodSeconds: {{ .Values.deployment.probes.readinessProbe.periodSeconds }}
-          successThreshold: {{ .Values.deployment.probes.readinessProbe.successThreshold }}
-          timeoutSeconds: {{ .Values.deployment.probes.readinessProbe.timeoutSeconds }}
-          initialDelaySeconds: {{ .Values.deployment.probes.readinessProbe.initialDelaySeconds }}
-          httpGet:
-            path: {{ .Values.deployment.probes.readinessProbe.httpGet.path }}
-            port: {{ .Values.deployment.probes.readinessProbe.httpGet.port }}
-        {{- if .Values.deployment.volumeMounts }}
-        volumeMounts:
-{{ toYaml .Values.deployment.volumeMounts | indent 10 }}
         {{- end }}
+        livenessProbe:
+{{ toYaml .Values.deployment.probes.livenessProbe | indent 10 }}
+        readinessProbe:
+{{ toYaml .Values.deployment.probes.readinessProbe | indent 10 }}
+      {{- if or (.Values.deployment.volumeMounts) (and (eq .Values.persistence.enabled true) (eq .Values.persistence.mountPVC true) )}} 
+        volumeMounts:
+        {{- if (eq .Values.persistence.mountPVC true) }}
+        - mountPath: {{ .Values.persistence.mountPath }}
+          name: {{ template "application.name" . }}-data
+        {{- end }}
+        {{- if .Values.deployment.volumeMounts }}
+{{ toYaml .Values.deployment.volumeMounts | indent 8 }}
+        {{- end }}
+      {{- end }}
         resources:
           limits:
             memory: {{ .Values.deployment.resources.limits.memory }}
@@ -133,10 +165,22 @@ spec:
       securityContext:      
 {{ toYaml .Values.deployment.securityContext | indent 8 }}
           {{- end }}
-      {{- if .Values.deployment.volumes }}
+      {{- if or (.Values.deployment.openshiftOAuthProxy.enabled) (.Values.deployment.volumes) (and (eq .Values.persistence.enabled true) (eq .Values.persistence.mountPVC true) )}} 
       volumes:
-{{ toYaml .Values.deployment.volumes | indent 8 }}
-        {{- end }}  
+        {{- if .Values.deployment.openshiftOAuthProxy.enabled }}
+      - name: proxy-tls
+        secret:
+          secretName: {{ .Values.deployment.openshiftOAuthProxy.secretName }}
+        {{- end }}
+        {{- if (eq .Values.persistence.mountPVC true) }}
+      - name: {{ template "application.name" . }}-data
+        persistentVolumeClaim:
+          claimName: {{ template "application.name" . }}-data
+        {{- end }}
+        {{- if .Values.deployment.volumes }}
+{{ include "application.tplvalues.render" ( dict "value" .Values.deployment.volumes "context" $ ) | indent 6 }}
+        {{- end }}
+      {{- end }}  
       {{- if .Values.rbac.serviceAccount.name }}
       serviceAccountName: {{ .Values.rbac.serviceAccount.name }}
         {{- else }}

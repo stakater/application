@@ -1,0 +1,90 @@
+name: Pull Request
+
+on:
+  pull_request_target:
+    branches:
+      - master
+    paths-ignore:
+    - 'README.md'
+
+env:
+  CHART_NAME: "application"
+  KUBERNETES_VERSION: "1.18.0"
+  KIND_VERSION: "0.7.0"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest 
+    name: Build
+    if: "! contains(toJSON(github.event.commits.*.message), '[skip-ci]')"    
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Install kubectl
+      run: |
+        curl -LO "https://storage.googleapis.com/kubernetes-release/release/v${KUBERNETES_VERSION}/bin/linux/amd64/kubectl"
+        sudo install ./kubectl /usr/local/bin/ && rm kubectl
+        kubectl version --short --client
+        kubectl version --short --client | grep -q ${KUBERNETES_VERSION}
+
+    - name: Install Kind
+      run: |
+        curl -L -o kind https://github.com/kubernetes-sigs/kind/releases/download/v${KIND_VERSION}/kind-linux-amd64
+        sudo install ./kind /usr/local/bin && rm kind
+        kind version
+        kind version | grep -q ${KIND_VERSION}
+
+    - name: Create Kind Cluster
+      run: |
+        kind create cluster
+
+    # Set Up Helm
+    - name: Set up Helm
+      uses: azure/setup-helm@v1
+      with:
+        version: v3.4.0
+
+    # Lint
+    - name: Helm Lint
+      run: |
+        helm lint ${CHART_NAME}
+
+    # Dry run to ensure that manifests are generated successfully 
+    - name: Dry Run Chart
+      run: |
+        helm install ${CHART_NAME} ${CHART_NAME} --dry-run --debug
+
+    # package
+    - name: Helm Package
+      run: |
+        helm package ${CHART_NAME}    
+
+    - name: Comment on PR
+      uses: mshick/add-pr-comment@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.STAKATER_GITHUB_TOKEN }}
+      with:
+        message: '@${{ github.actor }} Validation Successful'
+        allow-repeats: false
+
+    - name: Notify Failure
+      if: failure()
+      uses: mshick/add-pr-comment@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.STAKATER_GITHUB_TOKEN }}
+      with:
+        message: '@${{ github.actor }} Yikes! You better fix it before anyone else finds out! [Build](https://github.com/${{ github.repository }}/commit/${{ github.event.pull_request.head.sha }}/checks) has Failed!'
+        allow-repeats: false
+
+    - name: Notify Slack
+      uses: 8398a7/action-slack@v3
+      if: always() # Pick up events even if the job fails or is canceled.
+      with:
+        status: ${{ job.status }}
+        fields: repo,author,action,eventName,ref,workflow
+      env:
+        GITHUB_TOKEN: ${{ secrets.STAKATER_GITHUB_TOKEN }}
+        SLACK_WEBHOOK_URL: ${{ secrets.STAKATER_DELIVERY_SLACK_WEBHOOK }}

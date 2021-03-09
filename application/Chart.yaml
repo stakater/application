@@ -1,13 +1,21 @@
 apiVersion: v1
 name: application
 description: Generic helm chart for all kind of applications
-version: 0.0.23
+
+# Helm chart Version
+version: 0.0.43
+
 keywords:
   - java
   - node
   - dotnet
   - kubernetes
+  - stakater
+  - application
+
 home: https://github.com/stakater-charts/application
 maintainers:
 - name: Stakater
   email: hello@stakater.com
+
+icon: https://github.com/stakater/ForecastleIcons/blob/master/stakater.png

@@ -1,20 +1,21 @@
 # Name of the application.
 applicationName: "application"
 
+namespaceOverride: ""
+   
 # These labels will be added on all resources, and you can add additional labels from below on individual resource
 labels:
   group: com.stakater.platform
   team: stakater
-
 deployment:
-
+  
   # By default deploymentStrategy is set to rollingUpdate with maxSurge of 25% and maxUnavailable of 25%
   # You can change type to `Recreate` or can uncomment `rollingUpdate` specification and adjust them to your usage.
   strategy:
     type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
+    # rollingUpdate:
+    #   maxSurge: 25%
+    #   maxUnavailable: 25%
   
   # Reload deployment if configMap/secret updates
   reloadOnChange: true
@@ -36,7 +37,7 @@ deployment:
   
   # Additional label added on pod which is used in Service's Label Selector
   podLabels: 
-    app: application-name
+    # env: prod
 
   # Annotations on deployments
   annotations:
@@ -57,6 +58,13 @@ deployment:
   # Secrets used to pull image
   imagePullSecrets: ""
 
+  # If want to mount Envs from configmap or secret
+  envFrom: []
+  # - type: configmap
+  #   name: my-configmap
+  # - type: secret
+  #   name: my-secret
+
   # Environment variables to be passed to the app container
   env:
   # - name: ENVIRONMENT
@@ -67,6 +75,9 @@ deployment:
     # - name: config-volume
     #   configMap:        
     #     name: configmap-name
+    # - name: configmap-volume
+    #   configMap:
+    #     name: '{{ template "application.name" . }}-configmap-nameSuffix'
     # - name: secret-volume
     #   secret:        
     #     secretName: secret-name
@@ -135,6 +146,11 @@ deployment:
       memory: 128Mi
       cpu: 0.1
   
+  openshiftOAuthProxy: 
+    enabled: false
+    port: 8080
+    secretName: "openshift-oauth-proxy-tls"
+
   # Add additional containers besides init and app containers
   additionalContainers:
   # - name: sidecar-contaner
@@ -149,6 +165,8 @@ deployment:
 # Add Storage volumes to the pods
 persistence:
   enabled: false
+  mountPVC: false
+  mountPath: "/"
   accessMode: ReadWriteOnce
   ## If defined, storageClass: <storageClass>
   ## If set to "-", storageClass: "", which disables dynamic provisioning
@@ -255,6 +273,16 @@ forecastle:
   # Whether app is network restricted or not
   networkRestricted: false
 
+space:
+  enabled: false
+  # Additional labels on space
+  additionalLabels:
+    # key: value
+  # Annotations on space 
+  annotations: 
+     # key: value
+  # Tenants associated with space
+  tenant: ""
 
 # Role Based Access Control
 rbac:
@@ -329,6 +357,16 @@ configMap:
   #   data:
   #     key1: value1
   #     key2: value2
+sealedSecret:
+  enabled: false
+  additionalLabels: 
+    # key: value
+  annotations: 
+    # key: value
+  files:
+  # - name: example
+  #   encryptedData:
+  #     name: AgBghrdepGMKmp/rdtJrkBv/CWpJbtmoMsbKQ7QiZZ2kUoLeeTbrDnhmJY03kWKkNW4kN/sQRf6r1vvBEaR4nkHt5f/ayAeaH3NveI3bdb0xv/svvWjyjehwqwr/kNEAVWxRoUij0Y7MyIEAr4hnV2UnrhgvcjPJLNA8bK6spA+kuT328Vpyceyvnm6yArNn1aYlEckaFHrnculHWRpG73iRYxS5GWAY7EdkLXx7OLLWoopHtLcupklYyPfraJzPvBNZ5/PsyjlUBvoQbGV3cZlrdEj1WHj2S1RQ13ddf2WGtMHmY83t9B3LFZAZuA7BBt4rjludbwQm3/tJ5Kas1dDsSIRIIF7MTeum9YfRB8XUz8IxVKQ/JDskeynrWe3VzN/3HFVnv9GGFy+BCVXZKVU/roIRancz+nXkyoOHS722ZpBi53dfLItoS5dG+0EzArMTQzK/KXHz3b1rxp5oWWDNt3WggTiSg2zwy5ZR8VV2ToTDof6UrFmbCZv/kKriyxbVSxIo3KFnvuRiUZ5MwC0TNut4mW3LKyJfHqkUuLa1mYV6tKF58qBnoj/+JaibAIBEudT9hms5U52p7/jKmgHuop7XPEsz4OVwER//Vbv7X6ctoXtyPu6mZyOfOyJHM8Qj/H7/gwMBYhZHQ96DWrVmZOsWSRpZGJni4Xm7rgt2cFj6UtWv6lvl8aOi/HSZVC3TwWZ9mQrk
 
 # Additional Secrets
 secret:
@@ -389,3 +427,15 @@ autoscaling:
     resource:
       name: memory
       targetAverageUtilization: 60
+
+# EndpointMonitor for IMC (https://github.com/stakater/IngressMonitorController)
+endpointMonitor:
+  enabled: false
+  
+  # Additional labels
+  additionalLabels:
+    # key: value
+
+  # Additional annotations
+  annotations:
+    # key: value

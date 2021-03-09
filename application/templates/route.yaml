@@ -1,8 +1,10 @@
+{{- if .Values.route -}}
 {{- if .Values.route.enabled -}}
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   name: {{ template "application.name" . }}
+  namespace: {{ template "application.namespace" . }}
   labels:
 {{ include "application.labels.stakater" . | indent 4 }}
 {{ include "application.labels.chart" . | indent 4 }}
@@ -18,7 +20,12 @@ spec:
   host: {{ .Values.route.host }}
 {{- end }}
   port:
+    {{- if .Values.deployment.openshiftOAuthProxy.enabled }}
+    targetPort: proxy
+    {{- else }}
 {{ toYaml .Values.route.port | indent 4 }}
+    {{- end }}
+
   to:
     kind: Service
     name: {{ template "application.name" . }}
@@ -27,4 +34,5 @@ spec:
   tls:
     termination: {{ .Values.route.tls.termination }}
     insecureEdgeTerminationPolicy: {{ .Values.route.tls.insecureEdgeTerminationPolicy }}
+{{- end -}}
 {{- end -}}

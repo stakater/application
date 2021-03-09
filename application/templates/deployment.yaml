@@ -59,8 +59,10 @@ spec:
                 "slack": {
                   "webhookURL": "{{ .webhookURL }}",
                   "channelName": "{{ .channelName }}"
-                }
+                },
                 {{- end }}
+                "key": "{{ .key }}",
+                "pattern": " {{ .pattern }}"
               }
               {{- end }}
             }

@@ -122,5 +122,32 @@ To uninstall the chart:
 | sealedSecret.additionalLabels | Labels for sealed secret | `{}` |
 | sealedSecret.annotations | Annotations for sealed secret | `{}` |
 | sealedSecret.files | Array of secret files with name and encrypted data contained in those files | `[]` |
-
-
+| certificate.enabled | Enable Certficate Custom Resource | `false` |
+| certificate.enabled | Enable Certficate Custom Resource | `false` |
+| certificate.additionalLabels | Additional labels for Certificate Custom Resource  | `{}` |
+| certificate.annotations | Annotations for Certificate Custom Resource  | `{}` |
+| certificate.secretName | SecretName is the name of the secret resource that will be automatically created and managed by this Certificate resource  | `tls-cert` |
+| certificate.duration | The requested ‘duration’ (i.e. lifetime) of the Certificate  | `8760h0m0s` |
+| certificate.renewBefore | The amount of time before the currently issued certificate’s notAfter time that cert-manager will begin to attempt to renew the certificate  | `720h0m0s` |
+| certificate.subject | Full X509 name specification for certificate  | `{}` |
+| certificate.commonName | CommonName is the common name as specified on the DER encoded CSR  | `admin-app` |
+| certificate.keyAlgorithm | KeyAlgorithm is the private key algorithm of the corresponding private key for this certificate | `rsa` |
+| certificate.keyEncoding | KeyEncoding is the private key cryptography standards (PKCS) for this certificate’s private key to be encoded in  | `pkcs1` |
+| certificate.keySize | KeySize is the key bit size of the corresponding private key for this certificate  | `2048` |
+| certificate.isCA | IsCA will mark this Certificate as valid for certificate signing | `false` |
+| certificate.usages | Usages is the set of x509 usages that are requested for the certificate  | `{}` |
+| certificate.dnsNames | DNSNames is a list of DNS subjectAltNames to be set on the Certificate.  | `{}` |
+| certificate.ipAddresses | IPAddresses is a list of IP address subjectAltNames to be set on the Certificate.  | `{}` |
+| certificate.uriSANs | URISANs is a list of URI subjectAltNames to be set on the Certificate.  | `{}` |
+| certificate.emailSANs | EmailSANs is a list of email subjectAltNames to be set on the Certificate.  | `{}` |
+| certificate.privateKey.enabled | Enable private key for the certificate  | `false` |
+| certificate.privateKey.rotationPolicy | Denotes how private keys should be generated or sourced when a Certificate is being issued.  | `Always` |
+| certificate.issuerRef.name | IssuerRef is a reference to the issuer for this certificate. Name of the resource being referred to | `ca-issuer` |
+| certificate.issuerRef.kind | Kind of the resource being referred to | `ClusterIssuer` |
+| certificate.keystores.enabled | Enables keystore configuration. Keystores configures additional keystore output formats stored in the secretName Secret resource | `false` |
+| certificate.keystores.pkcs12.create | Enables PKCS12 keystore creation for the Certificate. PKCS12 configures options for storing a PKCS12 keystore in the spec.secretName Secret resource | `true` |
+| certificate.keystores.pkcs12.key | The key of the entry in the Secret resource’s data field to be used | `test_key` |
+| certificate.keystores.pkcs12.name | The name of the Secret resource being referred to | `test-creds` |
+| certificate.keystores.jks.create | Enables jks keystore creation for the Certificate. JKS configures options for storing a JKS keystore in the spec.secretName Secret resource | `false` |
+| certificate.keystores.jks.key | The key of the entry in the Secret resource’s data field to be used | `test_key` |
+| certificate.keystores.jks.name | The name of the Secret resource being referred to | `test-creds` |

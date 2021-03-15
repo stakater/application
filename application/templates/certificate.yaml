@@ -1,6 +1,6 @@
 {{- if .Values.certificate }}
 {{- if .Values.certificate.enabled }}
-apiVersion: {{ .Values.certificate.apiVersion | quote }}
+apiVersion: cert-manager.io/v1alpha3
 kind: Certificate
 metadata:
   labels:

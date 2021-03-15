@@ -440,10 +440,9 @@ endpointMonitor:
   annotations:
     # key: value
 
-# Service Monitor to collect Prometheus metrices
+# Certficate CRD to generate the certificate
 certificate:
   enabled: false
-  apiVersion: cert-manager.io/v1alpha3
   
   # Additional labels
   additionalLabels:

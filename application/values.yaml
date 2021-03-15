@@ -439,3 +439,66 @@ endpointMonitor:
   # Additional annotations
   annotations:
     # key: value
+
+# Service Monitor to collect Prometheus metrices
+certificate:
+  enabled: false
+  apiVersion: cert-manager.io/v1alpha3
+  
+  # Additional labels
+  additionalLabels:
+    # key: value
+
+  # Additional annotations
+  annotations:
+    # key: value
+
+  secretName: tls-cert
+  duration: 8760h0m0s # 1 year
+  renewBefore: 720h0m0s # 30d
+  subject:
+  #  organizations:
+  #    - stakater
+  #  countries:
+  #    - SE
+  #  organizationalUnits:
+  #    - devOps
+  #  localities:
+  #    - Stockholm
+  #  provinces:
+  #    - Stockholm
+  commonName: admin-app
+  keyAlgorithm: rsa
+  keyEncoding: pkcs1
+  keySize: 2048
+  isCA: false
+  usages:
+  #  - digital signature
+  #  - client auth
+  dnsNames:
+  #  - admin-app
+  ipAddresses:
+  #  - 192.168.0.5
+  uriSANs:
+  #  - spiffe://cluster.local/ns/sandbox/sa/example
+  emailSANs:
+  #  - emailSubjectAltNames
+  privateKey:
+    enabled: false
+    rotationPolicy: Always
+  issuerRef:
+    name: ca-issuer
+    # We can reference ClusterIssuers by changing the kind here.
+    kind: ClusterIssuer
+    group: #cert-manager.io
+  keystores:
+    enabled: false
+    pkcs12:
+      create: true
+      key: test_key
+      name: test-creds
+    jks:
+      create: false
+      key: test_key
+      name: test-creds
+

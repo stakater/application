@@ -1,0 +1,82 @@
+{{- if .Values.certificate }}
+{{- if .Values.certificate.enabled }}
+apiVersion: cert-manager.io/v1alpha3
+kind: Certificate
+metadata:
+  labels:
+{{ include "application.labels.stakater" . | indent 4 }}
+{{ include "application.labels.chart" . | indent 4 }}
+{{- if .Values.certificate.additionalLabels }}
+{{ toYaml .Values.certificate.additionalLabels | indent 4 }}
+{{- end }}
+{{- if or .Values.certificate.annotations .Values.forecastle.enabled }}
+  annotations:
+{{- end }}
+{{- if .Values.certificate.annotations }}
+{{ toYaml .Values.certificate.annotations | indent 4 }}
+{{- end }}
+  name: {{ template "application.name" . }}-certificate
+  namespace: {{ template "application.namespace" . }}
+spec:
+  secretName: {{ .Values.certificate.secretName }}
+  duration: {{ .Values.certificate.duration }}
+  renewBefore: {{ .Values.certificate.renewBefore }}
+  subject:
+{{ toYaml .Values.certificate.subject | indent 4 }}
+  commonName: {{ .Values.certificate.commonName }}
+  keyAlgorithm: {{ .Values.certificate.keyAlgorithm }}
+  keyEncoding: {{ .Values.certificate.keyEncoding }}
+  keySize: {{ .Values.certificate.keySize }}
+ {{- if .Values.certificate.isCA }} 
+  isCA: {{ .Values.certificate.isCA }}
+{{- end }}
+  usages:
+{{ toYaml .Values.certificate.usages | indent 4 }}
+  # At least one of a DNS Name, URI, or IP address is required.
+  dnsNames:
+{{ toYaml .Values.certificate.dnsNames | indent 4 }}
+{{- if .Values.certificate.ipAddresses }}
+  ipAddresses:
+{{ toYaml .Values.certificate.ipAddresses | indent 4 }}
+{{- end }}
+{{- if .Values.certificate.uriSANs }}
+  uriSANs:
+{{ toYaml .Values.certificate.uriSANs | indent 4 }}
+{{- end }}
+{{- if .Values.certificate.emailSANs }}
+  emailSANs:
+{{ toYaml .Values.certificate.emailSANs | indent 4 }}
+{{- end }}
+{{- if .Values.certificate.privateKey.enabled }}
+  privateKey:
+    rotationPolicy: {{ .Values.certificate.privateKey.rotationPolicy }}
+{{- end }}
+  issuerRef:
+    name: {{ .Values.certificate.issuerRef.name }}
+    # We can reference ClusterIssuers by changing the kind here.
+    # The default value is Issuer (i.e. a locally namespaced Issuer)
+    kind: {{ .Values.certificate.issuerRef.kind }}
+{{- if .Values.certificate.issuerRef.group }}
+    # This is optional since cert-manager will default to this value however
+    # if you are using an external issuer, change this to that issuer group.
+    group: {{ .Values.certificate.issuerRef.group }}
+{{- end }}
+{{- if .Values.certificate.keystores.enabled }}
+  keystores:
+{{- if .Values.certificate.keystores.jks.create }}
+    jks:
+      create: {{ .Values.certificate.keystores.jks.create }}
+      passwordSecretRef:
+        key: {{ .Values.certificate.keystores.jks.key }}
+        name: {{ .Values.certificate.keystores.jks.name }}
+{{- end }}
+{{- if .Values.certificate.keystores.pkcs12.create }}
+    pkcs12:
+      create: {{ .Values.certificate.keystores.pkcs12.create }}
+      passwordSecretRef:
+        key: {{ .Values.certificate.keystores.pkcs12.key }}
+        name: {{ .Values.certificate.keystores.pkcs12.name }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

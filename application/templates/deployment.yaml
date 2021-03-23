@@ -112,6 +112,10 @@ spec:
       - name: {{ template "application.name" . }}
         image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
         imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+        {{- if .Values.deployment.ports }}
+        ports:
+{{ toYaml .Values.deployment.ports | indent 10 }}
+        {{- end }}
         {{- if .Values.deployment.envFrom }}
         envFrom:
         {{- range .Values.deployment.envFrom }}

@@ -473,7 +473,7 @@ certificate:
   #  countries:
   #    - SE
   #  organizationalUnits:
-  #    - devOps
+  #    - {{ template "application.namespace" . }}
   #  localities:
   #    - Stockholm
   #  provinces:

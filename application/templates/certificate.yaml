@@ -22,7 +22,6 @@ spec:
   duration: {{ .Values.certificate.duration }}
   renewBefore: {{ .Values.certificate.renewBefore }}
   subject:
-{{ toYaml .Values.certificate.subject | indent 4 }}
 {{ include "application.tplvalues.render" ( dict "value" .Values.certificate.subject "context" $ ) | indent 4 }}
   commonName: {{ .Values.certificate.commonName }}
   keyAlgorithm: {{ .Values.certificate.keyAlgorithm }}

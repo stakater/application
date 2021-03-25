@@ -473,7 +473,7 @@ certificate:
   #  countries:
   #    - SE
   #  organizationalUnits:
-  #    - {{ template "application.namespace" . }}
+  #    - '{{ template "application.namespace" . }}'
   #  localities:
   #    - Stockholm
   #  provinces:

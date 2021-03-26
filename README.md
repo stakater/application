@@ -37,6 +37,7 @@ To uninstall the chart:
 | deployment.envFrom | Environment variables to be picked from configmap or secret | `[]` |
 | deployment.envFrom.type | Type of data i.e. Configmap or Secret | `` |
 | deployment.envFrom.name | Name of Configmap or Secret, if set empty, set to application name | `` |
+| deployment.envFrom.nameSuffix | Suffix Name of Configmap or Secret, applicationName is appended as prefix | `` |
 | deployment.env | Environment variables to be passed to the app container | `[]` |
 | deployment.volumes | Volumes to be added to the pod | `[]` |
 | deployment.volumeMounts | Mount path for Volumes | `[]` |

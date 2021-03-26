@@ -123,6 +123,8 @@ spec:
         - configMapRef:
             {{- if .name }}
             name: {{ .name }}
+            {{- else if .nameSuffix }}
+            name: {{ template "application.name" $ }}-{{ .nameSuffix }}
             {{- else }}
             name: {{ template "application.name" $ }}
             {{- end }}
@@ -131,6 +133,8 @@ spec:
         - secretRef:
             {{- if .name }}
             name: {{ .name }}
+            {{- else if .nameSuffix }}
+            name: {{ template "application.name" $ }}-{{ .nameSuffix }}
             {{- else }}
             name: {{ template "application.name" $ }}
             {{- end }}

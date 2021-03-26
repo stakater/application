@@ -62,6 +62,8 @@ deployment:
   envFrom: []
   # - type: configmap
   #   name: my-configmap
+  # - type: configmap
+  #   nameSuffix: your-configmap
   # - type: secret
   #   name: my-secret
 

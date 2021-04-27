@@ -1,123 +1,199 @@
-name: Push
-
-on:
+name: push
+on: 
   push:
     branches:
       - master
-    paths-ignore:
-    - 'README.md'      
-
-env:
-  CHART_NAME: "application"
-
-  KUBERNETES_VERSION: "1.18.0"
-  KIND_VERSION: "0.7.0"
-
+      - main
+    tags:        
+      - v*
+    
 jobs:
   build:
-    name: Build
-    if: "! contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
     runs-on: ubuntu-latest
-    
+    name: build
     steps:
-    - name: Check out code
+
+    - name: set repo name
+      shell: bash
+      run: | 
+        echo "REPOSITORY_NAME=$(basename $GITHUB_REPOSITORY)" >> $GITHUB_ENV    
+
+    - name: Set up Go 1.x
+      uses: actions/setup-go@v2
+      with:
+        go-version: ^1.15
+    - name: Check out code into the Go module directory
       uses: actions/checkout@v2
-      with:
-        persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
-        fetch-depth: 0 # otherwise, you will fail to push refs to dest repo
 
-    - name: Install kubectl
-      run: |
-        curl -LO "https://storage.googleapis.com/kubernetes-release/release/v${KUBERNETES_VERSION}/bin/linux/amd64/kubectl"
-        sudo install ./kubectl /usr/local/bin/ && rm kubectl
-        kubectl version --short --client
-        kubectl version --short --client | grep -q ${KUBERNETES_VERSION}
-
-    - name: Install Kind
-      run: |
-        curl -L -o kind https://github.com/kubernetes-sigs/kind/releases/download/v${KIND_VERSION}/kind-linux-amd64
-        sudo install ./kind /usr/local/bin && rm kind
-        kind version
-        kind version | grep -q ${KIND_VERSION}
-
-    - name: Create Kind Cluster
-      run: |
-        kind create cluster
-
-    # Generate tag for chart without "v" prefix
-    - name: Generate Tag
-      id: generate_tag
-      uses: anothrNick/github-tag-action@1.26.0
+    - name: Download operator sdk
+      shell: bash
       env:
-        GITHUB_TOKEN: ${{ secrets.STAKATER_GITHUB_TOKEN }}
-        WITH_V: false
-        DEFAULT_BUMP: patch
-        DRY_RUN: true
+        RELEASE_VERSION: v1.3.0
+      run: | 
+        curl -LO https://github.com/operator-framework/operator-sdk/releases/download/${RELEASE_VERSION}/operator-sdk_linux_amd64
+        chmod +x operator-sdk_linux_amd64
+        mkdir ${HOME}/bin
+        mv operator-sdk_linux_amd64 ${HOME}/bin/operator-sdk
+        echo "${HOME}/bin" >> $GITHUB_PATH
 
-    # Update chart tag to the latest semver tag
-    - name: Update Chart Version
-      env:
-        VERSION: ${{ steps.generate_tag.outputs.new_tag }}
-      run: make bump-chart
-
-    # Set Up Helm
-    - name: Set up Helm
-      uses: azure/setup-helm@v1
-      with:
-        version: v3.4.0
-
-    # Lint
-    - name: Helm Lint
+    - name: Get the version for tags
+      id: get_version1
+      if: "startsWith(github.ref, 'refs/tags')"
+      shell: bash
       run: |
-        helm lint ${CHART_NAME}
+        echo "OPERATOR_IMAGE_TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+        echo "BUNDLE_IMAGE_TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+        export TAG=${GITHUB_REF/refs\/tags\//}
+        echo "BUNDLE_VERSION=${TAG:1}" >> $GITHUB_ENV
+        export SEMVER_COMPLIANT=$(echo ${TAG:1} | egrep '^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-])(?:\.(?:0|[1-9]\d|\d*[a-zA-Z-][0-9a-zA-Z-]))))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$')
+        if [ -z "$SEMVER_COMPLIANT" ]; then   echo "invalid semver tag ${GITHUB_REF/refs\/tags\//}"; exit 1; fi
 
-    # Dry run to ensure that manifests are generated successfully 
-    - name: Dry Run Chart
+
+
+    - name: Get the version for merge
+      id: get_version2
+      if: "! startsWith(github.ref, 'refs/tags')"
+      shell: bash 
       run: |
-        helm install ${CHART_NAME} ${CHART_NAME} --dry-run --debug
+        echo "OPERATOR_IMAGE_TAG=v0.0.1" >> $GITHUB_ENV
+        echo "BUNDLE_IMAGE_TAG=v0.0.1" >> $GITHUB_ENV
+        echo "BUNDLE_VERSION=0.0.1" >> $GITHUB_ENV 
 
-    # Publish helm chart
-    - name: Publish Helm chart
-      uses: stefanprodan/helm-gh-pages@master
-      with:
-        branch: master
-        repository: stakater-charts
-        target_dir: docs
-        token: ${{ secrets.STAKATER_GITHUB_TOKEN }}
-        charts_dir: .
-        charts_url: https://stakater.github.io/stakater-charts
-        owner: stakater
-        linting: off 
-        commit_username: stakater-user
-        commit_email: stakater@gmail.com
-
-    # Commit back changes
-    - name: Commit files
+    - name: build code
+      run:  make
+      shell: bash
+      
+    - name: build bundle
+      shell: bash 
       run: |
-        git config --local user.email "stakater@gmail.com"
-        git config --local user.name "stakater-user"
-        git status 
-        git add .
-        git commit -m "[skip-ci] Update artifacts" -a
+        make bundle IMG=${{ secrets.STAKATER_NEXUS_PROD_REGISTRY }}/${{ github.repository }}:${OPERATOR_IMAGE_TAG} VERSION=${BUNDLE_VERSION} DEFAULT_CHANNEL=alpha
 
-    - name: Push changes
-      uses: ad-m/github-push-action@master
+    - name: verify bundle
+      shell: bash
+      run: operator-sdk bundle validate ./bundle --select-optional name=operatorhub
+
+    - name: build chart
+      shell: bash
+      run: make helmchart VERSION=${BUNDLE_VERSION} IMG=${{ secrets.STAKATER_NEXUS_PROD_REGISTRY }}/${{ github.repository }}:${OPERATOR_IMAGE_TAG}
+    - name: Upload helm chart from build job
+      uses: actions/upload-artifact@v2
       with:
-        github_token: ${{ secrets.STAKATER_GITHUB_TOKEN }}
-
-    - name: Push Latest Tag
-      uses: anothrNick/github-tag-action@1.26.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.STAKATER_GITHUB_TOKEN }}
-        WITH_V: true
-        DEFAULT_BUMP: patch
-
-    - name: Notify Slack
-      uses: 8398a7/action-slack@v3
-      if: always() # Pick up events even if the job fails or is canceled.
+        name: helm
+        path: ./charts/
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v1
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+    
+    - name: Login to DockerHub
+      uses: docker/login-action@v1 
       with:
-        status: ${{ job.status }}
-        fields: repo,author,action,eventName,ref,workflow
-      env:
-        GITHUB_TOKEN: ${{ secrets.STAKATER_GITHUB_TOKEN }}
-        SLACK_WEBHOOK_URL: ${{ secrets.STAKATER_DELIVERY_SLACK_WEBHOOK }}
+        username: ${{ secrets.STAKATER_DOCKERHUB_USERNAME }}
+        password: ${{ secrets.STAKATER_DOCKERHUB_PASSWORD }}
+
+    - name: "Build and Push Operator Image"
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        file: ./Dockerfile
+        push: true
+        tags: "${{ github.repository }}:${{ env.OPERATOR_IMAGE_TAG }}"
+
+    - name: "Build and Push Bundle Image"
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        file: ./bundle.Dockerfile
+        push: true
+        tags: "${{ github.repository }}-bundle:${{ env.BUNDLE_IMAGE_TAG }}"
+
+    - name: "Verify bundle image"
+      shell: bash
+      run: operator-sdk bundle validate ${{ github.repository }}-bundle:${BUNDLE_IMAGE_TAG} --select-optional name=operatorhub
+      
+  release-helm-chart:
+    name: Helm Chart Release      
+    runs-on: ubuntu-latest
+    needs: ["build"]
+    steps:
+
+      - name: set repo name
+        shell: bash
+        run: | 
+          echo "REPOSITORY_NAME=$(basename $GITHUB_REPOSITORY)" >> $GITHUB_ENV
+
+      - name: Checkout
+        uses: actions/checkout@v2       
+
+      - name: Get the version
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+
+      - name: Configure Git
+        shell: bash
+        run: |
+          git config --global user.name "$GITHUB_ACTOR"
+          git config --global user.email "$GITHUB_ACTOR@users.noreply.github.com "
+
+      - name: Download helm chart from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: helm
+      # Setting up helm binary
+      - uses: azure/setup-helm@v1 
+ 
+      # Publish helm chart 
+      - name: Publish Helm chart
+        uses: stefanprodan/helm-gh-pages@master
+        with:
+          branch: master
+          repository: stakater-charts
+          target_dir: docs
+          token: ${{ secrets.STAKATER_GITHUB_TOKEN }}
+          charts_dir: ./namespace-configuration-operator
+          charts_url: https://stakater.github.io/stakater-charts
+          owner: stakater
+          linting: off 
+          commit_username: stakater-user
+          commit_email: stakater@gmail.com
+          
+
+  release-github:
+    name: GitHub Release
+    runs-on: ubuntu-latest
+    if: "startsWith(github.ref, 'refs/tags')"
+    needs: ["build"]
+    steps:
+
+      - name: set repo name
+        shell: bash
+        run: | 
+          echo "REPOSITORY_NAME=$(basename $GITHUB_REPOSITORY)" >> $GITHUB_ENV
+
+      - name: Checkout
+        uses: actions/checkout@v2
+      - run: |
+          git fetch --prune --unshallow
+      - name: Get the version
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+      - name: Generate Changelog
+        run: |
+          LATEST_TAG=$(git tag --sort=creatordate | sed '$!d')
+          PREVIOUS_TAG=$(git tag --sort=creatordate | sed 'x;$!d')
+          if [ -z "${PREVIOUS_TAG}" ]; then
+            REV_RANGE=${LATEST_TAG}
+          else
+            REV_RANGE=${PREVIOUS_TAG}..${LATEST_TAG}
+          fi
+          git log --pretty=format:"- %s %H (%aN)" --no-merges ${REV_RANGE} > ${VERSION}-CHANGELOG.txt
+          cat ${VERSION}-CHANGELOG.txt
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: ${{ env.VERSION }}-CHANGELOG.txt
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.STAKATER_GITHUB_TOKEN }}

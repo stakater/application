@@ -518,6 +518,9 @@ certificate:
 # AlertmanagerConfig object for defining application specific alertmanager configurations
 alertmanagerConfig:
   enabled: false
+  
+  # AlertmanagerConfig selectionLabels to specify label to be picked up by Alertmanager to add it to base config. Read more about it at [https://docs.openshift.com/container-platform/4.7/rest_api/monitoring_apis/alertmanager-monitoring-coreos-com-v1.html] under .spec.alertmanagerConfigSelector
+  selectionLabels:
 
   # AlertmanagerConfig spec, read details here [https://docs.openshift.com/container-platform/4.7/rest_api/monitoring_apis/alertmanagerconfig-monitoring-coreos-com-v1alpha1.html]
   spec:

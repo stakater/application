@@ -9,3 +9,5 @@ metadata:
 {{ toYaml .Values.alertmanagerConfig.selectionLabels | indent 4 }}
 spec:
 {{ toYaml .Values.alertmanagerConfig.spec | indent 4 }}
+{{- end -}}
+{{- end -}}

@@ -28,7 +28,7 @@ To uninstall the chart:
 | deployment.nodeSelector | Select node to deploy this application | `{}` |
 | deployment.initContainers | Init containers which runs before the app container | `[]` |
 | deployment.additionalLabels | Additional labels for Deployment | `{}` |
-| deployment.podLables | Additional label added on pod which is used in Service's Label Selector | {} |
+| deployment.podLabels | Additional label added on pod which is used in Service's Label Selector | {} |
 | deployment.annotations | Annotations on deployments | `{}` |
 | deployment.additionalPodAnnotation  | Additional Pod Annotations added on pod created by this Deployment | `{}` |
 | deployment.fluentdConfigAnnotations | Annotations for fluentd Configurations | `{}` |

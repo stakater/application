@@ -153,3 +153,6 @@ To uninstall the chart:
 | certificate.keystores.jks.create | Enables jks keystore creation for the Certificate. JKS configures options for storing a JKS keystore in the spec.secretName Secret resource | `false` |
 | certificate.keystores.jks.key | The key of the entry in the Secret resource’s data field to be used | `test_key` |
 | certificate.keystores.jks.name | The name of the Secret resource being referred to | `test-creds` |
+| alertmanagerConfig.enabled | Enable alertmanagerConfig for this app (Will be merged in the base config) | `false` |
+| alertmanagerConfig.selectionLabels | Labels for this config to be selected for merging in alertmanager base config | `{}` |
+| alertmanagerConfig.spec | Alertmanager configuration | `{}` |

@@ -525,6 +525,21 @@ alertmanagerConfig:
 
   # AlertmanagerConfig spec, read details here [https://docs.openshift.com/container-platform/4.7/rest_api/monitoring_apis/alertmanagerconfig-monitoring-coreos-com-v1alpha1.html]
   spec:
+    # route:
+    #   receiver: "null"
+    #   groupBy:
+    #   - job
+    #   routes:
+    #   - receiver: "null"
+    #     groupBy:
+    #     - alertname
+    #     - severity
+    #     continue: true
+    #   groupWait: 30s
+    #   groupInterval: 5m
+    #   repeatInterval: 12h
+    # receivers:
+    # - name: "null"
 
 # PrometheusRule object for defining application alerting rules
 prometheusRule:
@@ -535,4 +550,14 @@ prometheusRule:
 
   # Groups with alerting rules. Read more here [https://docs.openshift.com/container-platform/4.7/rest_api/monitoring_apis/prometheusrule-monitoring-coreos-com-v1.html]
   spec:
-    groups: []
+    groups: []    
+      # - name: example-app-uptime
+      #   rules:
+      #     - alert: ExampleAppDown
+      #       annotations:
+      #         message: >-
+      #           The Example App is Down (Test Alert)
+      #       expr: up{namespace="test-app"} == 0
+      #       for: 1m
+      #       labels:
+      #         severity: critical  

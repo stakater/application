@@ -156,3 +156,6 @@ To uninstall the chart:
 | alertmanagerConfig.enabled | Enable alertmanagerConfig for this app (Will be merged in the base config) | `false` |
 | alertmanagerConfig.selectionLabels | Labels for this config to be selected for merging in alertmanager base config | `alertmanagerConfig: "workload"` |
 | alertmanagerConfig.spec | Alertmanager configuration | `{}` |
+| prometheusRule.enabled | Enable prometheusRule for this app | `false` |
+| prometheusRule.labels | Kubernetes labels object, these labels will be added to PrometheusRule CRD | `{}` |
+| prometheusRule.spec.groups | PrometheusRules in their groups to be added | `[]` |

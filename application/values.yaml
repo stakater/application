@@ -525,3 +525,14 @@ alertmanagerConfig:
 
   # AlertmanagerConfig spec, read details here [https://docs.openshift.com/container-platform/4.7/rest_api/monitoring_apis/alertmanagerconfig-monitoring-coreos-com-v1alpha1.html]
   spec:
+
+# PrometheusRule object for defining application alerting rules
+prometheusRule:
+  enabled: false
+  
+  # PrometheusRule labels
+  labels:
+
+  # Groups with alerting rules. Read more here [https://docs.openshift.com/container-platform/4.7/rest_api/monitoring_apis/prometheusrule-monitoring-coreos-com-v1.html]
+  spec:
+    groups: []

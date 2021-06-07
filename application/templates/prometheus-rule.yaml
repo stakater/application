@@ -1,0 +1,14 @@
+{{- if .Values.prometheusRule -}}
+{{- if .Values.prometheusRule.enabled -}}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+{{ toYaml .Values.prometheusRule.labels | indent 4 }}
+  name: {{ template "application.name" . }}
+  namespace: {{ template "application.namespace" . }}
+spec:
+  groups:
+{{ toYaml .Values.prometheusRule.groups | indent 4 }}
+{{- end -}}
+{{- end -}}

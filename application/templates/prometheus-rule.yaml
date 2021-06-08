@@ -3,8 +3,10 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
+{{- if .Values.prometheusRule.labels -}}
   labels:
 {{ toYaml .Values.prometheusRule.labels | indent 4 }}
+{{- end -}}
   name: {{ template "application.name" . }}
   namespace: {{ template "application.namespace" . }}
 spec:

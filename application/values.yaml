@@ -163,6 +163,12 @@ deployment:
   # Security Context for the pod
   securityContext:
     # fsGroup: 2000
+  
+  # Command for primary container
+  command: []
+
+  # Args for primary contaner
+  args: []
 
   # List of ports for the primary container
   ports:
@@ -517,7 +523,7 @@ certificate:
 
 # AlertmanagerConfig object for defining application specific alertmanager configurations
 alertmanagerConfig:
-  enabled: false
+  enabled: true
 
   # AlertmanagerConfig spec, read details here [https://docs.openshift.com/container-platform/4.7/rest_api/monitoring_apis/alertmanagerconfig-monitoring-coreos-com-v1alpha1.html]
   spec:

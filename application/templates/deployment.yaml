@@ -112,6 +112,12 @@ spec:
       - name: {{ template "application.name" . }}
         image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
         imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+        {{- if .Values.deployment.command }}
+        command: {{- include "application.tplvalues.render" (dict "value" .Values.deployment.command "context" $) | nindent 12 }}
+        {{- end }}
+        {{- if .Values.deployment.args }}
+        args: {{- include "application.tplvalues.render" (dict "value" .Values.deployment.args "context" $) | nindent 12 }}
+        {{- end }}
         {{- if .Values.deployment.ports }}
         ports:
 {{ toYaml .Values.deployment.ports | indent 10 }}

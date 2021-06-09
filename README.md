@@ -41,6 +41,8 @@ To uninstall the chart:
 | deployment.env | Environment variables to be passed to the app container | `[]` |
 | deployment.volumes | Volumes to be added to the pod | `[]` |
 | deployment.volumeMounts | Mount path for Volumes | `[]` |
+| deployment.command | Command for primary container of deployment | `[]` |
+| deployment.args | Arg for primary container of deployment | `[]` |
 | deployment.tolerations | Taint tolerations for nodes | `[]` |
 | deployment.affinity | Affinity for pod/node | `[]` |
 | deployment.image.repository | Image repository for the application | `repository/image-name` |

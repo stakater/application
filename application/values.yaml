@@ -525,7 +525,7 @@ alertmanagerConfig:
 
   # AlertmanagerConfig spec, read details here [https://docs.openshift.com/container-platform/4.7/rest_api/monitoring_apis/alertmanagerconfig-monitoring-coreos-com-v1alpha1.html]
   spec:
-    # route:
+    route:
     #   receiver: "null"
     #   groupBy:
     #   - job
@@ -538,8 +538,9 @@ alertmanagerConfig:
     #   groupWait: 30s
     #   groupInterval: 5m
     #   repeatInterval: 12h
-    # receivers:
+    receivers: []
     # - name: "null"
+    inhibitRules: []
 
 # PrometheusRule object for defining application alerting rules
 prometheusRule:

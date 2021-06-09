@@ -155,7 +155,9 @@ To uninstall the chart:
 | certificate.keystores.jks.name | The name of the Secret resource being referred to | `test-creds` |
 | alertmanagerConfig.enabled | Enable alertmanagerConfig for this app (Will be merged in the base config) | `false` |
 | alertmanagerConfig.selectionLabels | Labels for this config to be selected for merging in alertmanager base config | `alertmanagerConfig: "workload"` |
-| alertmanagerConfig.spec | Alertmanager configuration | `{}` |
+| alertmanagerConfig.spec.route | The Alertmanager route definition for alerts matching the resource’s namespace. It will be added to the generated Alertmanager configuration as a first-level route | `{}` |
+| alertmanagerConfig.spec.receivers | List of receivers  | `[]` |
+| alertmanagerConfig.spec.inhibitRules | InhibitRule defines an inhibition rule that allows to mute alerts when other alerts are already firing | `[]` |
 | prometheusRule.enabled | Enable prometheusRule for this app | `false` |
 | prometheusRule.labels | Kubernetes labels object, these labels will be added to PrometheusRule CRD | `{}` |
 | prometheusRule.spec.groups | PrometheusRules in their groups to be added | `[]` |

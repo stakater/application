@@ -8,6 +8,16 @@ metadata:
   labels:
 {{ toYaml .Values.alertmanagerConfig.selectionLabels | indent 4 }}
 spec:
-{{ toYaml .Values.alertmanagerConfig.spec | indent 4 }}
+{{- if .Values.alertmanagerConfig.spec.route -}}
+    route:
+{{ toYaml .Values.alertmanagerConfig.spec.route | indent 6 }}
+{{- end -}}
+{{- if .Values.alertmanagerConfig.spec.receivers -}}
+    receivers: {{ toYaml .Values.alertmanagerConfig.spec.receivers | nindent 6 }}
+{{- end -}}
+{{- if .Values.alertmanagerConfig.spec.inhibitRules -}}
+    inhibitRules: {{ toYaml .Values.alertmanagerConfig.spec.inhibitRules | nindent 6 }}
+{{- end -}}
+
 {{- end -}}
 {{- end -}}

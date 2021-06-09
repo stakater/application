@@ -520,10 +520,3 @@ certificate:
       create: false
       key: test_key
       name: test-creds
-
-# AlertmanagerConfig object for defining application specific alertmanager configurations
-alertmanagerConfig:
-  enabled: true
-
-  # AlertmanagerConfig spec, read details here [https://docs.openshift.com/container-platform/4.7/rest_api/monitoring_apis/alertmanagerconfig-monitoring-coreos-com-v1alpha1.html]
-  spec:

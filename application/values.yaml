@@ -25,6 +25,17 @@ deployment:
     # cloud.google.com/gke-nodepool: default-pool  
 
   # Init containers which runs before the app container
+  hostAliases:
+  # - ip: "127.0.0.1"
+  #   hostnames:
+  #   - "foo.local"
+  #   - "bar.local"
+  # - ip: "10.1.2.3"
+  #   hostnames:
+  #   - "foo.remote"
+  #   - "bar.remote"
+
+  # Init containers which runs before the app container
   initContainers:
   # - name: init-contaner
   #   image: busybox

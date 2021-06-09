@@ -69,6 +69,10 @@ spec:
           ]
 {{- end }}
     spec:
+      {{- if .Values.deployment.hostAliases }}
+      hostAliases:      
+{{ toYaml .Values.deployment.hostAliases | indent 6 }}
+      {{- end }}
       {{- if .Values.deployment.initContainers }}
       initContainers:      
 {{ toYaml .Values.deployment.initContainers | indent 6 }}

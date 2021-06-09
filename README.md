@@ -26,6 +26,7 @@ To uninstall the chart:
 | deployment.strategy | Strategy for updating deployments |`RollingUpdate`|
 | deployment.reloadOnChange| Reload deployment if configMap/secret mounted are updated | `true` |
 | deployment.nodeSelector | Select node to deploy this application | `{}` |
+| deployment.hostAliases | Adding entries to a Pod's /etc/hosts file provides Pod-level override of hostname resolution when DNS and other options are not applicable | `[]` |
 | deployment.initContainers | Init containers which runs before the app container | `[]` |
 | deployment.additionalLabels | Additional labels for Deployment | `{}` |
 | deployment.podLabels | Additional label added on pod which is used in Service's Label Selector | {} |

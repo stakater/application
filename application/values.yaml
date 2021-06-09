@@ -163,6 +163,12 @@ deployment:
   # Security Context for the pod
   securityContext:
     # fsGroup: 2000
+  
+  # Command for primary container
+  command: []
+
+  # Args for primary contaner
+  args: []
 
   # List of ports for the primary container
   ports:

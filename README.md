@@ -162,5 +162,5 @@ To uninstall the chart:
 | alertmanagerConfig.spec.receivers | List of receivers  | `[]` |
 | alertmanagerConfig.spec.inhibitRules | InhibitRule defines an inhibition rule that allows to mute alerts when other alerts are already firing | `[]` |
 | prometheusRule.enabled | Enable prometheusRule for this app | `false` |
-| prometheusRule.labels | Kubernetes labels object, these labels will be added to PrometheusRule CRD | `{}` |
+| prometheusRule.additionalLabels | Kubernetes labels object, these additional labels will be added to PrometheusRule CRD | `{}` |
 | prometheusRule.spec.groups | PrometheusRules in their groups to be added | `[]` |

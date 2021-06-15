@@ -569,7 +569,7 @@ prometheusRule:
   enabled: false
   
   # PrometheusRule labels
-  labels:
+  additionalLabels:
     # prometheus: stakater-workload-monitoring
     # role: alert-rules
 

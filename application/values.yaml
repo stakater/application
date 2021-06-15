@@ -531,3 +531,58 @@ certificate:
       create: false
       key: test_key
       name: test-creds
+
+# AlertmanagerConfig object for defining application specific alertmanager configurations
+alertmanagerConfig:
+  enabled: false
+  
+  # AlertmanagerConfig selectionLabels to specify label to be picked up by Alertmanager to add it to base config. Read more about it at [https://docs.openshift.com/container-platform/4.7/rest_api/monitoring_apis/alertmanager-monitoring-coreos-com-v1.html] under .spec.alertmanagerConfigSelector
+  selectionLabels:
+    alertmanagerConfig: "workload"
+
+  # AlertmanagerConfig spec, read details here [https://docs.openshift.com/container-platform/4.7/rest_api/monitoring_apis/alertmanagerconfig-monitoring-coreos-com-v1alpha1.html]
+  spec:
+    route:
+    #   receiver: "null"
+    #   groupBy:
+    #   - job
+    #   routes:
+    #   - receiver: "null"
+    #     groupBy:
+    #     - alertname
+    #     - severity
+    #     continue: true
+    #   groupWait: 30s
+    #   groupInterval: 5m
+    #   repeatInterval: 12h
+    receivers: []
+    # - name: "null"
+    inhibitRules: []
+    # - sourceMatch:
+    #     severity: 'critical'
+    #   targetMatch:
+    #     severity: 'warning'
+    #   equal: ['cluster', 'service']
+
+# PrometheusRule object for defining application alerting rules
+prometheusRule:
+  enabled: false
+  
+  # PrometheusRule labels
+  additionalLabels:
+    # prometheus: stakater-workload-monitoring
+    # role: alert-rules
+
+  # Groups with alerting rules. Read more here [https://docs.openshift.com/container-platform/4.7/rest_api/monitoring_apis/prometheusrule-monitoring-coreos-com-v1.html]
+  spec:
+    groups: []    
+      # - name: example-app-uptime
+      #   rules:
+      #     - alert: ExampleAppDown
+      #       annotations:
+      #         message: >-
+      #           The Example App is Down (Test Alert)
+      #       expr: up{namespace="test-app"} == 0
+      #       for: 1m
+      #       labels:
+      #         severity: critical  

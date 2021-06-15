@@ -558,6 +558,11 @@ alertmanagerConfig:
     receivers: []
     # - name: "null"
     inhibitRules: []
+    # - sourceMatch:
+    #     severity: 'critical'
+    #   targetMatch:
+    #     severity: 'warning'
+    #   equal: ['cluster', 'service']
 
 # PrometheusRule object for defining application alerting rules
 prometheusRule:

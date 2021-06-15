@@ -570,6 +570,8 @@ prometheusRule:
   
   # PrometheusRule labels
   labels:
+    # prometheus: my-application-alerts
+    role: alert-rules
 
   # Groups with alerting rules. Read more here [https://docs.openshift.com/container-platform/4.7/rest_api/monitoring_apis/prometheusrule-monitoring-coreos-com-v1.html]
   spec:

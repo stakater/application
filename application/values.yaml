@@ -269,6 +269,9 @@ route:
   
   # Additional labels for this Route
   additionalLabels:
+  
+  # If no host is added then openshift inserts the default hostname. To Add host explicitly, use host attribute
+  host:
 
   # Port of the service that serves pods
   port:

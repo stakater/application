@@ -13,6 +13,6 @@ metadata:
   namespace: {{ template "application.namespace" . }}
 spec:
   groups:
-{{ toYaml .Values.prometheusRule.spec.groups | indent 4 }}
+{{ toYaml .Values.prometheusRule.groups | indent 4 }}
 {{- end -}}
 {{- end -}}

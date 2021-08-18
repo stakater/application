@@ -1,0 +1,6 @@
+route:
+  enabled: true
+alertmanagerConfig:
+  enabled: true
+space:
+  enabled: true

@@ -87,7 +87,7 @@ spec:
       {{- end }}
       {{- if .Values.deployment.affinity }}
       affinity:
-      {{ toYaml .Values.deployment.affinity | indent 8 -}}
+{{ toYaml .Values.deployment.affinity | indent 8 -}}
       {{- end }}
       {{- if .Values.deployment.imagePullSecrets }}      
       imagePullSecrets:

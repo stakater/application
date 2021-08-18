@@ -573,7 +573,7 @@ alertmanagerConfig:
 
 # PrometheusRule object for defining application alerting rules
 prometheusRule:
-  enabled: true
+  enabled: false
   
   # PrometheusRule labels
   additionalLabels:

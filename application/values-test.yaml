@@ -1,0 +1,597 @@
+# Name of the application.
+applicationName: "application"
+
+namespaceOverride: ""
+   
+# These labels will be added on all resources, and you can add additional labels from below on individual resource
+labels:
+  group: com.stakater.platform
+  team: stakater
+deployment:
+  
+  # By default deploymentStrategy is set to rollingUpdate with maxSurge of 25% and maxUnavailable of 25%
+  # You can change type to `Recreate` or can uncomment `rollingUpdate` specification and adjust them to your usage.
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  
+  # Reload deployment if configMap/secret updates
+  reloadOnChange: true
+
+  # Select nodes to deploy which matches the following labels  
+  nodeSelector:
+    # cloud.google.com/gke-nodepool: default-pool  
+
+  # Init containers which runs before the app container
+  hostAliases:
+  - ip: "127.0.0.1"
+    hostnames:
+    - "foo.local"
+    - "bar.local"
+  - ip: "10.1.2.3"
+    hostnames:
+    - "foo.remote"
+    - "bar.remote"
+
+  # Init containers which runs before the app container
+  initContainers:
+  - name: init-contaner
+    image: busybox
+    imagePullPolicy: IfNotPresent
+    command: ['/bin/sh']    
+
+  # Additional labels for Deployment
+  additionalLabels:
+    key: value
+  
+  # Additional label added on pod which is used in Service's Label Selector
+  podLabels: 
+    env: prod
+
+  # Annotations on deployments
+  annotations:
+
+  # Additional Pod Annotations added on pod created by this Deployment
+  additionalPodAnnotations:
+    key: value
+  
+  # Annotations for fluentd Configurations
+  fluentdConfigAnnotations:
+    fluentd:
+      regex: hello
+      timeFormat: world
+
+  # Replicas to be created
+  replicas: 2
+
+  # Secrets used to pull image
+  imagePullSecrets: ""
+
+  # If want to mount Envs from configmap or secret
+  envFrom: 
+  - type: configmap
+    name: my-configmap
+  - type: configmap
+    nameSuffix: your-configmap
+  - type: secret
+    name: my-secret
+
+  # Environment variables to be passed to the app container
+  env:
+  - name: ENVIRONMENT
+    value: "dev"
+  
+  # Volumes to be added to the pod
+  volumes:
+    - name: config-volume
+      configMap:        
+        name: configmap-name
+    - name: configmap-volume
+      configMap:
+        name: '{{ template "application.name" . }}-configmap-nameSuffix'
+    - name: secret-volume
+      secret:        
+        secretName: secret-name
+    - name: volume-name
+      emptyDir: {}
+    - name: persistent-volume-name
+      persistentVolumeClaim:
+        claimName: claim-name
+
+  # Mount path for Volumes 
+  volumeMounts:
+    - mountPath: /path
+      name: volume-name
+
+  # Taint tolerations for nodes
+  tolerations:
+    - key: "dedicated"
+      operator: "Equal"
+      value: "app"
+      effect: "NoSchedule"
+
+  # Pod affinity and pod anti-affinity allow you to specify rules about how pods should be placed relative to other pods.
+  affinity:
+   nodeAffinity:
+     requiredDuringSchedulingIgnoredDuringExecution:
+       nodeSelectorTerms:
+       - matchExpressions:
+         - key: disktype
+           operator: In
+           values:
+           - ssd
+
+  # Image of the app container
+  image: 
+    repository: repository/image-name
+    tag: v1.0.0
+    pullPolicy: IfNotPresent
+
+  # Readiness and Liveness probes
+  probes:
+    readinessProbe:
+      failureThreshold: 3
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+      initialDelaySeconds: 10
+      httpGet:
+        path: /path
+        port: 8080
+    livenessProbe:
+      failureThreshold: 3
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+      initialDelaySeconds: 10
+      httpGet:
+        path: /path
+        port: 8080
+
+  # Resources to be defined for pod
+  resources: 
+    limits:
+      memory: 256Mi
+      cpu: 0.5
+    requests:
+      memory: 128Mi
+      cpu: 0.1
+  
+  openshiftOAuthProxy: 
+    enabled: true
+    port: 8080
+    secretName: "openshift-oauth-proxy-tls"
+
+  # Add additional containers besides init and app containers
+  additionalContainers:
+  - name: sidecar-contaner
+    image: busybox
+    imagePullPolicy: IfNotPresent
+    command: ['/bin/sh']    
+
+  # Security Context for the pod
+  securityContext:
+    # fsGroup: 2000
+  
+  # Command for primary container
+  command: []
+
+  # Args for primary contaner
+  args: []
+
+  # List of ports for the primary container
+  ports:
+  - containerPort: 8080
+    name: http
+    protocol: TCP
+  - containerPort: 8778
+    name: jolokia
+    protocol: TCP
+  - containerPort: 8443
+    name: https
+    protocol: TCP
+
+# Add Storage volumes to the pods
+persistence:
+  enabled: true
+  mountPVC: false
+  mountPath: "/"
+  accessMode: ReadWriteOnce
+  ## If defined, storageClass: <storageClass>
+  ## If set to "-", storageClass: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClass spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  storageClass: "-"
+  additionalLabels:
+    # key: "value"
+  annotations:
+  #  "helm.sh/resource-policy": keep
+  storageSize: 8Gi
+
+# Service object for servicing pods
+service:
+  additionalLabels:
+    # expose: "true"
+
+  annotations:
+    config.xposer.stakater.com/Domain: stakater.com
+    config.xposer.stakater.com/IngressNameTemplate: '{{.Service}}-{{.Namespace}}'
+    config.xposer.stakater.com/IngressURLPath: /
+    config.xposer.stakater.com/IngressURLTemplate: '{{.Service}}.{{.Namespace}}.{{.Domain}'
+    xposer.stakater.com/annotations: |-
+      kubernetes.io/ingress.class: external-ingress
+      ingress.kubernetes.io/rewrite-target: /
+      ingress.kubernetes.io/force-ssl-redirect: true
+  
+  ports:
+    - port: 8080
+      name: http
+      protocol: TCP
+      targetPort: 8080
+
+# Ingress object for exposing services
+ingress:
+  enabled: true
+  
+  # Port of the service that serves pods
+  servicePort: http
+  
+  # List of host addresses to be exposed by this Ingress
+  hosts:
+    - chart-example.local
+  
+  # Add annotations to this Ingress
+  annotations:
+    kubernetes.io/ingress.class: external-ingress
+    ingress.kubernetes.io/rewrite-target: /
+    ingress.kubernetes.io/force-ssl-redirect: true
+
+  # TLS details for this Ingress
+  tls:
+    # Secrets must be manually created in the namespace.
+    - secretName: chart-example-tls
+      hosts:
+        - chart-example.local
+
+# Route object for exposing services (OpenShift only)
+route:
+  enabled: true
+
+  # Add annotations to this Route
+  annotations:
+    kubernetes.io/ingress.class: external-ingress
+    ingress.kubernetes.io/rewrite-target: /
+    ingress.kubernetes.io/force-ssl-redirect: true
+  
+  # Additional labels for this Route
+  additionalLabels:
+  
+  # If no host is added then openshift inserts the default hostname. To Add host explicitly, use host attribute
+  host:
+
+  # Port of the service that serves pods
+  port:
+    targetPort: http
+
+  wildcardPolicy: None
+
+  tls:
+    # TLS Termination strategy
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+
+
+# Expose Application on Forecastle Dashboard
+forecastle:
+  enabled: true
+
+  # Add additional labels on Forecastle Custom Resource
+  additionalLabels:
+  
+  # URL of the icon for the custom app
+  icon: https://raw.githubusercontent.com/stakater/ForecastleIcons/master/stakater-big.png
+  
+  # Name of the application to be displayed on the Forecastle Dashboard
+  displayName: "application"
+  
+  # Group for the custom app (default: .Release.Namespace)
+  group: ""
+
+  # Add properties to Custom Resource
+  properties:
+  
+  # Whether app is network restricted or not
+  networkRestricted: false
+
+space:
+  enabled: true
+  # Additional labels on space
+  additionalLabels:
+    # key: value
+  # Annotations on space 
+  annotations: 
+     # key: value
+  # Tenants associated with space
+  tenant: ""
+
+# Role Based Access Control
+rbac:
+  enabled: true
+
+  # Service Account to use by pods
+  serviceAccount:
+    enabled: true
+    name: ""
+
+    # Additional Labels on service account
+    additionalLabels:
+      # key: value
+    
+    # Annotations on service account 
+    annotations:
+      # key: value
+
+  # Create Roles (Namespaced)
+  roles:
+  # - name: configmaps
+  #   rules:
+  #   - apiGroups:
+  #     - ""
+  #     resources:
+  #     - configmaps
+  #     verbs:
+  #     - get
+  # - name: secrets
+  #   rules:
+  #   - apiGroups:
+  #     - ""
+  #     resources:
+  #     - secrets
+  #     verbs:
+  #     - get
+
+  # Create ClusterRoles (Clusterwide)
+  clusterroles:
+  # - name: configmaps
+  #   rules:
+  #   - apiGroups:
+  #     - ""
+  #     resources:
+  #     - configmaps
+  #     verbs:
+  #     - get
+  # - name: pods
+  #   rules:
+  #   - apiGroups:
+  #     - ""
+  #     resources:
+  #     - pods
+  #     verbs:
+  #     - get
+  #     - list
+  #     - watch
+
+# Additional ConfigMaps  
+configMap:
+  enabled: true
+  additionalLabels: 
+    # key: value
+  annotations: 
+    # key: value
+  files:
+  # - nameSuffix: code-config    
+  #   data:
+  #     key1: value1
+  #     key2: value2
+  # - nameSuffix: dev-config
+  #   data:
+  #     key1: value1
+  #     key2: value2
+sealedSecret:
+  enabled: true
+  additionalLabels: 
+    # key: value
+  annotations: 
+    # key: value
+  files:
+  # - name: example
+  #   encryptedData:
+  #     name: AgBghrdepGMKmp/rdtJrkBv/CWpJbtmoMsbKQ7QiZZ2kUoLeeTbrDnhmJY03kWKkNW4kN/sQRf6r1vvBEaR4nkHt5f/ayAeaH3NveI3bdb0xv/svvWjyjehwqwr/kNEAVWxRoUij0Y7MyIEAr4hnV2UnrhgvcjPJLNA8bK6spA+kuT328Vpyceyvnm6yArNn1aYlEckaFHrnculHWRpG73iRYxS5GWAY7EdkLXx7OLLWoopHtLcupklYyPfraJzPvBNZ5/PsyjlUBvoQbGV3cZlrdEj1WHj2S1RQ13ddf2WGtMHmY83t9B3LFZAZuA7BBt4rjludbwQm3/tJ5Kas1dDsSIRIIF7MTeum9YfRB8XUz8IxVKQ/JDskeynrWe3VzN/3HFVnv9GGFy+BCVXZKVU/roIRancz+nXkyoOHS722ZpBi53dfLItoS5dG+0EzArMTQzK/KXHz3b1rxp5oWWDNt3WggTiSg2zwy5ZR8VV2ToTDof6UrFmbCZv/kKriyxbVSxIo3KFnvuRiUZ5MwC0TNut4mW3LKyJfHqkUuLa1mYV6tKF58qBnoj/+JaibAIBEudT9hms5U52p7/jKmgHuop7XPEsz4OVwER//Vbv7X6ctoXtyPu6mZyOfOyJHM8Qj/H7/gwMBYhZHQ96DWrVmZOsWSRpZGJni4Xm7rgt2cFj6UtWv6lvl8aOi/HSZVC3TwWZ9mQrk
+
+# Additional Secrets
+secret:
+  enabled: true
+  additionalLabels: 
+    # key: value
+  annotations: 
+    # key: value
+  files:    
+  # - nameSuffix: credentials
+  #   data:
+  #     secretKey1: secretValue1
+  #     secretKey2: secretValue2
+  # - nameSuffix: password
+  #   data:
+  #     secretKey1: secretValue1
+  #     secretKey2: secretValue2
+
+# Service Monitor to collect Prometheus metrices
+serviceMonitor:
+  enabled: true
+  
+  # Additional labels
+  additionalLabels:
+    # key: value
+
+  # Additional annotations
+  annotations:
+    # key: value
+
+  # List of the endpoints of service from which prometheus will scrape data
+  endpoints:
+  - interval: 5s
+    path: /actuator/prometheus
+    port: http
+
+# autoscaling is used for horizonal pod autoscaling
+autoscaling:
+# enabled is a boolean flag for enabling or disabling autoscaling 
+  enabled: true
+# additionalLabels defines additional labels
+  additionalLabels: 
+    # key: value
+# annotations defines annotations in key value pair
+  annotations: 
+    # key: value
+# minReplicas sets the minimum number of replicas
+  minReplicas: 1
+# maxReplicas sets the maximum number of replicas
+  maxReplicas: 10
+# metrics is the list of metrics used for hpa
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target: 
+         type: Utilization
+         averageUtilization: 60
+  - type: Resource
+    resource:
+      name: memory
+      target: 
+         type: Utilization
+         averageUtilization: 60
+
+# EndpointMonitor for IMC (https://github.com/stakater/IngressMonitorController)
+endpointMonitor:
+  enabled: true
+  
+  # Additional labels
+  additionalLabels:
+    # key: value
+
+  # Additional annotations
+  annotations:
+    # key: value
+
+# Certficate CRD to generate the certificate
+certificate:
+  enabled: true
+  
+  # Additional labels
+  additionalLabels:
+    # key: value
+
+  # Additional annotations
+  annotations:
+    # key: value
+
+  secretName: tls-cert
+  duration: 8760h0m0s # 1 year
+  renewBefore: 720h0m0s # 30d
+  subject:
+  #  organizations:
+  #    - stakater
+  #  countries:
+  #    - SE
+  #  organizationalUnits:
+  #    - '{{ template "application.namespace" . }}'
+  #  localities:
+  #    - Stockholm
+  #  provinces:
+  #    - Stockholm
+  commonName: admin-app
+  keyAlgorithm: rsa
+  keyEncoding: pkcs1
+  keySize: 2048
+  isCA: false
+  usages:
+  #  - digital signature
+  #  - client auth
+  dnsNames:
+  #  - admin-app
+  ipAddresses:
+  #  - 192.168.0.5
+  uriSANs:
+  #  - spiffe://cluster.local/ns/sandbox/sa/example
+  emailSANs:
+  #  - emailSubjectAltNames
+  privateKey:
+    enabled: true
+    rotationPolicy: Always
+  issuerRef:
+    name: ca-issuer
+    # We can reference ClusterIssuers by changing the kind here.
+    kind: ClusterIssuer
+    group: #cert-manager.io
+  keystores:
+    enabled: true
+    pkcs12:
+      create: true
+      key: test_key
+      name: test-creds
+    jks:
+      create: false
+      key: test_key
+      name: test-creds
+
+# AlertmanagerConfig object for defining application specific alertmanager configurations
+alertmanagerConfig:
+  enabled: true
+  
+  # AlertmanagerConfig selectionLabels to specify label to be picked up by Alertmanager to add it to base config. Read more about it at [https://docs.openshift.com/container-platform/4.7/rest_api/monitoring_apis/alertmanager-monitoring-coreos-com-v1.html] under .spec.alertmanagerConfigSelector
+  selectionLabels:
+    alertmanagerConfig: "workload"
+
+  # AlertmanagerConfig spec, read details here [https://docs.openshift.com/container-platform/4.7/rest_api/monitoring_apis/alertmanagerconfig-monitoring-coreos-com-v1alpha1.html]
+  spec:
+    route:
+      receiver: "null"
+      groupBy:
+      - job
+      routes:
+      - receiver: "null"
+        groupBy:
+        - alertname
+        - severity
+        continue: true
+      groupWait: 30s
+      groupInterval: 5m
+      repeatInterval: 12h
+    receivers: 
+    - name: "null"
+    inhibitRules: 
+    - sourceMatch:
+        - name: severity
+          value: 'critical'
+      targetMatch:
+        - name: severity
+          value: 'warning'
+      equal: ['cluster', 'service']
+
+# PrometheusRule object for defining application alerting rules
+prometheusRule:
+  enabled: true
+  
+  # PrometheusRule labels
+  additionalLabels:
+    prometheus: stakater-workload-monitoring
+    role: alert-rules
+
+  # Groups with alerting rules. Read more here [https://docs.openshift.com/container-platform/4.7/rest_api/monitoring_apis/prometheusrule-monitoring-coreos-com-v1.html]
+
+  groups: 
+    - name: example-app-uptime
+      rules:
+        - alert: ExampleAppDown
+          annotations:
+            message: >-
+              The Example App is Down (Test Alert)
+          expr: up{namespace="test-app"} == 0
+          for: 1m
+          labels:
+            severity: critical  

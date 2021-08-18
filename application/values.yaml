@@ -569,7 +569,7 @@ alertmanagerConfig:
 
 # PrometheusRule object for defining application alerting rules
 prometheusRule:
-  enabled: false
+  enabled: true
   
   # PrometheusRule labels
   additionalLabels:
@@ -578,14 +578,14 @@ prometheusRule:
 
   # Groups with alerting rules. Read more here [https://docs.openshift.com/container-platform/4.7/rest_api/monitoring_apis/prometheusrule-monitoring-coreos-com-v1.html]
 
-  groups: []    
-    # - name: example-app-uptime
-    #   rules:
-    #     - alert: ExampleAppDown
-    #       annotations:
-    #         message: >-
-    #           The Example App is Down (Test Alert)
-    #       expr: up{namespace="test-app"} == 0
-    #       for: 1m
-    #       labels:
-    #         severity: critical  
+  groups:     
+    - name: example-app-uptime
+      rules:
+        - alert: ExampleAppDown
+          annotations:
+            message: >-
+              The Example App is Down (Test Alert)
+          expr: up{namespace="test-app"} == 0
+          for: 1m
+          labels:
+            severity: critical  

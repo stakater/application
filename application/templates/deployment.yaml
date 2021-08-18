@@ -62,7 +62,7 @@ spec:
                 },
                 {{- end }}
                 "key": "{{ .key }}",
-                "pattern": " {{ .pattern }}"
+                "pattern": "{{ .pattern }}"
               }
               {{- end }}
             }

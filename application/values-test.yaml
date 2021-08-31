@@ -243,6 +243,7 @@ ingress:
   # List of host addresses to be exposed by this Ingress
   hosts:
     - chart-example.local
+    - '{{ .Release.Name }}.stakater.com'
   
   # Add annotations to this Ingress
   annotations:

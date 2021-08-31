@@ -3,7 +3,7 @@ name: application
 description: Generic helm chart for all kind of applications
 
 # Helm chart Version
-version: 0.0.60
+version: 0.0.61
 
 keywords:
   - java

@@ -257,6 +257,7 @@ ingress:
     - secretName: chart-example-tls
       hosts:
         - chart-example.local
+        - '{{ .Release.Name }}.stakater.com'
 
 # Route object for exposing services (OpenShift only)
 route:

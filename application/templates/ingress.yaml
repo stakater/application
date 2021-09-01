@@ -29,7 +29,7 @@ spec:
     {{- end -}}
   {{- if .Values.ingress.tls }}
   tls:
-{{ toYaml .Values.ingress.tls | indent 4 }}
+{{ include "application.tplvalues.render" (dict "value" .Values.ingress.tls "context" $) | indent 3 }}
   {{- end -}}
 {{- end -}}
 {{- end -}}

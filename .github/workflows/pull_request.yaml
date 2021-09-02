@@ -56,7 +56,7 @@ jobs:
     # Dry run to ensure that manifests are generated successfully 
     - name: Dry Run Chart
       run: |
-        helm install ${CHART_NAME} ${CHART_NAME} --dry-run --debug
+        helm install ${CHART_NAME} ${CHART_NAME} -f ${CHART_NAME}/values-test.yaml --dry-run --debug
 
     # package
     - name: Helm Package

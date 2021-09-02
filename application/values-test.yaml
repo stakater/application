@@ -225,7 +225,7 @@ service:
     xposer.stakater.com/annotations: |-
       kubernetes.io/ingress.class: external-ingress
       ingress.kubernetes.io/rewrite-target: /
-      ingress.kubernetes.io/force-ssl-redirect: true
+      ingress.kubernetes.io/force-ssl-redirect: "true"
   
   ports:
     - port: 8080
@@ -249,7 +249,7 @@ ingress:
   annotations:
     kubernetes.io/ingress.class: external-ingress
     ingress.kubernetes.io/rewrite-target: /
-    ingress.kubernetes.io/force-ssl-redirect: true
+    ingress.kubernetes.io/force-ssl-redirect: "true"
 
   # TLS details for this Ingress
   tls:
@@ -267,7 +267,7 @@ route:
   annotations:
     kubernetes.io/ingress.class: external-ingress
     ingress.kubernetes.io/rewrite-target: /
-    ingress.kubernetes.io/force-ssl-redirect: true
+    ingress.kubernetes.io/force-ssl-redirect: "true"
   
   # Additional labels for this Route
   additionalLabels:

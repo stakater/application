@@ -318,7 +318,7 @@ space:
   annotations: 
      # key: value
   # Tenants associated with space
-  tenant: ""
+  tenant: "dominator-test"
 
 # Role Based Access Control
 rbac:

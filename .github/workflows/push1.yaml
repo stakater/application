@@ -17,7 +17,7 @@ env:
 jobs:
   build:
     name: Build
-    # if: "! contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
+    if: "! contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
     runs-on: ubuntu-latest
     
     steps:
@@ -36,60 +36,33 @@ jobs:
 
     - name: Test oc
       run: |
-        env
-        oc version --client
-        echo "${{ runner.tool_cache }}"
+        which helm
         exit 1
 
     - name: Authenticate and set context
       uses: redhat-actions/oc-login@v1
-      # env:
-      #   # These can be stored in secrets, if desired.
-      #   OPENSHIFT_USER: my-username
-      #   OPENSHIFT_NAMESPACE: my-namespace
       with:
-        # openshift_server_url: ${{ secrets.OPENSHIFT_SERVER }}
         openshift_server_url: ${{ env.OPENSHIFT_TEST_CLUSTER }}
         openshift_username: ${{ secrets.STAKATER_TEST_USER }}
         openshift_password: ${{ secrets.STAKATER_TEST_PASSWORD }}
 
-    
-    # - name: Install kubectl
-    #   run: |
-    #     curl -LO "https://storage.googleapis.com/kubernetes-release/release/v${KUBERNETES_VERSION}/bin/linux/amd64/kubectl"
-    #     sudo install ./kubectl /usr/local/bin/ && rm kubectl
-    #     kubectl version --short --client
-    #     kubectl version --short --client | grep -q ${KUBERNETES_VERSION}
 
-    # - name: Install Kind
-    #   run: |
-    #     curl -L -o kind https://github.com/kubernetes-sigs/kind/releases/download/v${KIND_VERSION}/kind-linux-amd64
-    #     sudo install ./kind /usr/local/bin && rm kind
-    #     kind version
-    #     kind version | grep -q ${KIND_VERSION}
+    Generate tag for chart without "v" prefix
+    - name: Generate Tag
+      id: generate_tag
+      uses: anothrNick/github-tag-action@1.26.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.STAKATER_GITHUB_TOKEN }}
+        WITH_V: false
+        DEFAULT_BUMP: patch
+        DRY_RUN: true
 
-    # - name: Create Kind Cluster
-    #   run: |
-    #     if [ `kind get clusters | grep kind | wc -l` -eq 0 ]; then
-    #       kind create cluster
-    #     fi
-
-    # Generate tag for chart without "v" prefix
-    # - name: Generate Tag
-    #   id: generate_tag
-    #   uses: anothrNick/github-tag-action@1.26.0
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.STAKATER_GITHUB_TOKEN }}
-    #     WITH_V: false
-    #     DEFAULT_BUMP: patch
-    #     DRY_RUN: true
-
-    # # Update chart tag to the latest semver tag
-    # - name: Update Chart Version
-    #   env:
-    #     VERSION: ${{ steps.generate_tag.outputs.new_tag }}
-    #   run: |
-    #     make bump-chart
+    # Update chart tag to the latest semver tag
+    - name: Update Chart Version
+      env:
+        VERSION: ${{ steps.generate_tag.outputs.new_tag }}
+      run: |
+        make bump-chart
 
     # Set Up Helm
     - name: Set up Helm

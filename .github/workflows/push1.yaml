@@ -47,7 +47,7 @@ jobs:
         openshift_password: ${{ secrets.STAKATER_TEST_PASSWORD }}
 
 
-    Generate tag for chart without "v" prefix
+    # Generate tag for chart without "v" prefix
     - name: Generate Tag
       id: generate_tag
       uses: anothrNick/github-tag-action@1.26.0

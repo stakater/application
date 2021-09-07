@@ -21,12 +21,13 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    # - name: Check out code
-    #   uses: actions/checkout@v2
-    #   with:
-    #     persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
-    #     fetch-depth: 0 # otherwise, you will fail to push refs to dest repo
+    - name: Check out code
+      uses: actions/checkout@v2
+      with:
+        persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
+        fetch-depth: 0 # otherwise, you will fail to push refs to dest repo
 
+    ### only used on localhost (nektos/act image doesn't have oc installed)
     # - name: Install oc
     #   # if: "runner.os != 'Linux'"
     #   uses: redhat-actions/openshift-tools-installer@v1
@@ -35,10 +36,8 @@ jobs:
 
     - name: Test oc
       run: |
-        # ls -la /
-        find / -name oc
-        which oc
-        # oc version --client
+        env
+        oc version --client
         exit 1
 
     - name: Authenticate and set context

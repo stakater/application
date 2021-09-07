@@ -38,6 +38,7 @@ jobs:
       run: |
         env
         oc version --client
+        echo "${{ runner.tool_cache }}"
         exit 1
 
     - name: Authenticate and set context

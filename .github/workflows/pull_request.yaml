@@ -9,38 +9,28 @@ on:
 
 env:
   CHART_NAME: "application"
-  KUBERNETES_VERSION: "1.18.0"
-  KIND_VERSION: "0.7.0"
+  OPENSHIFT_TEST_CLUSTER: "https://api.binero-test.8sdzwd1l.kubeapp.cloud:6443"
 
 jobs:
   build:
     runs-on: ubuntu-latest 
     name: Build
     if: "! contains(toJSON(github.event.commits.*.message), '[skip-ci]')"    
+
     steps:
+    
     - name: Check out code
       uses: actions/checkout@v2
       with:
         fetch-depth: 0
         ref: ${{github.event.pull_request.head.sha}}
 
-    - name: Install kubectl
-      run: |
-        curl -LO "https://storage.googleapis.com/kubernetes-release/release/v${KUBERNETES_VERSION}/bin/linux/amd64/kubectl"
-        sudo install ./kubectl /usr/local/bin/ && rm kubectl
-        kubectl version --short --client
-        kubectl version --short --client | grep -q ${KUBERNETES_VERSION}
-
-    - name: Install Kind
-      run: |
-        curl -L -o kind https://github.com/kubernetes-sigs/kind/releases/download/v${KIND_VERSION}/kind-linux-amd64
-        sudo install ./kind /usr/local/bin && rm kind
-        kind version
-        kind version | grep -q ${KIND_VERSION}
-
-    - name: Create Kind Cluster
-      run: |
-        kind create cluster
+    - name: Authenticate to OC cluster
+      uses: redhat-actions/oc-login@v1
+      with:
+        openshift_server_url: ${{ env.OPENSHIFT_TEST_CLUSTER }}
+        openshift_username: ${{ secrets.STAKATER_TEST_USER }}
+        openshift_password: ${{ secrets.STAKATER_TEST_PASSWORD }}
 
     # Set Up Helm
     - name: Set up Helm

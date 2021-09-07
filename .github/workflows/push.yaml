@@ -9,7 +9,6 @@ on:
 
 env:
   CHART_NAME: "application"
-  OPENSHIFT_TEST_CLUSTER: "https://api.binero-test.8sdzwd1l.kubeapp.cloud:6443"
 
 jobs:
   build:
@@ -28,7 +27,7 @@ jobs:
     - name: Authenticate to OC cluster
       uses: redhat-actions/oc-login@v1
       with:
-        openshift_server_url: ${{ env.OPENSHIFT_TEST_CLUSTER }}
+        openshift_server_url: ${{ secrets.STAKATER_TEST_CLUSTER }}
         openshift_username: ${{ secrets.STAKATER_TEST_USER }}
         openshift_password: ${{ secrets.STAKATER_TEST_PASSWORD }}
 

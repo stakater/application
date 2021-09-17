@@ -72,6 +72,7 @@ To uninstall the chart:
 | ingress.enabled | Enable ingress | `false` |
 | ingress.servicePort | Port of the service that serves pod | `8080` |
 | ingress.hosts | Array of FQDN hosts to be served by this ingress | `- chart-example.local` |
+| ingress.additionalLables | Labels for ingress | `{}` |
 | ingress.annotations | Annotations for ingress | `{}` |
 | ingress.tls | TLS block for ingress | `[]` |
 | route.enabled | Enable Route incase of Openshift | `false` |

@@ -243,7 +243,10 @@ ingress:
   # List of host addresses to be exposed by this Ingress
   hosts:
     - chart-example.local
-  
+
+  # Additional labels for this Ingress
+  additionalLabels:
+
   # Add annotations to this Ingress
   annotations:
     # kubernetes.io/ingress.class: external-ingress

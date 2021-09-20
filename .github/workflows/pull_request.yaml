@@ -48,8 +48,9 @@ jobs:
     # Dry run to ensure that manifests are generated successfully 
     - name: Dry Run Chart
       run: |
-        helm install ${CHART_NAME} ${CHART_NAME} -f ${CHART_NAME}/values-test.yaml --dry-run --debug
-
+        kubectl create ns pipeline-test
+        helm install ${CHART_NAME} ${CHART_NAME} -f ${CHART_NAME}/values-test.yaml -n pipeline-test --dry-run --debug
+        kubectl delete ns pipeline-test
     # package
     - name: Helm Package
       run: |

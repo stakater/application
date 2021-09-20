@@ -1,6 +1,9 @@
 name: Pull Request
 
 on:
+  push:
+    branches:
+     - issue/fix-github-actions
   pull_request_target:
     branches:
       - master

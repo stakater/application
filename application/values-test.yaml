@@ -310,7 +310,7 @@ forecastle:
   networkRestricted: false
 
 space:
-  enabled: true
+  enabled: false
   # Additional labels on space
   additionalLabels:
     # key: value
@@ -318,7 +318,7 @@ space:
   annotations: 
      # key: value
   # Tenants associated with space
-  tenant: ""
+  tenant: "dominator-test"
 
 # Role Based Access Control
 rbac:

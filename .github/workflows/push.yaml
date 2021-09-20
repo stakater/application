@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - update-push-workflow
     paths-ignore:
     - 'README.md'      
 

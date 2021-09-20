@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - master
-      - fix-actions
+      - fix-actions-1
     paths-ignore:
     - 'README.md'      
 
@@ -85,7 +85,7 @@ jobs:
         git config --local user.email "stakater@gmail.com"
         git config --local user.name "stakater-user"
         git status 
-        git add .
+        git add ${CHART_NAME}/Chart.yaml
         git commit -m "[skip-ci] Update artifacts" -a
 
     - name: Push changes
@@ -103,8 +103,7 @@ jobs:
     - name: Clean up KUBECONFIG
       if: always() 
       run: |
-         cat ~/.kubeconfig
-         rm ~/.kubeconfig
+         rm $KUBECONFIG
     
 
     - name: Notify Slack

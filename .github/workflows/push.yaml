@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - master
-      - fix-actions-2
+      - fix-gh-actions
     paths-ignore:
     - 'README.md'      
 
@@ -86,7 +86,7 @@ jobs:
         git config --local user.name "stakater-user"
         git status 
         git add application/Chart.yaml
-        git commit -m "[skip-ci] Update artifacts" -a
+        git commit -m "[skip-ci] Update artifacts" 
 
     - name: Push changes
       uses: ad-m/github-push-action@master

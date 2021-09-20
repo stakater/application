@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - fix-actions
     paths-ignore:
     - 'README.md'      
 
@@ -98,6 +99,13 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.STAKATER_GITHUB_TOKEN }}
         WITH_V: true
         DEFAULT_BUMP: patch
+
+    - name: Clean up KUBECONFIG
+      if: always() 
+      run: |
+         cat ~/.kubeconfig
+         rm ~/.kubeconfig
+    
 
     - name: Notify Slack
       uses: 8398a7/action-slack@v3

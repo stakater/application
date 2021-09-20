@@ -62,8 +62,7 @@ jobs:
     # Dry run to ensure that manifests are generated successfully 
     - name: Dry Run Chart
       run: |
-        helm install ${CHART_NAME} ${CHART_NAME} -f ${CHART_NAME}/values-test.yaml --dry-run --debug
-
+        helm install ${CHART_NAME} ${CHART_NAME} -f ${CHART_NAME}/values-test.yaml -n stakater-chart-pipeline-test --dry-run --debug
     # Publish helm chart
     - name: Publish Helm chart
       uses: stefanprodan/helm-gh-pages@master

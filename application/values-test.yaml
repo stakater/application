@@ -310,7 +310,7 @@ forecastle:
   networkRestricted: false
 
 space:
-  enabled: true
+  enabled: false
   # Additional labels on space
   additionalLabels:
     # key: value

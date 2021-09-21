@@ -207,7 +207,8 @@ persistence:
   ##
   storageClass: "-"
   additionalLabels:
-    # key: "value"
+    key: "value"
+
   annotations:
   #  "helm.sh/resource-policy": keep
   storageSize: 8Gi
@@ -215,8 +216,8 @@ persistence:
 # Service object for servicing pods
 service:
   additionalLabels:
-    # expose: "true"
-
+    key: value
+    expose: "true"
   annotations:
     config.xposer.stakater.com/Domain: stakater.com
     config.xposer.stakater.com/IngressNameTemplate: '{{.Service}}-{{.Namespace}}'
@@ -247,6 +248,7 @@ ingress:
 
   # Additional labels for this Ingress
   additionalLabels:
+    key: value
 
   # Add annotations to this Ingress
   annotations:
@@ -274,6 +276,7 @@ route:
   
   # Additional labels for this Route
   additionalLabels:
+    key: value
   
   # If no host is added then openshift inserts the default hostname. To Add host explicitly, use host attribute
   host:
@@ -296,6 +299,7 @@ forecastle:
 
   # Add additional labels on Forecastle Custom Resource
   additionalLabels:
+    key: value
   
   # URL of the icon for the custom app
   icon: https://raw.githubusercontent.com/stakater/ForecastleIcons/master/stakater-big.png
@@ -316,7 +320,8 @@ space:
   enabled: false
   # Additional labels on space
   additionalLabels:
-    # key: value
+    key: value
+
   # Annotations on space 
   annotations: 
      # key: value
@@ -334,7 +339,7 @@ rbac:
 
     # Additional Labels on service account
     additionalLabels:
-      # key: value
+      key: value
     
     # Annotations on service account 
     annotations:
@@ -384,7 +389,7 @@ rbac:
 configMap:
   enabled: true
   additionalLabels: 
-    # key: value
+    key: value
   annotations: 
     # key: value
   files:
@@ -399,7 +404,7 @@ configMap:
 sealedSecret:
   enabled: true
   additionalLabels: 
-    # key: value
+    key: value
   annotations: 
     # key: value
   files:
@@ -411,7 +416,7 @@ sealedSecret:
 secret:
   enabled: true
   additionalLabels: 
-    # key: value
+    key: value
   annotations: 
     # key: value
   files:    
@@ -430,7 +435,7 @@ serviceMonitor:
   
   # Additional labels
   additionalLabels:
-    # key: value
+    key: value
 
   # Additional annotations
   annotations:
@@ -448,7 +453,7 @@ autoscaling:
   enabled: true
 # additionalLabels defines additional labels
   additionalLabels: 
-    # key: value
+    key: value
 # annotations defines annotations in key value pair
   annotations: 
     # key: value
@@ -477,7 +482,7 @@ endpointMonitor:
   
   # Additional labels
   additionalLabels:
-    # key: value
+    key: value
 
   # Additional annotations
   annotations:
@@ -489,7 +494,7 @@ certificate:
   
   # Additional labels
   additionalLabels:
-    # key: value
+    key: value
 
   # Additional annotations
   annotations:

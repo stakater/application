@@ -10,9 +10,6 @@ on:
 env:
   CHART_NAME: "application"
 
-  KUBERNETES_VERSION: "1.18.0"
-  KIND_VERSION: "0.7.0"
-
 jobs:
   build:
     name: Build
@@ -20,29 +17,19 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+
     - name: Check out code
       uses: actions/checkout@v2
       with:
         persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
         fetch-depth: 0 # otherwise, you will fail to push refs to dest repo
 
-    - name: Install kubectl
-      run: |
-        curl -LO "https://storage.googleapis.com/kubernetes-release/release/v${KUBERNETES_VERSION}/bin/linux/amd64/kubectl"
-        sudo install ./kubectl /usr/local/bin/ && rm kubectl
-        kubectl version --short --client
-        kubectl version --short --client | grep -q ${KUBERNETES_VERSION}
-
-    - name: Install Kind
-      run: |
-        curl -L -o kind https://github.com/kubernetes-sigs/kind/releases/download/v${KIND_VERSION}/kind-linux-amd64
-        sudo install ./kind /usr/local/bin && rm kind
-        kind version
-        kind version | grep -q ${KIND_VERSION}
-
-    - name: Create Kind Cluster
-      run: |
-        kind create cluster
+    - name: Authenticate to OC cluster
+      uses: redhat-actions/oc-login@v1
+      with:
+        openshift_server_url: ${{ secrets.STAKATER_TEST_CLUSTER }}
+        openshift_username: ${{ secrets.STAKATER_TEST_USER }}
+        openshift_password: ${{ secrets.STAKATER_TEST_PASSWORD }}
 
     # Generate tag for chart without "v" prefix
     - name: Generate Tag
@@ -58,7 +45,8 @@ jobs:
     - name: Update Chart Version
       env:
         VERSION: ${{ steps.generate_tag.outputs.new_tag }}
-      run: make bump-chart
+      run: |
+        make bump-chart
 
     # Set Up Helm
     - name: Set up Helm
@@ -74,8 +62,7 @@ jobs:
     # Dry run to ensure that manifests are generated successfully 
     - name: Dry Run Chart
       run: |
-        helm install ${CHART_NAME} ${CHART_NAME} -f ${CHART_NAME}/values-test.yaml --dry-run --debug
-
+        helm install ${CHART_NAME} ${CHART_NAME} -f ${CHART_NAME}/values-test.yaml -n stakater-chart-pipeline-test --dry-run --debug
     # Publish helm chart
     - name: Publish Helm chart
       uses: stefanprodan/helm-gh-pages@master
@@ -97,8 +84,8 @@ jobs:
         git config --local user.email "stakater@gmail.com"
         git config --local user.name "stakater-user"
         git status 
-        git add .
-        git commit -m "[skip-ci] Update artifacts" -a
+        git add application/Chart.yaml
+        git commit -m "[skip-ci] Update artifacts" 
 
     - name: Push changes
       uses: ad-m/github-push-action@master
@@ -111,6 +98,12 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.STAKATER_GITHUB_TOKEN }}
         WITH_V: true
         DEFAULT_BUMP: patch
+
+    - name: Clean up KUBECONFIG
+      if: always() 
+      run: |
+         rm $KUBECONFIG
+    
 
     - name: Notify Slack
       uses: 8398a7/action-slack@v3

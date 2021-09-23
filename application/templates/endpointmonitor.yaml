@@ -1,4 +1,4 @@
-{{- if and .Values.endpointMonitor .Values.endpointMonitor.enabled }}
+{{- if and .Values.endpointMonitor .Values.endpointMonitor.enabled (or (and .Values.route .Values.route.enabled) (and .Values.ingress .Values.ingress.enabled))}}
 apiVersion: endpointmonitor.stakater.com/v1alpha1
 kind: EndpointMonitor
 metadata:
@@ -19,11 +19,12 @@ spec:
   urlFrom:
 {{- if and .Values.route .Values.route.enabled }}
     routeRef:
+      name:  {{ template "application.name" . }}
 {{- end }}
 {{- if and .Values.ingress .Values.ingress.enabled }}
     ingressRef:
-{{- end }}
       name:  {{ template "application.name" . }}
+{{- end }}
 {{- if .Values.endpointMonitor.additionalConfig }}
 {{ toYaml .Values.endpointMonitor.additionalConfig | indent 2 }}
 {{- end }}

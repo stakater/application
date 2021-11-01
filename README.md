@@ -124,9 +124,9 @@ To uninstall the chart:
 | space.additionalLabels | Additional labels for Space Custom Resource | `{}` |
 | space.annotations | Annotations for Space Custom Resource | `{}` |
 | space.tenant | Tenant associated with Space Custom Resource | `""` |
-| namespace.enabled | Enable Space Custom Resource | `false` |
-| namespace.additionalLabels | Additional labels for Space Custom Resource | `{}` |
-| namespace.annotations | Annotations for Space Custom Resource | `{}` |
+| namespace.enabled | Enable Namespace| `false` |
+| namespace.additionalLabels | Additional labels for Namespace | `{}` |
+| namespace.annotations | Annotations for Namespace | `{}` |
 | sealedSecret.enabled | Enable sealed secret | `false` |
 | sealedSecret.additionalLabels | Labels for sealed secret | `{}` |
 | sealedSecret.annotations | Annotations for sealed secret | `{}` |

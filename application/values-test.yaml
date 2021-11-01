@@ -321,8 +321,6 @@ space:
   # Additional labels on space
   additionalLabels:
     key: value
-
-
   # Annotations on space 
   annotations: 
      # key: value
@@ -335,7 +333,6 @@ namespace:
   additionalLabels:
     key: value
     stakater.com/tenant: tenant-alpha
-
 
 # Role Based Access Control
 rbac:

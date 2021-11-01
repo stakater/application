@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: namespace
 metadata:
-  name: {{ template "application.namenamespace" . }}
+  name: {{ template "application.namespace" . }}
   labels:
 {{ include "application.labels.stakater" . | indent 4 }}
 {{ include "application.labels.chart" . | indent 4 }}

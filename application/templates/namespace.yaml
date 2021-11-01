@@ -1,0 +1,16 @@
+{{- if .Values.namespace.enabled }}
+apiVersion: v1
+kind: namespace
+metadata:
+  name: {{ template "application.namenamespace" . }}
+  labels:
+{{ include "application.labels.stakater" . | indent 4 }}
+{{ include "application.labels.chart" . | indent 4 }}
+{{- if .Values.namespace.additionalLabels }}
+{{ toYaml .Values.namespace.additionalLabels | indent 4 }}
+{{- end }}
+  annotations:
+{{- if or .Values.namespace.annotations }}
+{{ toYaml .Values.namespace.annotations | indent 4 }}
+{{- end }}
+{{- end }}

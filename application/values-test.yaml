@@ -322,11 +322,20 @@ space:
   additionalLabels:
     key: value
 
+
   # Annotations on space 
   annotations: 
      # key: value
   # Tenants associated with space
   tenant: "dominator-test"
+
+namespace:
+  enabled: true
+  # Additional labels on space
+  additionalLabels:
+    key: value
+    stakater.com/tenant: tenant-alpha
+
 
 # Role Based Access Control
 rbac:

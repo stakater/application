@@ -321,7 +321,7 @@ space:
   # Tenants associated with space
   tenant: ""
 
-namespacespace:
+namespace:
   enabled: false
   # Additional labels on space
   additionalLabels:

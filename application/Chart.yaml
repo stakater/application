@@ -4,7 +4,7 @@ description: Generic helm chart for all kind of applications
 
 # Helm chart Version
 
-version: 0.0.69
+version: 0.0.70
 
 
 keywords:

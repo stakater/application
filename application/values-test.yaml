@@ -321,7 +321,6 @@ space:
   # Additional labels on space
   additionalLabels:
     key: value
-
   # Annotations on space 
   annotations: 
      # key: value

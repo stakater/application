@@ -1,6 +1,6 @@
 {{- if .Values.namespace.enabled }}
 apiVersion: v1
-kind: namespace
+kind: Namespace
 metadata:
   name: {{ template "application.namespace" . }}
   labels:

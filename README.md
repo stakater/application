@@ -168,3 +168,11 @@ To uninstall the chart:
 | prometheusRule.enabled | Enable prometheusRule for this app | `false` |
 | prometheusRule.additionalLabels | Kubernetes labels object, these additional labels will be added to PrometheusRule CRD | `{}` |
 | prometheusRule.spec.groups | PrometheusRules in their groups to be added | `[]` |
+| secretProviderClass.enabled | Enables Secret Provider Class Custom Resource  | false |
+| secretProviderClass.name | Name of Secret Provider Class Custom Resource  | "" |
+| secretProviderClass.provider | Provider of Secret Provider Class Custom Resource  | "" |
+| secretProviderClass.parameters | Prameters of Secret Provider Class Custom Resource  | [] |
+| secretProviderClass.parameters.vaultAddress | Address of vault  | "" |
+| secretProviderClass.parameters.roleName | Name of the role being referred to in vault   | "" |
+| secretProviderClass.parameters.objects | The object created from the secret in vault   | [] |
+| secretProviderClass.secretObjects | This creates the kubernetes secret   | "" |

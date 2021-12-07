@@ -289,22 +289,22 @@ route:
 
 #Values for SecretProviderClass CR
 secretProviderClass:
-  enabled: true
-  name: mongo-host
-  provider: vault
-  parameters:
-    vaultAddress: "http://vault:8200"
-    roleName: "testing-role"
-    objects: |
-      - objectName: "MONGO_HOST"
-        secretPath: "testing/data/mongoDb"
-        secretKey: "MONGO_HOST"
-  secretObjects:
-    - data:
-      - key: MONGO_HOST
-        objectName: host
-      secretName: secret-mongo-host
-      type: Opaque
+  enabled: false
+  #name: mongo-host
+  #provider: vault
+  #parameters:
+    #vaultAddress: "http://vault:8200"
+    #roleName: "testing-role"
+    #objects: |
+      #- objectName: "MONGO_HOST"
+        #secretPath: "testing/data/mongoDb"
+        #secretKey: "MONGO_HOST"
+  #secretObjects:
+    #- data:
+      #- key: MONGO_HOST
+        #objectName: host
+      #secretName: secret-mongo-host
+      #type: Opaque
 
 
 # Expose Application on Forecastle Dashboard

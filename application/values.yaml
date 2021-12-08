@@ -290,8 +290,8 @@ route:
 #Values for SecretProviderClass CR
 secretProviderClass:
   enabled: false
-  #name: mongo-host
-  #provider: vault
+  name: #mongo-host
+  provider: #vault
   #parameters:
     #vaultAddress: "http://vault:8200"
     #roleName: "testing-role"

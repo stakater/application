@@ -296,13 +296,12 @@ secretProviderClass:
   enabled: true
   name: mongo-host
   provider: vault
-  parameters:
-    vaultAddress: "http://vault:8200"
-    roleName: "testing-role"
-    objects: |
-      - objectName: "MONGO_HOST"
-        secretPath: "testing/data/mongoDb"
-        secretKey: "MONGO_HOST"
+  vaultAddress: "http://vault:8200"
+  roleName: "testing-role"
+  objects: |
+    - objectName: "MONGO_HOST"
+      secretPath: "testing/data/mongoDb"
+      secretKey: "MONGO_HOST"  
   secretObjects:
     - data:
       - key: MONGO_HOST

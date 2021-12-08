@@ -293,7 +293,7 @@ route:
     insecureEdgeTerminationPolicy: Redirect
 
 secretProviderClass:
-  enabled: false
+  enabled: true
   name: mongo-host
   provider: vault
   parameters:

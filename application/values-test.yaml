@@ -297,7 +297,7 @@ secretProviderClass:
   name: mongo-host
   provider: vault
   vaultAddress: "http://vault:8200"
-  roleName: {{ .Release.Namespace }}
+  roleName: {{ .Release.Name }}
   objects: |
     - objectName: "MONGO_HOST"
       secretPath: "testing/data/mongoDb"

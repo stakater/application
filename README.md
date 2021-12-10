@@ -96,7 +96,6 @@ To uninstall the chart:
 | rbac.serviceAccount.additionalLabels | Labels for serviceAccount | `{}` |
 | rbac.serviceAccount.annotations | Annotations for serviceAccount | `{}` |
 | rbac.roles | Array of roles | `[]` |
-| rbac.clusterroles | Array of clusterroles | `[]` |
 | configMap.enabled | Enable configMaps | `false` |
 | configMap.additionalLabels | Labels for configMaps | `{}` |
 | configMap.annotations | Annotations for configMaps | `{}` |

@@ -380,27 +380,6 @@ rbac:
   #     verbs:
   #     - get
 
-  # Create ClusterRoles (Clusterwide)
-  clusterroles:
-  # - name: configmaps
-  #   rules:
-  #   - apiGroups:
-  #     - ""
-  #     resources:
-  #     - configmaps
-  #     verbs:
-  #     - get
-  # - name: pods
-  #   rules:
-  #   - apiGroups:
-  #     - ""
-  #     resources:
-  #     - pods
-  #     verbs:
-  #     - get
-  #     - list
-  #     - watch
-
 # Additional ConfigMaps  
 configMap:
   enabled: true

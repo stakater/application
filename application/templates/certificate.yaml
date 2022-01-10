@@ -1,5 +1,5 @@
-{{- if .Values.certificate }}
-{{- if .Values.certificate.enabled }}
+{{- if or (.Values.certificate) (.Values.mutualTls.enabled) }}
+{{- if or (.Values.certificate.enabled) (.Values.mutualTls.enabled) }}
 apiVersion: cert-manager.io/v1alpha3
 kind: Certificate
 metadata:
@@ -18,12 +18,20 @@ metadata:
   name: {{ template "application.name" . }}-certificate
   namespace: {{ template "application.namespace" . }}
 spec:
+{{- if .Values.certificate.secretName }}
   secretName: {{ .Values.certificate.secretName }}
+{{- else }}
+  secretName: {{ template "application.name" . }}-client-tls
+{{- end }}
   duration: {{ .Values.certificate.duration }}
   renewBefore: {{ .Values.certificate.renewBefore }}
   subject:
 {{ include "application.tplvalues.render" ( dict "value" .Values.certificate.subject "context" $ ) | indent 4 }}
+{{- if .Values.certificate.commonName }}
   commonName: {{ .Values.certificate.commonName }}
+{{- else }}
+  commonName: {{ template "application.name" . }}
+{{- end }}
   keyAlgorithm: {{ .Values.certificate.keyAlgorithm }}
   keyEncoding: {{ .Values.certificate.keyEncoding }}
   keySize: {{ .Values.certificate.keySize }}
@@ -33,8 +41,13 @@ spec:
   usages:
 {{ toYaml .Values.certificate.usages | indent 4 }}
   # At least one of a DNS Name, URI, or IP address is required.
+{{- if .Values.certificate.dnsNames }}
   dnsNames:
 {{ toYaml .Values.certificate.dnsNames | indent 4 }}
+{{- else }}
+  dnsNames:
+  - {{ template "application.name" . }}
+{{- end }}
 {{- if .Values.certificate.ipAddresses }}
   ipAddresses:
 {{ toYaml .Values.certificate.ipAddresses | indent 4 }}

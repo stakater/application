@@ -14,7 +14,31 @@ namespaceOverride: ""
 labels:
   group: com.stakater.platform
   team: stakater
-  
+
+##########################################################
+# Mutual TLS
+# Only supported for Java based applications for now, 
+# Adds truststore and keystore configuration
+# Disable mutual TLS if you are adding your own custom tls configuration
+##########################################################
+
+mutualTls:
+  enabled: true
+  deployment:
+    #projectSources:
+    #- secret:
+    #    items:
+    #    - key: mongo-ca.crt
+    #      path: mongo-ca.crt
+    #    name: mongo--client-tls
+    image:
+      repo: docker.io
+    defaultInitContainers:
+      keystore:
+        enabled: true
+      truststore:
+        enabled: true
+
 ##########################################################
 # Deployment
 ##########################################################
@@ -143,20 +167,20 @@ deployment:
   # Readiness and Liveness probes
   probes:
     readinessProbe:
-      failureThreshold: 3
-      periodSeconds: 10
+      failureThreshold: 5
+      periodSeconds: 20
       successThreshold: 1
-      timeoutSeconds: 1
-      initialDelaySeconds: 10
+      timeoutSeconds: 5
+      initialDelaySeconds: 60
       httpGet:
         path: /path
         port: 8080
     livenessProbe:
-      failureThreshold: 3
-      periodSeconds: 10
+      failureThreshold: 5
+      periodSeconds: 20
       successThreshold: 1
-      timeoutSeconds: 1
-      initialDelaySeconds: 10
+      timeoutSeconds: 5
+      initialDelaySeconds: 60
       httpGet:
         path: /path
         port: 8080
@@ -551,12 +575,12 @@ certificate:
   annotations:
     # key: value
 
-  secretName: tls-cert
+  #secretName: tls-cert
   duration: 8760h0m0s # 1 year
   renewBefore: 720h0m0s # 30d
   subject:
-  #  organizations:
-  #    - stakater
+    organizations:
+    - stakater
   #  countries:
   #    - SE
   #  organizationalUnits:
@@ -565,14 +589,14 @@ certificate:
   #    - Stockholm
   #  provinces:
   #    - Stockholm
-  commonName: admin-app
+  #commonName: admin-app
   keyAlgorithm: rsa
   keyEncoding: pkcs1
   keySize: 2048
   isCA: false
   usages:
-  #  - digital signature
-  #  - client auth
+    - digital signature
+    - client auth
   dnsNames:
   #  - admin-app
   ipAddresses:

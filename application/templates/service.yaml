@@ -1,4 +1,4 @@
-{{- if .Values.service }}
+{{- if or (.Values.service) (.Values.mutualTls.enabled) }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -8,9 +8,14 @@ metadata:
 {{- if .Values.service.additionalLabels }}
 {{ toYaml .Values.service.additionalLabels | indent 4 }}
 {{- end }}
-{{- if .Values.service.annotations }}
+{{- if or (.Values.service.annotations) (.Values.mutualTls.enabled) }}
   annotations:
+{{- if .Values.mutualTls.enabled }}
+    "service.alpha.openshift.io/serving-cert-secret-name": "{{ template "application.name" . }}-service-tls"
+{{- end }} 
+{{- if .Values.service.annotations }}
 {{ toYaml .Values.service.annotations | indent 4 }}
+{{- end }}
 {{- end }}
   name: {{ template "application.name" . }}
   namespace: {{ template "application.namespace" $ }}

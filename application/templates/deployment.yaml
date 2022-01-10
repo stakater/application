@@ -73,9 +73,85 @@ spec:
       hostAliases:      
 {{ toYaml .Values.deployment.hostAliases | indent 6 }}
       {{- end }}
-      {{- if .Values.deployment.initContainers }}
-      initContainers:      
+      {{- if or (.Values.deployment.initContainers) (.Values.mutualTls.enabled)}}
+      initContainers:
+      {{- if .Values.mutualTls.deployment.defaultInitContainers.keystore.enabled }}
+        - args:
+          - -x
+          - -c
+          - openssl pkcs12 -export -inkey $keyfile -in $crtfile -out $keystore_pkcs12 -password
+            pass:$password
+          command:
+          - /bin/bash
+          env:
+          - name: keyfile
+            value: /var/run/secrets/openshift.io/{{ template "application.name" . }}-service-tls/tls.key
+          - name: crtfile
+            value: /var/run/secrets/openshift.io/{{ template "application.name" . }}-service-tls/tls.crt
+          - name: keystore_pkcs12
+            value: /var/run/secrets/java.io/keystores/server.p12
+          - name: password
+            value: changeme
+          image: {{ .Values.mutualTls.deployment.image.repo }}/openjdk:11-slim
+          name: pem-to-keystore
+          resources:
+          {{- if .Values.mutualTls.deployment.defaultInitContainers.keystore.resources }}
+{{ toYaml .Values.mutualTls.deployment.defaultInitContainers.keystore.resources | indent 12 }}
+          {{- else }}
+            limits:
+              cpu: "0.4"
+              memory: 400Mi
+            requests:
+              cpu: "0.2"
+              memory: 200Mi
+          {{- end }}
+          volumeMounts:
+          - mountPath: /var/run/secrets/java.io/keystores
+            name: keystore-volume
+          - mountPath: /var/run/secrets/openshift.io/{{ template "application.name" . }}-service-tls
+            name: {{ template "application.name" . }}-service-tls
+          workingDir: /tmp
+        {{- end }}
+        {{- if .Values.mutualTls.deployment.defaultInitContainers.truststore.enabled }}
+        - name: pem-to-truststore
+          image: {{ .Values.mutualTls.deployment.image.repo }}/openjdk:11-slim
+          workingDir: /tmp
+          env:
+          - name: truststore_jks
+            value: /var/run/secrets/java.io/keystores/truststore.jks
+          - name: password
+            value: changeit
+          - name: ca_bundle
+            value: /var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt
+          - name: ca_certs
+            value: /var/run/secrets/java.io/certs
+          command:
+          - sh
+          - "-c"
+          - |
+            /bin/bash <<'EOF'
+            set -Eeuox pipefail
+            if [ ! -f $truststore_jks ]; then
+              find ${ca_certs} -type f -exec cat {} + > /var/run/secrets/java.io/keystores/certs
+              cat  ${ca_bundle} >> /var/run/secrets/java.io/keystores/certs
+              keytool -importkeystore -srckeystore $JAVA_HOME/lib/security/cacerts -srcstoretype JKS -destkeystore $truststore_jks -storepass $password -srcstorepass changeit \
+              && csplit -z -f crt- /var/run/secrets/java.io/keystores/certs '/-----BEGIN CERTIFICATE-----/' '{*}' \
+              && for file in crt-*; do keytool -import -noprompt -keystore $truststore_jks -file $file -storepass $password -alias service-$file; done || exit 0
+              rm /var/run/secrets/java.io/keystores/certs
+            fi
+            EOF
+          volumeMounts:
+          - name: keystore-volume
+            mountPath: /var/run/secrets/java.io/keystores
+          - name: servercert
+            mountPath: /var/run/secrets/openshift.io/servercert
+            readOnly: true
+          - name: ca-certs
+            mountPath: /var/run/secrets/java.io/certs
+        {{- end }}
+        {{- if .Values.deployment.initContainers }}
 {{ toYaml .Values.deployment.initContainers | indent 6 }}
+      {{- end }}
       {{- end }}
       {{- if .Values.deployment.nodeSelector }}
       nodeSelector:
@@ -183,12 +259,33 @@ spec:
       securityContext:      
 {{ toYaml .Values.deployment.securityContext | indent 8 }}
           {{- end }}
-      {{- if or (.Values.deployment.openshiftOAuthProxy.enabled) (.Values.deployment.volumes) (and (eq .Values.persistence.enabled true) (eq .Values.persistence.mountPVC true) )}} 
+      {{- if or (.Values.deployment.openshiftOAuthProxy.enabled) (.Values.deployment.volumes) (.Values.mutualTls.enabled) (and (eq .Values.persistence.enabled true) (eq .Values.persistence.mountPVC true) )}} 
       volumes:
         {{- if .Values.deployment.openshiftOAuthProxy.enabled }}
       - name: proxy-tls
         secret:
           secretName: {{ .Values.deployment.openshiftOAuthProxy.secretName }}
+        {{- end }}
+        {{- if .Values.mutualTls.enabled }}
+      - name: {{ template "application.name" . }}-client-tls
+        secret:
+          secretName: {{ template "application.name" . }}-client-tls
+      - emptyDir: {}
+        name: keystore-volume
+      - name: {{ template "application.name" . }}-service-tls
+        secret:
+          secretName: {{ template "application.name" . }}-service-tls
+      - name: ca-certs
+        projected:
+          sources:
+          - secret:
+              items:
+              - key: ca.crt
+                path: ca.crt
+              name: {{ template "application.name" . }}-client-tls
+          {{- if .Values.mutualTls.deployment.projectSources }}
+{{ include "application.tplvalues.render" ( dict "value" .Values.mutualTls.deployment.projectSources "context" $ ) | indent 10 }}
+        {{- end }}
         {{- end }}
         {{- if (eq .Values.persistence.mountPVC true) }}
       - name: {{ template "application.name" . }}-data

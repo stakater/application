@@ -36,6 +36,13 @@ mutualTls:
     defaultInitContainers:
       keystore:
         enabled: true
+        #resources:
+        #  limits:
+        #    cpu: "0.5"
+        #    memory: 400Mi
+        #  requests:
+        #    cpu: "0.2"
+        #    memory: 300Mi
       truststore:
         enabled: true
 

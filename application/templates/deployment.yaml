@@ -116,6 +116,17 @@ spec:
         - name: pem-to-truststore
           image: {{ .Values.mutualTls.deployment.image.repo }}/openjdk:11-slim
           workingDir: /tmp
+          resources:
+          {{- if .Values.mutualTls.deployment.defaultInitContainers.truststore.resources }}
+{{ toYaml .Values.mutualTls.deployment.defaultInitContainers.truststore.resources | indent 12 }}
+          {{- else }}
+            limits:
+              cpu: "0.4"
+              memory: 400Mi
+            requests:
+              cpu: "0.2"
+              memory: 200Mi
+          {{- end }}
           env:
           - name: truststore_jks
             value: /var/run/secrets/java.io/keystores/truststore.jks
@@ -143,9 +154,6 @@ spec:
           volumeMounts:
           - name: keystore-volume
             mountPath: /var/run/secrets/java.io/keystores
-          - name: servercert
-            mountPath: /var/run/secrets/openshift.io/servercert
-            readOnly: true
           - name: ca-certs
             mountPath: /var/run/secrets/java.io/certs
         {{- end }}

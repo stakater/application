@@ -119,13 +119,6 @@ To uninstall the chart:
 | endpointMonitor.additionalLabels | Labels for endpointMonitor | `{}` |
 | endpointMonitor.annotations | Annotations for endpointMonitor | `{}` |
 | endpointMonitor.additionalConfig | Additional Config for endpointMonitor | `{}` |
-| space.enabled | Enable Space Custom Resource | `false` |
-| space.additionalLabels | Additional labels for Space Custom Resource | `{}` |
-| space.annotations | Annotations for Space Custom Resource | `{}` |
-| space.tenant | Tenant associated with Space Custom Resource | `""` |
-| namespace.enabled | Enable Namespace| `false` |
-| namespace.additionalLabels | Additional labels for Namespace | `{}` |
-| namespace.annotations | Annotations for Namespace | `{}` |
 | sealedSecret.enabled | Enable sealed secret | `false` |
 | sealedSecret.additionalLabels | Labels for sealed secret | `{}` |
 | sealedSecret.annotations | Annotations for sealed secret | `{}` |

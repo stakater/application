@@ -370,18 +370,6 @@ space:
   tenant: ""
 
 ##########################################################
-# Namespace
-##########################################################
-namespace:
-  enabled: false
-  # Additional labels on space
-  additionalLabels:
-    # key: value
-  # Annotations on space 
-  annotations: 
-     # key: value
-
-##########################################################
 # Role Based Access Control (RBAC)
 ##########################################################
 rbac:

@@ -356,32 +356,6 @@ forecastle:
   networkRestricted: false
 
 ##########################################################
-# Space
-##########################################################
-space:
-  enabled: false
-  # Additional labels on space
-  additionalLabels:
-    # key: value
-  # Annotations on space 
-  annotations: 
-     # key: value
-  # Tenants associated with space
-  tenant: ""
-
-##########################################################
-# Namespace
-##########################################################
-namespace:
-  enabled: false
-  # Additional labels on space
-  additionalLabels:
-    # key: value
-  # Annotations on space 
-  annotations: 
-     # key: value
-
-##########################################################
 # Role Based Access Control (RBAC)
 ##########################################################
 rbac:

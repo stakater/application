@@ -333,17 +333,6 @@ forecastle:
   # Whether app is network restricted or not
   networkRestricted: false
 
-space:
-  enabled: false
-  # Additional labels on space
-  additionalLabels:
-    key: value
-  # Annotations on space 
-  annotations: 
-     # key: value
-  # Tenants associated with space
-  tenant: "dominator-test"
-
 # Role Based Access Control
 rbac:
   enabled: true

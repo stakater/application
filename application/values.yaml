@@ -435,7 +435,6 @@ secret:
     # key: value
   annotations: 
     # key: value
-    # key1: value2
   files:    
   # - nameSuffix: credentials
   #   data:

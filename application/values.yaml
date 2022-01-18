@@ -1,7 +1,7 @@
 ##########################################################
 # Name of the application.
 ##########################################################
-applicationName: "application"
+applicationName: "applicationtesting123"
 
 namespaceOverride: ""
 
@@ -63,6 +63,8 @@ deployment:
 
   # Annotations on deployments
   annotations:
+    key: value
+    key1: value2
 
   # Additional Pod Annotations added on pod created by this Deployment
   additionalPodAnnotations:
@@ -461,6 +463,7 @@ secret:
     # key: value
   annotations: 
     # key: value
+    # key1: value2
   files:    
   # - nameSuffix: credentials
   #   data:
@@ -660,3 +663,44 @@ prometheusRule:
     #       for: 1m
     #       labels:
     #         severity: critical  
+##########################################################
+# External Secrets
+##########################################################
+externalSecret:
+  enabled: false
+  # RefreshInterval is the amount of time before the values reading again from the SecretStore provider
+  refreshInterval: "1m"
+  files:   
+    # Data defines the connection between the Kubernetes Secret keys and the Provider data 
+    # - data:
+    #     - secretKey: secret-key-to-be-managed
+    #       remoteRef:
+    #         key: provider-key
+    #         property: provider-key-property
+    # SecretStoreRef defines which SecretStore to use when fetching the secret data
+    #   secretStoreRef:
+    #     name: secret-store-name
+    #     kind: SecretStore # or ClusterSecretStore            
+    #   nameSuffix: for-external-secret-name
+    #   type: Opaque #or your value here
+    #   annotations: 
+    #     # key: value
+    #     # key1: value2
+    #   labels: 
+    #     # key: value
+    #     # key1: value2
+    # Used to fetch all properties from the Provider key
+    # - dataFrom:
+    #     - key: provider-key
+    #   # SecretStoreRef defines which SecretStore to use when fetching the secret data
+    #   secretStoreRef:
+    #     name: secret-store-name
+    #     kind: SecretStore # or ClusterSecretStore            
+    #   nameSuffix: for-external-secret-name
+    #   type: Opaque #or your value here
+    #   annotations: 
+    #     # key: value
+    #     # key1: value2
+    #   labels: 
+    #     # key: value
+    #     # key1: value2

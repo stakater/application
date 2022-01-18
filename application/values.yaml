@@ -63,8 +63,6 @@ deployment:
 
   # Annotations on deployments
   annotations:
-    key: value
-    key1: value2
 
   # Additional Pod Annotations added on pod created by this Deployment
   additionalPodAnnotations:

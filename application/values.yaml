@@ -639,39 +639,34 @@ prometheusRule:
 ##########################################################
 externalSecret:
   enabled: false
+
+  #SecretStore defines which SecretStore to use when fetching the secret data
+  secretStore:
+    name: secret-store-name
+    #kind: SecretStore # or ClusterSecretStore  
+
   # RefreshInterval is the amount of time before the values reading again from the SecretStore provider
   refreshInterval: "1m"
   files:   
-    # Data defines the connection between the Kubernetes Secret keys and the Provider data 
-    # - data:
-    #     - secretKey: secret-key-to-be-managed
-    #       remoteRef:
-    #         key: provider-key
-    #         property: provider-key-property
-    # SecretStoreRef defines which SecretStore to use when fetching the secret data
-    #   secretStoreRef:
-    #     name: secret-store-name
-    #     kind: SecretStore # or ClusterSecretStore            
-    #   nameSuffix: for-external-secret-name
-    #   type: Opaque #or your value here
-    #   annotations: 
-    #     # key: value
-    #     # key1: value2
-    #   labels: 
-    #     # key: value
-    #     # key1: value2
-    # Used to fetch all properties from the Provider key
-    # - dataFrom:
-    #     - key: provider-key
-    #   # SecretStoreRef defines which SecretStore to use when fetching the secret data
-    #   secretStoreRef:
-    #     name: secret-store-name
-    #     kind: SecretStore # or ClusterSecretStore            
-    #   nameSuffix: for-external-secret-name
-    #   type: Opaque #or your value here
-    #   annotations: 
-    #     # key: value
-    #     # key1: value2
-    #   labels: 
-    #     # key: value
-    #     # key1: value2
+
+    #Data defines the connection between the Kubernetes Secret keys and the Provider data 
+    - data:
+        - secretKey: secret-key-to-be-managed
+          remoteRef:
+            key: provider-key
+            property: provider-key-property      
+
+      # secretStore:
+      #   name: secret-store-name-2
+      #   kind: SecretStore # or ClusterSecretStore   
+      nameSuffix: for-external-secret-name
+
+      #Used to fetch all properties from the Provider key
+    - dataFrom:
+        - key: provider-key
+          a: b  
+      type: Opaque #or your value here
+      annotations: 
+        key: value
+      labels: 
+        key: value

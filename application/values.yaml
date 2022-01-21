@@ -638,7 +638,7 @@ prometheusRule:
 # External Secrets
 ##########################################################
 externalSecret:
-  enabled: true
+  enabled: false
 
   #SecretStore defines which SecretStore to use when fetching the secret data
   secretStore:
@@ -648,9 +648,9 @@ externalSecret:
   # RefreshInterval is the amount of time before the values reading again from the SecretStore provider
   refreshInterval: "1m"
   files:   
-
-    # #Data defines the connection between the Kubernetes Secret keys and the Provider data 
-    # - data:
+    # secret-1-name:
+    #   #Data defines the connection between the Kubernetes Secret keys and the Provider data 
+    #   data:
     #     - secretKey: secret-key-to-be-managed
     #       remoteRef:
     #         key: provider-key
@@ -659,12 +659,11 @@ externalSecret:
     #   secretStore:
     #     name: secret-store-name-2
     #     kind: SecretStore # or ClusterSecretStore   
-    #   nameSuffix: for-external-secret-name
-
+    # secret-2-name:
     #   #Used to fetch all properties from the Provider key
-    # - dataFrom:
-    #     - key: provider-key
-    #       a: b  
+    #   dataFrom:
+    #       - key: provider-key
+    #         a: b  
     #   type: Opaque #or your value here
     #   annotations: 
     #     key: value

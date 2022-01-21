@@ -651,7 +651,7 @@ externalSecret:
     # secret-1-name:
     #   #Data defines the connection between the Kubernetes Secret keys and the Provider data 
     #   data:
-    #     - secretKey: secret-key-to-be-managed
+    #     secret-key-to-be-managed: 
     #       remoteRef:
     #         key: provider-key
     #         property: provider-key-property      
@@ -662,8 +662,8 @@ externalSecret:
     # secret-2-name:
     #   #Used to fetch all properties from the Provider key
     #   dataFrom:
-    #       - key: provider-key
-    #         a: b  
+    #   - key: provider-key
+    #     a: b
     #   type: Opaque #or your value here
     #   annotations: 
     #     key: value

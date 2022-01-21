@@ -605,7 +605,7 @@ externalSecret:
     secret-1-name:
       #Data defines the connection between the Kubernetes Secret keys and the Provider data 
       data:
-        - secretKey: example-secret-key
+        example-secret-key:
           remoteRef:
             key: example-provider-key
             property: example-provider-key-property

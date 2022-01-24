@@ -589,3 +589,33 @@ prometheusRule:
           for: 1m
           labels:
             severity: critical  
+
+# ExternalSecrets
+externalSecret:
+  enabled: true
+
+  #SecretStore defines which SecretStore to use when fetching the secret data
+  secretStore:
+    name: example-secret-store
+    #kind: SecretStore # or ClusterSecretStore  
+
+  # RefreshInterval is the amount of time before the values reading again from the SecretStore provider
+  refreshInterval: "1m"
+  files:   
+    secret-1-name:
+      #Data defines the connection between the Kubernetes Secret keys and the Provider data 
+      data:
+        example-secret-key:
+          remoteRef:
+            key: example-provider-key
+            property: example-provider-key-property
+
+    secret-2-name:
+      #Used to fetch all properties from the Provider key
+      dataFrom:
+      - key: example-provider-key
+      type: Opaque 
+      annotations: 
+        key: value
+      labels: 
+        key: value

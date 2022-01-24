@@ -167,3 +167,8 @@ To uninstall the chart:
 | secretProviderClass.roleName | Name of the role being referred to in vault   | `""` |
 | secretProviderClass.objects | The object created from the secret in vault   | `[]` |
 | secretProviderClass.secretObjects | This creates the kubernetes secret   | `""` |
+| externalSecret.enabled | Enables External Secret Custom Resource  | `false` |
+| externalSecret.secretStore.name | Defines name of default SecretStore to use when fetching the secret data  | `tenant-vault-secret-store` |
+| externalSecret.secretStore.kind | Defines kind as SecretStore or ClusterSecretStore  | `SecretStore` |
+| externalSecret.refreshInterval | Amount of time before the values reading again from the SecretStore provider  | `1m` |
+| externalSecret.files | Array of secret files with name and remote reference data contained in those files | `[]` |

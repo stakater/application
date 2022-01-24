@@ -640,32 +640,28 @@ prometheusRule:
 externalSecret:
   enabled: false
 
-  #SecretStore defines which SecretStore to use when fetching the secret data
+  # Default SecretStore for all externalsecrets defines which SecretStore to use when fetching the secret data
   secretStore:
     name: secret-store-name
-    #kind: SecretStore # or ClusterSecretStore  
+    #kind: ClusterSecretStore # Defaults to SecretStore if not specified 
 
   # RefreshInterval is the amount of time before the values reading again from the SecretStore provider
   refreshInterval: "1m"
   files:   
-    # secret-1-name:
-    #   #Data defines the connection between the Kubernetes Secret keys and the Provider data 
-    #   data:
-    #     secret-key-to-be-managed: 
-    #       remoteRef:
-    #         key: provider-key
-    #         property: provider-key-property      
-
-    #   secretStore:
-    #     name: secret-store-name-2
-    #     kind: SecretStore # or ClusterSecretStore   
-    # secret-2-name:
-    #   #Used to fetch all properties from the Provider key
-    #   dataFrom:
-    #   - key: provider-key
-    #     a: b
-    #   type: Opaque #or your value here
-    #   annotations: 
-    #     key: value
-    #   labels: 
-    #     key: value
+    # mongodb:
+    ## Data defines the connection between the Kubernetes Secret keys and the Provider data
+      # data:
+      #    mongo-password: 
+      #      remoteRef: 
+      #         key: monodb
+      #         property: passowrd 
+      # secretStore:                       
+      #    name: secret-store-name-2    # specify if value is other than default secretstore  
+      # labels:
+      #    stakater.com/app: mongodb 
+      #     
+    # postgres:
+      ## Used to fetch all properties from the Provider key
+      #   dataFrom:
+      #   - key: postgres
+      #     property: credentials

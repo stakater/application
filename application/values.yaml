@@ -642,7 +642,7 @@ externalSecret:
 
   # Default SecretStore for all externalsecrets defines which SecretStore to use when fetching the secret data
   secretStore:
-    name: secret-store-name
+    name: tenant-vault-secret-store
     #kind: ClusterSecretStore # Defaults to SecretStore if not specified 
 
   # RefreshInterval is the amount of time before the values reading again from the SecretStore provider

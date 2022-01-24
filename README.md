@@ -168,16 +168,9 @@ To uninstall the chart:
 | secretProviderClass.objects | The object created from the secret in vault   | `[]` |
 | secretProviderClass.secretObjects | This creates the kubernetes secret   | `""` |
 | externalSecret.enabled | Enables External Secret Custom Resource  | `false` |
-| externalSecret.secretStore.name | Defines name of SecretStore to use when fetching the secret data  | `tenant-vault-secret-store` |
+| externalSecret.secretStore.name | Defines name of default SecretStore to use when fetching the secret data  | `tenant-vault-secret-store` |
 | externalSecret.secretStore.kind | Defines kind as SecretStore or ClusterSecretStore  | `SecretStore` |
 | externalSecret.refreshInterval | Amount of time before the values reading again from the SecretStore provider  | `1m` |
-| externalSecret.files.data | Defines the connection between the Kubernetes Secret keys and the Provider data   | {} |
-| externalSecret.files.data.secretKey | Name of key in kubernetes secret to be created from External Secret | `secret-key-to-be-managed` |
-| externalSecret.files.data.remoteRef.key | Name/Path of secret in remote (e.g. vault) secret  | `provider-key` |
-| externalSecret.files.data.remoteRef.property | Name of key in secret in remote (e.g. vault)  | `provider-key-property ` |
-| externalSecret.files.nameSuffix | String that will append with external secret name, which, collectively, will form kubernetes secret name  | `for-external-secret-name` |
-| externalSecret.files.dataFrom | Used to fetch all properties from remote (e.g. vault) secret  | {} |
-| externalSecret.files.dataFrom.key | Name/Path of secret in remote (e.g. vault) secret | `provider-key` |
-| externalSecret.files.dataFrom.annotations | Annotations for External Secret. Used similarly in .data as well | `provider-key` |
-| externalSecret.files.dataFrom.labels | Labels for External Secret. Used similarly in .data as well | `provider-key` |
+| externalSecret.files | Array of secret files with name and remote reference data contained in those files | `[]` |
+
 

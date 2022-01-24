@@ -172,5 +172,3 @@ To uninstall the chart:
 | externalSecret.secretStore.kind | Defines kind as SecretStore or ClusterSecretStore  | `SecretStore` |
 | externalSecret.refreshInterval | Amount of time before the values reading again from the SecretStore provider  | `1m` |
 | externalSecret.files | Array of secret files with name and remote reference data contained in those files | `[]` |
-
-

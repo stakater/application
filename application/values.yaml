@@ -665,3 +665,18 @@ externalSecret:
       #   dataFrom:
       #   - key: postgres
       #     property: credentials
+
+##########################################################
+# grafanaDashboard object for defining application 
+# Grafana Dashboard
+##########################################################
+grafanaDashboard:
+  enabled: false
+  
+  # GrafanaDashboard additonal labels
+  additionalLabels:
+    # grafanaDashboard: grafana-operator
+  
+  # GrafanaDashboard contents
+  # it will read json files in "dashboards" folder, and generate GrafanaDashboard for each file, 
+  # with the file name as the GrafanaDashboard name, with the file content as the GrafanaDashboard content.

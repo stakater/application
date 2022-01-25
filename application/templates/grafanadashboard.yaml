@@ -1,8 +1,7 @@
 
 {{- if .Values.grafanaDashboard -}}
 {{- if .Values.grafanaDashboard.enabled -}}
-{{- range $path, $_ :=  .Files.Glob  "dashboards/**.json" }}
-{{ $name := base $path }}
+{{- range $name, $json := .Values.grafanaDashboard.contents }}
 apiVersion: integreatly.org/v1alpha1
 kind: GrafanaDashboard
 metadata:
@@ -17,7 +16,7 @@ metadata:
   namespace: {{ template "application.namespace" $ }}
 spec:
   json: |-
-    {{ $.Files.Get $path | toJson }}
+    {{ $json | toJson }}
 ---
 {{- end }}
 {{- end }}

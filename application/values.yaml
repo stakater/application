@@ -678,5 +678,13 @@ grafanaDashboard:
     # grafanaDashboard: grafana-operator
   
   # GrafanaDashboard contents
-  # it will read json files in "dashboards" folder, and generate GrafanaDashboard for each file, 
-  # with the file name as the GrafanaDashboard name, with the file content as the GrafanaDashboard content.
+  # this includes pairs of dashboard name and associated json content
+  contents:
+    # dashboard-name-1: |-
+    #   {
+    #     data
+    #   }
+    # dashboard-name-2: |-
+    #   {
+    #     data
+    #   }

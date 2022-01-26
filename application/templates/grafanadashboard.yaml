@@ -1,7 +1,7 @@
 
 {{- if .Values.grafanaDashboard -}}
 {{- if .Values.grafanaDashboard.enabled -}}
-{{- range $name, $json := .Values.grafanaDashboard.contents }}
+{{- range $name, $content := .Values.grafanaDashboard.contents }}
 apiVersion: integreatly.org/v1alpha1
 kind: GrafanaDashboard
 metadata:
@@ -15,8 +15,13 @@ metadata:
   name: {{ $name }}
   namespace: {{ template "application.namespace" $ }}
 spec:
+  {{- if $content.json }}
   json: |-
-    {{ $json | toJson }}
+    {{ $content.json | toJson }}
+  {{- end }}
+  {{- if $content.url }}
+  url: {{ $content.url }}
+  {{- end }}
 ---
 {{- end }}
 {{- end }}

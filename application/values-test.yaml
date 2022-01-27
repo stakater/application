@@ -623,6 +623,10 @@ externalSecret:
 # Grafana Dashboard
 grafanaDashboard:
   enabled: true
+  additionalLabels:
+    test-label: chart
+  annotations: 
+    test-annoation: chart
   contents:
     dashboard-test-name-1: 
       json: |-

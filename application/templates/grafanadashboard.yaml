@@ -1,4 +1,3 @@
-
 {{- if .Values.grafanaDashboard -}}
 {{- if .Values.grafanaDashboard.enabled -}}
 {{- range $name, $content := .Values.grafanaDashboard.contents }}
@@ -11,6 +10,10 @@ metadata:
 {{ include "application.labels.chart" $ | indent 4 }}
 {{- if $.Values.grafanaDashboard.additionalLabels }}
 {{ toYaml $.Values.grafanaDashboard.additionalLabels | indent 4 }}
+{{- end }}
+{{- if $.Values.grafanaDashboard.annotations }}
+  annotations: 
+{{ toYaml $.Values.grafanaDashboard.annotations | indent 4 }}
 {{- end }}
   name: {{ $name }}
   namespace: {{ template "application.namespace" $ }}

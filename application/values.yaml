@@ -665,3 +665,35 @@ externalSecret:
       #   dataFrom:
       #   - key: postgres
       #     property: credentials
+
+##########################################################
+# grafanaDashboard object for defining application 
+# Grafana Dashboard
+##########################################################
+grafanaDashboard:
+  enabled: false
+  
+  # GrafanaDashboard additonal labels
+  additionalLabels:
+    # grafanaDashboard: grafana-operator
+
+  # GrafanaDashboard annotations
+  annotations:
+    # key: value
+  
+  # GrafanaDashboard contents
+  # this includes pairs of dashboard name and associated json content
+  # Accoroding to GrafanaDashboard behavior, if both url and json are specified then the GrafanaDashboard content will be updated with fetched content from url
+  contents:
+    # dashboard-name-1: 
+    #   json: |-
+    #     {
+    #       "data"
+    #     }
+    #   url: http://hostname/path/to/file.json
+    # dashboard-name-2: 
+    #   json: |-
+    #     {
+    #       "data"
+    #     }
+    #   url: http://hostname/path/to/file.json

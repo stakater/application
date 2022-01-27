@@ -16,7 +16,7 @@ metadata:
   namespace: {{ template "application.namespace" $ }}
 spec:
   {{- if $content.json }}
-  json: |-
+  json: 
     {{ $content.json | toJson }}
   {{- end }}
   {{- if $content.url }}

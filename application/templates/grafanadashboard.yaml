@@ -5,6 +5,7 @@ apiVersion: integreatly.org/v1alpha1
 kind: GrafanaDashboard
 metadata:
   labels:
+    # this label is used as dashboard selector by grafana operator 
     grafanaDashboard: grafana-operator
 {{ include "application.labels.stakater" $ | indent 4 }}
 {{ include "application.labels.chart" $ | indent 4 }}

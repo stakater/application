@@ -175,6 +175,6 @@ To uninstall the chart:
 | grafanaDashboard.enabled | Enables Grafana Dashboard  | `false` |
 | grafanaDashboard.additionalLabels | Kubernetes labels object | `{}` |
 | grafanaDashboard.annotations | Annotations for Grafana Dashboard  | `{}` |
-| grafanaDashboard.contents.key | Used as name of Grafana Dashboard object  | `` |
-| grafanaDashboard.contents.key.json | json string used as content of Grafana Dashboard object  | `` |
-| grafanaDashboard.contents.key.url| Url used to fetch dashboard content. Accoroding to GrafanaDashboard behavior, if both url and json are specified then the GrafanaDashboard content will be updated with fetched content from url | `` |
+| grafanaDashboard.contents.key | Used as name of Grafana Dashboard object  | `""` |
+| grafanaDashboard.contents.key.json | json string used as content of Grafana Dashboard object  | `""` |
+| grafanaDashboard.contents.key.url| Url used to fetch dashboard content. Accoroding to GrafanaDashboard behavior, if both url and json are specified then the GrafanaDashboard content will be updated with fetched content from url | `""` |

@@ -172,3 +172,9 @@ To uninstall the chart:
 | externalSecret.secretStore.kind | Defines kind as SecretStore or ClusterSecretStore  | `SecretStore` |
 | externalSecret.refreshInterval | Amount of time before the values reading again from the SecretStore provider  | `1m` |
 | externalSecret.files | Array of secret files with name and remote reference data contained in those files | `[]` |
+| grafanaDashboard.enabled | Enables Grafana Dashboard  | `false` |
+| grafanaDashboard.additionalLabels | Kubernetes labels object | `{}` |
+| grafanaDashboard.annotations | Annotations for Grafana Dashboard  | `{}` |
+| grafanaDashboard.contents.key | Used as name of Grafana Dashboard object  | `` |
+| grafanaDashboard.contents.key.json | json string used as content of Grafana Dashboard object  | `` |
+| grafanaDashboard.contents.key.url| Url used to fetch dashboard content. Accoroding to GrafanaDashboard behavior, if both url and json are specified then the GrafanaDashboard content will be updated with fetched content from url | `` |

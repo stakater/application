@@ -1,6 +1,6 @@
 {{- if .Values.configMap }}
 {{- if .Values.configMap.enabled }}
-{{- range .Values.configMap.files }}
+{{- range $nameSuffix, $data := .Values.configMap.files }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -14,14 +14,10 @@ metadata:
   annotations:
 {{ toYaml $.Values.configMap.annotations | indent 4 }}
 {{- end }}
-  {{- if eq .nameSuffix ""  }}
-  name: {{ template "application.name" $ }}
-  {{- else }}
-  name: {{ template "application.name" $ }}-{{ .nameSuffix }}
-  {{- end }}
+  name: {{ template "application.name" $ }}-{{ $nameSuffix }}
   namespace: {{ template "application.namespace" $ }}
 data:
-{{ toYaml .data | indent 2 }}
+{{ toYaml $data | indent 2 }}
 ---
 {{- end }}
 {{- end }}

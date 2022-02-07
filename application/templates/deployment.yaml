@@ -75,7 +75,10 @@ spec:
       {{- end }}
       {{- if .Values.deployment.initContainers }}
       initContainers:
-{{ include "application.tplvalues.render" ( dict "value" .Values.deployment.initContainers "context" $ ) | indent 6 }}
+  {{- range $key, $value := .Values.deployment.initContainers  }}
+        - name: {{ $key }}
+{{ include "application.tplvalues.render" ( dict "value" $value "context" $ ) | indent 10 }}
+      {{- end }}
       {{- end }}
       {{- if .Values.deployment.nodeSelector }}
       nodeSelector:
@@ -196,9 +199,12 @@ spec:
           claimName: {{ template "application.name" . }}-data
         {{- end }}
         {{- if .Values.deployment.volumes }}
-{{ include "application.tplvalues.render" ( dict "value" .Values.deployment.volumes "context" $ ) | indent 6 }}
+        {{- range $key, $value := .Values.deployment.volumes  }}
+      - name: {{ $key }}
+{{ include "application.tplvalues.render" ( dict "value" $value "context" $ ) | indent 8 }}
         {{- end }}
-      {{- end }}  
+        {{- end }}
+      {{- end }}
       {{- if .Values.rbac.serviceAccount.name }}
       serviceAccountName: {{ .Values.rbac.serviceAccount.name }}
         {{- else }}

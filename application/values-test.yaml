@@ -37,10 +37,10 @@ deployment:
 
   # Init containers which runs before the app container
   initContainers:
-  - name: init-contaner
-    image: busybox
-    imagePullPolicy: IfNotPresent
-    command: ['/bin/sh']    
+     init-contaner:
+        image: busybox
+        imagePullPolicy: IfNotPresent
+        command: ['/bin/sh']
 
   # Additional labels for Deployment
   additionalLabels:
@@ -85,18 +85,18 @@ deployment:
   
   # Volumes to be added to the pod
   volumes:
-    - name: config-volume
+    config-volume:
       configMap:        
         name: configmap-name
-    - name: configmap-volume
+    configmap-volume:
       configMap:
         name: '{{ template "application.name" . }}-configmap-nameSuffix'
-    - name: secret-volume
+    secret-volume:
       secret:        
         secretName: secret-name
-    - name: volume-name
+    volume-name:
       emptyDir: {}
-    - name: persistent-volume-name
+    persistent-volume-name:
       persistentVolumeClaim:
         claimName: claim-name
 
@@ -377,14 +377,12 @@ configMap:
   annotations: 
     # key: value
   files:
-  # - nameSuffix: code-config    
-  #   data:
-  #     key1: value1
-  #     key2: value2
-  # - nameSuffix: dev-config
-  #   data:
-  #     key1: value1
-  #     key2: value2
+#    code-config:
+#       key1: value1
+#       key2: value2
+#    dev-config:
+#       key1: value1
+#       key2: value2
 sealedSecret:
   enabled: true
   additionalLabels: 

@@ -74,8 +74,8 @@ spec:
 {{ toYaml .Values.deployment.hostAliases | indent 6 }}
       {{- end }}
       {{- if .Values.deployment.initContainers }}
-      initContainers:      
-{{ toYaml .Values.deployment.initContainers | indent 6 }}
+      initContainers:
+{{ include "application.tplvalues.render" ( dict "value" .Values.deployment.initContainers "context" $ ) | indent 6 }}
       {{- end }}
       {{- if .Values.deployment.nodeSelector }}
       nodeSelector:

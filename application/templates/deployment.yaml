@@ -166,7 +166,7 @@ spec:
           name: {{ template "application.name" . }}-data
         {{- end }}
         {{- if .Values.deployment.volumeMounts }}
-{{ include "application.tplvalues.render" ( dict "value" .Values.deployment.volumeMounts "context" $ ) | indent 6 }}
+{{ include "application.tplvalues.render" ( dict "value" .Values.deployment.volumeMounts "context" $ ) | indent 8 }}
         {{- end }}
       {{- end }}
         resources:

@@ -474,7 +474,7 @@ endpointMonitor:
 
 # Certficate CRD to generate the certificate
 certificate:
-  enabled: true
+  enabled: false
   
   # Additional labels
   additionalLabels:

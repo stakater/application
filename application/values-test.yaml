@@ -81,7 +81,7 @@ deployment:
   # Environment variables to be passed to the app container
   env:
     ENVIRONMENT:
-        "dev"
+       value: "dev"
   
   # Volumes to be added to the pod
   volumes:

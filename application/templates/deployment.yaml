@@ -158,7 +158,7 @@ spec:
         env:
         {{- range $key, $value := .Values.deployment.env }}
            - name: {{ include "application.tplvalues.render" ( dict "value" $key "context" $ ) }}
-             value: {{ include "application.tplvalues.render" ( dict "value" $value "context" $ ) }}
+{{ include "application.tplvalues.render" ( dict "value" $value "context" $ ) | indent 13 }}
         {{- end }}
         {{- end }}
         livenessProbe:

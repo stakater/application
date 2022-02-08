@@ -156,7 +156,10 @@ spec:
         {{- end }}
         {{- if .Values.deployment.env }}
         env:
-{{ toYaml .Values.deployment.env | indent 10 }}
+        {{- range $key, $value := .Values.deployment.env }}
+           - name: {{ include "application.tplvalues.render" ( dict "value" $key "context" $ ) }}
+             value: {{ include "application.tplvalues.render" ( dict "value" $value "context" $ ) }}
+        {{- end }}
         {{- end }}
         livenessProbe:
 {{ toYaml .Values.deployment.probes.livenessProbe | indent 10 }}
@@ -200,7 +203,7 @@ spec:
         {{- end }}
         {{- if .Values.deployment.volumes }}
         {{- range $key, $value := .Values.deployment.volumes  }}
-      - name: {{ $key }}
+      - name: {{ include "application.tplvalues.render" ( dict "value" $key "context" $ ) }}
 {{ include "application.tplvalues.render" ( dict "value" $value "context" $ ) | indent 8 }}
         {{- end }}
         {{- end }}

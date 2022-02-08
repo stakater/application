@@ -80,8 +80,8 @@ deployment:
 
   # Environment variables to be passed to the app container
   env:
-  - name: ENVIRONMENT
-    value: "dev"
+    ENVIRONMENT:
+        "dev"
   
   # Volumes to be added to the pod
   volumes:

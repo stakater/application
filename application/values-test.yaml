@@ -102,8 +102,8 @@ deployment:
 
   # Mount path for Volumes 
   volumeMounts:
-    - mountPath: /path
-      name: volume-name
+      volume-name:
+        /path
 
   # Taint tolerations for nodes
   tolerations:

@@ -172,7 +172,10 @@ spec:
           name: {{ template "application.name" . }}-data
         {{- end }}
         {{- if .Values.deployment.volumeMounts }}
-{{ include "application.tplvalues.render" ( dict "value" .Values.deployment.volumeMounts "context" $ ) | indent 8 }}
+        {{- range $key, $value := .Values.deployment.volumeMounts }}
+        - mountPath: {{ include "application.tplvalues.render" ( dict "value" $value "context" $ )}}
+          name: {{ $key }}
+        {{- end }}
         {{- end }}
       {{- end }}
         resources:

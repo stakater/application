@@ -10,7 +10,7 @@ metadata:
 {{- end }}
 {{- if .Values.service.annotations }}
   annotations:
-{{ include "application.tplvalues.render" ( dict "value" .Values.service.annotations  "context" $ ) | indent 4 }}
+{{ toYaml .Values.service.annotations | indent 4 }}
 {{- end }}
   name: {{ template "application.name" . }}
   namespace: {{ template "application.namespace" $ }}

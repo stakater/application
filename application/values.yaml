@@ -670,7 +670,7 @@ externalSecret:
 # Pod disruption budget - PDB
 ##########################################################
 pdb:
-  enabled: true
+  enabled: false
   minAvailable: 1
   maxUnavailable: 2
 

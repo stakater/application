@@ -667,6 +667,14 @@ externalSecret:
       #     property: credentials
 
 ##########################################################
+# Pod disruption budget - PDB
+##########################################################
+pdb:
+  enabled: false
+  minAvailable: 1
+  maxUnavailable: 2
+
+##########################################################
 # grafanaDashboard object for defining application 
 # Grafana Dashboard
 ##########################################################

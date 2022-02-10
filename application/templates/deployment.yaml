@@ -131,13 +131,13 @@ spec:
         {{- end }}
         {{- if .Values.deployment.envFrom }}
         envFrom:
-        {{- range .Values.deployment.envFrom }}
+        {{- range $key, $value := .Values.deployment.envFrom }}
         {{- if (eq .type "configmap") }}
         - configMapRef:
             {{- if .name }}
-            name: {{ .name }}
+            name: {{ include "application.tplvalues.render" ( dict "value" $value.name "context" $ ) }}
             {{- else if .nameSuffix }}
-            name: {{ template "application.name" $ }}-{{ .nameSuffix }}
+            name: {{ template "application.name" $ }}-{{ include "application.tplvalues.render" ( dict "value" $value.nameSuffix "context" $ ) }}
             {{- else }}
             name: {{ template "application.name" $ }}
             {{- end }}
@@ -145,9 +145,9 @@ spec:
         {{- if (eq .type "secret") }}
         - secretRef:
             {{- if .name }}
-            name: {{ .name }}
+            name: { include "application.tplvalues.render" ( dict "value" $value.name "context" $ ) }}
             {{- else if .nameSuffix }}
-            name: {{ template "application.name" $ }}-{{ .nameSuffix }}
+            name: {{ template "application.name" $ }}-{{ include "application.tplvalues.render" ( dict "value" $value.nameSuffix "context" $ ) }}
             {{- else }}
             name: {{ template "application.name" $ }}
             {{- end }}

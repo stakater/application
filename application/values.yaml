@@ -83,11 +83,11 @@ deployment:
   # If want to mount Envs from configmap or secret
   envFrom: []
   # - type: configmap
-  #   name: my-configmap
+  #   nameSuffix: my-configmap
   # - type: configmap
   #   nameSuffix: your-configmap
   # - type: secret
-  #   name: my-secret
+  #   nameSuffix: my-secret
 
   # Environment variables to be passed to the app container
 #  env:

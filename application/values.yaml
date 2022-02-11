@@ -399,12 +399,13 @@ rbac:
 # Additional ConfigMaps
 ##########################################################
 configMap:
-  enabled: true
+  enabled: false
   additionalLabels: 
     # key: value
   annotations: 
     # key: value
   files:
+    # nameSuffix of configMap
     code-config:
        key1: value1
        key2: value2

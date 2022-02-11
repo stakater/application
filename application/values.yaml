@@ -676,7 +676,7 @@ externalSecret:
 pdb:
   enabled: false
   minAvailable: 1
-  maxUnavailable: 2
+# maxUnavailable: 1
 
 ##########################################################
 # grafanaDashboard object for defining application 

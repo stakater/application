@@ -131,7 +131,7 @@ spec:
         {{- end }}
         {{- if .Values.deployment.envFrom }}
         envFrom:
-        {{- range $key, $value := .Values.deployment.envFrom }}
+        {{- range $value := .Values.deployment.envFrom }}
         {{- if (eq .type "configmap") }}
         - configMapRef:
             {{- if .name }}

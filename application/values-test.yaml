@@ -70,13 +70,16 @@ deployment:
   imagePullSecrets: ""
 
   # If want to mount Envs from configmap or secret
-  envFrom: 
-  - type: configmap
-    nameSuffix: my-configmap
-  - type: configmap
-    nameSuffix: your-configmap
-  - type: secret
-    nameSuffix: my-secret
+  envFrom:
+    production-cm:
+      type: configmap
+      nameSuffix: my-configmap
+    logging-config:
+      type: configmap
+      nameSuffix: your-configmap
+    postgres-config:
+      type: secret
+      nameSuffix: postgres
 
   # Environment variables to be passed to the app container
   env:
@@ -221,9 +224,9 @@ service:
   annotations:
     config.xposer.stakater.com/Domain: stakater.com
 #    service.alpha.openshift.io/serving-cert-secret-name: '{{ template "application.name" . }}-tls'
-    config.xposer.stakater.com/IngressNameTemplate: '{{ "{{.Service}}.{{.Namespace}}"  }}'
+    config.xposer.stakater.com/IngressNameTemplate: '{{.Service}}-{{.Namespace}}'
     config.xposer.stakater.com/IngressURLPath: /
-    config.xposer.stakater.com/IngressURLTemplate: '{{ "{{.Service}}.{{.Namespace}}.{{.Domain}}" }}'
+    config.xposer.stakater.com/IngressURLTemplate: '{{.Service}}.{{.Namespace}}.{{.Domain}}'
     xposer.stakater.com/annotations: |-
       kubernetes.io/ingress.class: external-ingress
       ingress.kubernetes.io/rewrite-target: /
@@ -391,6 +394,7 @@ sealedSecret:
   annotations: 
     # key: value
   files:
+#  This is the nameSuffix
 #    example:
 #     encryptedData:
 #       name: AgBghrdepGMKmp/rdtJrkBv/CWpJbtmoMsbKQ7QiZZ2kUoLeeTbrDnhmJY03kWKkNW4kN/sQRf6r1vvBEaR4nkHt5f/ayAeaH3NveI3bdb0xv/svvWjyjehwqwr/kNEAVWxRoUij0Y7MyIEAr4hnV2UnrhgvcjPJLNA8bK6spA+kuT328Vpyceyvnm6yArNn1aYlEckaFHrnculHWRpG73iRYxS5GWAY7EdkLXx7OLLWoopHtLcupklYyPfraJzPvBNZ5/PsyjlUBvoQbGV3cZlrdEj1WHj2S1RQ13ddf2WGtMHmY83t9B3LFZAZuA7BBt4rjludbwQm3/tJ5Kas1dDsSIRIIF7MTeum9YfRB8XUz8IxVKQ/JDskeynrWe3VzN/3HFVnv9GGFy+BCVXZKVU/roIRancz+nXkyoOHS722ZpBi53dfLItoS5dG+0EzArMTQzK/KXHz3b1rxp5oWWDNt3WggTiSg2zwy5ZR8VV2ToTDof6UrFmbCZv/kKriyxbVSxIo3KFnvuRiUZ5MwC0TNut4mW3LKyJfHqkUuLa1mYV6tKF58qBnoj/+JaibAIBEudT9hms5U52p7/jKmgHuop7XPEsz4OVwER//Vbv7X6ctoXtyPu6mZyOfOyJHM8Qj/H7/gwMBYhZHQ96DWrVmZOsWSRpZGJni4Xm7rgt2cFj6UtWv6lvl8aOi/HSZVC3TwWZ9mQrk

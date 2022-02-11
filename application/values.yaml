@@ -90,31 +90,30 @@ deployment:
   #   nameSuffix: my-secret
 
   # Environment variables to be passed to the app container
-#  env:
+  env:
 #    ENVIRONMENT:
 #       value: "dev"
+#    FREQUENCY:
+#       valueFrom:
+#          configMapKeyRef:
+#             name: config
+#             key: abc
   
   # Volumes to be added to the pod
   volumes:
-#     config-volume:
-#       configMap:
-#         name: configmap-name
 #     configmap-volume:
 #       configMap:
 #         name: '{{ template "application.name" . }}-configmap-nameSuffix'
 #     secret-volume:
 #       secret:
 #         secretName: secret-name
-#     volume-name:
-#       emptyDir: {}
 #     persistent-volume-name:
 #       persistentVolumeClaim:
 #         claimName: claim-name
 
   # Mount path for Volumes 
 #  volumeMounts:
-#     volume-name:
-#       /path
+#     volume-name: /path
 
 
   # Taint tolerations for nodes

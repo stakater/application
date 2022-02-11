@@ -256,7 +256,7 @@ ingress:
   annotations:
     kubernetes.io/ingress.class: external-ingress
     ingress.kubernetes.io/rewrite-target: /
-    ingress.kubernetes.io/force-ssl-redirect: "true"
+    ingress.kubernetes.io/force-ssl-redirect:config "true"
 
   # TLS details for this Ingress
   tls:
@@ -379,12 +379,12 @@ configMap:
   annotations: 
     # key: value
   files:
-#    code-config:
-#       key1: value1
-#       key2: value2
-#    dev-config:
-#       key1: value1
-#       key2: value2
+   code-config:
+      key1: value1
+      key2: value2
+   dev-config:
+      key1: value1
+      key2: value2
 sealedSecret:
   enabled: true
   additionalLabels: 

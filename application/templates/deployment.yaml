@@ -75,7 +75,10 @@ spec:
       {{- end }}
       {{- if .Values.deployment.initContainers }}
       initContainers:
-{{ include "application.tplvalues.render" ( dict "value" .Values.deployment.initContainers "context" $ ) | indent 6 }}
+  {{- range $key, $value := .Values.deployment.initContainers  }}
+      - name: {{ $key }}
+{{ include "application.tplvalues.render" ( dict "value" $value "context" $ ) | indent 8 }}
+      {{- end }}
       {{- end }}
       {{- if .Values.deployment.nodeSelector }}
       nodeSelector:
@@ -128,13 +131,13 @@ spec:
         {{- end }}
         {{- if .Values.deployment.envFrom }}
         envFrom:
-        {{- range .Values.deployment.envFrom }}
+        {{- range $value := .Values.deployment.envFrom }}
         {{- if (eq .type "configmap") }}
         - configMapRef:
             {{- if .name }}
-            name: {{ .name }}
+            name: {{ include "application.tplvalues.render" ( dict "value" $value.name "context" $ ) }}
             {{- else if .nameSuffix }}
-            name: {{ template "application.name" $ }}-{{ .nameSuffix }}
+            name: {{ template "application.name" $ }}-{{ include "application.tplvalues.render" ( dict "value" $value.nameSuffix "context" $ ) }}
             {{- else }}
             name: {{ template "application.name" $ }}
             {{- end }}
@@ -142,9 +145,9 @@ spec:
         {{- if (eq .type "secret") }}
         - secretRef:
             {{- if .name }}
-            name: {{ .name }}
+            name: { include "application.tplvalues.render" ( dict "value" $value.name "context" $ ) }}
             {{- else if .nameSuffix }}
-            name: {{ template "application.name" $ }}-{{ .nameSuffix }}
+            name: {{ template "application.name" $ }}-{{ include "application.tplvalues.render" ( dict "value" $value.nameSuffix "context" $ ) }}
             {{- else }}
             name: {{ template "application.name" $ }}
             {{- end }}
@@ -153,7 +156,10 @@ spec:
         {{- end }}
         {{- if .Values.deployment.env }}
         env:
-{{ toYaml .Values.deployment.env | indent 10 }}
+        {{- range $key, $value := .Values.deployment.env }}
+        - name: {{ include "application.tplvalues.render" ( dict "value" $key "context" $ ) }}
+{{ include "application.tplvalues.render" ( dict "value" $value "context" $ ) | indent 10 }}
+        {{- end }}
         {{- end }}
         livenessProbe:
 {{ toYaml .Values.deployment.probes.livenessProbe | indent 10 }}
@@ -166,7 +172,10 @@ spec:
           name: {{ template "application.name" . }}-data
         {{- end }}
         {{- if .Values.deployment.volumeMounts }}
-{{ include "application.tplvalues.render" ( dict "value" .Values.deployment.volumeMounts "context" $ ) | indent 8 }}
+        {{- range $key, $value := .Values.deployment.volumeMounts }}
+        - mountPath: {{ include "application.tplvalues.render" ( dict "value" $value "context" $ )}}
+          name: {{ $key }}
+        {{- end }}
         {{- end }}
       {{- end }}
         resources:
@@ -196,9 +205,12 @@ spec:
           claimName: {{ template "application.name" . }}-data
         {{- end }}
         {{- if .Values.deployment.volumes }}
-{{ include "application.tplvalues.render" ( dict "value" .Values.deployment.volumes "context" $ ) | indent 6 }}
+        {{- range $key, $value := .Values.deployment.volumes  }}
+      - name: {{ $key  }}
+{{ include "application.tplvalues.render" ( dict "value" $value "context" $ ) | indent 8 }}
         {{- end }}
-      {{- end }}  
+        {{- end }}
+      {{- end }}
       {{- if .Values.rbac.serviceAccount.name }}
       serviceAccountName: {{ .Values.rbac.serviceAccount.name }}
         {{- else }}

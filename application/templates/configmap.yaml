@@ -17,7 +17,7 @@ metadata:
   name: {{ template "application.name" $ }}-{{ $nameSuffix }}
   namespace: {{ template "application.namespace" $ }}
 data:
-{{ toYaml $data | indent 2 }}
+{{ include "application.tplvalues.render" ( dict "value" $data "context" $ ) | indent 2 }}
 ---
 {{- end }}
 {{- end }}

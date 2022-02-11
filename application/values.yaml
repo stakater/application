@@ -234,7 +234,7 @@ service:
     # expose: "true"
 
   annotations:
-#     service.alpha.openshift.io/serving-cert-secret-name: '{{ template "application.name" . }}-tls'
+     service.alpha.openshift.io/serving-cert-secret-name: '{{ template "application.name" . }}-tls'
 #     config.xposer.stakater.com/Domain: stakater.com
 #     config.xposer.stakater.com/IngressNameTemplate: '{{ "{{.Service}}.{{.Namespace}}"  }}'
 #     config.xposer.stakater.com/IngressURLPath: /

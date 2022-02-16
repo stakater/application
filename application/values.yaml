@@ -237,13 +237,15 @@ service:
 
   annotations:
 #     config.xposer.stakater.com/Domain: stakater.com
-#     config.xposer.stakater.com/IngressNameTemplate: '{{.Service}}-{{.Namespace}}'
+#     config.xposer.stakater.com/IngressNameTemplate: '{{ "{{.Service}}.{{.Namespace}}" }}'
 #     config.xposer.stakater.com/IngressURLPath: /
-#     config.xposer.stakater.com/IngressURLTemplate: '{{.Service}}.{{.Namespace}}.{{.Domain}}'
+#     config.xposer.stakater.com/IngressURLTemplate: '{{ "{{.Service}}.{{.Namespace}}.{{.Domain}}" }}'
+#     service.alpha.openshift.io/serving-cert-secret-name: |
+#       '{{ template "application.name" . }}-tls'
 #     xposer.stakater.com/annotations: |-
 #       kubernetes.io/ingress.class: external-ingress
 #       ingress.kubernetes.io/rewrite-target: /
-#       ingress.kubernetes.io/force-ssl-redirect: true
+#       ingress.kubernetes.io/force-ssl-redirect: "true"
   
   ports:
     - port: 8080

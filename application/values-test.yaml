@@ -2,7 +2,7 @@
 applicationName: "application"
 
 namespaceOverride: ""
-   
+
 # These labels will be added on all resources, and you can add additional labels from below on individual resource
 labels:
   group: com.stakater.platform
@@ -22,7 +22,7 @@ deployment:
 
   # Select nodes to deploy which matches the following labels  
   nodeSelector:
-    # cloud.google.com/gke-nodepool: default-pool  
+    # cloud.google.com/gke-nodepool: default-pool
 
   # Init containers which runs before the app container
   hostAliases:
@@ -47,7 +47,7 @@ deployment:
     key: value
   
   # Additional label added on pod which is used in Service's Label Selector
-  podLabels: 
+  podLabels:
     env: prod
 
   # Annotations on deployments
@@ -89,13 +89,13 @@ deployment:
   # Volumes to be added to the pod
   volumes:
     config-volume:
-      configMap:        
+      configMap:
         name: configmap-name
     configmap-volume:
       configMap:
         name: '{{ template "application.name" . }}-configmap-nameSuffix'
     secret-volume:
-      secret:        
+      secret:
         secretName: secret-name
     volume-name:
       emptyDir: {}
@@ -126,7 +126,7 @@ deployment:
            - ssd
 
   # Image of the app container
-  image: 
+  image:
     repository: repository/image-name
     tag: v1.0.0
     pullPolicy: IfNotPresent
@@ -153,7 +153,7 @@ deployment:
         port: 8080
 
   # Resources to be defined for pod
-  resources: 
+  resources:
     limits:
       memory: 256Mi
       cpu: 0.5
@@ -161,7 +161,7 @@ deployment:
       memory: 128Mi
       cpu: 0.1
   
-  openshiftOAuthProxy: 
+  openshiftOAuthProxy:
     enabled: true
     port: 8080
     secretName: "openshift-oauth-proxy-tls"
@@ -171,7 +171,7 @@ deployment:
   - name: sidecar-contaner
     image: busybox
     imagePullPolicy: IfNotPresent
-    command: ['/bin/sh']    
+    command: ['/bin/sh']
 
   # Security Context for the pod
   securityContext:
@@ -222,9 +222,11 @@ service:
     expose: "true"
   annotations:
     config.xposer.stakater.com/Domain: stakater.com
-    config.xposer.stakater.com/IngressNameTemplate: '{{.Service}}-{{.Namespace}}'
+    config.xposer.stakater.com/IngressNameTemplate: '{{ "{{.Service}}.{{.Namespace}}" }}'
     config.xposer.stakater.com/IngressURLPath: /
-    config.xposer.stakater.com/IngressURLTemplate: '{{.Service}}.{{.Namespace}}.{{.Domain}}'
+    config.xposer.stakater.com/IngressURLTemplate: '{{ "{{.Service}}.{{.Namespace}}.{{.Domain}}" }}'
+    service.alpha.openshift.io/serving-cert-secret-name: |
+      '{{ template "application.name" . }}-tls'
     xposer.stakater.com/annotations: |-
       kubernetes.io/ingress.class: external-ingress
       ingress.kubernetes.io/rewrite-target: /
@@ -374,9 +376,9 @@ rbac:
 # Additional ConfigMaps  
 configMap:
   enabled: true
-  additionalLabels: 
+  additionalLabels:
     key: value
-  annotations: 
+  annotations:
     # key: value
   files:
    code-config:
@@ -387,9 +389,9 @@ configMap:
       key2: value2
 sealedSecret:
   enabled: true
-  additionalLabels: 
+  additionalLabels:
     key: value
-  annotations: 
+  annotations:
     # key: value
   files:
 #  nameSuffix of sealedSecret
@@ -400,9 +402,9 @@ sealedSecret:
 # Additional Secrets
 secret:
   enabled: true
-  additionalLabels: 
+  additionalLabels:
     key: value
-  annotations: 
+  annotations:
     # key: value
   files:
 #  nameSuffix of Secret
@@ -435,13 +437,13 @@ serviceMonitor:
 
 # autoscaling is used for horizonal pod autoscaling
 autoscaling:
-# enabled is a boolean flag for enabling or disabling autoscaling 
+# enabled is a boolean flag for enabling or disabling autoscaling
   enabled: true
 # additionalLabels defines additional labels
-  additionalLabels: 
+  additionalLabels:
     key: value
 # annotations defines annotations in key value pair
-  annotations: 
+  annotations:
     # key: value
 # minReplicas sets the minimum number of replicas
   minReplicas: 1
@@ -452,13 +454,13 @@ autoscaling:
   - type: Resource
     resource:
       name: cpu
-      target: 
+      target:
          type: Utilization
          averageUtilization: 60
   - type: Resource
     resource:
       name: memory
-      target: 
+      target:
          type: Utilization
          averageUtilization: 60
 
@@ -558,9 +560,9 @@ alertmanagerConfig:
       groupWait: 30s
       groupInterval: 5m
       repeatInterval: 12h
-    receivers: 
+    receivers:
     - name: "null"
-    inhibitRules: 
+    inhibitRules:
     - sourceMatch:
         - name: severity
           value: 'critical'
@@ -580,7 +582,7 @@ prometheusRule:
 
   # Groups with alerting rules. Read more here [https://docs.openshift.com/container-platform/4.7/rest_api/monitoring_apis/prometheusrule-monitoring-coreos-com-v1.html]
 
-  groups: 
+  groups:
     - name: example-app-uptime
       rules:
         - alert: ExampleAppDown
@@ -590,7 +592,7 @@ prometheusRule:
           expr: up{namespace="test-app"} == 0
           for: 1m
           labels:
-            severity: critical  
+            severity: critical
 
 # ExternalSecrets
 externalSecret:
@@ -603,7 +605,7 @@ externalSecret:
 
   # RefreshInterval is the amount of time before the values reading again from the SecretStore provider
   refreshInterval: "1m"
-  files:   
+  files:
     secret-1-name:
       #Data defines the connection between the Kubernetes Secret keys and the Provider data 
       data:
@@ -616,10 +618,10 @@ externalSecret:
       #Used to fetch all properties from the Provider key
       dataFrom:
       - key: example-provider-key
-      type: Opaque 
-      annotations: 
+      type: Opaque
+      annotations:
         key: value
-      labels: 
+      labels:
         key: value
 
 ##########################################################
@@ -635,10 +637,10 @@ grafanaDashboard:
   enabled: true
   additionalLabels:
     test-label: chart
-  annotations: 
+  annotations:
     test-annoation: chart
   contents:
-    dashboard-test-name-1: 
+    dashboard-test-name-1:
       json: |-
         {
           "annotations": {

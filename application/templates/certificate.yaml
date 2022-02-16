@@ -18,12 +18,12 @@ metadata:
   name: {{ template "application.name" . }}-certificate
   namespace: {{ template "application.namespace" . }}
 spec:
-  secretName: {{ .Values.certificate.secretName }}
+  secretName: {{ include "application.tplvalues.render" ( dict "value" .Values.certificate.secretName "context" $ ) }}
   duration: {{ .Values.certificate.duration }}
   renewBefore: {{ .Values.certificate.renewBefore }}
   subject:
 {{ include "application.tplvalues.render" ( dict "value" .Values.certificate.subject "context" $ ) | indent 4 }}
-  commonName: {{ .Values.certificate.commonName }}
+  commonName: {{ include "application.tplvalues.render" ( dict "value" .Values.certificate.commonName "context" $ )  }}
   keyAlgorithm: {{ .Values.certificate.keyAlgorithm }}
   keyEncoding: {{ .Values.certificate.keyEncoding }}
   keySize: {{ .Values.certificate.keySize }}
@@ -34,7 +34,7 @@ spec:
 {{ toYaml .Values.certificate.usages | indent 4 }}
   # At least one of a DNS Name, URI, or IP address is required.
   dnsNames:
-{{ toYaml .Values.certificate.dnsNames | indent 4 }}
+{{ include "application.tplvalues.render" ( dict "value" .Values.certificate.dnsNames "context" $ ) | indent 4 }}
 {{- if .Values.certificate.ipAddresses }}
   ipAddresses:
 {{ toYaml .Values.certificate.ipAddresses | indent 4 }}
@@ -75,7 +75,7 @@ spec:
       create: {{ .Values.certificate.keystores.pkcs12.create }}
       passwordSecretRef:
         key: {{ .Values.certificate.keystores.pkcs12.key }}
-        name: {{ .Values.certificate.keystores.pkcs12.name }}
+        name: {{ include "application.tplvalues.render" ( dict "value" .Values.certificate.keystores.pkcs12.name "context" $ ) }}
 {{- end }}
 {{- end }}
 {{- end }}

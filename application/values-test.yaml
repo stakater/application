@@ -37,10 +37,10 @@ deployment:
 
   # Init containers which runs before the app container
   initContainers:
-  - name: init-contaner
-    image: busybox
-    imagePullPolicy: IfNotPresent
-    command: ['/bin/sh']    
+     init-contaner:
+        image: busybox
+        imagePullPolicy: IfNotPresent
+        command: ['/bin/sh']
 
   # Additional labels for Deployment
   additionalLabels:
@@ -70,40 +70,42 @@ deployment:
   imagePullSecrets: ""
 
   # If want to mount Envs from configmap or secret
-  envFrom: 
-  - type: configmap
-    name: my-configmap
-  - type: configmap
-    nameSuffix: your-configmap
-  - type: secret
-    name: my-secret
+  envFrom:
+    production-cm:
+      type: configmap
+      nameSuffix: my-configmap
+    logging-config:
+      type: configmap
+      name: your-configmap
+    postgres-config:
+      type: secret
+      nameSuffix: postgres
 
   # Environment variables to be passed to the app container
   env:
-  - name: ENVIRONMENT
-    value: "dev"
+    ENVIRONMENT:
+       value: "dev"
   
   # Volumes to be added to the pod
   volumes:
-    - name: config-volume
+    config-volume:
       configMap:        
         name: configmap-name
-    - name: configmap-volume
+    configmap-volume:
       configMap:
         name: '{{ template "application.name" . }}-configmap-nameSuffix'
-    - name: secret-volume
+    secret-volume:
       secret:        
         secretName: secret-name
-    - name: volume-name
+    volume-name:
       emptyDir: {}
-    - name: persistent-volume-name
+    persistent-volume-name:
       persistentVolumeClaim:
         claimName: claim-name
 
   # Mount path for Volumes 
   volumeMounts:
-    - mountPath: /path
-      name: volume-name
+      volume-name: /path
 
   # Taint tolerations for nodes
   tolerations:
@@ -379,14 +381,12 @@ configMap:
   annotations: 
     # key: value
   files:
-  # - nameSuffix: code-config    
-  #   data:
-  #     key1: value1
-  #     key2: value2
-  # - nameSuffix: dev-config
-  #   data:
-  #     key1: value1
-  #     key2: value2
+   code-config:
+      key1: value1
+      key2: value2
+   dev-config:
+      key1: value1
+      key2: value2
 sealedSecret:
   enabled: true
   additionalLabels: 
@@ -394,9 +394,10 @@ sealedSecret:
   annotations: 
     # key: value
   files:
-  # - name: example
-  #   encryptedData:
-  #     name: AgBghrdepGMKmp/rdtJrkBv/CWpJbtmoMsbKQ7QiZZ2kUoLeeTbrDnhmJY03kWKkNW4kN/sQRf6r1vvBEaR4nkHt5f/ayAeaH3NveI3bdb0xv/svvWjyjehwqwr/kNEAVWxRoUij0Y7MyIEAr4hnV2UnrhgvcjPJLNA8bK6spA+kuT328Vpyceyvnm6yArNn1aYlEckaFHrnculHWRpG73iRYxS5GWAY7EdkLXx7OLLWoopHtLcupklYyPfraJzPvBNZ5/PsyjlUBvoQbGV3cZlrdEj1WHj2S1RQ13ddf2WGtMHmY83t9B3LFZAZuA7BBt4rjludbwQm3/tJ5Kas1dDsSIRIIF7MTeum9YfRB8XUz8IxVKQ/JDskeynrWe3VzN/3HFVnv9GGFy+BCVXZKVU/roIRancz+nXkyoOHS722ZpBi53dfLItoS5dG+0EzArMTQzK/KXHz3b1rxp5oWWDNt3WggTiSg2zwy5ZR8VV2ToTDof6UrFmbCZv/kKriyxbVSxIo3KFnvuRiUZ5MwC0TNut4mW3LKyJfHqkUuLa1mYV6tKF58qBnoj/+JaibAIBEudT9hms5U52p7/jKmgHuop7XPEsz4OVwER//Vbv7X6ctoXtyPu6mZyOfOyJHM8Qj/H7/gwMBYhZHQ96DWrVmZOsWSRpZGJni4Xm7rgt2cFj6UtWv6lvl8aOi/HSZVC3TwWZ9mQrk
+#  nameSuffix of sealedSecret
+#    example:
+#     encryptedData:
+#       name: AgBghrdepGMKmp/rdtJrkBv/CWpJbtmoMsbKQ7QiZZ2kUoLeeTbrDnhmJY03kWKkNW4kN/sQRf6r1vvBEaR4nkHt5f/ayAeaH3NveI3bdb0xv/svvWjyjehwqwr/kNEAVWxRoUij0Y7MyIEAr4hnV2UnrhgvcjPJLNA8bK6spA+kuT328Vpyceyvnm6yArNn1aYlEckaFHrnculHWRpG73iRYxS5GWAY7EdkLXx7OLLWoopHtLcupklYyPfraJzPvBNZ5/PsyjlUBvoQbGV3cZlrdEj1WHj2S1RQ13ddf2WGtMHmY83t9B3LFZAZuA7BBt4rjludbwQm3/tJ5Kas1dDsSIRIIF7MTeum9YfRB8XUz8IxVKQ/JDskeynrWe3VzN/3HFVnv9GGFy+BCVXZKVU/roIRancz+nXkyoOHS722ZpBi53dfLItoS5dG+0EzArMTQzK/KXHz3b1rxp5oWWDNt3WggTiSg2zwy5ZR8VV2ToTDof6UrFmbCZv/kKriyxbVSxIo3KFnvuRiUZ5MwC0TNut4mW3LKyJfHqkUuLa1mYV6tKF58qBnoj/+JaibAIBEudT9hms5U52p7/jKmgHuop7XPEsz4OVwER//Vbv7X6ctoXtyPu6mZyOfOyJHM8Qj/H7/gwMBYhZHQ96DWrVmZOsWSRpZGJni4Xm7rgt2cFj6UtWv6lvl8aOi/HSZVC3TwWZ9mQrk
 
 # Additional Secrets
 secret:
@@ -405,15 +406,16 @@ secret:
     key: value
   annotations: 
     # key: value
-  files:    
-  # - nameSuffix: credentials
-  #   data:
-  #     secretKey1: secretValue1
-  #     secretKey2: secretValue2
-  # - nameSuffix: password
-  #   data:
-  #     secretKey1: secretValue1
-  #     secretKey2: secretValue2
+  files:
+#  nameSuffix of Secret
+#   credentials:
+#     data:
+#       secretKey1: secretValue1
+#       secretKey2: secretValue2
+#   password:
+#     data:
+#       secretKey1: secretValue1
+#       secretKey2: secretValue2
 
 # Service Monitor to collect Prometheus metrices
 serviceMonitor:
@@ -476,7 +478,7 @@ endpointMonitor:
 
 # Certficate CRD to generate the certificate
 certificate:
-  enabled: true
+  enabled: false
   
   # Additional labels
   additionalLabels:
@@ -621,6 +623,14 @@ externalSecret:
         key: value
       labels: 
         key: value
+
+##########################################################
+# Pod disruption budget - PDB
+##########################################################
+pdb:
+  enabled: true
+  minAvailable: 1
+  maxUnavailable: 2
 
 # Grafana Dashboard
 grafanaDashboard:

@@ -222,7 +222,7 @@ service:
     expose: "true"
   annotations:
     config.xposer.stakater.com/Domain: stakater.com
-    config.xposer.stakater.com/IngressNameTemplate: '{{ "{{.Service}}.{{.Namespace}}" }}'
+    config.xposer.stakater.com/IngressNameTemplate: '{{ "{{.Service}}-{{.Namespace}}" }}'
     config.xposer.stakater.com/IngressURLPath: /
     config.xposer.stakater.com/IngressURLTemplate: '{{ "{{.Service}}.{{.Namespace}}.{{.Domain}}" }}'
     service.alpha.openshift.io/serving-cert-secret-name: |

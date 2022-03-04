@@ -257,7 +257,7 @@ service:
 # Ingress object for exposing services
 ##########################################################
 ingress:
-  enabled: true
+  enabled: false
   
   # Port of the service that serves pods
   servicePort: http

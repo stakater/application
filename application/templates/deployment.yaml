@@ -173,8 +173,8 @@ spec:
         {{- end }}
         {{- if .Values.deployment.volumeMounts }}
         {{- range $key, $value := .Values.deployment.volumeMounts }}
-        - mountPath: {{ include "application.tplvalues.render" ( dict "value" $value "context" $ )}}
-          name: {{ $key }}
+        - name: {{ $key }}
+{{  include "application.tplvalues.render" ( dict "value" $value "context" $ ) | indent 10 }} 	
         {{- end }}
         {{- end }}
       {{- end }}

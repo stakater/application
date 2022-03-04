@@ -23,6 +23,7 @@ spec:
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
               service:
                 name: {{ template "application.name" $ }}

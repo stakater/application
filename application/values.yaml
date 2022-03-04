@@ -115,9 +115,13 @@ deployment:
 #         claimName: claim-name
 
   # Mount path for Volumes 
-#  volumeMounts:
-#     volume-name: /path
+  volumeMounts:
+    # volume-name:
+    #    mountPath: path
+    #    subPath: szy
 
+    # volume-name-2:
+    #    mountPath: path-2
 
   # Taint tolerations for nodes
   tolerations:

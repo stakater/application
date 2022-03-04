@@ -12,7 +12,7 @@ app: {{ template "application.name" . }}
 
 {{- define "application.labels.stakater" -}}
 {{ template "application.labels.selector" . }}
-appVersion: "{{ .Values.deployment.image.tag }}"
+appVersion: "{{ .Values.deployment.image.tag | trunc 63 | trimSuffix "-" -}}"
 {{- end -}}
 
 {{- define "application.labels.chart" -}}

@@ -1,6 +1,7 @@
 {{- if .Values.ingress -}}
 {{- if .Values.ingress.enabled -}}
 {{- $servicePort := .Values.ingress.servicePort -}}
+{{- $pathType := .Values.ingress.pathType -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -23,7 +24,7 @@ spec:
       http:
         paths:
           - path: /
-            pathType: Prefix
+            pathType: {{ $pathType }}
             backend:
               service:
                 name: {{ template "application.name" $ }}

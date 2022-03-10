@@ -1,4 +1,5 @@
 {{- if .Values.deployment }}
+{{- if .Values.deployment.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -216,4 +217,5 @@ spec:
         {{- else }}
       serviceAccountName: {{ template "application.name" . }}
       {{- end }}
+{{- end }}   
 {{- end }}        

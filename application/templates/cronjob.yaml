@@ -11,7 +11,7 @@ metadata:
 {{- end }}
 {{- if $job.annotations }}
   annotations:
-{{  $job.annotations | indent 4 }}
+{{ $job.annotations | indent 4 }}
 {{- end }}
   name: {{ $name }}
   namespace: {{ template "application.namespace" $ }}

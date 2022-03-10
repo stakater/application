@@ -251,7 +251,7 @@ persistence:
 # Service object for servicing pods
 ##########################################################
 service:
-  enabled: false
+  enabled: true
   additionalLabels:
     # expose: "true"
 

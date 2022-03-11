@@ -214,3 +214,20 @@ job paramater for each cronjob object at `cronJob.jobs`
 | `<name>.affinity`                  | affinity of cronjob                                                                          | 
 | `<name>.tolerations`               | tolerations of cronjob                                                                       | 
 | `<name>.restartPolicy`             | restartPOlicy of cronjob                                                                     | 
+
+
+### Naming Convention for configMaps,secrets and sealedSecrets
+
+Format of names of configmap,secret and SealedSecret is ```{{ template "application.name" $ }}-{{ $nameSuffix }}```. While nameSuffix is the each key in ```secret.files```,```configmap.files``` and ```sealedsecrets.files``` and {{ template "application.name" }} is helper function that outputs ```.Values.applicationName```  if exist else return chart name as output . For suppose if we have following values for configmap
+
+```
+applicationName: application
+configMap:
+  files:
+     code-config:
+         key: value
+```
+
+created configmap name will be ````application-code-config```
+
+

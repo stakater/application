@@ -1,4 +1,5 @@
 {{- if .Values.service }}
+{{- if .Values.service.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -29,4 +30,5 @@ spec:
   {{- else }}
 {{ toYaml .Values.service.ports | indent 4 }}
   {{- end }}
+{{- end }}
 {{- end }}

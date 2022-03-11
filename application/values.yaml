@@ -15,11 +15,26 @@ labels:
   group: com.stakater.platform
   team: stakater
   
+cronJob: 
+  enabled: false
+  jobs:
+#  db-migration:
+#    schedule: "* * * 8 *"
+#    image: 
+#      repository: docker.io/nginx
+#      tag: v1.0.0
+#    command: ["/bin/bash"]
+#    args: ["-c","sleep 5000"]
+#    resources:  
+#      requests:
+#          memory: 5Gi
+#          cpu: 1
+  
 ##########################################################
 # Deployment
 ##########################################################
 deployment:
-  
+  enabled: true
   # By default deploymentStrategy is set to rollingUpdate with maxSurge of 25% and maxUnavailable of 25%
   # You can change type to `Recreate` or can uncomment `rollingUpdate` specification and adjust them to your usage.
   strategy:
@@ -236,6 +251,7 @@ persistence:
 # Service object for servicing pods
 ##########################################################
 service:
+  enabled: true
   additionalLabels:
     # expose: "true"
 
@@ -662,17 +678,17 @@ externalSecret:
   refreshInterval: "1m"
   files:   
     # mongodb:
-    ## Data defines the connection between the Kubernetes Secret keys and the Provider data
-      # data:
-      #    mongo-password: 
-      #      remoteRef: 
-      #         key: monodb
-      #         property: passowrd 
-      # secretStore:                       
-      #    name: secret-store-name-2    # specify if value is other than default secretstore  
-      # labels:
-      #    stakater.com/app: mongodb 
-      #     
+    # # Data defines the connection between the Kubernetes Secret keys and the Provider data
+    #   data:
+    #      mongo-password: 
+    #        remoteRef: 
+    #           key: monodb
+    #           property: passowrd 
+    #   secretStore:                       
+    #      name: secret-store-name-2    # specify if value is other than default secretstore  
+    #   labels:
+    #      stakater.com/app: mongodb 
+    #   #     
     # postgres:
       ## Used to fetch all properties from the Provider key
       #   dataFrom:

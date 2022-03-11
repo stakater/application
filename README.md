@@ -188,3 +188,26 @@ To uninstall the chart:
 | ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | `cronJob.enabled`        | Enable cronjob in application chart                                                          | `""`            |
 | `cronJob.jobs`           | cronjobs spec                                                                                | {}              |
+
+job paramater for each cronjob object at `cronJob.jobs` 
+
+| Name                               | Description                                                                                  
+| -----------------------------------| -------------------------------------------------------------------------------------------- |
+| `<name>.schedule`                  | Schedule of cronjob                                                                          | 
+| `<name>.image.repository`          | Repository of container image of cronjob                                                     |
+| `<name>.image.tag`                 | tag of container image of cronjob                                                            |
+| `<name>.image.imagePullPolicy`     | imagePullPolicy of container image ofcronjob                                                                                                                           |
+| `<name>.command`                   | command of container of job                                                                  |
+| `<name>.args`                      | args of container of job                                                                     |
+| `<name>.resources`                 | resources of container of job                                                                |
+| `<name>.additionalLabels`          | Additional labels of cronjob                                                                 |
+| `<name>.annotations`               | Annotation of cronjob                                                                        |    
+| `<name>.successfulJobsHistoryLimit`| successful jobs historyLimit of cronjob                                                                           |    
+| `<name>.concurrencyPolicy`         | concurrencyPolicy of cronjob                                                                 |    
+| `<name>.failedJobsHistoryLimit`    | failedJobsHistoryLimit of cronjob                                                            |    
+| `<name>.volumeMounts`              | volume mounts  of cronjob                                                                    | 
+ `<name>.volumes`                    | volumes  of cronjob                                                                          | 
+| `<name>.nodeSelector`              | Node selector of cronjob                                                                     | 
+| `<name>.affinity`                  | affinity of cronjob                                                                          | 
+| `<name>.tolerations`               | tolerations of cronjob                                                                       | 
+| `<name>.restartPolicy`             | restartPOlicy of cronjob                                                                     | 

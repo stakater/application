@@ -9,11 +9,11 @@ metadata:
 {{- if .Values.networkPolicy.additionalLabels }}
 {{ toYaml .Values.networkPolicy.additionalLabels | indent 4 }}
 {{- end }}
-{{- if or .Values.networkPolicy.annotations }}
+{{- if .Values.networkPolicy.annotations }}
   annotations:
 {{ toYaml .Values.networkPolicy.annotations | indent 4 }}
 {{- end }}
-  name: {{ template "application.name" . }}-network-policy
+  name: {{ template "application.name" . }}
   namespace: {{ template "application.namespace" . }}
 spec:
   podSelector:
@@ -36,6 +36,5 @@ spec:
   ingress:
 {{ toYaml .Values.networkPolicy.ingress | indent 4 }}
 {{- end }}
-
 {{- end }}
 {{- end }}

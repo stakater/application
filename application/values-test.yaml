@@ -629,6 +629,45 @@ externalSecret:
         key: value
 
 ##########################################################
+# Network Policy
+##########################################################
+networkPolicy: 
+  enabled: false
+  # Additional labels
+  additionalLabels:
+    key: value
+
+  # Additional annotations
+  annotations:
+    # key: value
+  
+  # Ingress rules
+  ingress:
+  - from:
+    - ipBlock:
+        cidr: 172.17.0.0/16
+        except:
+        - 172.17.1.0/24
+    - namespaceSelector:
+        matchLabels:
+          project: myproject
+    - podSelector:
+        matchLabels:
+          role: frontend
+    ports:
+    - protocol: TCP
+      port: 6379
+      
+  # Egress rules
+  egress:
+    - to:
+      - ipBlock:
+          cidr: 10.0.0.0/24
+      ports:
+      - protocol: TCP
+        port: 5978
+
+##########################################################
 # Pod disruption budget - PDB
 ##########################################################
 pdb:
@@ -1139,17 +1178,3 @@ grafanaDashboard:
           "version": 3
         }
 
-cronJob: 
-  enabled: true
-  jobs:
-    db-migration:
-      schedule: "* * * 8 *"
-      image: 
-        repository: docker.io/nginx
-        tag: v1.0.0
-      command: ["/bin/bash"]
-      args: ["-c","sleep 5000"]
-      resources:  
-        requests:
-            memory: 5Gi
-            cpu: 1

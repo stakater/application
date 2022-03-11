@@ -205,8 +205,8 @@ job paramater for each cronjob object at `cronJob.jobs`
 | `<name>.successfulJobsHistoryLimit`| successful jobs historyLimit of cronjob                                                                           |    
 | `<name>.concurrencyPolicy`         | concurrencyPolicy of cronjob                                                                 |    
 | `<name>.failedJobsHistoryLimit`    | failedJobsHistoryLimit of cronjob                                                            |    
-| `<name>.volumeMounts`              | volume mounts  of cronjob                                                                    | 
- `<name>.volumes`                    | volumes  of cronjob                                                                          | 
+| `<name>.volumeMounts`              | volume mounts  of cronjob                                                                    |  
+| `<name>.volumes`                    | volumes  of cronjob                                                                          | 
 | `<name>.nodeSelector`              | Node selector of cronjob                                                                     | 
 | `<name>.affinity`                  | affinity of cronjob                                                                          | 
 | `<name>.tolerations`               | tolerations of cronjob                                                                       | 

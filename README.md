@@ -228,6 +228,6 @@ configMap:
          key: value
 ```
 
-created configmap name will be ````application-code-config```
+created configmap name will be ``application-code-config``
 
 

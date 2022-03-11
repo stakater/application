@@ -182,3 +182,9 @@ To uninstall the chart:
 | grafanaDashboard.contents.key | Used as name of Grafana Dashboard object                                                                                                                                                         | `""`                                                                                                                                                  |
 | grafanaDashboard.contents.key.json | json string used as content of Grafana Dashboard object                                                                                                                                          | `""`                                                                                                                                                  |
 | grafanaDashboard.contents.key.url| Url used to fetch dashboard content. According to GrafanaDashboard behavior, if both url and json are specified then the GrafanaDashboard content will be updated with fetched content from url | `""`                                                                                                                                                  |
+### CronJob Parameters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
+| `cronJob.enabled`        | Enable cronjob in application chart                                                          | `""`            |
+| `cronJob.jobs`           | cronjobs spec                                                                                | {}              |

@@ -23,6 +23,11 @@ To uninstall the chart:
 | namespaceOverride | Override default release namespace with a custom value                                                                                                                                           | `application`                                                                                                                                         |
 | labels.group | Label to define application group                                                                                                                                                                | `com.stakater.platform`                                                                                                                               |
 | labels.team | Label to define team                                                                                                                                                                             | `stakater`                                                                                                                                            |
+
+### Deployment Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | deployment.strategy | Strategy for updating deployments                                                                                                                                                                | `RollingUpdate`
 | deployment.enabled | Enable deployment on helm chart deployments                                                                                                                                                                | `true`                                                                                                                                       |
 | deployment.reloadOnChange| Reload deployment if configMap/secret mounted are updated                                                                                                                                        | `true`                                                                                                                                                |
@@ -59,9 +64,19 @@ To uninstall the chart:
 | deployment.openshiftOAuthProxy.secretName | Secret name containing the TLS cert                                                                                                                                                              | `openshift-oauth-proxy-tls`                                                                                                                           |
 | deployment.additionalContainers | Add additional containers besides init and app containers                                                                                                                                        | `[]`                                                                                                                                                  |
 | deployment.securityContext | Security Context for the pod                                                                                                                                                                     | `{}`                                                                                                                                                  |
+
+### PodDisruptionBudget Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | pdb.enabled | Enable pod disruption budget | `false` |
 | pdb.minAvailable | The number of pods that must be available after the eviction. If both minAvailable and maxUnavailable is set, minAvailable is preferred | `1` |
 | pdb.maxUnavailable | The number of pods that can be unavailable after the eviction. Either minAvailable or maxUnavailable needs to be provided | `` |
+
+### Persistence Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | persistence.enabled | Enable persistence                                                                                                                                                                               | `false`                                                                                                                                               |
 | persistence.mountPVC | Whether to mount the created PVC to the deployment                                                                                                                                               | `false`                                                                                                                                               |
 | persistence.mountPath | If `persistence.mountPVC` is set, so where to mount the volume in the deployment                                                                                                                 | `/`                                                                                                                                                   |
@@ -71,10 +86,20 @@ To uninstall the chart:
 | persistence.annotations | Annotations for persistent volume                                                                                                                                                                | `{}`                                                                                                                                                  |
 | persistence.storageSize | Size of the persistent volume                                                                                                                                                                    | 
 `8Gi`   
+
+### Service Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | service.enabled | Enable service in helm chart                                                                                                                                                                    | `true`                                                                                                                                           |
 | service.additionalLabels | Additional labels for service                                                                                                                                                                    | `{}`                                                                                                                                                  |
 | service.annotations | Annotations for service                                                                                                                                                                          | `{}`                                                                                                                                                  |
 | service.ports | Ports for applications service                                                                                                                                                                   | - port: 8080<br>&nbsp;&nbsp;name: http<br>&nbsp;&nbsp;protocol: TCP<br>&nbsp;&nbsp;targetPort: 8080                                                   |
+
+### Ingress Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | ingress.enabled | Enable ingress                                                                                                                                                                                   | `false`                                                                                                                                               |
 | ingress.servicePort | Port of the service that serves pod                                                                                                                                                              | `8080`                                                                                                                                                |
 | ingress.pathType | Each path in an Ingress is required to have a corresponding path type of ingress hosts to validate rules properly                                                                                                                                                             | `ImplementationSpecific`                                                                                                                                                |
@@ -82,6 +107,11 @@ To uninstall the chart:
 | ingress.additionalLables | Labels for ingress                                                                                                                                                                               | `{}`                                                                                                                                                  |
 | ingress.annotations | Annotations for ingress                                                                                                                                                                          | `{}`                                                                                                                                                  |
 | ingress.tls | TLS block for ingress                                                                                                                                                                            | `[]`                                                                                                                                                  |
+
+### Route Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | route.enabled | Enable Route incase of Openshift                                                                                                                                                                 | `false`                                                                                                                                               |
 | route.host | Host of route. If no host is added then openshift inserts the default hostname                                                                                                                   | nil                                                                                                                                                   |
 | route.annotations | Annotations for route                                                                                                                                                                            | `{}`                                                                                                                                                  |
@@ -90,6 +120,13 @@ To uninstall the chart:
 | route.wildcardPolicy | Route wildcard policy                                                                                                                                                                            | `None`                                                                                                                                                |
 | route.tls.termination | TLS termination strategy                                                                                                                                                                         | `edge`                                                                                                                                                |
 | route.tls.insecureEdgeTerminationPolicy | TLS termination policy for insecure traffic                                                                                                                                                      | `Redirect`                                                                                                                                            |
+
+### Forecastle Paramaters
+
+Stakater [Forecastle](https://github.com/stakater/Forecastle) parameters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | forecastle.enabled | Enable Forecastle                                                                                                                                                                                | `false`                                                                                                                                               |
 | forecastle.additionalLabels | Additional labels for Forecastle Custom Resource                                                                                                                                                 | `{}`                                                                                                                                                  |
 | forecastle.icon | URL of application icon display on forecastle dashboard                                                                                                                                          | `https://raw.githubusercontent.com/stakater/ForecastleIcons/master/stakater-big.png`                                                                  |
@@ -97,20 +134,40 @@ To uninstall the chart:
 | forecastle.group | Group application on Forecastle dashboard                                                                                                                                                        | if not defined Namespace name is used                                                                                                                 |
 | forecastle.properties | Additional properties for Custom Resource                                                                                                                                                        | `{}`                                                                                                                                                  |
 | forecastle.networkRestricted | Whether app is network restricted or not                                                                                                                                                         | `false`                                                                                                                                               |
+
+### RBAC Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | rbac.enabled | Enable RBAC                                                                                                                                                                                      | `true`                                                                                                                                                |
 | rbac.serviceAccount.enabled | Enable serviceAccount                                                                                                                                                                            | `false`                                                                                                                                               |
 | rbac.serviceAccount.name | Name of the existing serviceAccount                                                                                                                                                              | `""`                                                                                                                                                  |
 | rbac.serviceAccount.additionalLabels | Labels for serviceAccount                                                                                                                                                                        | `{}`                                                                                                                                                  |
 | rbac.serviceAccount.annotations | Annotations for serviceAccount                                                                                                                                                                   | `{}`                                                                                                                                                  |
 | rbac.roles | Array of roles                                                                                                                                                                                   | `[]`                                                                                                                                                  |
+
+### ConfigMap Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | configMap.enabled | Enable configMaps                                                                                                                                                                                | `false`                                                                                                                                               |
 | configMap.additionalLabels | Labels for configMaps                                                                                                                                                                            | `{}`                                                                                                                                                  |
 | configMap.annotations | Annotations for configMaps                                                                                                                                                                       | `{}`                                                                                                                                                  |
 | configMap.files | Map of configMap files with suffixes and data contained in those files                                                                                                                           | `{}`                                                                                                                                                  |
+
+### Secret Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | secret.enabled | Enable secret                                                                                                                                                                                    | `false`                                                                                                                                               |
 | secret.additionalLabels | Labels for secret                                                                                                                                                                                | `{}`                                                                                                                                                  |
 | secret.annotations | Annotations for secret                                                                                                                                                                           | `{}`                                                                                                                                                  |
 | secret.files | Map of secret files with suffixes and data contained in those files                                                                                                                              | `{}`                                                                                                                                                  |
+
+### ServiceMonitor Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | serviceMonitor.enabled | Enable serviceMonitor                                                                                                                                                                            | `false`                                                                                                                                               |
 | serviceMonitor.additionalLabels | Labels for serviceMonitor                                                                                                                                                                        | `{}`                                                                                                                                                  |
 | serviceMonitor.annotations | Annotations for serviceMonitor                                                                                                                                                                   | `{}`                                                                                                                                                  |

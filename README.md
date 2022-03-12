@@ -1,7 +1,7 @@
 # Application
 Generic helm chart for all kind of applications
 
-# Installing the Chart
+## Installing the Chart
 
 To install the chart with the release name my-application in namespace test:
 
@@ -9,13 +9,13 @@ To install the chart with the release name my-application in namespace test:
     helm repo update
     helm install my-application stakater/application --namespace test
 
-# Uninstall the Chart
+## Uninstall the Chart
 
 To uninstall the chart:
 
     helm delete <name-of-the-chart>
 
-# Configuration
+## Paramaters
 
 | Parameter | Description                                                                                                                                                                                      | Default                                                                                                                                               |
 |:---|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -192,25 +192,45 @@ To uninstall the chart:
 | `cronJob.enabled`        | Enable cronjob in application chart                                                          | `""`            |
 | `cronJob.jobs`           | cronjobs spec                                                                                | {}              |
 
-job paramater for each cronjob object at `cronJob.jobs` 
+Job paramater for each cronjob object at `cronJob.jobs` 
 
 | Name                               | Description                                                                                  
 | -----------------------------------| -------------------------------------------------------------------------------------------- |
 | `<name>.schedule`                  | Schedule of cronjob                                                                          | 
 | `<name>.image.repository`          | Repository of container image of cronjob                                                     |
-| `<name>.image.tag`                 | tag of container image of cronjob                                                            |
-| `<name>.image.imagePullPolicy`     | imagePullPolicy of container image ofcronjob                                                                                                                           |
-| `<name>.command`                   | command of container of job                                                                  |
-| `<name>.args`                      | args of container of job                                                                     |
-| `<name>.resources`                 | resources of container of job                                                                |
+| `<name>.image.tag`                 | Tag of container image of cronjob                                                            |
+| `<name>.image.imagePullPolicy`     | ImagePullPolicy of container image ofcronjob                                                                                                                           |
+| `<name>.command`                   | Command of container of job                                                                  |
+| `<name>.args`                      | Args of container of job                                                                     |
+| `<name>.resources`                 | Resources of container of job                                                                |
 | `<name>.additionalLabels`          | Additional labels of cronjob                                                                 |
 | `<name>.annotations`               | Annotation of cronjob                                                                        |    
-| `<name>.successfulJobsHistoryLimit`| successful jobs historyLimit of cronjob                                                                           |    
-| `<name>.concurrencyPolicy`         | concurrencyPolicy of cronjob                                                                 |    
-| `<name>.failedJobsHistoryLimit`    | failedJobsHistoryLimit of cronjob                                                            |    
-| `<name>.volumeMounts`              | volume mounts  of cronjob                                                                    |  
-| `<name>.volumes`                    | volumes  of cronjob                                                                          | 
+| `<name>.successfulJobsHistoryLimit`| Successful jobs historyLimit of cronjob                                                                           |    
+| `<name>.concurrencyPolicy`         | ConcurrencyPolicy of cronjob                                                                 |    
+| `<name>.failedJobsHistoryLimit`    | FailedJobsHistoryLimit of cronjob                                                            |    
+| `<name>.volumeMounts`              | Volume mounts  of cronjob                                                                    |  
+| `<name>.volumes`                    | Volumes  of cronjob                                                                          | 
 | `<name>.nodeSelector`              | Node selector of cronjob                                                                     | 
-| `<name>.affinity`                  | affinity of cronjob                                                                          | 
-| `<name>.tolerations`               | tolerations of cronjob                                                                       | 
-| `<name>.restartPolicy`             | restartPOlicy of cronjob                                                                     | 
+| `<name>.affinity`                  | Affinity of cronjob                                                                          | 
+| `<name>.tolerations`               | Tolerations of cronjob                                                                       | 
+| `<name>.restartPolicy`             | RestartPolicy of cronjob                                                                     | 
+
+## Naming convention for ConfigMap, Secret, SealedSecret and ExternalSecret
+
+Name format of ConfigMap, Secret, SealedSecret and ExternalSecret is ```{{ template "application.name" $ }}-{{ $nameSuffix }}``` then:
+
+- ```{{ template "application.name" }}``` is a helper function that outputs ```.Values.applicationName``` if exist else return chart name as output
+- `nameSuffix` is the each key in ```secret.files```,```configMap.files```, ```sealedSecret.files``` and ```externalSecret.files```
+
+For example if we have following values file:
+
+```
+applicationName: helloworld # {{ template "application.name" $ }}
+
+configMap:
+  files:
+    config: # {{ $nameSuffix }}
+      key: value
+```
+
+then the configmap name will be ``helloworld-config``

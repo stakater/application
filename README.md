@@ -116,20 +116,42 @@ To uninstall the chart:
 | serviceMonitor.annotations | Annotations for serviceMonitor                                                                                                                                                                   | `{}`                                                                                                                                                  |
 | serviceMonitor.jobLabel | Job Label used for application selector                                                                                                                                                          | `k8s-app`                                                                                                                                             |
 | serviceMonitor.endpoints | Array of endpoints to be scraped by prometheus                                                                                                                                                   | - interval: 5s<br>&nbsp;&nbsp;path: /actuator/prometheus<br>&nbsp;&nbsp;port: http                                                                    |
+
+### Autoscaling Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | autoscaling.enabled | Enable horizontal pod autoscaler                                                                                                                                                                 | `false`                                                                                                                                               |
 | autoscaling.additionalLabels | Labels for horizontal pod autoscaler                                                                                                                                                             | `{}`                                                                                                                                                  |
 | autoscaling.annotations | Annotations for horizontal pod autoscaler                                                                                                                                                        | `{}`                                                                                                                                                  |
 | autoscaling.minReplicas | Sets minimum replica count when autoscaling is enabled                                                                                                                                           | `1`                                                                                                                                                   |
 | autoscaling.maxReplicas | Sets maximum replica count when autoscaling is enabled                                                                                                                                           | `10`                                                                                                                                                  |
 | autoscaling.metrics | Configuration for hpa metrics, set when autoscaling is enabled                                                                                                                                   | `{}`                                                                                                                                                  |
+
+### EndpointMonitor Paramaters
+
+Stakater [IngressMonitorController](https://github.com/stakater/IngressMonitorController) EndpointMonitor parameters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | endpointMonitor.enabled | Enable endpointMonitor for IMC (https://github.com/stakater/IngressMonitorController)                                                                                                            | `false`                                                                                                                                               |
 | endpointMonitor.additionalLabels | Labels for endpointMonitor                                                                                                                                                                       | `{}`                                                                                                                                                  |
 | endpointMonitor.annotations | Annotations for endpointMonitor                                                                                                                                                                  | `{}`                                                                                                                                                  |
 | endpointMonitor.additionalConfig | Additional Config for endpointMonitor                                                                                                                                                            | `{}`                                                                                                                                                  |
+
+### SealedSecret Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | sealedSecret.enabled | Enable sealed secret                                                                                                                                                                             | `false`                                                                                                                                               |
 | sealedSecret.additionalLabels | Labels for sealed secret                                                                                                                                                                         | `{}`                                                                                                                                                  |
 | sealedSecret.annotations | Annotations for sealed secret                                                                                                                                                                    | `{}`                                                                                                                                                  |
 | sealedSecret.files | Map of secret files with name and encrypted data contained in those files                                                                                                                        | `{}`                                                                                                                                                  |
+
+### Cert-manager Certificate Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | certificate.enabled | Enable Certificate Custom Resource                                                                                                                                                                | `false`                                                                                                                                               |
 | certificate.enabled | Enable Certificate Custom Resource                                                                                                                                                                | `false`                                                                                                                                               |
 | certificate.additionalLabels | Additional labels for Certificate Custom Resource                                                                                                                                                | `{}`                                                                                                                                                  |
@@ -159,14 +181,29 @@ To uninstall the chart:
 | certificate.keystores.jks.create | Enables jks keystore creation for the Certificate. JKS configures options for storing a JKS keystore in the spec.secretName Secret resource                                                      | `false`                                                                                                                                               |
 | certificate.keystores.jks.key | The key of the entry in the Secret resource’s data field to be used                                                                                                                              | `test_key`                                                                                                                                            |
 | certificate.keystores.jks.name | The name of the Secret resource being referred to                                                                                                                                                | `test-creds`                                                                                                                                          |
+
+### Alertmanager Config Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | alertmanagerConfig.enabled | Enable alertmanagerConfig for this app (Will be merged in the base config)                                                                                                                       | `false`                                                                                                                                               |
 | alertmanagerConfig.selectionLabels | Labels for this config to be selected for merging in alertmanager base config                                                                                                                    | `alertmanagerConfig: "workload"`                                                                                                                      |
 | alertmanagerConfig.spec.route | The Alertmanager route definition for alerts matching the resource’s namespace. It will be added to the generated Alertmanager configuration as a first-level route                              | `{}`                                                                                                                                                  |
 | alertmanagerConfig.spec.receivers | List of receivers                                                                                                                                                                                | `[]`                                                                                                                                                  |
 | alertmanagerConfig.spec.inhibitRules | InhibitRule defines an inhibition rule that allows to mute alerts when other alerts are already firing                                                                                           | `[]`                                                                                                                                                  |
+
+### PrometheusRule Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | prometheusRule.enabled | Enable prometheusRule for this app                                                                                                                                                               | `false`                                                                                                                                               |
 | prometheusRule.additionalLabels | Kubernetes labels object, these additional labels will be added to PrometheusRule CRD                                                                                                            | `{}`                                                                                                                                                  |
 | prometheusRule.spec.groups | PrometheusRules in their groups to be added                                                                                                                                                      | `[]`                                                                                                                                                  |
+
+### SecretProviderClass Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | secretProviderClass.enabled | Enables Secret Provider Class Custom Resource                                                                                                                                                    | `false`                                                                                                                                               |
 | secretProviderClass.name | Name of Secret Provider Class Custom Resource                                                                                                                                                    | `""`                                                                                                                                                  |
 | secretProviderClass.provider | Provider of Secret Provider Class Custom Resource                                                                                                                                                | `""`                                                                                                                                                  |
@@ -185,7 +222,6 @@ To uninstall the chart:
 | externalSecret.files | Array of secret files with name and remote reference data contained in those files                                                                                                               | `[]`                                                                                                                                                  |
 
 ### Grafana Dashboard Paramaters
-
 
 | Name                     | Description                                                                                  | Value           |
 | ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |

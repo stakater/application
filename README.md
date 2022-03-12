@@ -56,11 +56,16 @@ To uninstall the chart:
 | deployment.image.tag | Tag of the application Image                                                                     | `v1.0.0`        |
 | deployment.image.pullPolicy | Pull policy for the application image                                                     | `IfNotPresent`  |
 | deployment.ports | Ports for primary container                                                                          | `[]`            |
-| deployment.probes.readinessProbe | The readiness probe block    | `{"failureThreshold":3,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":1,"initialDelaySeconds":"10\nhttpGet:\n  path: /path\n  port: 8080"}` |
-| deployment.probes.livenessProbe| The livenessness probe block.   | `{"failureThreshold":3,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":1,"initialDelaySeconds":"10\nhttpGet:\n  path: /path\n  port: 8080"}` |
 | deployment.resources | Application pod resource requests & limits | limits:<br>&nbsp;&nbsp;memory: 256Mi<br>&nbsp;&nbsp;cpu: 1<br>requests:<br>&nbsp;&nbsp;memory: 128Mi<br>&nbsp;&nbsp;cpu: 0.5 |
 | deployment.securityContext | Security Context for the pod                                                               | `{}`            |
 | deployment.additionalContainers | Add additional containers besides init and app containers                             | `[]             |
+
+#### Deployment Probes Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
+| deployment.probes.readinessProbe | The readiness probe block    | `{"failureThreshold":3,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":1,"initialDelaySeconds":"10\nhttpGet:\n  path: /path\n  port: 8080"}` |
+| deployment.probes.livenessProbe| The livenessness probe block.   | `{"failureThreshold":3,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":1,"initialDelaySeconds":"10\nhttpGet:\n  path: /path\n  port: 8080"}` |
 
 #### OpenshiftOAuthProxy Paramaters
 

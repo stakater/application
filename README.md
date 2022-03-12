@@ -178,8 +178,6 @@ To uninstall the chart:
 
 | Name                     | Description                                                                                  | Value           |
 | ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
-
-
 | externalSecret.enabled | Enables External Secret Custom Resource                                                                                                                                                          | `false`                                                                                                                                               |
 | externalSecret.secretStore.name | Defines name of default SecretStore to use when fetching the secret data                                                                                                                         | `tenant-vault-secret-store`                                                                                                                           |
 | externalSecret.secretStore.kind | Defines kind as SecretStore or ClusterSecretStore                                                                                                                                                | `SecretStore`                                                                                                                                         |

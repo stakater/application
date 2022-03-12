@@ -56,7 +56,7 @@ To uninstall the chart:
 | deployment.image.tag | Tag of the application Image                                                                     | `v1.0.0`        |
 | deployment.image.pullPolicy | Pull policy for the application image                                                     | `IfNotPresent`  |
 | deployment.ports | Ports for primary container                                                                          | `[]`            |
-| deployment.resources | Application pod resource requests & limits | limits:<br>&nbsp;&nbsp;memory: 256Mi<br>&nbsp;&nbsp;cpu: 1<br>requests:<br>&nbsp;&nbsp;memory: 128Mi<br>&nbsp;&nbsp;cpu: 0.5 |
+| deployment.resources | Application pod resource requests & limits | `limits:<br>&nbsp;&nbsp;memory: 256Mi<br>&nbsp;&nbsp;cpu: 1<br>requests:<br>&nbsp;&nbsp;memory: 128Mi<br>&nbsp;&nbsp;cpu: 0.5` |
 | deployment.securityContext | Security Context for the pod                                                               | `{}`            |
 | deployment.additionalContainers | Add additional containers besides init and app containers                             | `[]             |
 

@@ -229,8 +229,8 @@ applicationName: helloworld # {{ template "application.name" $ }}
 
 configMap:
   files:
-     code-config: # {{ $nameSuffix }}
-         key: value
+    config: # {{ $nameSuffix }}
+      key: value
 ```
 
-then the configmap name will be ``helloworld-code-config``
+then the configmap name will be ``helloworld-config``

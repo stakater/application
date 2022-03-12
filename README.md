@@ -1,7 +1,7 @@
 # Application
 Generic helm chart for all kind of applications
 
-# Installing the Chart
+## Installing the Chart
 
 To install the chart with the release name my-application in namespace test:
 
@@ -9,13 +9,13 @@ To install the chart with the release name my-application in namespace test:
     helm repo update
     helm install my-application stakater/application --namespace test
 
-# Uninstall the Chart
+## Uninstall the Chart
 
 To uninstall the chart:
 
     helm delete <name-of-the-chart>
 
-# Configuration
+## Paramaters
 
 | Parameter | Description                                                                                                                                                                                      | Default                                                                                                                                               |
 |:---|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -185,7 +185,7 @@ To uninstall the chart:
 | grafanaDashboard.contents.key | Used as name of Grafana Dashboard object                                                                                                                                                         | `""`                                                                                                                                                  |
 | grafanaDashboard.contents.key.json | json string used as content of Grafana Dashboard object                                                                                                                                          | `""`                                                                                                                                                  |
 | grafanaDashboard.contents.key.url| Url used to fetch dashboard content. According to GrafanaDashboard behavior, if both url and json are specified then the GrafanaDashboard content will be updated with fetched content from url | `""`                                                                                                                                                  |
-### CronJob Parameters
+## CronJob Parameters
 
 | Name                     | Description                                                                                  | Value           |
 | ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
@@ -215,7 +215,7 @@ Job paramater for each cronjob object at `cronJob.jobs`
 | `<name>.tolerations`               | Tolerations of cronjob                                                                       | 
 | `<name>.restartPolicy`             | RestartPolicy of cronjob                                                                     | 
 
-### Naming convention for ConfigMap, Secret, SealedSecret and ExternalSecret
+## Naming convention for ConfigMap, Secret, SealedSecret and ExternalSecret
 
 Name format of ConfigMap, Secret, SealedSecret and ExternalSecret is ```{{ template "application.name" $ }}-{{ $nameSuffix }}``` then:
 

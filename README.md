@@ -17,12 +17,12 @@ To uninstall the chart:
 
 ## Paramaters
 
-| Parameter | Description                                                                                                                                                                                      | Default                                                                                                                                               |
-|:---|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------|
-| applicationName | Name of the application                                                                                                                                                                          | `application`                                                                                                                                         |
-| namespaceOverride | Override default release namespace with a custom value                                                                                                                                           | `application`                                                                                                                                         |
-| labels.group | Label to define application group                                                                                                                                                                | `com.stakater.platform`                                                                                                                               |
-| labels.team | Label to define team                                                                                                                                                                             | `stakater`                                                                                                                                            |
+| Name | Description                                                                                | Value                                       |
+| ---| ---------------------------------------------------------------------------------------------|---------------------------------------------|
+| applicationName | Name of the application                                                         | `application`                               |
+| namespaceOverride | Override default release namespace with a custom value                        | `application`                               |
+| labels.group | Label to define application group                                                  | `com.stakater.platform`                     |
+| labels.team | Label to define team                                                                | `stakater`                                  |
 
 ### Deployment Paramaters
 
@@ -31,9 +31,9 @@ To uninstall the chart:
 | deployment.enabled | Enable deployment on helm chart deployments                                                        | `true`          |
 | deployment.strategy | Strategy for updating deployments                                                                 | `RollingUpdate` |
 | deployment.reloadOnChange| Reload deployment if configMap/secret mounted are updated                                    | `true`          |
-| deployment.nodeSelector | Select node to deploy this application                                                                                                                                                           | `{}`                                                                                                                                                  |
-| deployment.hostAliases | Adding entries to a Pod's /etc/hosts file provides Pod-level override of hostname resolution when DNS and other options are not applicable                                                       | `[]`                                                                                                                                                  |
-| deployment.initContainers | Init containers which runs before the app container                                                                                                                                              | `{}`                                                                                                                                                  |
+| deployment.nodeSelector | Select node to deploy this application                                                        | `{}`            |
+| deployment.hostAliases | Adding entries to a Pod's /etc/hosts file provides Pod-level override of hostname resolution when DNS and other options are not applicable                                                                                                                | `[]`            |
+| deployment.initContainers | Init containers which runs before the app container                                         | `{}`            |
 | deployment.additionalLabels | Additional labels for Deployment                                                                                                                                                                 | `{}`                                                                                                                                                  |
 | deployment.podLabels | Additional label added on pod which is used in Service's Label Selector                                                                                                                          | {}                                                                                                                                                    |
 | deployment.annotations | Annotations on deployments                                                                                                                                                                       | `{}`                                                                                                                                                  |
@@ -62,7 +62,7 @@ To uninstall the chart:
 | deployment.securityContext | Security Context for the pod                                                                                                                                                                     | `{}`                                                                                                                                                  |
 | deployment.additionalContainers | Add additional containers besides init and app containers                             | `[]             |
 
-#### Deployment Authentication Proxy Paramaters
+#### OpenshiftOAuthProxy Paramaters
 
 | Name                     | Description                                                                                  | Value           |
 | ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
@@ -75,7 +75,7 @@ To uninstall the chart:
 | Name                     | Description                                                                                  | Value           |
 | ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | pdb.enabled | Enable pod disruption budget | `false` |
-| pdb.minAvailable | The number of pods that must be available after the eviction. If both minAvailable and maxUnavailable is set, minAvailable is preferred | `1` |
+| pdb.minAvailable | The number of pods that must be available after the eviction. If both minAvailable and maxUnavailable is set, minAvailable is preferred | `1`|
 | pdb.maxUnavailable | The number of pods that can be unavailable after the eviction. Either minAvailable or maxUnavailable needs to be provided | `` |
 
 ### Persistence Paramaters

@@ -225,11 +225,11 @@ Name format of ConfigMap, Secret, SealedSecret and ExternalSecret is ```{{ templ
 For example if we have following values file:
 
 ```
-applicationName: helloworld
+applicationName: helloworld # {{ template "application.name" $ }}
 
 configMap:
   files:
-     code-config:
+     code-config: # {{ $nameSuffix }}
          key: value
 ```
 

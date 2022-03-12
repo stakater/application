@@ -33,18 +33,12 @@ To uninstall the chart:
 | deployment.reloadOnChange| Reload deployment if configMap/secret mounted are updated                                    | `true`          |
 | deployment.nodeSelector | Select node to deploy this application                                                        | `{}`            |
 | deployment.hostAliases | Adding entries to a Pod's /etc/hosts file provides Pod-level override of hostname resolution when DNS and other options are not applicable                                                                                                                | `[]`            |
-| deployment.initContainers | Init containers which runs before the app container                                         | `{}`            |
 | deployment.additionalLabels | Additional labels for Deployment                                                          | `{}`            |
 | deployment.podLabels | Additional label added on pod which is used in Service's Label Selector                          | {}              |
 | deployment.annotations | Annotations on deployments                                                                     | `{}`            |
 | deployment.additionalPodAnnotation  | Additional Pod Annotations added on pod created by this Deployment                | `{}`            |
-| deployment.fluentdConfigAnnotations | Annotations for fluentd Configurations                                            | `{}`            |
 | deployment.replicas | Replicas to be created                                                                            | `2`             |
 | deployment.imagePullSecrets | Secrets used to pull image                                                                | `""`            |
-| deployment.envFrom | Environment variables to be picked from configmap or secret                                        | `{}`            |
-| deployment.envFrom.type | Type of data i.e. Configmap or Secret                                                         | ``              |
-| deployment.envFrom.name | Name of Configmap or Secret, if set empty, set to application name                            | ``              |
-| deployment.envFrom.nameSuffix | Suffix Name of Configmap or Secret, applicationName is appended as prefix               | ``              |
 | deployment.env | Environment variables to be passed to the app container                                                | `{}`            |
 | deployment.volumes | Volumes to be added to the pod                                                                     | `{}`            |
 | deployment.volumeMounts | Mount path for Volumes                                                                        | `{}`            |
@@ -52,22 +46,94 @@ To uninstall the chart:
 | deployment.args | Arg for primary container of deployment                                                               | `[]`            |
 | deployment.tolerations | Taint tolerations for nodes                                                                    | `[]`            |
 | deployment.affinity | Affinity for pod/node                                                                             | `[]`            |
+| deployment.ports | Ports for primary container                                                                          | `[]`            |
+| deployment.securityContext | Security Context for the pod                                                               | `{}`            |
+| deployment.additionalContainers | Add additional containers besides init and app containers                             | `[]             |
+
+#### Deployment Resources Parameters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
+| deployment.resources | Application pod resource requests & limits                                                       | See below       |
+
+##### Requests and Limits
+
+```
+  resources: 
+    limits:
+      memory: 256Mi
+      cpu: 0.5
+    requests:
+      memory: 128Mi
+      cpu: 0.1
+```
+
+#### Deployment InitContainers Parameters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
+| deployment.initContainers | Init containers which runs before the app container                                         | `{}`            |
+
+
+#### Deployment fluentd Parameters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
+| deployment.fluentdConfigAnnotations | Annotations for fluentd Configurations                                            | `{}`            |
+
+#### Deployment Image Parameters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | deployment.image.repository | Image repository for the application                                                      | `repository/image-name`  |
 | deployment.image.tag | Tag of the application Image                                                                     | `v1.0.0`        |
 | deployment.image.pullPolicy | Pull policy for the application image                                                     | `IfNotPresent`  |
-| deployment.ports | Ports for primary container                                                                          | `[]`            |
-| deployment.resources | Application pod resource requests & limits | `limits:<br>&nbsp;&nbsp;memory: 256Mi<br>&nbsp;&nbsp;cpu: 1<br>requests:<br>&nbsp;&nbsp;memory: 128Mi<br>&nbsp;&nbsp;cpu: 0.5` |
-| deployment.securityContext | Security Context for the pod                                                               | `{}`            |
-| deployment.additionalContainers | Add additional containers besides init and app containers                             | `[]             |
+
+#### Deployment envFrom Parameters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
+| deployment.envFrom | Environment variables to be picked from configmap or secret                                        | `{}`            |
+| deployment.envFrom.type | Type of data i.e. Configmap or Secret                                                         | ``              |
+| deployment.envFrom.name | Name of Configmap or Secret, if set empty, set to application name                            | ``              |
+| deployment.envFrom.nameSuffix | Suffix Name of Configmap or Secret, applicationName is appended as prefix               | ``              |
 
 #### Deployment Probes Paramaters
 
 | Name                     | Description                                                                                  | Value           |
 | ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
-| deployment.probes.readinessProbe | The readiness probe block    | `{"failureThreshold":3,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":1,"initialDelaySeconds":"10\nhttpGet:\n  path: /path\n  port: 8080"}` |
-| deployment.probes.livenessProbe| The livenessness probe block.   | `{"failureThreshold":3,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":1,"initialDelaySeconds":"10\nhttpGet:\n  path: /path\n  port: 8080"}` |
+| deployment.probes.readinessProbe | The readiness probe                                                                  | See below       |
+| deployment.probes.livenessProbe| The livenessness probe                                                                 | See below       |
 
-#### OpenshiftOAuthProxy Paramaters
+##### Readiness Probe
+
+```
+    readinessProbe:
+      failureThreshold: 3
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+      initialDelaySeconds: 10
+      httpGet:
+        path: /path
+        port: 8080
+```
+
+##### Liveness Probe
+
+```
+    livenessProbe:
+      failureThreshold: 3
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+      initialDelaySeconds: 10
+      httpGet:
+        path: /path
+        port: 8080
+```
+
+#### Deployment OpenshiftOAuthProxy Paramaters
 
 | Name                     | Description                                                                                  | Value           |
 | ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |

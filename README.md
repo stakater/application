@@ -217,12 +217,12 @@ Job paramater for each cronjob object at `cronJob.jobs`
 
 ### Naming convention for ConfigMap, Secret, SealedSecret and ExternalSecret
 
-Name format of ConfigMap, Secret, SealedSecret and ExternalSecret is ```{{ template "application.name" $ }}-{{ $nameSuffix }}```. 
+Name format of ConfigMap, Secret, SealedSecret and ExternalSecret is ```{{ template "application.name" $ }}-{{ $nameSuffix }}``` then:
 
-- Where `nameSuffix` is the each key in ```secret.files```,```configMap.files```, ```sealedSecret.files``` and ```externalSecret.files```
-- ```{{ template "application.name" }}``` is helper function that outputs ```.Values.applicationName``` if exist else return chart name as output. 
+- ```{{ template "application.name" }}``` is a helper function that outputs ```.Values.applicationName``` if exist else return chart name as output
+- `nameSuffix` is the each key in ```secret.files```,```configMap.files```, ```sealedSecret.files``` and ```externalSecret.files```
 
-For example if we have following values:
+For example if we have following values file:
 
 ```
 applicationName: helloworld
@@ -233,4 +233,4 @@ configMap:
          key: value
 ```
 
-Then the configmap name will be ``helloworld-code-config``
+then the configmap name will be ``helloworld-code-config``

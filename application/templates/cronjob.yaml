@@ -84,7 +84,7 @@ spec:
           restartPolicy: {{ $job.restartPolicy }}
           {{ end }}
           {{- if $job.imagePullSecrets}}
-          restartPolicy: {{ $job.imagePullSecrets }}
+          imagePullSecrets: {{ $job.imagePullSecrets }}
           {{ end }}
           {{- with $job.volumes }}
           volumes:

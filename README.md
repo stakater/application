@@ -393,7 +393,8 @@ Job paramater for each cronjob object at `cronJob.jobs`
 | `<name>.nodeSelector`              | Node selector of cronjob                                                                     | 
 | `<name>.affinity`                  | Affinity of cronjob                                                                          | 
 | `<name>.tolerations`               | Tolerations of cronjob                                                                       | 
-| `<name>.restartPolicy`             | RestartPolicy of cronjob                                                                     | 
+| `<name>.restartPolicy`             | RestartPolicy of cronjob                                                                     |
+| `<name>.imagePullSecrets`          | ImagePullSecrets of cronjob                                                                     |
 
 ## Naming convention for ConfigMap, Secret, SealedSecret and ExternalSecret
 

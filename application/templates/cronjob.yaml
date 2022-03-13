@@ -83,6 +83,9 @@ spec:
           {{- if $job.restartPolicy}}
           restartPolicy: {{ $job.restartPolicy }}
           {{ end }}
+          {{- if $job.imagePullSecrets}}
+          restartPolicy: {{ $job.imagePullSecrets }}
+          {{ end }}
           {{- with $job.volumes }}
           volumes:
 {{ toYaml . | indent 12 }}

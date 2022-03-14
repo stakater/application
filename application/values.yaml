@@ -18,17 +18,20 @@ labels:
 cronJob: 
   enabled: false
   jobs:
-#  db-migration:
-#    schedule: "* * * 8 *"
-#    image: 
-#      repository: docker.io/nginx
-#      tag: v1.0.0
-#    command: ["/bin/bash"]
-#    args: ["-c","sleep 5000"]
-#    resources:  
-#      requests:
-#          memory: 5Gi
-#          cpu: 1
+    # db-migration:
+    #   schedule: "* * * 8 *"
+    #   env: 
+    #     KEY:
+    #       value: VALUE
+    #   image: 
+    #     repository: docker.io/nginx
+    #     tag: v1.0.0
+    #   command: ["/bin/bash"]
+    #   args: ["-c","sleep 5000"]
+    #   resources:  
+    #     requests:
+    #         memory: 5Gi
+    #         cpu: 1
   
 ##########################################################
 # Deployment

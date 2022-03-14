@@ -417,7 +417,7 @@ configMap:
 then the configmap name will be ``helloworld-config``
 
 
-## Consuming Environment Variable in application chart
+## Consuming environment variable in application chart
 
 In order to use environment variable in deployment or cronjob, you will have to provide environment variable in *key/value* pair in `env` value. where key being environment variable key and value varies in different scenarios 
 

@@ -47,7 +47,10 @@ spec:
             name: {{ $name }}
             {{- with $job.env }}
             env:
-{{ toYaml . | indent 12 }}
+            {{- range $key, $value := $job.env }}
+            - name: {{ include "application.tplvalues.render" ( dict "value" $key "context" $ ) }}
+{{ include "application.tplvalues.render" ( dict "value" $value "context" $ ) | indent 14 }}
+            {{- end }}
             {{- end }}
             {{- with $job.envFrom }}
             envFrom:
@@ -82,6 +85,10 @@ spec:
           {{- end }}
           {{- if $job.restartPolicy}}
           restartPolicy: {{ $job.restartPolicy }}
+          {{ end }}
+          {{- with $job.imagePullSecrets}}
+          imagePullSecrets: 
+{{ toYaml . | indent 12 }}
           {{ end }}
           {{- with $job.volumes }}
           volumes:

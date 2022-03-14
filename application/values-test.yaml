@@ -1184,9 +1184,14 @@ cronJob:
   jobs:
     db-migration:
       schedule: "* * * 8 *"
+      imagePullSecrets:
+       - name: nexus-secret
       image: 
         repository: docker.io/nginx
         tag: v1.0.0
+      env: 
+        KEY:
+          value: VALUE
       command: ["/bin/bash"]
       args: ["-c","sleep 5000"]
       resources:  

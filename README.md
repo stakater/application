@@ -1,7 +1,7 @@
 # Application
 Generic helm chart for all kind of applications
 
-# Installing the Chart
+## Installing the Chart
 
 To install the chart with the release name my-application in namespace test:
 
@@ -9,59 +9,150 @@ To install the chart with the release name my-application in namespace test:
     helm repo update
     helm install my-application stakater/application --namespace test
 
-# Uninstall the Chart
+## Uninstall the Chart
 
 To uninstall the chart:
 
     helm delete <name-of-the-chart>
 
-# Configuration
+## Paramaters
 
-| Parameter | Description                                                                                                                                                                                      | Default                                                                                                                                               |
-|:---|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------|
-| applicationName | Name of the application                                                                                                                                                                          | `application`                                                                                                                                         |
-| namespaceOverride | Override default release namespace with a custom value                                                                                                                                           | `application`                                                                                                                                         |
-| labels.group | Label to define application group                                                                                                                                                                | `com.stakater.platform`                                                                                                                               |
-| labels.team | Label to define team                                                                                                                                                                             | `stakater`                                                                                                                                            |
-| deployment.strategy | Strategy for updating deployments                                                                                                                                                                | `RollingUpdate`
-| deployment.enabled | Enable deployment on helm chart deployments                                                                                                                                                                | `true`                                                                                                                                       |
-| deployment.reloadOnChange| Reload deployment if configMap/secret mounted are updated                                                                                                                                        | `true`                                                                                                                                                |
-| deployment.nodeSelector | Select node to deploy this application                                                                                                                                                           | `{}`                                                                                                                                                  |
-| deployment.hostAliases | Adding entries to a Pod's /etc/hosts file provides Pod-level override of hostname resolution when DNS and other options are not applicable                                                       | `[]`                                                                                                                                                  |
-| deployment.initContainers | Init containers which runs before the app container                                                                                                                                              | `{}`                                                                                                                                                  |
-| deployment.additionalLabels | Additional labels for Deployment                                                                                                                                                                 | `{}`                                                                                                                                                  |
-| deployment.podLabels | Additional label added on pod which is used in Service's Label Selector                                                                                                                          | {}                                                                                                                                                    |
-| deployment.annotations | Annotations on deployments                                                                                                                                                                       | `{}`                                                                                                                                                  |
-| deployment.additionalPodAnnotation  | Additional Pod Annotations added on pod created by this Deployment                                                                                                                               | `{}`                                                                                                                                                  |
-| deployment.fluentdConfigAnnotations | Annotations for fluentd Configurations                                                                                                                                                           | `{}`                                                                                                                                                  |
-| deployment.replicas | Replicas to be created                                                                                                                                                                           | `2`                                                                                                                                                   |
-| deployment.imagePullSecrets | Secrets used to pull image                                                                                                                                                                       | `""`                                                                                                                                                  |
-| deployment.envFrom | Environment variables to be picked from configmap or secret                                                                                                                                      | `{}`                                                                                                                                                  |
-| deployment.envFrom.type | Type of data i.e. Configmap or Secret                                                                                                                                                            | ``                                                                                                                                                    |
-| deployment.envFrom.name | Name of Configmap or Secret, if set empty, set to application name                                                                                                                               | ``                                                                                                                                                    |
-| deployment.envFrom.nameSuffix | Suffix Name of Configmap or Secret, applicationName is appended as prefix                                                                                                                        | ``                                                                                                                                                    |
-| deployment.env | Environment variables to be passed to the app container                                                                                                                                          | `{}`                                                                                                                                                  |
-| deployment.volumes | Volumes to be added to the pod                                                                                                                                                                   | `{}`                                                                                                                                                  |
-| deployment.volumeMounts | Mount path for Volumes                                                                                                                                                                           | `{}`                                                                                                                                                  |
-| deployment.command | Command for primary container of deployment                                                                                                                                                      | `[]`                                                                                                                                                  |
-| deployment.args | Arg for primary container of deployment                                                                                                                                                          | `[]`                                                                                                                                                  |
-| deployment.tolerations | Taint tolerations for nodes                                                                                                                                                                      | `[]`                                                                                                                                                  |
-| deployment.affinity | Affinity for pod/node                                                                                                                                                                            | `[]`                                                                                                                                                  |
-| deployment.image.repository | Image repository for the application                                                                                                                                                             | `repository/image-name`                                                                                                                               |
-| deployment.image.tag | Tag of the application Image                                                                                                                                                                     | `v1.0.0`                                                                                                                                              |
-| deployment.image.pullPolicy | Pull policy for the application image                                                                                                                                                            | `IfNotPresent`                                                                                                                                        |
-| deployment.ports | Ports for primary container                                                                                                                                                                      | `[]`                                                                                                                                                  |
-| deployment.probes.readinessProbe | The readiness probe block                                                                                                                                                                        | `{"failureThreshold":3,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":1,"initialDelaySeconds":"10\nhttpGet:\n  path: /path\n  port: 8080"}` |
-| deployment.probes.livenessProbe| The livenessness probe block.                                                                                                                                                                    | `{"failureThreshold":3,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":1,"initialDelaySeconds":"10\nhttpGet:\n  path: /path\n  port: 8080"}` |
-| deployment.resources | Application pod resource requests & limits                                                                                                                                                       | limits:<br>&nbsp;&nbsp;memory: 256Mi<br>&nbsp;&nbsp;cpu: 1<br>requests:<br>&nbsp;&nbsp;memory: 128Mi<br>&nbsp;&nbsp;cpu: 0.5                          |
-| deployment.openshiftOAuthProxy.enabled | Add Openshift OAuth Proxy as SideCar Container                                                                                                                                                   | `false`                                                                                                                                               |
-| deployment.openshiftOAuthProxy.port | Application port so proxy should forward to this port                                                                                                                                            | `8080`                                                                                                                                                |
-| deployment.openshiftOAuthProxy.secretName | Secret name containing the TLS cert                                                                                                                                                              | `openshift-oauth-proxy-tls`                                                                                                                           |
-| deployment.additionalContainers | Add additional containers besides init and app containers                                                                                                                                        | `[]`                                                                                                                                                  |
-| deployment.securityContext | Security Context for the pod                                                                                                                                                                     | `{}`                                                                                                                                                  |
+| Name | Description                                                                                | Value                                       |
+| ---| ---------------------------------------------------------------------------------------------|---------------------------------------------|
+| applicationName | Name of the application                                                         | `application`                               |
+| namespaceOverride | Override default release namespace with a custom value                        | `application`                               |
+| labels.group | Label to define application group                                                  | `com.stakater.platform`                     |
+| labels.team | Label to define team                                                                | `stakater`                                  |
+
+### Deployment Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
+| deployment.enabled | Enable deployment on helm chart deployments                                                        | `true`          |
+| deployment.strategy | Strategy for updating deployments                                                                 | `RollingUpdate` |
+| deployment.reloadOnChange| Reload deployment if configMap/secret mounted are updated                                    | `true`          |
+| deployment.nodeSelector | Select node to deploy this application                                                        | `{}`            |
+| deployment.hostAliases | Adding entries to a Pod's /etc/hosts file provides Pod-level override of hostname resolution when DNS and other options are not applicable                                                                                                                | `[]`            |
+| deployment.additionalLabels | Additional labels for Deployment                                                          | `{}`            |
+| deployment.podLabels | Additional label added on pod which is used in Service's Label Selector                          | {}              |
+| deployment.annotations | Annotations on deployments                                                                     | `{}`            |
+| deployment.additionalPodAnnotation  | Additional Pod Annotations added on pod created by this Deployment                | `{}`            |
+| deployment.replicas | Replicas to be created                                                                            | `2`             |
+| deployment.imagePullSecrets | Secrets used to pull image                                                                | `""`            |
+| deployment.env | Environment variables to be passed to the app container                                                | `{}`            |
+| deployment.volumes | Volumes to be added to the pod                                                                     | `{}`            |
+| deployment.volumeMounts | Mount path for Volumes                                                                        | `{}`            |
+| deployment.command | Command for primary container of deployment                                                        | `[]`            |
+| deployment.args | Arg for primary container of deployment                                                               | `[]`            |
+| deployment.tolerations | Taint tolerations for nodes                                                                    | `[]`            |
+| deployment.affinity | Affinity for pod/node                                                                             | `[]`            |
+| deployment.ports | Ports for primary container                                                                          | `[]`            |
+| deployment.securityContext | Security Context for the pod                                                               | `{}`            |
+| deployment.additionalContainers | Add additional containers besides init and app containers                             | `[]             |
+
+#### Deployment Resources Parameters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
+| deployment.resources | Application pod resource requests & limits                                                       | See below       |
+
+##### Requests and Limits
+
+```
+  resources: 
+    limits:
+      memory: 256Mi
+      cpu: 0.5
+    requests:
+      memory: 128Mi
+      cpu: 0.1
+```
+
+#### Deployment InitContainers Parameters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
+| deployment.initContainers | Init containers which runs before the app container                                         | `{}`            |
+
+
+#### Deployment fluentd Parameters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
+| deployment.fluentdConfigAnnotations | Annotations for fluentd Configurations                                            | `{}`            |
+
+#### Deployment Image Parameters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
+| deployment.image.repository | Image repository for the application                                                      | `repository/image-name`  |
+| deployment.image.tag | Tag of the application Image                                                                     | `v1.0.0`        |
+| deployment.image.pullPolicy | Pull policy for the application image                                                     | `IfNotPresent`  |
+
+#### Deployment envFrom Parameters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
+| deployment.envFrom | Environment variables to be picked from configmap or secret                                        | `{}`            |
+| deployment.envFrom.type | Type of data i.e. Configmap or Secret                                                         | ``              |
+| deployment.envFrom.name | Name of Configmap or Secret, if set empty, set to application name                            | ``              |
+| deployment.envFrom.nameSuffix | Suffix Name of Configmap or Secret, applicationName is appended as prefix               | ``              |
+
+#### Deployment Probes Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
+| deployment.probes.readinessProbe | The readiness probe                                                                  | See below       |
+| deployment.probes.livenessProbe| The livenessness probe                                                                 | See below       |
+
+##### Readiness Probe
+
+```
+    readinessProbe:
+      failureThreshold: 3
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+      initialDelaySeconds: 10
+      httpGet:
+        path: /path
+        port: 8080
+```
+
+##### Liveness Probe
+
+```
+    livenessProbe:
+      failureThreshold: 3
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+      initialDelaySeconds: 10
+      httpGet:
+        path: /path
+        port: 8080
+```
+
+#### Deployment OpenshiftOAuthProxy Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
+| deployment.openshiftOAuthProxy.enabled | Add Openshift OAuth Proxy as SideCar Container                                 | `false`         |
+| deployment.openshiftOAuthProxy.port | Application port so proxy should forward to this port                             | `8080`          |
+| deployment.openshiftOAuthProxy.secretName | Secret name containing the TLS cert                                         | `openshift-oauth-proxy-tls`|
+
+### PodDisruptionBudget Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | pdb.enabled | Enable pod disruption budget | `false` |
-| pdb.minAvailable | The number of pods that must be available after the eviction. If both minAvailable and maxUnavailable is set, minAvailable is preferred | `1` |
+| pdb.minAvailable | The number of pods that must be available after the eviction. If both minAvailable and maxUnavailable is set, minAvailable is preferred | `1`|
 | pdb.maxUnavailable | The number of pods that can be unavailable after the eviction. Either minAvailable or maxUnavailable needs to be provided | `` |
+
+### Persistence Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | persistence.enabled | Enable persistence                                                                                                                                                                               | `false`                                                                                                                                               |
 | persistence.mountPVC | Whether to mount the created PVC to the deployment                                                                                                                                               | `false`                                                                                                                                               |
 | persistence.mountPath | If `persistence.mountPVC` is set, so where to mount the volume in the deployment                                                                                                                 | `/`                                                                                                                                                   |
@@ -71,10 +162,20 @@ To uninstall the chart:
 | persistence.annotations | Annotations for persistent volume                                                                                                                                                                | `{}`                                                                                                                                                  |
 | persistence.storageSize | Size of the persistent volume                                                                                                                                                                    | 
 `8Gi`   
+
+### Service Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | service.enabled | Enable service in helm chart                                                                                                                                                                    | `true`                                                                                                                                           |
 | service.additionalLabels | Additional labels for service                                                                                                                                                                    | `{}`                                                                                                                                                  |
 | service.annotations | Annotations for service                                                                                                                                                                          | `{}`                                                                                                                                                  |
 | service.ports | Ports for applications service                                                                                                                                                                   | - port: 8080<br>&nbsp;&nbsp;name: http<br>&nbsp;&nbsp;protocol: TCP<br>&nbsp;&nbsp;targetPort: 8080                                                   |
+
+### Ingress Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | ingress.enabled | Enable ingress                                                                                                                                                                                   | `false`                                                                                                                                               |
 | ingress.servicePort | Port of the service that serves pod                                                                                                                                                              | `8080`                                                                                                                                                |
 | ingress.pathType | Each path in an Ingress is required to have a corresponding path type of ingress hosts to validate rules properly                                                                                                                                                             | `ImplementationSpecific`                                                                                                                                                |
@@ -82,6 +183,11 @@ To uninstall the chart:
 | ingress.additionalLables | Labels for ingress                                                                                                                                                                               | `{}`                                                                                                                                                  |
 | ingress.annotations | Annotations for ingress                                                                                                                                                                          | `{}`                                                                                                                                                  |
 | ingress.tls | TLS block for ingress                                                                                                                                                                            | `[]`                                                                                                                                                  |
+
+### Route Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | route.enabled | Enable Route incase of Openshift                                                                                                                                                                 | `false`                                                                                                                                               |
 | route.host | Host of route. If no host is added then openshift inserts the default hostname                                                                                                                   | nil                                                                                                                                                   |
 | route.annotations | Annotations for route                                                                                                                                                                            | `{}`                                                                                                                                                  |
@@ -90,6 +196,13 @@ To uninstall the chart:
 | route.wildcardPolicy | Route wildcard policy                                                                                                                                                                            | `None`                                                                                                                                                |
 | route.tls.termination | TLS termination strategy                                                                                                                                                                         | `edge`                                                                                                                                                |
 | route.tls.insecureEdgeTerminationPolicy | TLS termination policy for insecure traffic                                                                                                                                                      | `Redirect`                                                                                                                                            |
+
+### Forecastle Paramaters
+
+Stakater [Forecastle](https://github.com/stakater/Forecastle) parameters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | forecastle.enabled | Enable Forecastle                                                                                                                                                                                | `false`                                                                                                                                               |
 | forecastle.additionalLabels | Additional labels for Forecastle Custom Resource                                                                                                                                                 | `{}`                                                                                                                                                  |
 | forecastle.icon | URL of application icon display on forecastle dashboard                                                                                                                                          | `https://raw.githubusercontent.com/stakater/ForecastleIcons/master/stakater-big.png`                                                                  |
@@ -97,39 +210,81 @@ To uninstall the chart:
 | forecastle.group | Group application on Forecastle dashboard                                                                                                                                                        | if not defined Namespace name is used                                                                                                                 |
 | forecastle.properties | Additional properties for Custom Resource                                                                                                                                                        | `{}`                                                                                                                                                  |
 | forecastle.networkRestricted | Whether app is network restricted or not                                                                                                                                                         | `false`                                                                                                                                               |
+
+### RBAC Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | rbac.enabled | Enable RBAC                                                                                                                                                                                      | `true`                                                                                                                                                |
 | rbac.serviceAccount.enabled | Enable serviceAccount                                                                                                                                                                            | `false`                                                                                                                                               |
 | rbac.serviceAccount.name | Name of the existing serviceAccount                                                                                                                                                              | `""`                                                                                                                                                  |
 | rbac.serviceAccount.additionalLabels | Labels for serviceAccount                                                                                                                                                                        | `{}`                                                                                                                                                  |
 | rbac.serviceAccount.annotations | Annotations for serviceAccount                                                                                                                                                                   | `{}`                                                                                                                                                  |
 | rbac.roles | Array of roles                                                                                                                                                                                   | `[]`                                                                                                                                                  |
+
+### ConfigMap Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | configMap.enabled | Enable configMaps                                                                                                                                                                                | `false`                                                                                                                                               |
 | configMap.additionalLabels | Labels for configMaps                                                                                                                                                                            | `{}`                                                                                                                                                  |
 | configMap.annotations | Annotations for configMaps                                                                                                                                                                       | `{}`                                                                                                                                                  |
 | configMap.files | Map of configMap files with suffixes and data contained in those files                                                                                                                           | `{}`                                                                                                                                                  |
+
+### Secret Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | secret.enabled | Enable secret                                                                                                                                                                                    | `false`                                                                                                                                               |
 | secret.additionalLabels | Labels for secret                                                                                                                                                                                | `{}`                                                                                                                                                  |
 | secret.annotations | Annotations for secret                                                                                                                                                                           | `{}`                                                                                                                                                  |
 | secret.files | Map of secret files with suffixes and data contained in those files                                                                                                                              | `{}`                                                                                                                                                  |
+
+### ServiceMonitor Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | serviceMonitor.enabled | Enable serviceMonitor                                                                                                                                                                            | `false`                                                                                                                                               |
 | serviceMonitor.additionalLabels | Labels for serviceMonitor                                                                                                                                                                        | `{}`                                                                                                                                                  |
 | serviceMonitor.annotations | Annotations for serviceMonitor                                                                                                                                                                   | `{}`                                                                                                                                                  |
 | serviceMonitor.jobLabel | Job Label used for application selector                                                                                                                                                          | `k8s-app`                                                                                                                                             |
 | serviceMonitor.endpoints | Array of endpoints to be scraped by prometheus                                                                                                                                                   | - interval: 5s<br>&nbsp;&nbsp;path: /actuator/prometheus<br>&nbsp;&nbsp;port: http                                                                    |
+
+### Autoscaling Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | autoscaling.enabled | Enable horizontal pod autoscaler                                                                                                                                                                 | `false`                                                                                                                                               |
 | autoscaling.additionalLabels | Labels for horizontal pod autoscaler                                                                                                                                                             | `{}`                                                                                                                                                  |
 | autoscaling.annotations | Annotations for horizontal pod autoscaler                                                                                                                                                        | `{}`                                                                                                                                                  |
 | autoscaling.minReplicas | Sets minimum replica count when autoscaling is enabled                                                                                                                                           | `1`                                                                                                                                                   |
 | autoscaling.maxReplicas | Sets maximum replica count when autoscaling is enabled                                                                                                                                           | `10`                                                                                                                                                  |
 | autoscaling.metrics | Configuration for hpa metrics, set when autoscaling is enabled                                                                                                                                   | `{}`                                                                                                                                                  |
+
+### EndpointMonitor Paramaters
+
+Stakater [IngressMonitorController](https://github.com/stakater/IngressMonitorController) EndpointMonitor parameters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | endpointMonitor.enabled | Enable endpointMonitor for IMC (https://github.com/stakater/IngressMonitorController)                                                                                                            | `false`                                                                                                                                               |
 | endpointMonitor.additionalLabels | Labels for endpointMonitor                                                                                                                                                                       | `{}`                                                                                                                                                  |
 | endpointMonitor.annotations | Annotations for endpointMonitor                                                                                                                                                                  | `{}`                                                                                                                                                  |
 | endpointMonitor.additionalConfig | Additional Config for endpointMonitor                                                                                                                                                            | `{}`                                                                                                                                                  |
+
+### SealedSecret Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | sealedSecret.enabled | Enable sealed secret                                                                                                                                                                             | `false`                                                                                                                                               |
 | sealedSecret.additionalLabels | Labels for sealed secret                                                                                                                                                                         | `{}`                                                                                                                                                  |
 | sealedSecret.annotations | Annotations for sealed secret                                                                                                                                                                    | `{}`                                                                                                                                                  |
 | sealedSecret.files | Map of secret files with name and encrypted data contained in those files                                                                                                                        | `{}`                                                                                                                                                  |
+
+### Cert-manager Certificate Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | certificate.enabled | Enable Certificate Custom Resource                                                                                                                                                                | `false`                                                                                                                                               |
 | certificate.enabled | Enable Certificate Custom Resource                                                                                                                                                                | `false`                                                                                                                                               |
 | certificate.additionalLabels | Additional labels for Certificate Custom Resource                                                                                                                                                | `{}`                                                                                                                                                  |
@@ -159,14 +314,29 @@ To uninstall the chart:
 | certificate.keystores.jks.create | Enables jks keystore creation for the Certificate. JKS configures options for storing a JKS keystore in the spec.secretName Secret resource                                                      | `false`                                                                                                                                               |
 | certificate.keystores.jks.key | The key of the entry in the Secret resource’s data field to be used                                                                                                                              | `test_key`                                                                                                                                            |
 | certificate.keystores.jks.name | The name of the Secret resource being referred to                                                                                                                                                | `test-creds`                                                                                                                                          |
+
+### Alertmanager Config Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | alertmanagerConfig.enabled | Enable alertmanagerConfig for this app (Will be merged in the base config)                                                                                                                       | `false`                                                                                                                                               |
 | alertmanagerConfig.selectionLabels | Labels for this config to be selected for merging in alertmanager base config                                                                                                                    | `alertmanagerConfig: "workload"`                                                                                                                      |
 | alertmanagerConfig.spec.route | The Alertmanager route definition for alerts matching the resource’s namespace. It will be added to the generated Alertmanager configuration as a first-level route                              | `{}`                                                                                                                                                  |
 | alertmanagerConfig.spec.receivers | List of receivers                                                                                                                                                                                | `[]`                                                                                                                                                  |
 | alertmanagerConfig.spec.inhibitRules | InhibitRule defines an inhibition rule that allows to mute alerts when other alerts are already firing                                                                                           | `[]`                                                                                                                                                  |
+
+### PrometheusRule Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | prometheusRule.enabled | Enable prometheusRule for this app                                                                                                                                                               | `false`                                                                                                                                               |
 | prometheusRule.additionalLabels | Kubernetes labels object, these additional labels will be added to PrometheusRule CRD                                                                                                            | `{}`                                                                                                                                                  |
 | prometheusRule.spec.groups | PrometheusRules in their groups to be added                                                                                                                                                      | `[]`                                                                                                                                                  |
+
+### SecretProviderClass Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | secretProviderClass.enabled | Enables Secret Provider Class Custom Resource                                                                                                                                                    | `false`                                                                                                                                               |
 | secretProviderClass.name | Name of Secret Provider Class Custom Resource                                                                                                                                                    | `""`                                                                                                                                                  |
 | secretProviderClass.provider | Provider of Secret Provider Class Custom Resource                                                                                                                                                | `""`                                                                                                                                                  |
@@ -174,23 +344,36 @@ To uninstall the chart:
 | secretProviderClass.roleName | Name of the role being referred to in vault                                                                                                                                                      | `""`                                                                                                                                                  |
 | secretProviderClass.objects | The object created from the secret in vault                                                                                                                                                      | `[]`                                                                                                                                                  |
 | secretProviderClass.secretObjects | This creates the kubernetes secret                                                                                                                                                               | `""`                                                                                                                                                  |
+### ExternalSecret Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | externalSecret.enabled | Enables External Secret Custom Resource                                                                                                                                                          | `false`                                                                                                                                               |
 | externalSecret.secretStore.name | Defines name of default SecretStore to use when fetching the secret data                                                                                                                         | `tenant-vault-secret-store`                                                                                                                           |
 | externalSecret.secretStore.kind | Defines kind as SecretStore or ClusterSecretStore                                                                                                                                                | `SecretStore`                                                                                                                                         |
 | externalSecret.refreshInterval | Amount of time before the values reading again from the SecretStore provider                                                                                                                     | `1m`                                                                                                                                                  |
 | externalSecret.files | Array of secret files with name and remote reference data contained in those files                                                                                                               | `[]`                                                                                                                                                  |
-| grafanaDashboard.enabled | Enables Grafana Dashboard                                                                                                                                                                        | `false`                                                                                                                                               |
-| grafanaDashboard.additionalLabels | Kubernetes labels object                                                                                                                                                                         | `{}`                                                                                                                                                  |
-| grafanaDashboard.annotations | Annotations for Grafana Dashboard                                                                                                                                                                | `{}`                                                                                                                                                  |
-| grafanaDashboard.contents.key | Used as name of Grafana Dashboard object                                                                                                                                                         | `""`                                                                                                                                                  |
-| grafanaDashboard.contents.key.json | json string used as content of Grafana Dashboard object                                                                                                                                          | `""`                                                                                                                                                  |
-| grafanaDashboard.contents.key.url| Url used to fetch dashboard content. According to GrafanaDashboard behavior, if both url and json are specified then the GrafanaDashboard content will be updated with fetched content from url | `""`                                                                                                                                                  |
-| networkPolicy.enabled | Enable NetworkPolicy                                                                                                                                                                            | `false`                                                                                                                                               |
-| networkPolicy.additionalLabels | Kubernetes labels object                                                                                                                                                                         | `{}`                                                                                                                                                  |
-| networkPolicy.annotations | Annotations for NetworkPolicy                                                                                                                                                                  | `{}`                                                                                                                                                  |
-| networkPolicy.ingress | Ingress ruels for NetworkPolicy                                                                                                                                                                  | `[]`                                                                                                                                                  |
-| networkPolicy.egress | egress rules for NetworkPolicy                                                                                                                                                                  | `[]`                                                                                                                                                  |
-                                                                                                                                                               | `false`                                                                                                                                               |
+
+### NetworkPolicy Paramaters
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
+| networkPolicy.enabled    | Enable NetworkPolicy                                                                         | `false`         |
+| networkPolicy.additionalLabels | Kubernetes labels object                                                               | `{}`            |
+| networkPolicy.annotations | Annotations for NetworkPolicy                                                               | `{}`            |
+| networkPolicy.ingress | Ingress ruels for NetworkPolicy                                                                 | `[]`            |
+| networkPolicy.egress | egress rules for NetworkPolicy                                                                   | `[]`            |
+
+### Grafana Dashboard Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
+| grafanaDashboard.enabled | Enables Grafana Dashboard                                                                    | `false`         |
+| grafanaDashboard.additionalLabels | Kubernetes labels object                                                            | `{}`            |
+| grafanaDashboard.annotations | Annotations for Grafana Dashboard                                                        | `{}`            |
+| grafanaDashboard.contents.key | Used as name of Grafana Dashboard object                                                | `""`            |
+| grafanaDashboard.contents.key.json | json string used as content of Grafana Dashboard object                            | `""`            |
+| grafanaDashboard.contents.key.url| Url used to fetch dashboard content. According to GrafanaDashboard behavior, if both url and json are specified then the GrafanaDashboard content will be updated with fetched content from url                                                    | `""`            |
+
 ### CronJob Parameters
 
 | Name                     | Description                                                                                  | Value           |
@@ -198,25 +381,46 @@ To uninstall the chart:
 | `cronJob.enabled`        | Enable cronjob in application chart                                                          | `""`            |
 | `cronJob.jobs`           | cronjobs spec                                                                                | {}              |
 
-job paramater for each cronjob object at `cronJob.jobs` 
+Job paramater for each cronjob object at `cronJob.jobs` 
 
 | Name                               | Description                                                                                  
 | -----------------------------------| -------------------------------------------------------------------------------------------- |
 | `<name>.schedule`                  | Schedule of cronjob                                                                          | 
 | `<name>.image.repository`          | Repository of container image of cronjob                                                     |
-| `<name>.image.tag`                 | tag of container image of cronjob                                                            |
-| `<name>.image.imagePullPolicy`     | imagePullPolicy of container image ofcronjob                                                                                                                           |
-| `<name>.command`                   | command of container of job                                                                  |
-| `<name>.args`                      | args of container of job                                                                     |
-| `<name>.resources`                 | resources of container of job                                                                |
+| `<name>.image.tag`                 | Tag of container image of cronjob                                                            |
+| `<name>.image.imagePullPolicy`     | ImagePullPolicy of container image ofcronjob                                                                                                                           |
+| `<name>.command`                   | Command of container of job                                                                  |
+| `<name>.args`                      | Args of container of job                                                                     |
+| `<name>.resources`                 | Resources of container of job                                                                |
 | `<name>.additionalLabels`          | Additional labels of cronjob                                                                 |
 | `<name>.annotations`               | Annotation of cronjob                                                                        |    
-| `<name>.successfulJobsHistoryLimit`| successful jobs historyLimit of cronjob                                                                           |    
-| `<name>.concurrencyPolicy`         | concurrencyPolicy of cronjob                                                                 |    
-| `<name>.failedJobsHistoryLimit`    | failedJobsHistoryLimit of cronjob                                                            |    
-| `<name>.volumeMounts`              | volume mounts  of cronjob                                                                    |  
-| `<name>.volumes`                    | volumes  of cronjob                                                                          | 
+| `<name>.successfulJobsHistoryLimit`| Successful jobs historyLimit of cronjob                                                                           |    
+| `<name>.concurrencyPolicy`         | ConcurrencyPolicy of cronjob                                                                 |    
+| `<name>.failedJobsHistoryLimit`    | FailedJobsHistoryLimit of cronjob                                                            |    
+| `<name>.volumeMounts`              | Volume mounts  of cronjob                                                                    |  
+| `<name>.volumes`                    | Volumes  of cronjob                                                                          | 
 | `<name>.nodeSelector`              | Node selector of cronjob                                                                     | 
-| `<name>.affinity`                  | affinity of cronjob                                                                          | 
-| `<name>.tolerations`               | tolerations of cronjob                                                                       | 
-| `<name>.restartPolicy`             | restartPOlicy of cronjob                                                                     | 
+| `<name>.affinity`                  | Affinity of cronjob                                                                          | 
+| `<name>.tolerations`               | Tolerations of cronjob                                                                       | 
+| `<name>.restartPolicy`             | RestartPolicy of cronjob                                                                     |
+| `<name>.imagePullSecrets`          | ImagePullSecrets of cronjob                                                                     |
+
+## Naming convention for ConfigMap, Secret, SealedSecret and ExternalSecret
+
+Name format of ConfigMap, Secret, SealedSecret and ExternalSecret is ```{{ template "application.name" $ }}-{{ $nameSuffix }}``` then:
+
+- ```{{ template "application.name" }}``` is a helper function that outputs ```.Values.applicationName``` if exist else return chart name as output
+- `nameSuffix` is the each key in ```secret.files```,```configMap.files```, ```sealedSecret.files``` and ```externalSecret.files```
+
+For example if we have following values file:
+
+```
+applicationName: helloworld # {{ template "application.name" $ }}
+
+configMap:
+  files:
+    config: # {{ $nameSuffix }}
+      key: value
+```
+
+then the configmap name will be ``helloworld-config``

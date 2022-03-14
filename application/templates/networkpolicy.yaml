@@ -18,7 +18,6 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: {{ template "application.name" . }}
 {{ include "application.labels.selector" . | indent 6 }}
 {{- if .Values.deployment.podLabels }}
 {{ toYaml .Values.deployment.podLabels | indent 6 }}

@@ -415,3 +415,50 @@ configMap:
 ```
 
 then the configmap name will be ``helloworld-config``
+
+
+## Consuming Environment Variable in application chart
+
+In order to use environment variable in deployment or cronjob, you will have to provide environment variable in *key/value* pair in `env` value. where key being environment variable key and value varies in different scenarios 
+
+- For simple key/value environment variable, just provide `value: <value>` 
+  ```
+   env:
+      KEY:
+        value: MY_VALUE
+  ```
+ - To get environment variable value from **Secret**
+   ```
+     env:
+        KEY:
+         valueFrom:
+          secretKeyRef:
+            name: mysecret
+            key: username
+   ``` 
+ - To get environement variable value from **ConfigMap**
+   ```
+   env:
+    KEY:
+     valueFrom:
+       configMapKeyRef:
+         name: application-cm
+         key: file-location
+   ```
+- To get all environment variables key/values from **ConfigMap**, where configmap key being key of environment variable and value being value
+   ```
+     envFrom:
+      production-cm:
+        type: configmap
+        nameSuffix: my-configmap
+   ```
+   you can either provide `nameSuffix` which means name added after prefix ```<applicationName>-``` or static name with ```name``` of configmap 
+
+ - To get environement variable value from **Secret**, where secret key being key of environment variable and value being value
+   ```
+   envFrom:
+     database-credentials:
+        type secret
+        name: postgres-database
+   ```
+   you can either provide `nameSuffix` which means name added after prefix ```<applicationName>-``` or static name with ```name``` of secret

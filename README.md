@@ -437,13 +437,25 @@ In order to use environment variable in deployment or cronjob, you will have to 
             key: username
    ``` 
  - To get environement variable value from **ConfigMap**
+  
+   Suppose we have configmap created from applicaion chart
+   
+   ```
+   applicationName: my-application
+   configMap:
+     files:
+        application-config:
+             LOG: DEBUG
+             VERBOSE: v1
+   ```
+   if we want to consume environment variable from above created configmap, we will need to add following
    ```
    env:
-    KEY:
+    APP_LOG_LEVEL:
      valueFrom:
        configMapKeyRef:
-         name: application-cm
-         key: file-location
+         name: my-application-appication-config
+         key: LOG
    ```
 - To get all environment variables key/values from **ConfigMap**, where configmap key being key of environment variable and value being value
    ```

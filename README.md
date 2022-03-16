@@ -427,15 +427,7 @@ In order to use environment variable in deployment or cronjob, you will have to 
       KEY:
         value: MY_VALUE
   ```
- - To get environment variable value from **Secret**
-   ```
-     env:
-        KEY:
-         valueFrom:
-          secretKeyRef:
-            name: mysecret
-            key: username
-   ``` 
+
  - To get environement variable value from **ConfigMap**
   
    Suppose we have configmap created from applicaion chart
@@ -443,12 +435,13 @@ In order to use environment variable in deployment or cronjob, you will have to 
    ```
    applicationName: my-application
    configMap:
+     enabled: true
      files:
-        application-config:
-             LOG: DEBUG
-             VERBOSE: v1
+       application-config:
+         LOG: DEBUG
+         VERBOSE: v1
    ```
-   if we want to consume environment variable from above created configmap, we will need to add following
+   To get environment variable value from above created configmap, we will need to add following
    ```
    env:
     APP_LOG_LEVEL:
@@ -457,20 +450,46 @@ In order to use environment variable in deployment or cronjob, you will have to 
          name: my-application-appication-config
          key: LOG
    ```
-- To get all environment variables key/values from **ConfigMap**, where configmap key being key of environment variable and value being value
+   To get all environment variables key/values from **ConfigMap**, where configmap key being key of environment variable and value being value
    ```
      envFrom:
-      production-cm:
+      application-config-env:
         type: configmap
-        nameSuffix: my-configmap
+        nameSuffix: application-config
    ```
-   you can either provide `nameSuffix` which means name added after prefix ```<applicationName>-``` or static name with ```name``` of configmap 
+   you can either provide `nameSuffix` which means name added after prefix ```<applicationName>-``` or static name with ```name``` of configmap.
 
- - To get environement variable value from **Secret**, where secret key being key of environment variable and value being value
+- To get environment variable value from **Secret**
+   
+   Suppose we have secret created from application chart
+   
+   ```
+    applicationName: my-application
+    secret:
+      enabled: true
+      files:
+         db-credentials:
+           PASSWORD: skljd#2Qer!!
+           USER: postgres
+   ```
+   To get environment variable value from above created secret, we will need to add following
+   ```
+     env:
+        KEY:
+         valueFrom:
+          secretKeyRef:
+            name: my-application-db-credentials
+            key: USER
+   ``` 
+
+   To get environement variable value from **Secret**, where secret key being key of environment variable and value being value
    ```
    envFrom:
      database-credentials:
-        type secret
-        name: postgres-database
+        type: secret
+        nameSuffix: db-credentials
    ```
    you can either provide `nameSuffix` which means name added after prefix ```<applicationName>-``` or static name with ```name``` of secret
+
+   **Note:** first key after ``envFrom`` is just used to uniquely identify different objects in ``envFrom`` block. Make sure to keep it unique and relevant 
+ 

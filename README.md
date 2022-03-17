@@ -141,13 +141,20 @@ To uninstall the chart:
 | deployment.openshiftOAuthProxy.port | Application port so proxy should forward to this port                             | `8080`          |
 | deployment.openshiftOAuthProxy.secretName | Secret name containing the TLS cert                                         | `openshift-oauth-proxy-tls`|
 
-### PodDisruptionBudget Paramaters
+### Deployment Dns Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
+| deployment.dnsConfig | Enable pod disruption budget | `{}` |
+
+### dnsconfig Paramaters
 
 | Name                     | Description                                                                                  | Value           |
 | ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | pdb.enabled | Enable pod disruption budget | `false` |
 | pdb.minAvailable | The number of pods that must be available after the eviction. If both minAvailable and maxUnavailable is set, minAvailable is preferred | `1`|
 | pdb.maxUnavailable | The number of pods that can be unavailable after the eviction. Either minAvailable or maxUnavailable needs to be provided | `` |
+
 
 ### Persistence Paramaters
 

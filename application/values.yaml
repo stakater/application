@@ -164,7 +164,10 @@ deployment:
     repository: repository/image-name
     tag: v1.0.0
     pullPolicy: IfNotPresent
-
+  dnsConfig:
+    # options:
+    # - name: ndots
+    #   value: '1'
   # Readiness and Liveness probes
   probes:
     readinessProbe:

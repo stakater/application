@@ -363,6 +363,15 @@ Stakater [IngressMonitorController](https://github.com/stakater/IngressMonitorCo
 | externalSecret.refreshInterval | Amount of time before the values reading again from the SecretStore provider                                                                                                                     | `1m`                                                                                                                                                  |
 | externalSecret.files | Array of secret files with name and remote reference data contained in those files                                                                                                               | `[]`                                                                                                                                                  |
 
+### NetworkPolicy Paramaters
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
+| networkPolicy.enabled    | Enable NetworkPolicy                                                                         | `false`         |
+| networkPolicy.additionalLabels | Kubernetes labels object                                                               | `{}`            |
+| networkPolicy.annotations | Annotations for NetworkPolicy                                                               | `{}`            |
+| networkPolicy.ingress | Ingress ruels for NetworkPolicy                                                                 | `[]`            |
+| networkPolicy.egress | egress rules for NetworkPolicy                                                                   | `[]`            |
+
 ### Grafana Dashboard Paramaters
 
 | Name                     | Description                                                                                  | Value           |

@@ -325,7 +325,8 @@ route:
   
   # If no host is added then openshift inserts the default hostname. To Add host explicitly, use host attribute
   host:
-
+  
+  path: 
   # Port of the service that serves pods
   port:
     targetPort: http

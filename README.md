@@ -197,6 +197,8 @@ To uninstall the chart:
 | route.tls.termination | TLS termination strategy                                                                                                                                                                         | `edge`                                                                                                                                                |
 | route.tls.insecureEdgeTerminationPolicy | TLS termination policy for insecure traffic                                                                                                                                                      | `Redirect`                                                                                                                                            |
 
+| route.path | path of route traffic                                                                                                                                                      | ``  
+
 ### Forecastle Paramaters
 
 Stakater [Forecastle](https://github.com/stakater/Forecastle) parameters

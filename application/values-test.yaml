@@ -8,7 +8,10 @@ labels:
   group: com.stakater.platform
   team: stakater
 deployment:
-  
+  dnsConfig:
+    options:
+    - name: ndots
+      value: '1'
   # By default deploymentStrategy is set to rollingUpdate with maxSurge of 25% and maxUnavailable of 25%
   # You can change type to `Recreate` or can uncomment `rollingUpdate` specification and adjust them to your usage.
   strategy:

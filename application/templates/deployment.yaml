@@ -193,6 +193,10 @@ spec:
       securityContext:      
 {{ toYaml .Values.deployment.securityContext | indent 8 }}
           {{- end }}
+      {{- if .Values.deployment.dnsConfig }}
+      dnsConfig:      
+{{ toYaml .Values.deployment.dnsConfig | indent 8 }}
+          {{- end }}
       {{- if or (.Values.deployment.openshiftOAuthProxy.enabled) (.Values.deployment.volumes) (and (eq .Values.persistence.enabled true) (eq .Values.persistence.mountPVC true) )}} 
       volumes:
         {{- if .Values.deployment.openshiftOAuthProxy.enabled }}

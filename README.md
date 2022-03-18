@@ -204,6 +204,8 @@ To uninstall the chart:
 | route.tls.termination | TLS termination strategy                                                                                                                                                                         | `edge`                                                                                                                                                |
 | route.tls.insecureEdgeTerminationPolicy | TLS termination policy for insecure traffic                                                                                                                                                      | `Redirect`                                                                                                                                            |
 
+| route.path | path of route traffic                                                                                                                                                      | ``  
+
 ### Forecastle Paramaters
 
 Stakater [Forecastle](https://github.com/stakater/Forecastle) parameters
@@ -423,3 +425,81 @@ configMap:
 
 then the configmap name will be ``helloworld-config``
 
+
+
+## Consuming environment variable in application chart
+
+In order to use environment variable in deployment or cronjob, you will have to provide environment variable in *key/value* pair in `env` value. where key being environment variable key and value varies in different scenarios 
+
+- For simple key/value environment variable, just provide `value: <value>` 
+  ```
+   env:
+      KEY:
+        value: MY_VALUE
+  ```
+
+ - To get environement variable value from **ConfigMap**
+  
+   Suppose we have configmap created from applicaion chart
+   
+   ```
+   applicationName: my-application
+   configMap:
+     enabled: true
+     files:
+       application-config:
+         LOG: DEBUG
+         VERBOSE: v1
+   ```
+   To get environment variable value from above created configmap, we will need to add following
+   ```
+   env:
+    APP_LOG_LEVEL:
+     valueFrom:
+       configMapKeyRef:
+         name: my-application-appication-config
+         key: LOG
+   ```
+   To get all environment variables key/values from **ConfigMap**, where configmap key being key of environment variable and value being value
+   ```
+     envFrom:
+      application-config-env:
+        type: configmap
+        nameSuffix: application-config
+   ```
+   you can either provide `nameSuffix` which means name added after prefix ```<applicationName>-``` or static name with ```name``` of configmap.
+
+- To get environment variable value from **Secret**
+   
+   Suppose we have secret created from application chart
+   
+   ```
+    applicationName: my-application
+    secret:
+      enabled: true
+      files:
+         db-credentials:
+           PASSWORD: skljd#2Qer!!
+           USER: postgres
+   ```
+   To get environment variable value from above created secret, we will need to add following
+   ```
+     env:
+        KEY:
+         valueFrom:
+          secretKeyRef:
+            name: my-application-db-credentials
+            key: USER
+   ``` 
+
+   To get environement variable value from **Secret**, where secret key being key of environment variable and value being value
+   ```
+   envFrom:
+     database-credentials:
+        type: secret
+        nameSuffix: db-credentials
+   ```
+   you can either provide `nameSuffix` which means name added after prefix ```<applicationName>-``` or static name with ```name``` of secret
+
+   **Note:** first key after ``envFrom`` is just used to uniquely identify different objects in ``envFrom`` block. Make sure to keep it unique and relevant 
+ 

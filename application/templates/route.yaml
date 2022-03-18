@@ -19,13 +19,15 @@ spec:
 {{- if .Values.route.host }}
   host: {{ .Values.route.host }}
 {{- end }}
+{{- if .Values.route.path }}
+  path: {{ .Values.route.path }}
+{{- end }}
   port:
     {{- if .Values.deployment.openshiftOAuthProxy.enabled }}
     targetPort: proxy
     {{- else }}
 {{ toYaml .Values.route.port | indent 4 }}
     {{- end }}
-
   to:
     kind: Service
     name: {{ template "application.name" . }}

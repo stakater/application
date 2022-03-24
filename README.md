@@ -512,3 +512,10 @@ In order to use environment variable in deployment or cronjob, you will have to 
 
    **Note:** first key after ``envFrom`` is just used to uniquely identify different objects in ``envFrom`` block. Make sure to keep it unique and relevant 
  
+# Changelog
+
+All notable changes to this project will be documented here
+
+## v1.1.8
+- Fix: add an application name prefix in the external secret name.
+  

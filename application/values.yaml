@@ -397,7 +397,7 @@ forecastle:
 # Role Based Access Control (RBAC)
 ##########################################################
 rbac:
-  enabled: false
+  enabled: true
 
   # Service Account to use by pods
   serviceAccount:

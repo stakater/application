@@ -170,27 +170,21 @@ deployment:
     #   value: '1'
   # Readiness and Liveness probes
   probes:
-    # readinessProbe:
-    #   enabled: false
-    #   failureThreshold: 3
-    #   periodSeconds: 10
-    #   successThreshold: 1
-    #   timeoutSeconds: 1
-    #   initialDelaySeconds: 10
-    #   exec:
-    #     command:
-    #     - cat
-    #     - /tmp/healthy
-    # livenessProbe:
-    #   enabled: false
-    #   failureThreshold: 3
-    #   periodSeconds: 10
-    #   successThreshold: 1
-    #   timeoutSeconds: 1
-    #   initialDelaySeconds: 10
-    #   httpGet:
-    #     path: /path
-    #     port: 8080
+    readinessProbe:
+      enabled: true
+      failureThreshold: 3
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+      initialDelaySeconds: 10
+
+    livenessProbe:
+      enabled: true
+      failureThreshold: 3
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+      initialDelaySeconds: 10
 
   # Resources to be defined for pod
   resources: 

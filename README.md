@@ -109,6 +109,7 @@ To uninstall the chart:
 
 ```
     readinessProbe:
+      enabled: true
       failureThreshold: 3
       periodSeconds: 10
       successThreshold: 1
@@ -123,14 +124,16 @@ To uninstall the chart:
 
 ```
     livenessProbe:
+      enabled: true
       failureThreshold: 3
       periodSeconds: 10
       successThreshold: 1
       timeoutSeconds: 1
       initialDelaySeconds: 10
-      httpGet:
-        path: /path
-        port: 8080
+      exec:
+        command:
+        - cat
+        - /tmp/healthy
 ```
 
 #### Deployment OpenshiftOAuthProxy Paramaters

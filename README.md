@@ -102,8 +102,14 @@ To uninstall the chart:
 
 | Name                     | Description                                                                                  | Value           |
 | ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
-| deployment.probes.readinessProbe | The readiness probe                                                                  | See below       |
-| deployment.probes.livenessProbe| The livenessness probe                                                                 | See below       |
+| deployment.probes.readinessProbe | The readiness probe                                                                  |  See below      |
+| deployment.probes.readinessProbe.enabled | Enabled readiness probe                                                                  | true       |
+| deployment.probes.readinessProbe.failureThreshold | When a probe fails, Kubernetes will try failureThreshold times before giving up.                                                                  | 3      |
+| deployment.probes.readinessProbe.periodSeconds | Perform probe  everytime after specified periodSeconds                                                                  | 10       |
+| deployment.probes.readinessProbe.successThreshold | Minimum consecutive successes for the probe to be considered successful after having failed.                                                                  | 1       |
+| deployment.probes.readinessProbe.timeoutSeconds | Number of seconds after which the probe times out.                                                                  | 1       |
+| deployment.probes.readinessProbe.initialDelaySeconds | Number of seconds after the container has started before liveness or readiness probes are initiated.                                                                  | 10       |
+| deployment.probes.readinessProbe.httpGet | Describes an action based on HTTP Get requests                                                                  | See below       |
 
 ##### Readiness Probe
 
@@ -121,6 +127,17 @@ To uninstall the chart:
 ```
 
 ##### Liveness Probe
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
+| deployment.probes.livenessProbe| The livenessness probe                                                                 | See below       |
+| deployment.probes.livenessProbe.enabled | Enabled readiness probe                                                                  | true       |
+| deployment.probes.livenessProbe.failureThreshold | When a probe fails, Kubernetes will try failureThreshold times before giving up.                                                                  | 3      |
+| deployment.probes.livenessProbe.periodSeconds | Perform probe  everytime after specified periodSeconds                                                                  | 10       |
+| deployment.probes.livenessProbe.successThreshold | Minimum consecutive successes for the probe to be considered successful after having failed.                                                                  | 1       |
+| deployment.probes.livenessProbe.timeoutSeconds | Number of seconds after which the probe times out.                                                                  | 1       |
+| deployment.probes.livenessProbe.initialDelaySeconds | Number of seconds after the container has started before liveness or readiness probes are initiated.                                                                  | 10       |
+| deployment.probes.livenessProbe.exec | Kubelet executes the command to perform the probe                                                                  | See below       |
 
 ```
     livenessProbe:

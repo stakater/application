@@ -177,6 +177,10 @@ deployment:
       successThreshold: 1
       timeoutSeconds: 1
       initialDelaySeconds: 10
+      httpGet:
+        path: /path
+        port: 8080
+
 
     livenessProbe:
       enabled: true

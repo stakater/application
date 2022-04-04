@@ -155,7 +155,7 @@ To uninstall the chart:
 ```
 ### Configuring probes
 
-In order to use probes in deployment, set enable to `true`. onfigure handler type to either `httpGet` or `exec`. You can only use one handler in one probe. `httpGet` is enabled by default, other possible handler is `exec`, whose configuration is specified as below:
+Configure handler type to either `httpGet` or `exec`. You can only use one handler in one probe. `httpGet` is enabled by default - and you can change values of `path` and `port` per need. Other possible handler is `exec`, whose configuration is specified as below. You can configure `command` in `exec` per need as well. 
 
   ```
    exec:
@@ -163,6 +163,8 @@ In order to use probes in deployment, set enable to `true`. onfigure handler typ
         - cat
         -/tmp/healthy
   ```
+
+
 
 #### Deployment OpenshiftOAuthProxy Paramaters
 

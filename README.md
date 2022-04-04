@@ -100,6 +100,8 @@ To uninstall the chart:
 
 #### Deployment Probes Paramaters
 
+##### Readiness Probe
+
 | Name                     | Description                                                                                  | Value           |
 | ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | deployment.probes.readinessProbe.enabled | Enabled readiness probe                                                                  | true       |
@@ -110,22 +112,6 @@ To uninstall the chart:
 | deployment.probes.readinessProbe.initialDelaySeconds | Number of seconds after the container has started before liveness or readiness probes are initiated.                                                                  | 10       |
 | deployment.probes.readinessProbe.httpGet | Describes an action based on HTTP Get requests                                                                  |   path: '/path' port: 8080     |
 | deployment.probes.readinessProbe.exec | Kubelet executes the specified command to perform the probe                                                                  |   {}   |
-
-##### Readiness Probe
-
-```
-    readinessProbe:
-      enabled: true
-      failureThreshold: 3
-      periodSeconds: 10
-      successThreshold: 1
-      timeoutSeconds: 1
-      initialDelaySeconds: 10
-      httpGet:
-        path: /path
-        port: 8080
-      exec: {}
-```
 
 ##### Liveness Probe
 
@@ -139,32 +125,6 @@ To uninstall the chart:
 | deployment.probes.livenessProbe.initialDelaySeconds | Number of seconds after the container has started before liveness or readiness probes are initiated.                                                                  | 10       |
 | deployment.probes.livenessProbe.httpGet | Describes an action based on HTTP Get requests                                                                  |   path: '/path' port: 8080     |
 | deployment.probes.livenessProbe.exec | Kubelet executes the specified command to perform the probe                                                                  | {}      |
-
-```
-    livenessProbe:
-      enabled: true
-      failureThreshold: 3
-      periodSeconds: 10
-      successThreshold: 1
-      timeoutSeconds: 1
-      initialDelaySeconds: 10
-      httpGet:
-        path: /path
-        port: 8080
-      exec: {}
-```
-### Configuring probes
-
-Configure handler type to either `httpGet` or `exec`. You can only use one handler in one probe. `httpGet` is enabled by default - and you can change values of `path` and `port` per need. Other possible handler is `exec`, whose configuration is specified as below. You can configure `command` in `exec` per need as well. 
-
-  ```
-   exec:
-      command:
-        - cat
-        -/tmp/healthy
-  ```
-
-
 
 #### Deployment OpenshiftOAuthProxy Paramaters
 
@@ -544,11 +504,44 @@ In order to use environment variable in deployment or cronjob, you will have to 
    you can either provide `nameSuffix` which means name added after prefix ```<applicationName>-``` or static name with ```name``` of secret
 
    **Note:** first key after ``envFrom`` is just used to uniquely identify different objects in ``envFrom`` block. Make sure to keep it unique and relevant 
+
+
+### Configuring probes
+
+By default probe handler type is `httpGet`. You just need to override `port` and `path` as per your need.
+
+```
+  livenessProbe:
+    httpGet:
+      path: '/path'
+      port: 8080
+```
+
+
+In order to use `exec` handler, you can define field `livenessProbe.exec` in your values.yaml.
+
+```
+  livenessProbe:
+    exec:
+      command:
+        - cat
+        -/tmp/healthy
+```
+
+To disable liveness or readiness probe, set value of `enabled:` to `false`.
+```
+  livenessProbe:
+    enabled: false
+```
+
+
  
 # Changelog
 
 All notable changes to this project will be documented here
 
+## v1.1.9
+- Feature: add functionality to disable liveness and readiness probes.
+- Feature: support `exec` handler type in probes 
 ## v1.1.8
-- Fix: add an application name prefix in the external secret name.
-  
+- Fix: add an application name prefix in the external secret name.  

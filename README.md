@@ -131,7 +131,7 @@ To uninstall the chart:
 
 | Name                     | Description                                                                                  | Value           |
 | ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
-| deployment.probes.livenessProbe.enabled | Enabled readiness probe                                                                  | true       |
+| deployment.probes.livenessProbe.enabled | Enabled livenessProbe probe                                                                  | true       |
 | deployment.probes.livenessProbe.failureThreshold | When a probe fails, Kubernetes will try failureThreshold times before giving up.                                                                  | 3      |
 | deployment.probes.livenessProbe.periodSeconds | Perform probe  everytime after specified periodSeconds                                                                  | 10       |
 | deployment.probes.livenessProbe.successThreshold | Minimum consecutive successes for the probe to be considered successful after having failed.                                                                  | 1       |
@@ -155,7 +155,7 @@ To uninstall the chart:
 ```
 ### Configuring probes
 
-In order to use probes in deployment, set enable to `true`. After configuring `failureThreshold`, `periodSeconds`, `successThreshold`, `timeoutSeconds`, `initialDelaySeconds`, configure handler type to either `httpGet` or `exec`. You can only use one handler in one probe. `httpGet` is enabled by default, other possible handler is `exec`, whose configuration is specified as below:
+In order to use probes in deployment, set enable to `true`. onfigure handler type to either `httpGet` or `exec`. You can only use one handler in one probe. `httpGet` is enabled by default, other possible handler is `exec`, whose configuration is specified as below:
 
   ```
    exec:

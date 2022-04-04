@@ -177,10 +177,10 @@ deployment:
       successThreshold: 1
       timeoutSeconds: 1
       initialDelaySeconds: 10
-      httpGet:
-        path: /path
+      httpGet: 
+        path: '/path'
         port: 8080
-
+      exec: {}
 
     livenessProbe:
       enabled: true
@@ -189,7 +189,11 @@ deployment:
       successThreshold: 1
       timeoutSeconds: 1
       initialDelaySeconds: 10
-
+      httpGet: 
+        path: '/path'
+        port: 8080
+      exec: {}
+      
   # Resources to be defined for pod
   resources: 
     limits:

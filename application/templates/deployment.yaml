@@ -169,12 +169,12 @@ spec:
           successThreshold: {{ .Values.deployment.probes.livenessProbe.successThreshold }}
           timeoutSeconds: {{ .Values.deployment.probes.livenessProbe.timeoutSeconds }}
           initialDelaySeconds: {{ .Values.deployment.probes.livenessProbe.initialDelaySeconds }}
-          {{- if .Values.deployment.probes.livenessProbe.httpGet }}
-          httpGet:
-            {{- toYaml .Values.deployment.probes.livenessProbe.httpGet | nindent 12 }}
-          {{- else if .Values.deployment.probes.livenessProbe.exec }}
+          {{- if .Values.deployment.probes.livenessProbe.exec }}
           exec:
             {{- toYaml .Values.deployment.probes.livenessProbe.exec | nindent 12 }}
+          {{- else if .Values.deployment.probes.livenessProbe.httpGet }}
+          httpGet:
+            {{- toYaml .Values.deployment.probes.livenessProbe.httpGet | nindent 12 }}
           {{- end }}
         {{- end }}
         {{- if .Values.deployment.probes.readinessProbe.enabled }} 
@@ -184,12 +184,12 @@ spec:
           successThreshold: {{ .Values.deployment.probes.readinessProbe.successThreshold }}
           timeoutSeconds: {{ .Values.deployment.probes.readinessProbe.timeoutSeconds }}
           initialDelaySeconds: {{ .Values.deployment.probes.readinessProbe.initialDelaySeconds }}
-          {{- if .Values.deployment.probes.readinessProbe.httpGet }}
-          httpGet:
-            {{- toYaml .Values.deployment.probes.readinessProbe.httpGet | nindent 12 }}
-          {{- else if .Values.deployment.probes.readinessProbe.exec }}
+          {{- if .Values.deployment.probes.readinessProbe.exec }}
           exec:
             {{- toYaml .Values.deployment.probes.readinessProbe.exec | nindent 12 }}
+          {{- else if .Values.deployment.probes.readinessProbe.httpGet }}
+          httpGet:
+            {{- toYaml .Values.deployment.probes.readinessProbe.httpGet | nindent 12 }}
           {{- end }}
         {{- end }}
       {{- if or (.Values.deployment.volumeMounts) (and (eq .Values.persistence.enabled true) (eq .Values.persistence.mountPVC true) )}} 

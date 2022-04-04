@@ -525,7 +525,7 @@ In order to use `exec` handler, you can define field `livenessProbe.exec` in you
     exec:
       command:
         - cat
-        -/tmp/healthy
+        - /tmp/healthy
 ```
 
 To disable liveness or readiness probe, set value of `enabled:` to `false`.

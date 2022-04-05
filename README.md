@@ -542,6 +542,8 @@ To disable liveness or readiness probe, set value of `enabled:` to `false`.
 
 All notable changes to this project will be documented here
 
+## v1.2.0
+- Fix: remove network policy default value
 ## v1.1.9
 - Feature: add functionality to disable liveness and readiness probes.
 - Feature: support `exec` handler type in liveness and readiness probes 

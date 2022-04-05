@@ -100,38 +100,31 @@ To uninstall the chart:
 
 #### Deployment Probes Paramaters
 
-| Name                     | Description                                                                                  | Value           |
-| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
-| deployment.probes.readinessProbe | The readiness probe                                                                  | See below       |
-| deployment.probes.livenessProbe| The livenessness probe                                                                 | See below       |
-
 ##### Readiness Probe
 
-```
-    readinessProbe:
-      failureThreshold: 3
-      periodSeconds: 10
-      successThreshold: 1
-      timeoutSeconds: 1
-      initialDelaySeconds: 10
-      httpGet:
-        path: /path
-        port: 8080
-```
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
+| deployment.readinessProbe.enabled | Enabled readiness probe                                                                  | true       |
+| deployment.readinessProbe.failureThreshold | When a probe fails, Kubernetes will try failureThreshold times before giving up.                                                                  | 3      |
+| deployment.readinessProbe.periodSeconds | Perform probe  everytime after specified periodSeconds                                                                  | 10       |
+| deployment.readinessProbe.successThreshold | Minimum consecutive successes for the probe to be considered successful after having failed.                                                                  | 1       |
+| deployment.readinessProbe.timeoutSeconds | Number of seconds after which the probe times out.                                                                  | 1       |
+| deployment.readinessProbe.initialDelaySeconds | Number of seconds after the container has started before liveness or readiness probes are initiated.                                                                  | 10       |
+| deployment.readinessProbe.httpGet | Describes an action based on HTTP Get requests                                                                  |   path: '/path' port: 8080     |
+| deployment.readinessProbe.exec | Kubelet executes the specified command to perform the probe                                                                  |   {}   |
 
 ##### Liveness Probe
 
-```
-    livenessProbe:
-      failureThreshold: 3
-      periodSeconds: 10
-      successThreshold: 1
-      timeoutSeconds: 1
-      initialDelaySeconds: 10
-      httpGet:
-        path: /path
-        port: 8080
-```
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
+| deployment.livenessProbe.enabled | Enabled livenessProbe probe                                                                  | true       |
+| deployment.livenessProbe.failureThreshold | When a probe fails, Kubernetes will try failureThreshold times before giving up.                                                                  | 3      |
+| deployment.livenessProbe.periodSeconds | Perform probe  everytime after specified periodSeconds                                                                  | 10       |
+| deployment.livenessProbe.successThreshold | Minimum consecutive successes for the probe to be considered successful after having failed.                                                                  | 1       |
+| deployment.livenessProbe.timeoutSeconds | Number of seconds after which the probe times out.                                                                  | 1       |
+| deployment.livenessProbe.initialDelaySeconds | Number of seconds after the container has started before liveness or readiness probes are initiated.                                                                  | 10       |
+| deployment.livenessProbe.httpGet | Describes an action based on HTTP Get requests                                                                  |   path: '/path' port: 8080     |
+| deployment.livenessProbe.exec | Kubelet executes the specified command to perform the probe                                                                  | {}      |
 
 #### Deployment OpenshiftOAuthProxy Paramaters
 
@@ -511,11 +504,47 @@ In order to use environment variable in deployment or cronjob, you will have to 
    you can either provide `nameSuffix` which means name added after prefix ```<applicationName>-``` or static name with ```name``` of secret
 
    **Note:** first key after ``envFrom`` is just used to uniquely identify different objects in ``envFrom`` block. Make sure to keep it unique and relevant 
+
+
+### Configuring probes
+
+By default probe handler type is `httpGet`. You just need to override `port` and `path` as per your need.
+
+```
+  livenessProbe:
+    enabled: true
+    httpGet:
+      path: '/path'
+      port: 8080
+```
+
+
+In order to use `exec` handler, you can define field `livenessProbe.exec` in your values.yaml.
+
+```
+  livenessProbe:
+    enabled: true
+    exec:
+      command:
+        - cat
+        - /tmp/healthy
+```
+
+To disable liveness or readiness probe, set value of `enabled:` to `false`.
+```
+  livenessProbe:
+    enabled: false
+```
+
+
  
 # Changelog
 
 All notable changes to this project will be documented here
 
+## v1.1.9
+- Feature: add functionality to disable liveness and readiness probes.
+- Feature: support `exec` handler type in liveness and readiness probes 
+- Feature: support for setting individual values for probe configuration is added.
 ## v1.1.8
-- Fix: add an application name prefix in the external secret name.
-  
+- Fix: add an application name prefix in the external secret name.  

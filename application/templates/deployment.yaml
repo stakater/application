@@ -162,10 +162,36 @@ spec:
 {{ include "application.tplvalues.render" ( dict "value" $value "context" $ ) | indent 10 }}
         {{- end }}
         {{- end }}
+        {{- if .Values.deployment.livenessProbe.enabled }} 
         livenessProbe:
-{{ toYaml .Values.deployment.probes.livenessProbe | indent 10 }}
+          failureThreshold: {{ .Values.deployment.livenessProbe.failureThreshold }}
+          periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
+          successThreshold: {{ .Values.deployment.livenessProbe.successThreshold }}
+          timeoutSeconds: {{ .Values.deployment.livenessProbe.timeoutSeconds }}
+          initialDelaySeconds: {{ .Values.deployment.livenessProbe.initialDelaySeconds }}
+          {{- if .Values.deployment.livenessProbe.exec }}
+          exec:
+            {{- toYaml .Values.deployment.livenessProbe.exec | nindent 12 }}
+          {{- else if .Values.deployment.livenessProbe.httpGet }}
+          httpGet:
+            {{- toYaml .Values.deployment.livenessProbe.httpGet | nindent 12 }}
+          {{- end }}
+        {{- end }}
+        {{- if .Values.deployment.readinessProbe.enabled }} 
         readinessProbe:
-{{ toYaml .Values.deployment.probes.readinessProbe | indent 10 }}
+          failureThreshold: {{ .Values.deployment.readinessProbe.failureThreshold }}
+          periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds }}
+          successThreshold: {{ .Values.deployment.readinessProbe.successThreshold }}
+          timeoutSeconds: {{ .Values.deployment.readinessProbe.timeoutSeconds }}
+          initialDelaySeconds: {{ .Values.deployment.readinessProbe.initialDelaySeconds }}
+          {{- if .Values.deployment.readinessProbe.exec }}
+          exec:
+            {{- toYaml .Values.deployment.readinessProbe.exec | nindent 12 }}
+          {{- else if .Values.deployment.readinessProbe.httpGet }}
+          httpGet:
+            {{- toYaml .Values.deployment.readinessProbe.httpGet | nindent 12 }}
+          {{- end }}
+        {{- end }}
       {{- if or (.Values.deployment.volumeMounts) (and (eq .Values.persistence.enabled true) (eq .Values.persistence.mountPVC true) )}} 
         volumeMounts:
         {{- if (eq .Values.persistence.mountPVC true) }}
@@ -222,4 +248,4 @@ spec:
       serviceAccountName: {{ template "application.name" . }}
       {{- end }}
 {{- end }}   
-{{- end }}        
+{{- end }}

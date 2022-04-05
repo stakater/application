@@ -280,8 +280,11 @@ Stakater [IngressMonitorController](https://github.com/stakater/IngressMonitorCo
 | ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | sealedSecret.enabled | Enable sealed secret                                                                                                                                                                             | `false`                                                                                                                                               |
 | sealedSecret.additionalLabels | Labels for sealed secret                                                                                                                                                                         | `{}`                                                                                                                                                  |
-| sealedSecret.annotations | Annotations for sealed secret                                                                                                                                                                    | `{}`                                                                                                                                                  |
+| sealedSecret.annotations | Annotation that applies to all sealed secrets created under `files`                                                                                                                                                                    | `{}`                                                                                                                                                  |
 | sealedSecret.files | Map of secret files with name and encrypted data contained in those files                                                                                                                        | `{}`                                                                                                                                                  |
+| sealedSecret.files.[name].annotations | Annotation that applies to the secret created through sealed secret                                                                                                                        | `{}`                                                                                                                                                  |
+| sealedSecret.files.[name].type | Type of secret created through sealed secret                                                                                                                        | `Opaque`                                                                                                                                                  |
+| sealedSecret.files.[name].clusterWide | When set to true, adds annotation `sealedsecrets.bitnami.com/cluster-wide: true` to the secret created through sealed secret, setting the scope of the secret to cluster wide.                                                                                                                       | `false`                                                                                                                                                  |
 
 ### Cert-manager Certificate Paramaters
 
@@ -541,7 +544,10 @@ To disable liveness or readiness probe, set value of `enabled:` to `false`.
 # Changelog
 
 All notable changes to this project will be documented here
-
+## v1.1.10
+- Feature: add functionality to set `type` in sealed secrets
+- Feature: add functionality for adding annotation for `cluster-wide` in sealed secrets
+- Feature: add functionality to allow `annotations` to each sealed secret separately
 ## v1.1.9
 - Feature: add functionality to disable liveness and readiness probes.
 - Feature: support `exec` handler type in liveness and readiness probes 

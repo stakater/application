@@ -512,6 +512,7 @@ By default probe handler type is `httpGet`. You just need to override `port` and
 
 ```
   livenessProbe:
+    enabled: true
     httpGet:
       path: '/path'
       port: 8080
@@ -522,6 +523,7 @@ In order to use `exec` handler, you can define field `livenessProbe.exec` in you
 
 ```
   livenessProbe:
+    enabled: true
     exec:
       command:
         - cat

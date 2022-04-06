@@ -711,11 +711,11 @@ externalSecret:
 ##########################################################
 networkPolicy: 
   enabled: false
-  # additionalLabels:
+  additionalLabels:
   #   key: value
-  # annotations:
+  annotations:
   #   key: value
-  # ingress:
+  ingress:
   # - from:
   #   - ipBlock:
   #       cidr: 172.17.0.0/16
@@ -730,7 +730,7 @@ networkPolicy:
   #   ports:
   #   - protocol: TCP
   #     port: 6379
-  # egress:
+  egress:
   #   - to:
   #     - ipBlock:
   #         cidr: 10.0.0.0/24

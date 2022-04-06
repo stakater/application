@@ -542,7 +542,7 @@ To disable liveness or readiness probe, set value of `enabled:` to `false`.
 
 All notable changes to this project will be documented here
 
-## v1.2.0
+## v1.1.11
 - Fix: remove network policy default value
 ## v1.1.9
 - Feature: add functionality to disable liveness and readiness probes.

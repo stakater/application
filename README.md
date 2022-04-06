@@ -546,9 +546,10 @@ To disable liveness or readiness probe, set value of `enabled:` to `false`.
 
 All notable changes to this project will be documented here
 
+## v1.1.12
+- Feature: replica field is made optional
 ## v1.1.11
 - Fix: remove network policy default value
-- Feature: replica field is made optional
 ## v1.1.10
 - Feature: add functionality to set `type` in sealed secrets
 - Feature: add functionality for adding annotation for `cluster-wide` in sealed secrets

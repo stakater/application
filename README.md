@@ -37,7 +37,7 @@ To uninstall the chart:
 | deployment.podLabels | Additional label added on pod which is used in Service's Label Selector                          | {}              |
 | deployment.annotations | Annotations on deployments                                                                     | `{}`            |
 | deployment.additionalPodAnnotation  | Additional Pod Annotations added on pod created by this Deployment                | `{}`            |
-| deployment.replicas | Replicas to be created                                                                            | `2`             |
+| deployment.replicas | Replicas to be created                                                                            | ``              |
 | deployment.imagePullSecrets | Secrets used to pull image                                                                | `""`            |
 | deployment.env | Environment variables to be passed to the app container                                                | `{}`            |
 | deployment.volumes | Volumes to be added to the pod                                                                     | `{}`            |
@@ -545,6 +545,8 @@ To disable liveness or readiness probe, set value of `enabled:` to `false`.
 # Changelog
 
 All notable changes to this project will be documented here
+## v1.1.11
+- Feature: replica field is made optional
 ## v1.1.10
 - Feature: add functionality to set `type` in sealed secrets
 - Feature: add functionality for adding annotation for `cluster-wide` in sealed secrets

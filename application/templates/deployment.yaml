@@ -21,7 +21,9 @@ metadata:
   name: {{ template "application.name" . }}
   namespace: {{ template "application.namespace" . }}
 spec:
+{{- if .Values.deployment.replicas }}
   replicas: {{ .Values.deployment.replicas }}
+{{- end }}
   selector:
     matchLabels:
 {{ include "application.labels.selector" . | indent 6 }}

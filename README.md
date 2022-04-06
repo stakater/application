@@ -548,16 +548,20 @@ All notable changes to this project will be documented here
 
 ## v1.1.12
 - Feature: replica field is made optional
+
 ## v1.1.11
 - Fix: remove network policy default value
+
 ## v1.1.10
 - Feature: add functionality to set `type` in sealed secrets
 - Feature: add functionality for adding annotation for `cluster-wide` in sealed secrets
 - Feature: add functionality to add `annotations` to each sealed secret separately
 - Feature: add functionality to add `labels` to each sealed secret separately
+
 ## v1.1.9
 - Feature: add functionality to disable liveness and readiness probes.
 - Feature: support `exec` handler type in liveness and readiness probes 
 - Feature: support for setting individual values for probe configuration is added.
+
 ## v1.1.8
 - Fix: add an application name prefix in the external secret name.  

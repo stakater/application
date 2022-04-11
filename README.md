@@ -546,7 +546,7 @@ To disable liveness or readiness probe, set value of `enabled:` to `false`.
 
 All notable changes to this project will be documented here
 
-## v1.2.1
+## v1.2.0
 - Fix: remove `probes` key from deployment
 ## v1.1.12
 - Fix: add `probes` key back to deployment

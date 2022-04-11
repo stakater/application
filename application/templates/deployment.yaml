@@ -146,7 +146,7 @@ spec:
         {{- if (eq .type "secret") }}
         - secretRef:
             {{- if .name }}
-            name: { include "application.tplvalues.render" ( dict "value" $value.name "context" $ ) }}
+            name: {{ include "application.tplvalues.render" ( dict "value" $value.name "context" $ ) }}
             {{- else if .nameSuffix }}
             name: {{ template "application.name" $ }}-{{ include "application.tplvalues.render" ( dict "value" $value.nameSuffix "context" $ ) }}
             {{- else }}

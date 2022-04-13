@@ -546,20 +546,29 @@ To disable liveness or readiness probe, set value of `enabled:` to `false`.
 
 All notable changes to this project will be documented here
 
-## v1.2.0
+
+### v1.2.0
 - Fix: remove `probes` key from deployment. Note: This is a breaking change. Applications need to update values file accordingly.
-## v1.1.12
+
+### v1.1.13
+- Fix: fix templating error in `Deployment.envFrom.secretRef`, fixes an `error converting YAML to JSON` error when `application.deployment.envfrom[].name` is set.
+
+### v1.1.12
 - Fix: add `probes` key back to deployment
-## v1.1.11
+
+### v1.1.11
 - Fix: remove network policy default value
-## v1.1.10
+
+### v1.1.10
 - Feature: add functionality to set `type` in sealed secrets
 - Feature: add functionality for adding annotation for `cluster-wide` in sealed secrets
 - Feature: add functionality to add `annotations` to each sealed secret separately
 - Feature: add functionality to add `labels` to each sealed secret separately
-## v1.1.9
+
+### v1.1.9
 - Feature: add functionality to disable liveness and readiness probes.
 - Feature: support `exec` handler type in liveness and readiness probes 
 - Feature: support for setting individual values for probe configuration is added.
-## v1.1.8
+
+### v1.1.8
 - Fix: add an application name prefix in the external secret name.  

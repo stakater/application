@@ -93,7 +93,7 @@ deployment:
     #   timeFormat: world
 
   # Replicas to be created
-  replicas: 2
+  replicas: 
 
   # Secrets used to pull image
   imagePullSecrets: ""

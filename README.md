@@ -546,8 +546,14 @@ To disable liveness or readiness probe, set value of `enabled:` to `false`.
 
 All notable changes to this project will be documented here
 
+
+
+### v1.2.0
+- Fix: remove `probes` key from deployment. Note: This is a breaking change. Applications need to update values file accordingly.
+
 ### v1.1.14
 - Feature: replica field is made optional
+
 
 ### v1.1.13
 - Fix: fix templating error in `Deployment.envFrom.secretRef`, fixes an `error converting YAML to JSON` error when `application.deployment.envfrom[].name` is set.

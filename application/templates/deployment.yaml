@@ -164,6 +164,21 @@ spec:
 {{ include "application.tplvalues.render" ( dict "value" $value "context" $ ) | indent 10 }}
         {{- end }}
         {{- end }}
+        {{- if .Values.deployment.startupProbe.enabled }}
+        startupProbe:
+          failureThreshold: {{ .Values.deployment.startupProbe.failureThreshold }}
+          periodSeconds: {{ .Values.deployment.startupProbe.periodSeconds }}
+          successThreshold: {{ .Values.deployment.startupProbe.successThreshold }}
+          timeoutSeconds: {{ .Values.deployment.startupProbe.timeoutSeconds }}
+          initialDelaySeconds: {{ .Values.deployment.startupProbe.initialDelaySeconds }}
+          {{- if .Values.deployment.startupProbe.exec }}
+          exec:
+            {{- toYaml .Values.deployment.startupProbe.exec | nindent 12 }}
+          {{- else if .Values.deployment.startupProbe.httpGet }}
+          httpGet:
+            {{- toYaml .Values.deployment.startupProbe.httpGet | nindent 12 }}
+          {{- end }}
+        {{- end }}
         {{- if .Values.deployment.livenessProbe.enabled }} 
         livenessProbe:
           failureThreshold: {{ .Values.deployment.livenessProbe.failureThreshold }}

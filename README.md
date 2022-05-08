@@ -196,7 +196,6 @@ To uninstall the chart:
 | route.wildcardPolicy | Route wildcard policy                                                                                                                                                                            | `None`                                                                                                                                                |
 | route.tls.termination | TLS termination strategy                                                                                                                                                                         | `edge`                                                                                                                                                |
 | route.tls.insecureEdgeTerminationPolicy | TLS termination policy for insecure traffic                                                                                                                                                      | `Redirect`                                                                                                                                            |
-
 | route.path | path of route traffic                                                                                                                                                      | ``  
 
 ### Forecastle Paramaters

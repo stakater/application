@@ -137,7 +137,7 @@ deployment:
 
   # Startup, Readiness and Liveness probes
   startupProbe:
-    enabled: false
+    enabled: true
     failureThreshold: 30
     periodSeconds: 10
     httpGet:

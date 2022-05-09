@@ -135,7 +135,16 @@ deployment:
     tag: v1.0.0
     pullPolicy: IfNotPresent
 
-  # Readiness and Liveness probes
+  # Startup, Readiness and Liveness probes
+  startupProbe:
+    enabled: true
+    failureThreshold: 30
+    periodSeconds: 10
+    httpGet:
+      path: '/path'
+      port: 8080
+    exec: { }
+
   readinessProbe:
     enabled: true
     failureThreshold: 3
@@ -147,6 +156,7 @@ deployment:
       command:
         - cat
         - tmp/healthy
+
   livenessProbe:
     enabled: true
     failureThreshold: 3

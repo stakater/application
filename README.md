@@ -100,7 +100,22 @@ To uninstall the chart:
 
 #### Deployment Probes Paramaters
 
+##### Startup Probe
+StartupProbe indicates that the Pod has successfully initialized. If specified, no other probes are executed until this completes successfully.
+
+| Name                     | Description                                                                                 | Value                  |
+| ------------------------ |---------------------------------------------------------------------------------------------|------------------------|
+| deployment.startupProbe.enabled | Enabled startup probe                                                                       | false                  |
+| deployment.startupProbe.failureThreshold | When a probe fails, Kubernetes will try failureThreshold times before giving up.    | 30              |
+| deployment.startupProbe.periodSeconds | Perform probe  everytime after specified periodSeconds                                | 10                     |
+| deployment.startupProbe.successThreshold | Minimum consecutive successes for the probe to be considered successful after having failed. |                        |
+| deployment.startupProbe.timeoutSeconds | Number of seconds after which the probe times out.                                    |                        |
+| deployment.startupProbe.httpGet | Describes an action based on HTTP Get requests                                              | path: '/path' port: 8080 |
+| deployment.startupProbe.exec | Kubelet executes the specified command to perform the probe                                 | {}          |
+
+
 ##### Readiness Probe
+Periodic probe of container service readiness. Container will be removed from service endpoints if the probe fails.
 
 | Name                     | Description                                                                                  | Value           |
 | ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
@@ -114,6 +129,7 @@ To uninstall the chart:
 | deployment.readinessProbe.exec | Kubelet executes the specified command to perform the probe                                                                  |   {}   |
 
 ##### Liveness Probe
+Periodic probe of container liveness. Container will be restarted if the probe fails.
 
 | Name                     | Description                                                                                  | Value           |
 | ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |

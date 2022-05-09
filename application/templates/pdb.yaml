@@ -5,7 +5,6 @@ kind: PodDisruptionBudget
 metadata:
   labels:
 {{ include "application.labels.stakater" . | indent 4 }}
-{{ include "application.labels.chart" . | indent 4 }}
   name: {{ template "application.name" . }}
 spec:
   {{- if .Values.pdb.minAvailable }}

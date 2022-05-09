@@ -5,7 +5,6 @@ kind: PrometheusRule
 metadata:
   labels:
 {{ include "application.labels.stakater" . | indent 4 }}
-{{ include "application.labels.chart" . | indent 4 }}
 {{- if .Values.prometheusRule.additionalLabels }}
 {{ toYaml .Values.prometheusRule.additionalLabels | indent 4 }}
 {{- end }}

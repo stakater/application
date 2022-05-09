@@ -6,7 +6,6 @@ metadata:
   name: {{ template "application.name" . }}
   labels:
     {{ include "application.labels.stakater" . | nindent 4 }}
-    {{ include "application.labels.chart" . | nindent 4 }}
   {{- if .Values.autoscaling.additionalLabels }}
     {{- toYaml .Values.autoscaling.additionalLabels | nindent 4 }}
   {{- end }}

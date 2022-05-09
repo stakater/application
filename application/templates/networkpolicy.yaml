@@ -5,7 +5,6 @@ kind: NetworkPolicy
 metadata:
   labels:
 {{ include "application.labels.stakater" . | indent 4 }}
-{{ include "application.labels.chart" . | indent 4 }}
 {{- if .Values.networkPolicy.additionalLabels }}
 {{ toYaml .Values.networkPolicy.additionalLabels | indent 4 }}
 {{- end }}

@@ -9,7 +9,6 @@ metadata:
   namespace: {{ template "application.namespace" . }}
   labels:
 {{ include "application.labels.stakater" . | indent 4 }}
-{{ include "application.labels.chart" . | indent 4 }}
 {{- if .Values.ingress.additionalLabels }}
 {{ toYaml .Values.ingress.additionalLabels | indent 4 }}
 {{- end }}

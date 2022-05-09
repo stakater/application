@@ -5,7 +5,6 @@ kind: Deployment
 metadata:
   labels:
 {{ include "application.labels.stakater" . | indent 4 }}
-{{ include "application.labels.chart" . | indent 4 }}
 {{- if .Values.deployment.additionalLabels }}
 {{ toYaml .Values.deployment.additionalLabels | indent 4 }}
 {{- end }}

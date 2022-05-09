@@ -5,7 +5,6 @@ kind: CronJob
 metadata:
   labels:
 {{ include "application.labels.stakater" $ | indent 4 }}
-{{ include "application.labels.chart" $ | indent 4 }}
 {{- if $job.additionalLabels }}
 {{ $job.additionalLabels | indent 4 }}
 {{- end }}
@@ -32,7 +31,6 @@ spec:
         metadata:
           labels:
           {{- include "application.labels.stakater" $ | nindent 12 }}
-          {{- include "application.labels.chart" $ | nindent 12 }}
         spec:
           {{- if $.Values.rbac.serviceAccount.name }}
           serviceAccountName: {{ $.Values.rbac.serviceAccount.name }}

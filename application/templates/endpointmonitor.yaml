@@ -4,7 +4,6 @@ kind: EndpointMonitor
 metadata:
   labels:
 {{ include "application.labels.stakater" . | indent 4 }}
-{{ include "application.labels.chart" . | indent 4 }}
 {{- if .Values.endpointMonitor.additionalLabels }}
 {{ toYaml .Values.endpointMonitor.additionalLabels | indent 4 }}
 {{- end }}

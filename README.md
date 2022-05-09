@@ -103,15 +103,15 @@ To uninstall the chart:
 ##### Startup Probe
 StartupProbe indicates that the Pod has successfully initialized. If specified, no other probes are executed until this completes successfully.
 
-| Name                     | Description                                                                                  | Value           |
-| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
-| deployment.startupProbe.enabled | Enabled startup probe                                                                  | true       |
-| deployment.startupProbe.failureThreshold | When a probe fails, Kubernetes will try failureThreshold times before giving up.                                                                  | 3      |
-| deployment.startupProbe.periodSeconds | Perform probe  everytime after specified periodSeconds                                                                  | 10       |
-| deployment.startupProbe.successThreshold | Minimum consecutive successes for the probe to be considered successful after having failed.                                                                  | 1       |
-| deployment.startupProbe.timeoutSeconds | Number of seconds after which the probe times out.                                                                  | 1       |
-| deployment.startupProbe.httpGet | Describes an action based on HTTP Get requests                                                                  |   path: '/path' port: 8080     |
-| deployment.startupProbe.exec | Kubelet executes the specified command to perform the probe                                                                  |   {}   |
+| Name                     | Description                                                                                 | Value                  |
+| ------------------------ |---------------------------------------------------------------------------------------------|------------------------|
+| deployment.startupProbe.enabled | Enabled startup probe                                                                       | false                  |
+| deployment.startupProbe.failureThreshold | When a probe fails, Kubernetes will try failureThreshold times before giving up.    | 30              |
+| deployment.startupProbe.periodSeconds | Perform probe  everytime after specified periodSeconds                                | 10                     |
+| deployment.startupProbe.successThreshold | Minimum consecutive successes for the probe to be considered successful after having failed. |                        |
+| deployment.startupProbe.timeoutSeconds | Number of seconds after which the probe times out.                                    |                        |
+| deployment.startupProbe.httpGet | Describes an action based on HTTP Get requests                                              | path: '/path' port: 8080 |
+| deployment.startupProbe.exec | Kubelet executes the specified command to perform the probe                                 | {}          |
 
 
 ##### Readiness Probe

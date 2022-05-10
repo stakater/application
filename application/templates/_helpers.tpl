@@ -19,7 +19,6 @@ appVersion: "{{ .Values.deployment.image.tag | trunc 63 | trimSuffix "-" -}}"
 group: {{ .Values.labels.group }}
 provider: stakater
 team: {{ .Values.labels.team }}
-chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
 release: {{ .Release.Name | quote }}
 heritage: {{ .Release.Service | quote }}
 {{- end -}}

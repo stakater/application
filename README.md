@@ -190,17 +190,16 @@ Periodic probe of container liveness. Container will be restarted if the probe f
 
 ### Ingress Paramaters
 
-| Name                     | Description                                                                                  | Value           |
+| Name | Description | Value |
 | ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
-| ingress.enabled | Enable ingress                                                                                                                                                                                   | `false`                                                                                                                                               |
-| ingress.servicePort | Port of the service that serves pod                                                                                                                                                              | `8080`                                                                                                                                                |
-| ingress.pathType | Each path in an Ingress is required to have a corresponding path type of ingress hosts to validate rules properly                                                                                                                                                             | `ImplementationSpecific`                                                                                                                                                |
-| ingress.hosts | Array of FQDN hosts to be served by this ingress                                                                                                                                                 | `- chart-example.local`                                                                                                                               |
-| ingress.additionalLables | Labels for ingress                                                                                                                                                                               | `{}`                                                                                                                                                  |
-| ingress.annotations | Annotations for ingress                                                                                                                                                                          | `{}`                                                                                                                                                  |
-| ingress.tls | TLS block for ingress                                                                                                                                                                            | `[]`                                                                                                                                                  |
-| ingress.ingressClassName | Name for the ingress class ingress                                                                                                                                                                            | `[]`                                                                                                                                                  |
-
+| ingress.enabled | Enable ingress | `false` |
+| ingress.servicePort | Port of the service that serves pod | `8080` |
+| ingress.pathType | Each path in an Ingress is required to have a corresponding path type of ingress hosts to validate rules properly | `ImplementationSpecific` |
+| ingress.hosts | Array of FQDN hosts to be served by this ingress | `- chart-example.local` |
+| ingress.additionalLables | Labels for ingress | `{}` |
+| ingress.annotations | Annotations for ingress | `{}` |
+| ingress.tls | TLS block for ingress | `[]` |
+| ingress.ingressClassName | Name for the ingress class ingress | '' |
 
 ### Route Paramaters
 

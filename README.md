@@ -199,7 +199,7 @@ Periodic probe of container liveness. Container will be restarted if the probe f
 | ingress.additionalLables | Labels for ingress | `{}` |
 | ingress.annotations | Annotations for ingress | `{}` |
 | ingress.tls | TLS block for ingress | `[]` |
-| ingress.ingressClassName | Name for the ingress class ingress | '' |
+| ingress.ingressClassName | Name of the ingress class | '' |
 
 ### Route Paramaters
 

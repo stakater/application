@@ -563,6 +563,9 @@ All notable changes to this project will be documented here
 
 
 
+### v1.2.1
+- Fix: change label `chart: {{ .Chart.Name }}-{{ .Chart.Version }} ` to `chart: {{ .Chart.Name }}`.
+
 ### v1.2.0
 - Fix: remove `probes` key from deployment. Note: This is a breaking change. Applications need to update values file accordingly.
 

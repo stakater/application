@@ -18,6 +18,7 @@ metadata:
 {{ toYaml .Values.ingress.annotations | indent 4 }}
 {{- end }}
 spec:
+  ingressClassName: {{ .Values.ingress.ingressClassName }}
   rules:
     {{- range $host := .Values.ingress.hosts }}
     - host: {{ include "application.tplvalues.render" (dict "value" $host "context" $)  }}

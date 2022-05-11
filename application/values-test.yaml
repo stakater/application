@@ -257,7 +257,10 @@ service:
 # Ingress object for exposing services
 ingress:
   enabled: true
-  
+
+  # Name of the ingress class
+  ingressClassName: nginx
+
   # Port of the service that serves pods
   servicePort: http
   

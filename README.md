@@ -562,7 +562,8 @@ To disable liveness or readiness probe, set value of `enabled:` to `false`.
 
 All notable changes to this project will be documented here
 
-
+### v1.2.3
+- Feature: add ingressClassName in ingress template.
 
 ### v1.2.1
 - Fix: change label `chart: {{ .Chart.Name }}-{{ .Chart.Version }} ` to `chart: {{ .Chart.Name }}`.

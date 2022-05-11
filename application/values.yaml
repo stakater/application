@@ -298,6 +298,9 @@ service:
 ingress:
   enabled: false
   
+  # Name of the ingress class
+  ingressClassName: nginx
+
   # Port of the service that serves pods
   servicePort: http
 

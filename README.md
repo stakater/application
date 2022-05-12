@@ -179,7 +179,7 @@ Periodic probe of container liveness. Container will be restarted if the probe f
 | persistence.annotations | Annotations for persistent volume                                                                                                                                                                | `{}`                                                                                                                                                  |
 | persistence.storageSize | Size of the persistent volume                                                                                                                                                                    | `8Gi`   
 | persistence.volumeName | Name of the volume                                                                                                                                                                     | ``   
-| persistence.volumeMode | PVC volume mode                                                                                                                                                                    | `Filesystem`   
+| persistence.volumeMode | PVC volume mode                                                                                                                                                                    | ``   
 
 ### Service Paramaters
 

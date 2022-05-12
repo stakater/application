@@ -172,6 +172,7 @@ Periodic probe of container liveness. Container will be restarted if the probe f
 | persistence.enabled | Enable persistence                                                                                                                                                                               | `false`                                                                                                                                               |
 | persistence.mountPVC | Whether to mount the created PVC to the deployment                                                                                                                                               | `false`                                                                                                                                               |
 | persistence.mountPath | If `persistence.mountPVC` is set, so where to mount the volume in the deployment                                                                                                                 | `/`                                                                                                                                                   |
+| persistence.name | Name of the PVC.                                                                                                                | ``                                                                                                                                                   |
 | persistence.accessMode | Access mode for volume                                                                                                                                                                           | `ReadWriteOnce`                                                                                                                                       |
 | persistence.storageClass | StorageClass of the volume                                                                                                                                                                       | `-`                                                                                                                                                   |
 | persistence.additionalLabels | Additional labels for persistent volume                                                                                                                                                          | `{}`                                                                                                                                                  |
@@ -564,7 +565,7 @@ To disable liveness or readiness probe, set value of `enabled:` to `false`.
 All notable changes to this project will be documented here
 
 ### v1.2.4
-- Feature: add volumeName and volumeMode in pvc template.
+- Feature: add name, volumeName and volumeMode in pvc template. 
 
 ### v1.2.3
 - Feature: add ingressClassName in ingress template.

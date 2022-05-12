@@ -252,6 +252,7 @@ persistence:
   enabled: false
   mountPVC: false
   mountPath: "/"
+  name: ""
   accessMode: ReadWriteOnce
   ## If defined, storageClass: <storageClass>
   ## If set to "-", storageClass: "", which disables dynamic provisioning

@@ -177,6 +177,8 @@ Periodic probe of container liveness. Container will be restarted if the probe f
 | persistence.additionalLabels | Additional labels for persistent volume                                                                                                                                                          | `{}`                                                                                                                                                  |
 | persistence.annotations | Annotations for persistent volume                                                                                                                                                                | `{}`                                                                                                                                                  |
 | persistence.storageSize | Size of the persistent volume                                                                                                                                                                    | `8Gi`   
+| persistence.volumeName | Name of the volume volume                                                                                                                                                                    | ``   
+| persistence.volumeMode | Size of the persistent volume volume                                                                                                                                                                    | `Filesystem`   
 
 ### Service Paramaters
 

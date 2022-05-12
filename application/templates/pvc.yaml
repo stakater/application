@@ -13,7 +13,11 @@ metadata:
   annotations:
 {{ toYaml .Values.persistence.annotations | indent 4 }}
 {{- end }}
+{{- if .Values.persistence.name }}
+  name: "{{ .Values.persistence.name }}"
+{{- else }}
   name: {{ template "application.name" . }}-data
+{{- end }}
   namespace: {{ template "application.namespace" . }}
 spec:
   accessModes:

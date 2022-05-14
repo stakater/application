@@ -560,6 +560,8 @@ To disable liveness or readiness probe, set value of `enabled:` to `false`.
 # Changelog
 
 All notable changes to this project will be documented here
+### v1.2.4
+- Feature: add ability to omit serviceaccount in deployment.
 
 ### v1.2.3
 - Feature: add ingressClassName in ingress template.

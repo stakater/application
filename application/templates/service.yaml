@@ -16,6 +16,9 @@ metadata:
   name: {{ template "application.name" . }}
   namespace: {{ template "application.namespace" $ }}
 spec:
+{{- if .Values.service.type }}  
+  type: "{{ .Values.service.type }}"
+{{- end }}
   selector:
 {{ include "application.labels.selector" . | indent 4 }}
 {{- if .Values.deployment.podLabels }}

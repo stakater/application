@@ -189,7 +189,6 @@ Periodic probe of container liveness. Container will be restarted if the probe f
 | service.additionalLabels | Additional labels for service                                                                                                                                                                    | `{}`                                                                                                                                                  |
 | service.annotations | Annotations for service                                                                                                                                                                          | `{}`                                                                                                                                                  |
 | service.ports | Ports for applications service                                                                                                                                                                   | - port: 8080<br>&nbsp;&nbsp;name: http<br>&nbsp;&nbsp;protocol: TCP<br>&nbsp;&nbsp;targetPort: 8080                                                   |
-| service.type | Type of service                                                                                                                                                                          | `ClusterIP`                                                                                                                                                  |
 
 
 ### Ingress Paramaters
@@ -568,7 +567,6 @@ All notable changes to this project will be documented here
 
 ### v1.2.4
 - Feature: add name, volumeName and volumeMode in pvc template.
-- Feature: add service type in service template.          
 
 ### v1.2.3
 - Feature: add ingressClassName in ingress template.

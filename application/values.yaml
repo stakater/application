@@ -1,16 +1,16 @@
-##########################################################
+#########################################################
 # Name of the application.
-##########################################################
+#########################################################
 applicationName: "application"
 
 namespaceOverride: ""
 
-##########################################################
+#########################################################
 # Global labels
 # These labels will be added on all resources, 
 # and you can add additional labels from below 
 # on individual resource.
-##########################################################
+#########################################################
 labels:
   group: com.stakater.platform
   team: stakater
@@ -33,9 +33,9 @@ cronJob:
     #         memory: 5Gi
     #         cpu: 1
   
-##########################################################
+#########################################################
 # Deployment
-##########################################################
+#########################################################
 deployment:
   enabled: true
   # By default deploymentStrategy is set to rollingUpdate with maxSurge of 25% and maxUnavailable of 25%
@@ -245,9 +245,9 @@ deployment:
   #  name: https
   #  protocol: TCP
 
-##########################################################
+#########################################################
 # Add Storage volumes to the pods
-##########################################################
+#########################################################
 persistence:
   enabled: false
   mountPVC: false
@@ -266,9 +266,9 @@ persistence:
   #  "helm.sh/resource-policy": keep
   storageSize: 8Gi
 
-##########################################################
+#########################################################
 # Service object for servicing pods
-##########################################################
+#########################################################
 service:
   enabled: true
   additionalLabels:
@@ -292,9 +292,9 @@ service:
       protocol: TCP
       targetPort: 8080
 
-##########################################################
+#########################################################
 # Ingress object for exposing services
-##########################################################
+#########################################################
 ingress:
   enabled: false
   
@@ -327,9 +327,9 @@ ingress:
     #   hosts:
     #     - chart-example.local
 
-##########################################################
+#########################################################
 # Route object for exposing services (OpenShift)
-##########################################################
+#########################################################
 route:
   enabled: false
 
@@ -357,9 +357,9 @@ route:
     termination: edge
     insecureEdgeTerminationPolicy: Redirect
 
-##########################################################
+#########################################################
 # SecretProviderClass
-##########################################################
+#########################################################
 secretProviderClass:
   enabled: false
   name: ""
@@ -381,10 +381,10 @@ secretProviderClass:
     #  secretName: secret-mongo-host
     #  type: Opaque  
   
-##########################################################
+#########################################################
 # Expose Application on Forecastle Dashboard
 # https://github.com/stakater/Forecastle
-##########################################################
+#########################################################
 forecastle:
   enabled: false
 
@@ -406,9 +406,9 @@ forecastle:
   # Whether app is network restricted or not
   networkRestricted: false
 
-##########################################################
+#########################################################
 # Role Based Access Control (RBAC)
-##########################################################
+#########################################################
 rbac:
   enabled: true
 
@@ -444,9 +444,9 @@ rbac:
   #     verbs:
   #     - get
 
-##########################################################
+#########################################################
 # Additional ConfigMaps
-##########################################################
+#########################################################
 configMap:
   enabled: false
   additionalLabels: 
@@ -462,9 +462,9 @@ configMap:
 #       key1: value1
 #       key2: value2
 
-##########################################################
+#########################################################
 # SealedSecrets
-##########################################################
+#########################################################
 sealedSecret:
   enabled: false
   additionalLabels: 
@@ -485,9 +485,9 @@ sealedSecret:
 #       encryptedData:
 #         name: AgBghrdepGMKmp/rdtJrkBv/CWpJbtmoMsbKQ7QiZZ2kUoLeeTbrDnhmJY03kWKkNW4kN/sQRf6r1vvBEaR4nkHt5f/ayAeaH3NveI3bdb0xv/svvWjyjehwqwr/kNEAVWxRoUij0Y7MyIEAr4hnV2UnrhgvcjPJLNA8bK6spA+kuT328Vpyceyvnm6yArNn1aYlEckaFHrnculHWRpG73iRYxS5GWAY7EdkLXx7OLLWoopHtLcupklYyPfraJzPvBNZ5/PsyjlUBvoQbGV3cZlrdEj1WHj2S1RQ13ddf2WGtMHmY83t9B3LFZAZuA7BBt4rjludbwQm3/tJ5Kas1dDsSIRIIF7MTeum9YfRB8XUz8IxVKQ/JDskeynrWe3VzN/3HFVnv9GGFy+BCVXZKVU/roIRancz+nXkyoOHS722ZpBi53dfLItoS5dG+0EzArMTQzK/KXHz3b1rxp5oWWDNt3WggTiSg2zwy5ZR8VV2ToTDof6UrFmbCZv/kKriyxbVSxIo3KFnvuRiUZ5MwC0TNut4mW3LKyJfHqkUuLa1mYV6tKF58qBnoj/+JaibAIBEudT9hms5U52p7/jKmgHuop7XPEsz4OVwER//Vbv7X6ctoXtyPu6mZyOfOyJHM8Qj/H7/gwMBYhZHQ96DWrVmZOsWSRpZGJni4Xm7rgt2cFj6UtWv6lvl8aOi/HSZVC3TwWZ9mQrk
 
-##########################################################
+#########################################################
 # Additional Secrets
-##########################################################
+#########################################################
 secret:
   enabled: false
   additionalLabels: 
@@ -505,9 +505,9 @@ secret:
 #       secretKey1: secretValue1
 #       secretKey2: secretValue2
 
-##########################################################
+#########################################################
 # Service Monitor to collect Prometheus metrices
-##########################################################
+#########################################################
 serviceMonitor:
   enabled: false
   
@@ -525,9 +525,9 @@ serviceMonitor:
     path: /actuator/prometheus
     port: http
 
-##########################################################
+#########################################################
 # HPA - Horizontal Pod Autoscaling
-##########################################################
+#########################################################
 autoscaling:
 # enabled is a boolean flag for enabling or disabling autoscaling 
   enabled: false
@@ -556,10 +556,10 @@ autoscaling:
          type: Utilization
          averageUtilization: 60
 
-##########################################################
+#########################################################
 # EndpointMonitor for IMC
 # https://github.com/stakater/IngressMonitorController
-##########################################################
+#########################################################
 endpointMonitor:
   enabled: false
   
@@ -571,9 +571,9 @@ endpointMonitor:
   annotations:
     # key: value
 
-##########################################################
+#########################################################
 # Certficate CRD to generate the certificate
-##########################################################
+#########################################################
 certificate:
   enabled: false
   
@@ -634,10 +634,10 @@ certificate:
       key: test_key
       name: test-creds
 
-##########################################################
+#########################################################
 # AlertmanagerConfig object for defining application 
 # specific alertmanager configurations
-##########################################################
+#########################################################
 alertmanagerConfig:
   enabled: false
   
@@ -669,10 +669,10 @@ alertmanagerConfig:
     #     severity: 'warning'
     #   equal: ['cluster', 'service']
 
-##########################################################
+#########################################################
 # PrometheusRule object for defining application 
 # alerting rules
-##########################################################
+#########################################################
 prometheusRule:
   enabled: false
   
@@ -694,9 +694,9 @@ prometheusRule:
     #       for: 1m
     #       labels:
     #         severity: critical  
-##########################################################
+#########################################################
 # External Secrets
-##########################################################
+#########################################################
 externalSecret:
   enabled: false
 
@@ -726,9 +726,9 @@ externalSecret:
       #   - key: postgres
       #     property: credentials
 
-##########################################################
+#########################################################
 # Network Policy
-##########################################################
+#########################################################
 networkPolicy: 
   enabled: false
   additionalLabels:
@@ -758,18 +758,18 @@ networkPolicy:
   #     - protocol: TCP
   #       port: 5978
 
-##########################################################
+#########################################################
 # Pod disruption budget - PDB
-##########################################################
+#########################################################
 pdb:
   enabled: false
   minAvailable: 1
 # maxUnavailable: 1
 
-##########################################################
+#########################################################
 # grafanaDashboard object for defining application 
 # Grafana Dashboard
-##########################################################
+#########################################################
 grafanaDashboard:
   enabled: false
   

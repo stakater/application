@@ -9,7 +9,7 @@ namespaceOverride: ""
 # Global labels
 # These labels will be added on all resources, 
 # and you can add additional labels from below 
-# on individual resource
+# on individual resource.
 ##########################################################
 labels:
   group: com.stakater.platform

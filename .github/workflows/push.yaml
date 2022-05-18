@@ -91,7 +91,7 @@ jobs:
         git add application/Chart.yaml
         git commit -m "[skip-ci] Update artifacts" 
 
-    # Push Chart.yml with Updated Version
+    # Push Chart.yaml with Updated Version
     - name: Push changes
       shell: bash {0}
       run: |

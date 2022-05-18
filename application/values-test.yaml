@@ -659,7 +659,7 @@ externalSecret:
 # Network Policy
 ##########################################################
 networkPolicy: 
-  enabled: false
+  enabled: true
   # Additional labels
   additionalLabels:
     key: value

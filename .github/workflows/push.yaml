@@ -1,5 +1,9 @@
 name: Push
 
+concurrency: 
+ group: push_on_master
+ cancel-in-progress: false
+
 on:
   push:
     branches:
@@ -87,11 +91,40 @@ jobs:
         git add application/Chart.yaml
         git commit -m "[skip-ci] Update artifacts" 
 
+    # Push Chart.yaml with Updated Version
     - name: Push changes
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.STAKATER_GITHUB_TOKEN }}
-
+      shell: bash {0}
+      run: |
+        git config --local user.email "stakater@gmail.com"
+        git config --local user.name "stakater-user"
+        git remote set-url origin https://x-access-token:${{ secrets.STAKATER_GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
+        git push origin
+        if [ $? -eq 0 ]; then
+            echo OK Pushed Succesfully.
+        else
+          for i in 1 2 3
+          do
+            echo "Trying Push Again Attempt:" $i
+            git pull --rebase --strategy-option theirs
+            if [ $? -eq 0 ]; then
+                echo OK Pulled
+            else
+                continue
+            fi
+            git push origin
+            if [ $? -eq 0 ]; then
+                echo OK Pushed
+                break
+            else
+                if [ $i -eq 3 ];then
+                 echo "Fail: Couldnt Push to Remote"
+                 exit 1
+                fi
+                continue
+            fi
+          done
+        fi
+  
     - name: Push Latest Tag
       uses: anothrNick/github-tag-action@1.36.0
       env:

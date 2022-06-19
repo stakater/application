@@ -231,7 +231,7 @@ persistence:
   annotations:
   #  "helm.sh/resource-policy": keep
   storageSize: 8Gi
-  volumeMode: ""
+  volumeMode: "Filesystem"
   volumeName: ""
 
 # Service object for servicing pods

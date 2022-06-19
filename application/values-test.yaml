@@ -381,22 +381,22 @@ rbac:
 
   # Create Roles (Namespaced)
   roles:
-  # - name: configmaps
-  #   rules:
-  #   - apiGroups:
-  #     - ""
-  #     resources:
-  #     - configmaps
-  #     verbs:
-  #     - get
-  # - name: secrets
-  #   rules:
-  #   - apiGroups:
-  #     - ""
-  #     resources:
-  #     - secrets
-  #     verbs:
-  #     - get
+  - name: configmaps
+    rules:
+    - apiGroups:
+      - ""
+      resources:
+      - configmaps
+      verbs:
+      - get
+  - name: secrets
+    rules:
+    - apiGroups:
+      - ""
+      resources:
+      - secrets
+      verbs:
+      - get
 
 # Additional ConfigMaps  
 configMap:

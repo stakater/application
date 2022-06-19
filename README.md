@@ -563,8 +563,11 @@ To disable liveness or readiness probe, set value of `enabled:` to `false`.
 
 All notable changes to this project will be documented here
 
-### v1.2.4
+### v1.2.6
 - Feature: add service type in service template.
+
+### v1.2.4
+- Fix: namespace indentation for rolebinding
 
 ### v1.2.3
 - Feature: add ingressClassName in ingress template.

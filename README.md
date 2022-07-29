@@ -189,6 +189,8 @@ Periodic probe of container liveness. Container will be restarted if the probe f
 | service.additionalLabels | Additional labels for service                                                                                                                                                                    | `{}`                                                                                                                                                  |
 | service.annotations | Annotations for service                                                                                                                                                                          | `{}`                                                                                                                                                  |
 | service.ports | Ports for applications service                                                                                                                                                                   | - port: 8080<br>&nbsp;&nbsp;name: http<br>&nbsp;&nbsp;protocol: TCP<br>&nbsp;&nbsp;targetPort: 8080                                                   |
+| service.type | Type of service                                                                                                                                                                          | `ClusterIP`                                                                                                                                                  |
+
 
 
 ### Ingress Paramaters
@@ -565,6 +567,9 @@ To disable liveness or readiness probe, set value of `enabled:` to `false`.
 
 All notable changes to this project will be documented here
 
+### v1.2.6
+- Feature: add service type in service template.
+
 ### v1.2.5
 - Feature: add name, volumeName and volumeMode in pvc template.
 
@@ -582,7 +587,6 @@ All notable changes to this project will be documented here
 
 ### v1.1.14
 - Feature: replica field is made optional
-
 
 ### v1.1.13
 - Fix: fix templating error in `Deployment.envFrom.secretRef`, fixes an `error converting YAML to JSON` error when `application.deployment.envfrom[].name` is set.

@@ -581,7 +581,6 @@ All notable changes to this project will be documented here
 ### v1.1.14
 - Feature: replica field is made optional
 
-
 ### v1.1.13
 - Fix: fix templating error in `Deployment.envFrom.secretRef`, fixes an `error converting YAML to JSON` error when `application.deployment.envfrom[].name` is set.
 

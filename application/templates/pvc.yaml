@@ -13,7 +13,11 @@ metadata:
   annotations:
 {{ toYaml .Values.persistence.annotations | indent 4 }}
 {{- end }}
+{{- if .Values.persistence.name }}
+  name: "{{ .Values.persistence.name }}"
+{{- else }}
   name: {{ template "application.name" . }}-data
+{{- end }}
   namespace: {{ template "application.namespace" . }}
 spec:
   accessModes:
@@ -27,6 +31,12 @@ spec:
 {{- else }}
   storageClassName: "{{ .Values.persistence.storageClass }}"
 {{- end }}
+{{- end }}
+{{- if .Values.persistence.volumeMode }}  
+  volumeMode: "{{ .Values.persistence.volumeMode }}"
+{{- end }}
+{{- if .Values.persistence.volumeName }}  
+  volumeName: "{{ .Values.persistence.volumeName }}"
 {{- end }}
 {{- end }}
 {{- end }}

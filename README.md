@@ -172,11 +172,14 @@ Periodic probe of container liveness. Container will be restarted if the probe f
 | persistence.enabled | Enable persistence                                                                                                                                                                               | `false`                                                                                                                                               |
 | persistence.mountPVC | Whether to mount the created PVC to the deployment                                                                                                                                               | `false`                                                                                                                                               |
 | persistence.mountPath | If `persistence.mountPVC` is set, so where to mount the volume in the deployment                                                                                                                 | `/`                                                                                                                                                   |
+| persistence.name | Name of the PVC.                                                                                                                | ``                                                                                                                                                   |
 | persistence.accessMode | Access mode for volume                                                                                                                                                                           | `ReadWriteOnce`                                                                                                                                       |
 | persistence.storageClass | StorageClass of the volume                                                                                                                                                                       | `-`                                                                                                                                                   |
 | persistence.additionalLabels | Additional labels for persistent volume                                                                                                                                                          | `{}`                                                                                                                                                  |
 | persistence.annotations | Annotations for persistent volume                                                                                                                                                                | `{}`                                                                                                                                                  |
 | persistence.storageSize | Size of the persistent volume                                                                                                                                                                    | `8Gi`   
+| persistence.volumeName | Name of the volume                                                                                                                                                                     | ``   
+| persistence.volumeMode | PVC volume mode                                                                                                                                                                    | ``   
 
 ### Service Paramaters
 
@@ -187,6 +190,7 @@ Periodic probe of container liveness. Container will be restarted if the probe f
 | service.annotations | Annotations for service                                                                                                                                                                          | `{}`                                                                                                                                                  |
 | service.ports | Ports for applications service                                                                                                                                                                   | - port: 8080<br>&nbsp;&nbsp;name: http<br>&nbsp;&nbsp;protocol: TCP<br>&nbsp;&nbsp;targetPort: 8080                                                   |
 | service.type | Type of service                                                                                                                                                                          | `ClusterIP`                                                                                                                                                  |
+
 
 
 ### Ingress Paramaters
@@ -565,6 +569,9 @@ All notable changes to this project will be documented here
 
 ### v1.2.6
 - Feature: add service type in service template.
+
+### v1.2.5
+- Feature: add name, volumeName and volumeMode in pvc template.
 
 ### v1.2.4
 - Fix: namespace indentation for rolebinding

@@ -252,6 +252,7 @@ persistence:
   enabled: false
   mountPVC: false
   mountPath: "/"
+  name: ""
   accessMode: ReadWriteOnce
   ## If defined, storageClass: <storageClass>
   ## If set to "-", storageClass: "", which disables dynamic provisioning
@@ -265,6 +266,8 @@ persistence:
   annotations:
   #  "helm.sh/resource-policy": keep
   storageSize: 8Gi
+  volumeMode: ""
+  volumeName: ""
 
 ##########################################################
 # Service object for servicing pods

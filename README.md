@@ -610,3 +610,6 @@ All notable changes to this project will be documented here
 
 ### v1.1.8
 - Fix: add an application name prefix in the external secret name.  
+
+### v0.1.6
+- Fix: corrected the namespace indentation in rolebinding template. Corresponding chart package has been pushed to helmchart repo manually.

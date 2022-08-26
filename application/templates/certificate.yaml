@@ -1,6 +1,6 @@
 {{- if .Values.certificate }}
 {{- if .Values.certificate.enabled }}
-apiVersion: cert-manager.io/v1alpha3
+apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   labels:
@@ -24,9 +24,6 @@ spec:
   subject:
 {{ include "application.tplvalues.render" ( dict "value" .Values.certificate.subject "context" $ ) | indent 4 }}
   commonName: {{ include "application.tplvalues.render" ( dict "value" .Values.certificate.commonName "context" $ )  }}
-  keyAlgorithm: {{ .Values.certificate.keyAlgorithm }}
-  keyEncoding: {{ .Values.certificate.keyEncoding }}
-  keySize: {{ .Values.certificate.keySize }}
  {{- if .Values.certificate.isCA }} 
   isCA: {{ .Values.certificate.isCA }}
 {{- end }}
@@ -40,15 +37,18 @@ spec:
 {{ toYaml .Values.certificate.ipAddresses | indent 4 }}
 {{- end }}
 {{- if .Values.certificate.uriSANs }}
-  uriSANs:
+  uris:
 {{ toYaml .Values.certificate.uriSANs | indent 4 }}
 {{- end }}
 {{- if .Values.certificate.emailSANs }}
-  emailSANs:
+  emailAddresses:
 {{ toYaml .Values.certificate.emailSANs | indent 4 }}
 {{- end }}
 {{- if .Values.certificate.privateKey.enabled }}
   privateKey:
+    algorithm: {{ .Values.certificate.keyAlgorithm }}
+    encoding: {{ .Values.certificate.keyEncoding }}
+    size: {{ .Values.certificate.keySize }}
     rotationPolicy: {{ .Values.certificate.privateKey.rotationPolicy }}
 {{- end }}
   issuerRef:

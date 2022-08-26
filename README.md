@@ -567,6 +567,9 @@ To disable liveness or readiness probe, set value of `enabled:` to `false`.
 
 All notable changes to this project will be documented here
 
+### v1.2.7
+- Update: Update `Certificate` template from `cert-manager.io/v1alpha3` to `cert-manager.io/v1` in order to support cert-manager v1.7.
+
 ### v1.2.6
 - Feature: add service type in service template.
 

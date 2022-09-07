@@ -36,7 +36,7 @@ To uninstall the chart:
 | deployment.additionalLabels | Additional labels for Deployment                                                          | `{}`            |
 | deployment.podLabels | Additional label added on pod which is used in Service's Label Selector                          | {}              |
 | deployment.annotations | Annotations on deployments                                                                     | `{}`            |
-| deployment.additionalPodAnnotation  | Additional Pod Annotations added on pod created by this Deployment                | `{}`            |
+| deployment.additionalPodAnnotations  | Additional Pod Annotations added on pod created by this Deployment                | `{}`            |
 | deployment.replicas | Replicas to be created                                                                            | ``              |
 | deployment.imagePullSecrets | Secrets used to pull image                                                                | `""`            |
 | deployment.env | Environment variables to be passed to the app container                                                | `{}`            |

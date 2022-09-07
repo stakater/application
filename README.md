@@ -3,9 +3,9 @@
 Generic helm chart for applications which are:
 
 - stateless
-- creates only namespace scoped resources (e.g. it doesn't need CRB - cluster role bindings)
-- doesn't need privileged containers
-- doesn't call the underlying Kubernetes API or use the underlying etcd as a database by defining custom resources
+- create only namespace scoped resources (e.g. it doesn't need CRB - cluster role bindings)
+- don't need privileged containers
+- don't call the underlying Kubernetes API or use the underlying etcd as a database by defining custom resources
 
 ## Installing the Chart
 

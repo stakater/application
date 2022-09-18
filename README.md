@@ -536,8 +536,7 @@ In order to use environment variable in deployment or cronjob, you will have to 
 
    **Note:** first key after ``envFrom`` is just used to uniquely identify different objects in ``envFrom`` block. Make sure to keep it unique and relevant 
 
-
-### Configuring probes
+## Configuring probes
 
 By default probe handler type is `httpGet`. You just need to override `port` and `path` as per your need.
 
@@ -548,7 +547,6 @@ By default probe handler type is `httpGet`. You just need to override `port` and
       path: '/path'
       port: 8080
 ```
-
 
 In order to use `exec` handler, you can define field `livenessProbe.exec` in your values.yaml.
 
@@ -567,8 +565,6 @@ To disable liveness or readiness probe, set value of `enabled:` to `false`.
     enabled: false
 ```
 
-
- 
 # Changelog
 
 All notable changes to this project will be documented here

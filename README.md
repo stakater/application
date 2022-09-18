@@ -6,6 +6,7 @@ Generic helm chart for applications which are:
 - create only namespace scoped resources (e.g. it doesn't need CRB - cluster role bindings)
 - don't need privileged containers
 - don't call the underlying Kubernetes API or use the underlying etcd as a database by defining custom resources
+- run either as deployment or cronjob
 
 ## Installing the Chart
 
@@ -458,8 +459,6 @@ configMap:
 
 then the configmap name will be ``helloworld-config``
 
-
-
 ## Consuming environment variable in application chart
 
 In order to use environment variable in deployment or cronjob, you will have to provide environment variable in *key/value* pair in `env` value. where key being environment variable key and value varies in different scenarios 
@@ -504,8 +503,7 @@ In order to use environment variable in deployment or cronjob, you will have to 
 
 - To get environment variable value from **Secret**
    
-   Suppose we have secret created from application chart
-   
+   Suppose we have secret created from application chart   
    ```
     applicationName: my-application
     secret:
@@ -515,6 +513,7 @@ In order to use environment variable in deployment or cronjob, you will have to 
            PASSWORD: skljd#2Qer!!
            USER: postgres
    ```
+   
    To get environment variable value from above created secret, we will need to add following
    ```
      env:
@@ -538,6 +537,13 @@ In order to use environment variable in deployment or cronjob, you will have to 
 
 ## Configuring probes
 
+To disable liveness or readiness probe, set value of `enabled` to `false`.
+
+```
+  livenessProbe:
+    enabled: false
+```
+
 By default probe handler type is `httpGet`. You just need to override `port` and `path` as per your need.
 
 ```
@@ -557,12 +563,6 @@ In order to use `exec` handler, you can define field `livenessProbe.exec` in you
       command:
         - cat
         - /tmp/healthy
-```
-
-To disable liveness or readiness probe, set value of `enabled:` to `false`.
-```
-  livenessProbe:
-    enabled: false
 ```
 
 # Changelog

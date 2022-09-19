@@ -225,7 +225,12 @@ Periodic probe of container liveness. Container will be restarted if the probe f
 | route.wildcardPolicy | Route wildcard policy                                                                                                                                                                            | `None`                                                                                                                                                |
 | route.tls.termination | TLS termination strategy                                                                                                                                                                         | `edge`                                                                                                                                                |
 | route.tls.insecureEdgeTerminationPolicy | TLS termination policy for insecure traffic                                                                                                                                                      | `Redirect`                                                                                                                                            |
-| route.path | path of route traffic                                                                                                                                                      | ``  
+| route.path | path of route traffic                                                                                                                                                      | 
+| route.to.weight | portion of requests to be handled by the service                                                                                                                                                       | `100`
+| route.alternateBackends | For the purpose of multiple services supporting a route                                                                                                                                                       | 
+| route.alternateBackends.kind | Kind of supporting resource                                                                                                                                                       | `Service`
+| route.alternateBackends.name | Name of supporting service                                                                                                                                                       | 
+| route.alternateBackends.weight | portion of requests to be handled by supporting service                                                                                                                                                       | 
 
 ### Forecastle Paramaters
 
@@ -568,6 +573,9 @@ In order to use `exec` handler, you can define field `livenessProbe.exec` in you
 # Changelog
 
 All notable changes to this project will be documented here
+
+### v1.2.8
+- Update: Update `route` template, add support for `alternateBackends` 
 
 ### v1.2.7
 - Update: Update `Certificate` template from `cert-manager.io/v1alpha3` to `cert-manager.io/v1` in order to support cert-manager v1.7.

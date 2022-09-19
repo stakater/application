@@ -317,12 +317,20 @@ route:
   port:
     targetPort: http
 
+  to:
+    weight: 80
+
   wildcardPolicy: None
 
   tls:
     # TLS Termination strategy
     termination: edge
     insecureEdgeTerminationPolicy: Redirect
+
+  alternateBackends:
+    kind: Service
+    name: alternate-application
+    weight: 20
 
 secretProviderClass:
   enabled: true

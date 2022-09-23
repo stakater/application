@@ -31,10 +31,20 @@ spec:
   to:
     kind: Service
     name: {{ template "application.name" . }}
+    {{- if .Values.route.to }}
+    weight: {{ .Values.route.to.weight }}
+    {{- else }}
     weight: 100
+    {{- end }}
   wildcardPolicy: {{ .Values.route.wildcardPolicy }}
   tls:
     termination: {{ .Values.route.tls.termination }}
     insecureEdgeTerminationPolicy: {{ .Values.route.tls.insecureEdgeTerminationPolicy }}
+  {{- if .Values.route.alternateBackends }}
+  alternateBackends:
+  - kind: {{ .Values.route.alternateBackends.kind }}
+    name: {{ .Values.route.alternateBackends.name }}
+    weight: {{ .Values.route.alternateBackends.weight }}
+  {{- end -}}
 {{- end -}}
 {{- end -}}

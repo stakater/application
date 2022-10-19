@@ -306,14 +306,20 @@ ingress:
   ingressClassName: ''
 
   # Port of the service that serves pods
-  servicePort: http
+  #servicePort: http
 
   #Set pathType: default is ImplementationSpecific; Options: Exact, Prefix
-  pathType: ImplementationSpecific 
+  #pathType: ImplementationSpecific 
   
   # List of host addresses to be exposed by this Ingress
-  hosts:
-    - chart-example.local
+  hosts: []
+    # - host: chart-example.local
+    #   paths:
+    #     - path: "/*"
+    #       pathType: ImplementationSpecific
+    #       serviceName: chart-service
+    #       portName: chart-port
+    #       portNumber: 80
 
   # Additional labels for this Ingress
   additionalLabels:

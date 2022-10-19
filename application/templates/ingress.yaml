@@ -1,7 +1,5 @@
 {{- if .Values.ingress -}}
 {{- if .Values.ingress.enabled -}}
-{{- $servicePort := .Values.ingress.servicePort -}}
-{{- $pathType := .Values.ingress.pathType -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -22,18 +20,27 @@ spec:
   ingressClassName: {{ .Values.ingress.ingressClassName }}
 {{- end}}
   rules:
-    {{- range $host := .Values.ingress.hosts }}
-    - host: {{ include "application.tplvalues.render" (dict "value" $host "context" $)  }}
+    {{- if .Values.ingress.hosts }}
+    {{- range .Values.ingress.hosts }}
+    - host: {{ .host }}
       http:
         paths:
-          - path: /
-            pathType: {{ $pathType }}
+          {{- range .paths }}
+          - path: {{ .path }}
+            pathType: {{ .pathType }}
             backend:
               service:
-                name: {{ template "application.name" $ }}
+                name: {{ .serviceName}}
                 port:
-                  name: {{ $servicePort }}
-    {{- end -}}
+                  {{ if .portName -}}
+                  name: {{ .portName }}
+                  {{- end -}}
+                  {{ if .portNumber -}}
+                  number: {{ .portNumber }}
+                  {{- end -}}
+          {{- end }}
+    {{- end }}
+    {{- end }}
   {{- if .Values.ingress.tls }}
   tls:
 {{ include "application.tplvalues.render" (dict "value" .Values.ingress.tls "context" $) | indent 3 }}

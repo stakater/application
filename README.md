@@ -574,7 +574,7 @@ In order to use `exec` handler, you can define field `livenessProbe.exec` in you
 
 All notable changes to this project will be documented here
 
-### v1.2.8
+### v1.2.8 & v1.2.9
 - Update: Update `route` template, add support for `alternateBackends` 
 
 ### v1.2.7

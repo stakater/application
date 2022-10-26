@@ -26,6 +26,8 @@ cronJob:
     #   image: 
     #     repository: docker.io/nginx
     #     tag: v1.0.0
+    #     digest: '' # if set to a non empty value, digest takes precedence on the tag
+    #     imagePullPolicy: IfNotPresent
     #   command: ["/bin/bash"]
     #   args: ["-c","sleep 5000"]
     #   resources:  
@@ -163,6 +165,7 @@ deployment:
   image: 
     repository: repository/image-name
     tag: v1.0.0
+    digest: '' # if set to a non empty value, digest takes precedence on the tag
     pullPolicy: IfNotPresent
   dnsConfig:
     # options:

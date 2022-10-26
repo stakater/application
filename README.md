@@ -93,7 +93,8 @@ To uninstall the chart:
 | Name                     | Description                                                                                  | Value           |
 | ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | deployment.image.repository | Image repository for the application                                                      | `repository/image-name`  |
-| deployment.image.tag | Tag of the application Image                                                                     | `v1.0.0`        |
+| deployment.image.tag | Tag of the application image                                                                     | `v1.0.0`        |
+| deployment.image.digest | Digest of the application image                                                               | ``              |
 | deployment.image.pullPolicy | Pull policy for the application image                                                     | `IfNotPresent`  |
 
 #### Deployment envFrom Parameters
@@ -225,12 +226,12 @@ Periodic probe of container liveness. Container will be restarted if the probe f
 | route.wildcardPolicy | Route wildcard policy                                                                                                                                                                            | `None`                                                                                                                                                |
 | route.tls.termination | TLS termination strategy                                                                                                                                                                         | `edge`                                                                                                                                                |
 | route.tls.insecureEdgeTerminationPolicy | TLS termination policy for insecure traffic                                                                                                                                                      | `Redirect`                                                                                                                                            |
-| route.path | path of route traffic                                                                                                                                                      | 
+| route.path | path of route traffic                                                                                                                                                      |
 | route.to.weight | portion of requests to be handled by the service                                                                                                                                                       | `100`
-| route.alternateBackends | For the purpose of multiple services supporting a route                                                                                                                                                       | 
+| route.alternateBackends | For the purpose of multiple services supporting a route                                                                                                                                                       |
 | route.alternateBackends.kind | Kind of supporting resource                                                                                                                                                       | `Service`
-| route.alternateBackends.name | Name of supporting service                                                                                                                                                       | 
-| route.alternateBackends.weight | portion of requests to be handled by supporting service                                                                                                                                                       | 
+| route.alternateBackends.name | Name of supporting service                                                                                                                                                       |
+| route.alternateBackends.weight | portion of requests to be handled by supporting service                                                                                                                                                       |
 
 ### Forecastle Paramaters
 
@@ -427,6 +428,7 @@ Job paramater for each cronjob object at `cronJob.jobs`
 | `<name>.schedule`                  | Schedule of cronjob                                                                          | 
 | `<name>.image.repository`          | Repository of container image of cronjob                                                     |
 | `<name>.image.tag`                 | Tag of container image of cronjob                                                            |
+| `<name>.image.digest`              | Digest of container image of cronjob                                                         |
 | `<name>.image.imagePullPolicy`     | ImagePullPolicy of container image ofcronjob                                                                                                                           |
 | `<name>.command`                   | Command of container of job                                                                  |
 | `<name>.args`                      | Args of container of job                                                                     |
@@ -508,7 +510,7 @@ In order to use environment variable in deployment or cronjob, you will have to 
 
 - To get environment variable value from **Secret**
    
-   Suppose we have secret created from application chart   
+   Suppose we have secret created from application chart
    ```
     applicationName: my-application
     secret:
@@ -518,7 +520,7 @@ In order to use environment variable in deployment or cronjob, you will have to 
            PASSWORD: skljd#2Qer!!
            USER: postgres
    ```
-   
+
    To get environment variable value from above created secret, we will need to add following
    ```
      env:
@@ -573,6 +575,9 @@ In order to use `exec` handler, you can define field `livenessProbe.exec` in you
 # Changelog
 
 All notable changes to this project will be documented here
+
+### v1.2.10
+- Feature: Add `image.digest` field to deployment and cronjob resources.
 
 ### v1.2.8 & v1.2.9
 - Update: Update `route` template, add support for `alternateBackends` 

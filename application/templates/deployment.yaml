@@ -120,7 +120,11 @@ spec:
           name: proxy-tls 
         {{- end }}
       - name: {{ template "application.name" . }}
+        {{- if .Values.deployment.image.digest }}
+        image: "{{ .Values.deployment.image.repository }}@{{ .Values.deployment.image.digest }}"
+        {{- else if .Values.deployment.image.tag }}
         image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
+        {{- end }}
         imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
         {{- if .Values.deployment.command }}
         command: {{- include "application.tplvalues.render" (dict "value" .Values.deployment.command "context" $) | nindent 12 }}

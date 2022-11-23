@@ -95,7 +95,7 @@ deployment:
     #   timeFormat: world
 
   # Replicas to be created
-  replicas: 
+  replicas: 1
 
   # Secrets used to pull image
   imagePullSecrets: ""
@@ -182,7 +182,7 @@ deployment:
     exec: {}
 
   readinessProbe:
-    enabled: true
+    enabled: false
     failureThreshold: 3
     periodSeconds: 10
     successThreshold: 1
@@ -194,7 +194,7 @@ deployment:
     exec: {}
 
   livenessProbe:
-    enabled: true
+    enabled: false
     failureThreshold: 3
     periodSeconds: 10
     successThreshold: 1
@@ -429,8 +429,8 @@ rbac:
 
   # Service Account to use by pods
   serviceAccount:
-    enabled: false
-    name: ""
+    enabled: true
+    name: "application"
 
     # Additional Labels on service account
     additionalLabels:

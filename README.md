@@ -576,6 +576,9 @@ In order to use `exec` handler, you can define field `livenessProbe.exec` in you
 
 All notable changes to this project will be documented here
 
+### v1.3.0
+- Feature: Use `policy/v1/PodDisruptionBudget` if supported by the target cluster.
+
 ### v1.2.10
 - Feature: Add `image.digest` field to deployment and cronjob resources.
 

@@ -228,8 +228,8 @@ deployment:
   #   command: ['/bin/sh']
 
   # Security Context at Container Level
-  #  containers:
-  #    securityContext:
+  containers:
+    securityContext:
   #      readOnlyRootFilesystem: true
   #      runAsNonRoot: true
 

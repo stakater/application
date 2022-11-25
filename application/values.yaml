@@ -214,6 +214,11 @@ deployment:
     requests:
       memory: 128Mi
       cpu: 0.1
+
+#  Security Context at Container Level
+  containerSecurityContext:
+#        readOnlyRootFilesystem: true
+#        runAsNonRoot: true
   
   openshiftOAuthProxy: 
     enabled: false
@@ -227,11 +232,6 @@ deployment:
   #   imagePullPolicy: IfNotPresent
   #   command: ['/bin/sh']
 
-  # Security Context at Container Level
-  containers:
-    securityContext:
-  #      readOnlyRootFilesystem: true
-  #      runAsNonRoot: true
 
   # Security Context for the pod
 

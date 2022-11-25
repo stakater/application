@@ -182,6 +182,11 @@ deployment:
     port: 8080
     secretName: "openshift-oauth-proxy-tls"
 
+  #  Security Context at Container Level
+    containerSecurityContext:
+      readOnlyRootFilesystem: true
+      runAsNonRoot: true
+
   # Add additional containers besides init and app containers
   additionalContainers:
   - name: sidecar-contaner
@@ -189,11 +194,6 @@ deployment:
     imagePullPolicy: IfNotPresent
     command: ['/bin/sh']
 
-  # Container Level Security Context
-  containers:
-    securityContext:
-  #      readOnlyRootFilesystem: true
-  #      runAsNonRoot: true
   # Security Context for the pod
   securityContext:
     # fsGroup: 2000

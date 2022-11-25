@@ -233,11 +233,13 @@ spec:
           requests:
             memory: {{ .Values.deployment.resources.requests.memory }}
             cpu: {{ .Values.deployment.resources.requests.cpu }}
-        {{- if .Values.deployment.containers }}
-        {{- if .Values.deployment.containers.securityContext }}
+        {{- if .Values.deployment.containerSecurityContext }}
         securityContext:
-{{ toYaml .Values.deployment.containers.securityContext | indent 10 }}
-        {{- end }}
+{{ toYaml .Values.deployment.containerSecurityContext | indent 10 }}
+        {{- else }}
+        securityContext:
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
         {{- end }}
         {{- if .Values.deployment.additionalContainers }}
 {{ toYaml .Values.deployment.additionalContainers | indent 6 }}

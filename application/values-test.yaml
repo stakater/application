@@ -189,6 +189,11 @@ deployment:
     imagePullPolicy: IfNotPresent
     command: ['/bin/sh']
 
+  # Container Level Security Context
+  containers:
+    securityContext:
+  #      readOnlyRootFilesystem: true
+  #      runAsNonRoot: true
   # Security Context for the pod
   securityContext:
     # fsGroup: 2000

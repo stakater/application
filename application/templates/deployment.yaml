@@ -236,10 +236,6 @@ spec:
         {{- if .Values.deployment.containerSecurityContext }}
         securityContext:
 {{ toYaml .Values.deployment.containerSecurityContext | indent 10 }}
-        {{- else }}
-        securityContext:
-          readOnlyRootFilesystem: true
-          runAsNonRoot: true
         {{- end }}
         {{- if .Values.deployment.additionalContainers }}
 {{ toYaml .Values.deployment.additionalContainers | indent 6 }}

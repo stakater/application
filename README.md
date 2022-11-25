@@ -33,30 +33,30 @@ To uninstall the chart:
 
 ### Deployment Paramaters
 
-| Name                                  | Description                                                                                                                                | Value           |
-|---------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------| --------------- |
-| deployment.enabled                    | Enable deployment on helm chart deployments                                                                                                | `true`          |
+| Name                                  | Description                                                                                                                                | Value          |
+|---------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|----------------|
+| deployment.enabled                    | Enable deployment on helm chart deployments                                                                                                | `true`         |
 | deployment.strategy                   | Strategy for updating deployments                                                                                                          | `RollingUpdate` |
-| deployment.reloadOnChange             | Reload deployment if configMap/secret mounted are updated                                                                                  | `true`          |
-| deployment.nodeSelector               | Select node to deploy this application                                                                                                     | `{}`            |
-| deployment.hostAliases                | Adding entries to a Pod's /etc/hosts file provides Pod-level override of hostname resolution when DNS and other options are not applicable | `[]`            |
-| deployment.additionalLabels           | Additional labels for Deployment                                                                                                           | `{}`            |
-| deployment.podLabels                  | Additional label added on pod which is used in Service's Label Selector                                                                    | {}              |
-| deployment.annotations                | Annotations on deployments                                                                                                                 | `{}`            |
-| deployment.additionalPodAnnotations   | Additional Pod Annotations added on pod created by this Deployment                                                                         | `{}`            |
-| deployment.replicas                   | Replicas to be created                                                                                                                     | ``              |
-| deployment.imagePullSecrets           | Secrets used to pull image                                                                                                                 | `""`            |
-| deployment.env                        | Environment variables to be passed to the app container                                                                                    | `{}`            |
-| deployment.volumes                    | Volumes to be added to the pod                                                                                                             | `{}`            |
-| deployment.volumeMounts               | Mount path for Volumes                                                                                                                     | `{}`            |
-| deployment.command                    | Command for primary container of deployment                                                                                                | `[]`            |
-| deployment.args                       | Arg for primary container of deployment                                                                                                    | `[]`            |
-| deployment.tolerations                | Taint tolerations for nodes                                                                                                                | `[]`            |
-| deployment.affinity                   | Affinity for pod/node                                                                                                                      | `[]`            |
-| deployment.ports                      | Ports for primary container                                                                                                                | `[]`            |
-| deployment.securityContext            | Security Context for the pod                                                                                                               | `{}`            |
-| deployment.additionalContainers       | Add additional containers besides init and app containers                                                                                  | `[]             |
-| deployment.containers.securityContext | Add security context at container level                                                                                                    | `[]             |
+| deployment.reloadOnChange             | Reload deployment if configMap/secret mounted are updated                                                                                  | `true`         |
+| deployment.nodeSelector               | Select node to deploy this application                                                                                                     | `{}`           |
+| deployment.hostAliases                | Adding entries to a Pod's /etc/hosts file provides Pod-level override of hostname resolution when DNS and other options are not applicable | `[]`           |
+| deployment.additionalLabels           | Additional labels for Deployment                                                                                                           | `{}`           |
+| deployment.podLabels                  | Additional label added on pod which is used in Service's Label Selector                                                                    | {}             |
+| deployment.annotations                | Annotations on deployments                                                                                                                 | `{}`           |
+| deployment.additionalPodAnnotations   | Additional Pod Annotations added on pod created by this Deployment                                                                         | `{}`           |
+| deployment.replicas                   | Replicas to be created                                                                                                                     | ``             |
+| deployment.imagePullSecrets           | Secrets used to pull image                                                                                                                 | `""`           |
+| deployment.env                        | Environment variables to be passed to the app container                                                                                    | `{}`           |
+| deployment.volumes                    | Volumes to be added to the pod                                                                                                             | `{}`           |
+| deployment.volumeMounts               | Mount path for Volumes                                                                                                                     | `{}`           |
+| deployment.command                    | Command for primary container of deployment                                                                                                | `[]`           |
+| deployment.args                       | Arg for primary container of deployment                                                                                                    | `[]`           |
+| deployment.tolerations                | Taint tolerations for nodes                                                                                                                | `[]`           |
+| deployment.affinity                   | Affinity for pod/node                                                                                                                      | `[]`           |
+| deployment.ports                      | Ports for primary container                                                                                                                | `[]`           |
+| deployment.securityContext            | Security Context for the pod                                                                                                               | `{}`           |
+| deployment.additionalContainers       | Add additional containers besides init and app containers                                                                                  | `[]`           |
+| deployment.containers.securityContext | Add security context at container level                                                                                                    | `{}`           |
 
 #### Deployment Resources Parameters
 

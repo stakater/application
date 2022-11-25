@@ -176,11 +176,17 @@ deployment:
     requests:
       memory: 128Mi
       cpu: 0.1
-  
+
+  # Security Context at Container Level
+  containerSecurityContext:
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+
   openshiftOAuthProxy:
     enabled: true
     port: 8080
     secretName: "openshift-oauth-proxy-tls"
+
 
   # Add additional containers besides init and app containers
   additionalContainers:

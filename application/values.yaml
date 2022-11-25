@@ -39,6 +39,7 @@ cronJob:
 # Deployment
 ##########################################################
 deployment:
+
   enabled: true
   # By default deploymentStrategy is set to rollingUpdate with maxSurge of 25% and maxUnavailable of 25%
   # You can change type to `Recreate` or can uncomment `rollingUpdate` specification and adjust them to your usage.
@@ -213,6 +214,11 @@ deployment:
     requests:
       memory: 128Mi
       cpu: 0.1
+
+#  Security Context at Container Level
+  containerSecurityContext:
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
   
   openshiftOAuthProxy: 
     enabled: false
@@ -224,9 +230,11 @@ deployment:
   # - name: sidecar-contaner
   #   image: busybox
   #   imagePullPolicy: IfNotPresent
-  #   command: ['/bin/sh']    
+  #   command: ['/bin/sh']
+
 
   # Security Context for the pod
+
   securityContext:
     # fsGroup: 2000
   
@@ -271,6 +279,7 @@ persistence:
   storageSize: 8Gi
   volumeMode: ""
   volumeName: ""
+
 
 ##########################################################
 # Service object for servicing pods

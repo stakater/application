@@ -233,6 +233,10 @@ spec:
           requests:
             memory: {{ .Values.deployment.resources.requests.memory }}
             cpu: {{ .Values.deployment.resources.requests.cpu }}
+        {{- if .Values.deployment.containers.securityContext }}
+        securityContext:
+{{ toYaml .Values.deployment.containers.securityContext | indent 10 }}
+        {{- end }}
         {{- if .Values.deployment.additionalContainers }}
 {{ toYaml .Values.deployment.additionalContainers | indent 6 }}
         {{- end }}

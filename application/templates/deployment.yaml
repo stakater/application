@@ -181,6 +181,9 @@ spec:
           {{- else if .Values.deployment.startupProbe.httpGet }}
           httpGet:
             {{- toYaml .Values.deployment.startupProbe.httpGet | nindent 12 }}
+          {{- else if .Values.deployment.startupProbe.tcpSocket }}
+          tcpSocket:
+            {{- toYaml .Values.deployment.startupProbe.tcpSocket | nindent 12 }}
           {{- end }}
         {{- end }}
         {{- if .Values.deployment.livenessProbe.enabled }} 
@@ -196,6 +199,9 @@ spec:
           {{- else if .Values.deployment.livenessProbe.httpGet }}
           httpGet:
             {{- toYaml .Values.deployment.livenessProbe.httpGet | nindent 12 }}
+          {{- else if .Values.deployment.livenessProbe.tcpSocket }}
+          tcpSocket:
+            {{- toYaml .Values.deployment.livenessProbe.tcpSocket | nindent 12 }}
           {{- end }}
         {{- end }}
         {{- if .Values.deployment.readinessProbe.enabled }} 
@@ -211,6 +217,9 @@ spec:
           {{- else if .Values.deployment.readinessProbe.httpGet }}
           httpGet:
             {{- toYaml .Values.deployment.readinessProbe.httpGet | nindent 12 }}
+          {{- else if .Values.deployment.readinessProbe.tcpSocket }}
+          tcpSocket:
+            {{- toYaml .Values.deployment.readinessProbe.tcpSocket | nindent 12 }}
           {{- end }}
         {{- end }}
       {{- if or (.Values.deployment.volumeMounts) (and (eq .Values.persistence.enabled true) (eq .Values.persistence.mountPVC true) )}} 

@@ -181,6 +181,7 @@ deployment:
       path: '/path'
       port: 8080
     exec: {}
+    tcpSocket: {}
 
   readinessProbe:
     enabled: true
@@ -193,6 +194,7 @@ deployment:
       path: '/path'
       port: 8080
     exec: {}
+    tcpSocket: {}
 
   livenessProbe:
     enabled: true
@@ -205,7 +207,8 @@ deployment:
       path: '/path'
       port: 8080
     exec: {}
-      
+    tcpSocket: {}
+
   # Resources to be defined for pod
   resources: 
     limits:

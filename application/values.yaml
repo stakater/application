@@ -184,30 +184,30 @@ deployment:
     tcpSocket: {}
 
   readinessProbe:
-    enabled: true
-    failureThreshold: 3
-    periodSeconds: 10
-    successThreshold: 1
-    timeoutSeconds: 1
-    initialDelaySeconds: 10
-    httpGet: 
-      path: '/path'
-      port: 8080
-    exec: {}
-    tcpSocket: {}
+  #  enabled: true
+  #  failureThreshold: 3
+  #  periodSeconds: 10
+  #  successThreshold: 1
+  #  timeoutSeconds: 1
+  #  initialDelaySeconds: 10
+  #  httpGet:
+  #    path: '/path'
+  #    port: 8080
+  #  exec: {}
+  #  tcpSocket: {}
 
   livenessProbe:
-    enabled: true
-    failureThreshold: 3
-    periodSeconds: 10
-    successThreshold: 1
-    timeoutSeconds: 1
-    initialDelaySeconds: 10
-    httpGet: 
-      path: '/path'
-      port: 8080
-    exec: {}
-    tcpSocket: {}
+  #  enabled: true
+  #  failureThreshold: 3
+  #  periodSeconds: 10
+  #  successThreshold: 1
+  #  timeoutSeconds: 1
+  #  initialDelaySeconds: 10
+  #  httpGet: 
+  #    path: '/path'
+  #    port: 8080
+  #  exec: {}
+  #  tcpSocket: {}
 
   # Resources to be defined for pod
   resources: 

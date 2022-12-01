@@ -3,7 +3,7 @@
 
 All notable changes to this project will be documented here
 
-### v1.3.1
+### v1.3.2
 - Feature: Disable liveness and readiness probes.
 
 ### v1.3.1

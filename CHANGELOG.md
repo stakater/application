@@ -4,6 +4,9 @@
 All notable changes to this project will be documented here
 
 ### v1.3.1
+- Feature: Disable liveness and readiness probes.
+
+### v1.3.1
 - Feature: Support for specifiying tcpSocket probe check mechanisms in probes.
 
 ### v1.3.0

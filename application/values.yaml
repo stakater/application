@@ -177,6 +177,7 @@ deployment:
     enabled: false
     failureThreshold: 30
     periodSeconds: 10
+    # Must specify either one of the following field when enabled
     httpGet: {}
     exec: {}
     tcpSocket: {}

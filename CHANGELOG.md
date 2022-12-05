@@ -1,10 +1,13 @@
 
 # Changelog
 
-All notable changes to this project will be documented here
+All notable changes to this project will be documented here.
+
+### v1.3.3
+- Feature: Uncomment liveness and readiness probes in default values. Set enabled:false in probes.
 
 ### v1.3.2
-- Feature: Disable liveness and readiness probes.
+- Feature: Comment liveness and readiness probe in default values.
 
 ### v1.3.1
 - Feature: Support for specifiying tcpSocket probe check mechanisms in probes.

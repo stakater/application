@@ -666,7 +666,7 @@ externalSecret:
     secret-2-name:
       #Used to fetch all properties from the Provider key
       dataFrom:
-      - key: example-provider-key
+        key: example-provider-key
       type: Opaque
       annotations:
         key: value

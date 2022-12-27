@@ -2,8 +2,6 @@
 # Changelog
 
 All notable changes to this project will be documented here.
-### v2.0.0
-- Update: Updating ExternalSecret from v1alpha1 to v1beta1 
 
 ### v1.3.3
 - Feature: Uncomment liveness and readiness probes in default values. Set enabled:false in probes.

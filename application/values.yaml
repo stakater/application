@@ -747,7 +747,8 @@ externalSecret:
     # postgres:
       ## Used to fetch all properties from the Provider key
       #   dataFrom:
-      #     key: postgres
+      #   - key: postgres
+      #     property: credentials
 
 ##########################################################
 # Network Policy

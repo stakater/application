@@ -276,10 +276,12 @@ spec:
         {{- end }}
         {{- end }}
       {{- end }}
+      {{- if .Values.rbac }}
+      {{- if .Values.rbac.serviceAccount }}
       {{- if .Values.rbac.serviceAccount.name }}
       serviceAccountName: {{ .Values.rbac.serviceAccount.name }}
-        {{- else }}
-      serviceAccountName: {{ template "application.name" . }}
       {{- end }}
+      {{- end }}
+      {{- end }}      
 {{- end }}   
 {{- end }}

@@ -3,7 +3,7 @@
 
 All notable changes to this project will be documented here.
 
-### v2.0.1
+### v2.1.0
 - Fix: added oauth proxy image template and test to ensure oauth deployment image is not added in default case
 
 ### v2.0.0

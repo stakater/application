@@ -81,11 +81,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        with:
-          version: '3.11.0'
-          token: ${{secrets.STAKATER_GITHUB_TOKEN}}
-      - run: helm dependency build
-        working-directory: application
       - uses: d3adb5/helm-unittest-action@v1
         with:
           charts: application

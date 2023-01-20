@@ -75,3 +75,6 @@ All notable changes to this project will be documented here.
 
 ### v0.1.6
 - Fix: corrected the namespace indentation in rolebinding template. Corresponding chart package has been pushed to helmchart repo manually.
+
+### v2.0.1
+- Fix: added oauth proxy image template and test to ensure oauth deployment image is not added in default case

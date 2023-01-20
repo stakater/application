@@ -1,0 +1,11 @@
+suite: test deployment
+templates:
+  - charts/application/templates/deployment.yaml
+tests:
+  - it: make sure OAuth image is not included in the default rendered chart
+    asserts:
+      - isKind:
+          of: Deployment
+      - notEqual:
+          path: spec.template.spec.containers[0].image
+          value: openshift/oauth-proxy:latest

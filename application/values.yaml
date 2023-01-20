@@ -224,7 +224,7 @@ deployment:
     enabled: false
     port: 8080
     secretName: "openshift-oauth-proxy-tls"
-    image: openshift/oauth-proxy:latest
+    image: openshift/oauth-proxy:latest       # If you have a custom container for oauth-proxy that can be updated here
 
   # Add additional containers besides init and app containers
   additionalContainers:

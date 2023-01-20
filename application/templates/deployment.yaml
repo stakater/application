@@ -109,7 +109,7 @@ spec:
         - --tls-cert=/etc/tls/private/tls.crt
         - --tls-key=/etc/tls/private/tls.key
         - --cookie-secret=SECRET
-        image: openshift/oauth-proxy:latest
+        image: {{ .Values.deployment.openshiftOAuthProxy.image  | default "openshift/oauth-proxy:latest" }}
         imagePullPolicy: IfNotPresent
         name: oauth-proxy
         ports:

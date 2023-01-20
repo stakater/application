@@ -153,11 +153,12 @@ Periodic probe of container liveness. Container will be restarted if the probe f
 
 #### Deployment OpenshiftOAuthProxy Paramaters
 
-| Name                     | Description                                                                                  | Value           |
-| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
-| deployment.openshiftOAuthProxy.enabled | Add Openshift OAuth Proxy as SideCar Container                                 | `false`         |
-| deployment.openshiftOAuthProxy.port | Application port so proxy should forward to this port                             | `8080`          |
-| deployment.openshiftOAuthProxy.secretName | Secret name containing the TLS cert                                         | `openshift-oauth-proxy-tls`|
+| Name                                      | Description                                        | Value           |
+|-------------------------------------------|----------------------------------------------------| --------------- |
+| deployment.openshiftOAuthProxy.enabled    | Add Openshift OAuth Proxy as SideCar Container     | `false`         |
+| deployment.openshiftOAuthProxy.port       | Application port so proxy should forward to this port | `8080`          |
+| deployment.openshiftOAuthProxy.secretName | Secret name containing the TLS cert                | `openshift-oauth-proxy-tls`|
+| deployment.openshiftOAuthProxy.image      | image for oauth sidecar container                  | `openshift/oauth-proxy:latest`|
 
 ### Deployment Dns Paramaters
 

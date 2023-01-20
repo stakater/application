@@ -6,6 +6,7 @@ tests:
     asserts:
       - isKind:
           of: Deployment
-      - notEqual:
-          path: spec.template.spec.containers[0].image
-          value: openshift/oauth-proxy:latest
+      - notContains:
+          path: spec.template.spec.containers[0]
+          content:
+            image: openshift/oauth-proxy:latest

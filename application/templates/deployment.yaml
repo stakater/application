@@ -102,7 +102,11 @@ spec:
       containers:
         {{- if .Values.deployment.openshiftOAuthProxy.enabled }}
       - args:
+        {{- if .Values.deployment.openshiftOAuthProxy.disableTLSArg }}
+        - --http-address=:8081
+        {{- else }}
         - --https-address=:8443
+        {{- end }}
         - --provider=openshift
         - --upstream=http://localhost:{{ .Values.deployment.openshiftOAuthProxy.port }}
         - --openshift-service-account={{ template "application.name" . }}
@@ -113,7 +117,11 @@ spec:
         imagePullPolicy: IfNotPresent
         name: oauth-proxy
         ports:
+        {{- if .Values.deployment.openshiftOAuthProxy.disableTLSArg }}
+        - containerPort: 8081
+        {{- else }}
         - containerPort: 8443
+        {{- end }}
           name: proxy
         volumeMounts:
         - mountPath: /etc/tls/private

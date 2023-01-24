@@ -222,9 +222,10 @@ deployment:
   
   openshiftOAuthProxy: 
     enabled: false
-    port: 8080
+    port: 8080   # Port on which application is running inside container
     secretName: "openshift-oauth-proxy-tls"
     image: openshift/oauth-proxy:latest       # If you have a custom container for oauth-proxy that can be updated here
+    disableTLSArg: false # On enabling http port will be used as arg containerPort: 8081 , to be used in case of ingress
 
   # Add additional containers besides init and app containers
   additionalContainers:

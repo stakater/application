@@ -159,7 +159,7 @@ Periodic probe of container liveness. Container will be restarted if the probe f
 | deployment.openshiftOAuthProxy.port       | Application port so proxy should forward to this port | `8080`          |
 | deployment.openshiftOAuthProxy.secretName | Secret name containing the TLS cert                   | `openshift-oauth-proxy-tls`|
 | deployment.openshiftOAuthProxy.image      | image for oauth sidecar container                     | `openshift/oauth-proxy:latest`|
-| deployment.openshiftOAuthProxy.disableTLSArg      | On enabling http port will be used as arg             | false           |
+| deployment.openshiftOAuthProxy.disableTLSArg      | If disabled --http-address=:8081 will be used instead of --https-address=:8443             | false           |
 
 ### Deployment Dns Paramaters
 

@@ -34,7 +34,6 @@ spec:
     {{- else }}
     targetPort: 8443
     {{- end }}
-
   {{- else }}
 {{ toYaml .Values.service.ports | indent 4 }}
   {{- end }}

@@ -29,7 +29,11 @@ spec:
   - name: proxy
     port: 443
     protocol: TCP
+    {{- if .Values.deployment.openshiftOAuthProxy.disableTLSArg }}
+    targetPort: 8081
+    {{- else }}
     targetPort: 8443
+    {{- end }}
   {{- else }}
 {{ toYaml .Values.service.ports | indent 4 }}
   {{- end }}

@@ -2,6 +2,8 @@
 # Changelog
 
 All notable changes to this project will be documented here.
+### v2.1.1
+- Fix: added template for oauth proxy deployment to use http container port in case of ingress
 
 ### v2.1.0
 - Fix: added oauth proxy image template and test to ensure oauth deployment image is not added in default case

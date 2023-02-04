@@ -1,0 +1,25 @@
+suite: Deployment
+
+templates:
+  - deployment.yaml
+
+tests:
+  - it: does not include OAuth proxy container if disabled
+    set:
+      deployment.openshiftOAuthProxy.enabled: false
+    asserts:
+      - notContains:
+          path: spec.template.spec.containers
+          content:
+            image: openshift/oauth-proxy:latest
+          any: true
+
+  - it: includes OAuth proxy container when enabled
+    set:
+      deployment.openshiftOAuthProxy.enabled: true
+    asserts:
+      - contains:
+          path: spec.template.spec.containers
+          content:
+            image: openshift/oauth-proxy:latest
+          any: true

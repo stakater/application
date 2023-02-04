@@ -10,15 +10,15 @@ kind: HorizontalPodAutoscaler
 metadata:
   name: {{ template "application.name" . }}
   labels:
-    {{ include "application.labels.stakater" . | nindent 4 }}
-    {{ include "application.labels.chart" . | nindent 4 }}
-  {{- if .Values.autoscaling.additionalLabels }}
-    {{- toYaml .Values.autoscaling.additionalLabels | nindent 4 }}
-  {{- end }}
+    {{- include "application.labels.stakater" . | nindent 4 }}
+    {{- include "application.labels.chart" . | nindent 4 }}
+    {{- with .Values.autoscaling.additionalLabels }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
   {{- if .Values.autoscaling.annotations }}
   annotations:
     {{- toYaml .Values.autoscaling.annotations | nindent 4 }}
-  {{- end }}    
+  {{- end }}
   namespace: {{ template "application.namespace" . }}
 spec:
   scaleTargetRef:

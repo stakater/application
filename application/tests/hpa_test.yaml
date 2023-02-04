@@ -57,3 +57,26 @@ tests:
           value:
             foo: bar
             test: ing
+
+  - it: uses API version autoscaling/v2 when available
+    set:
+      autoscaling.enabled: true
+      deployment.enabled: true
+    capabilities:
+      apiVersions:
+        - apps/v1
+        - autoscaling/v2
+    asserts:
+      - isAPIVersion:
+          of: autoscaling/v2
+
+  - it: uses API version autoscaling/v2beta2 when v2 is unavailable
+    set:
+      autoscaling.enabled: true
+      deployment.enabled: true
+    capabilities:
+      apiVersions:
+        - apps/v1
+    asserts:
+      - isAPIVersion:
+          of: autoscaling/v2beta2

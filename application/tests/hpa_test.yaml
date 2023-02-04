@@ -11,11 +11,10 @@ tests:
       - hasDocuments:
           count: 0
 
-  # TODO: refactor hpa.yaml to use deployment.enabled instead!
-  - it: does not yield HPA resource if deployment is falsy
+  - it: does not yield HPA resource if deployment is disabled
     set:
       autoscaling.enabled: true
-      deployment: null
+      deployment.enabled: false
     asserts:
       - hasDocuments:
           count: 0

@@ -1,0 +1,96 @@
+suite: PodDisruptionBudget
+
+templates:
+  - pdb.yaml
+
+tests:
+  - it: does not yield PDB if disabled
+    set:
+      pdb.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: does not yield PDB if minAvailable and maxUnavailable are inexistent
+    set:
+      pdb:
+        enabled: true
+        minAvailable: null
+        maxUnavailable: null
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: yields PDB if enabled and minAvailable is set
+    set:
+      pdb:
+        enabled: true
+        minAvailable: 1
+        maxUnavailable: null
+    asserts:
+      - isKind:
+          of: PodDisruptionBudget
+      - hasDocuments:
+          count: 1
+
+  - it: yields PDB if enabled and maxUnavailable is set
+    set:
+      pdb:
+        enabled: true
+        minAvailable: null
+        maxUnavailable: 1
+    asserts:
+      - isKind:
+          of: PodDisruptionBudget
+      - hasDocuments:
+          count: 1
+
+  - it: uses API version policy/v1 if cluster advertises capability
+    set:
+      pdb:
+        enabled: true
+        minAvailable: 1
+    capabilities:
+      apiVersions:
+        - policy/v1/PodDisruptionBudget
+    asserts:
+      - isAPIVersion:
+          of: policy/v1
+
+  - it: uses API version policy/v1beta1 if cluster does not advertise capability
+    set:
+      pdb:
+        enabled: true
+        minAvailable: 1
+    capabilities:
+      apiVersions:
+        - apps/v1
+    asserts:
+      - isAPIVersion:
+          of: policy/v1beta1
+
+  - it: uses minAvailable when both minAvailable and maxUnavailable are set
+    set:
+      pdb:
+        enabled: true
+        minAvailable: 1
+        maxUnavailable: 1
+    asserts:
+      - equal:
+          path: spec.minAvailable
+          value: 1
+      - isNull:
+          path: spec.maxUnavailable
+
+  - it: uses maxUnavailable when it is set and minAvailable is not
+    set:
+      pdb:
+        enabled: true
+        minAvailable: null
+        maxUnavailable: 1
+    asserts:
+      - equal:
+          path: spec.maxUnavailable
+          value: 1
+      - isNull:
+          path: spec.minAvailable

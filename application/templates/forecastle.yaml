@@ -1,16 +1,14 @@
-{{- if .Values.forecastle }}
-{{- if and (or .Values.ingress.enabled .Values.route.enabled) .Values.forecastle.enabled }}
+{{- if and (.Values.forecastle).enabled (.Capabilities.APIVersions.Has "forecastle.stakater.com/v1alpha1") (or .Values.ingress.enabled .Values.route.enabled) }}
 apiVersion: forecastle.stakater.com/v1alpha1
 kind: ForecastleApp
 metadata:
+  name: {{ template "application.name" . }}
+  namespace: {{ include "application.namespace" . }}
   labels:
-{{ include "application.labels.stakater" . | indent 4 }}
-{{ include "application.labels.chart" . | indent 4 }}
+{{ include "application.labels" . | indent 4 }}
 {{- if .Values.forecastle.additionalLabels }}
 {{ toYaml .Values.forecastle.additionalLabels | indent 4 }}
 {{- end }}
-  name: {{ template "application.name" . }}
-  namespace: {{ template "application.namespace" . }}
 spec:
   name: {{ .Values.forecastle.displayName }}
   group: {{ default .Release.Namespace .Values.forecastle.group }}
@@ -28,5 +26,4 @@ spec:
   properties:
 {{ toYaml .Values.forecastle.properties | indent 4 }}
   {{- end }}
-{{- end -}}
 {{- end -}}

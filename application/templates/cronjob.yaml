@@ -1,11 +1,10 @@
-{{- if .Values.cronJob.enabled }}
+{{- if (.Values.cronJob).enabled }}
 {{- range $name, $job := .Values.cronJob.jobs }}
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   labels:
-{{ include "application.labels.stakater" $ | indent 4 }}
-{{ include "application.labels.chart" $ | indent 4 }}
+{{ include "application.labels" $ | indent 4 }}
 {{- if $job.additionalLabels }}
 {{ $job.additionalLabels | indent 4 }}
 {{- end }}
@@ -31,8 +30,8 @@ spec:
       template:
         metadata:
           labels:
-          {{- include "application.labels.stakater" $ | nindent 12 }}
-          {{- include "application.labels.chart" $ | nindent 12 }}
+          {{- include "application.labels" $ | nindent 12 }}
+          {{- include "" $ | nindent 12 }}
         spec:
           {{- if $.Values.rbac.serviceAccount.name }}
           serviceAccountName: {{ $.Values.rbac.serviceAccount.name }}

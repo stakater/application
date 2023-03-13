@@ -1,11 +1,9 @@
-{{- if .Values.deployment }}
-{{- if .Values.deployment.enabled }}
+{{- if (.Values.deployment).enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-{{ include "application.labels.stakater" . | indent 4 }}
-{{ include "application.labels.chart" . | indent 4 }}
+{{ include "application.labels" . | indent 4 }}
 {{- if .Values.deployment.additionalLabels }}
 {{ toYaml .Values.deployment.additionalLabels | indent 4 }}
 {{- end }}
@@ -19,14 +17,14 @@ metadata:
     reloader.stakater.com/auto: "true"
 {{- end }}
   name: {{ template "application.name" . }}
-  namespace: {{ template "application.namespace" . }}
+  namespace: {{ include "application.namespace" . }}
 spec:
 {{- if .Values.deployment.replicas }}
   replicas: {{ .Values.deployment.replicas }}
 {{- end }}
   selector:
     matchLabels:
-{{ include "application.labels.selector" . | indent 6 }}
+{{ include "application.selectorLabels" . | indent 6 }}
   {{- if .Values.deployment.strategy }}
   strategy:
 {{ toYaml .Values.deployment.strategy | indent 4 }}
@@ -34,7 +32,7 @@ spec:
   template:
     metadata:
       labels:
-{{ include "application.labels.selector" . | indent 8 }}
+{{ include "application.selectorLabels" . | indent 8 }}
 {{- if .Values.deployment.podLabels }}
 {{ toYaml .Values.deployment.podLabels | indent 8 }}
 {{- end }}
@@ -289,5 +287,4 @@ spec:
         {{- else }}
       serviceAccountName: {{ template "application.name" . }}
       {{- end }}
-{{- end }}   
 {{- end }}

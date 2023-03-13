@@ -1,11 +1,11 @@
-{{- if .Values.service }}
-{{- if .Values.service.enabled }}
+{{- if (.Values.service).enabled }}
 apiVersion: v1
 kind: Service
 metadata:
+  name: {{ template "application.name" . }}
+  namespace: {{ template "application.namespace" $ }}
   labels:
-{{ include "application.labels.stakater" . | indent 4 }}
-{{ include "application.labels.chart" . | indent 4 }}
+{{ include "application.labels" . | indent 4 }}
 {{- if .Values.service.additionalLabels }}
 {{ toYaml .Values.service.additionalLabels | indent 4 }}
 {{- end }}
@@ -13,14 +13,12 @@ metadata:
   annotations:
 {{ include "application.tplvalues.render" ( dict "value" .Values.service.annotations  "context" $ ) | indent 4 }}
 {{- end }}
-  name: {{ template "application.name" . }}
-  namespace: {{ template "application.namespace" $ }}
 spec:
 {{- if .Values.service.type }}  
   type: "{{ .Values.service.type }}"
 {{- end }}
   selector:
-{{ include "application.labels.selector" . | indent 4 }}
+{{ include "application.selectorLabels" . | indent 4 }}
 {{- if .Values.deployment.podLabels }}
 {{ toYaml .Values.deployment.podLabels | indent 4 }}
 {{- end }}
@@ -37,5 +35,4 @@ spec:
   {{- else }}
 {{ toYaml .Values.service.ports | indent 4 }}
   {{- end }}
-{{- end }}
 {{- end }}

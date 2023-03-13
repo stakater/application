@@ -1,11 +1,11 @@
-{{- if .Values.networkPolicy }}
-{{- if .Values.networkPolicy.enabled }}
+{{- if (.Values.networkPolicy).enabled }}
 apiVersion: "networking.k8s.io/v1"
 kind: NetworkPolicy
 metadata:
+  name: {{ template "application.name" . }}
+  namespace: {{ include "application.namespace" . }}
   labels:
-{{ include "application.labels.stakater" . | indent 4 }}
-{{ include "application.labels.chart" . | indent 4 }}
+{{ include "application.labels" . | indent 4 }}
 {{- if .Values.networkPolicy.additionalLabels }}
 {{ toYaml .Values.networkPolicy.additionalLabels | indent 4 }}
 {{- end }}
@@ -13,12 +13,10 @@ metadata:
   annotations:
 {{ toYaml .Values.networkPolicy.annotations | indent 4 }}
 {{- end }}
-  name: {{ template "application.name" . }}
-  namespace: {{ template "application.namespace" . }}
 spec:
   podSelector:
     matchLabels:
-{{ include "application.labels.selector" . | indent 6 }}
+{{ include "application.selectorLabels" . | indent 6 }}
 {{- if .Values.deployment.podLabels }}
 {{ toYaml .Values.deployment.podLabels | indent 6 }}
 {{- end }}
@@ -38,6 +36,5 @@ spec:
 {{- if .Values.networkPolicy.ingress }}
   ingress:
 {{ toYaml .Values.networkPolicy.ingress | indent 4 }}
-{{- end }}
 {{- end }}
 {{- end }}

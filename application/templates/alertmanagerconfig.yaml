@@ -1,13 +1,11 @@
-{{- if .Values.alertmanagerConfig -}}
-{{- if .Values.alertmanagerConfig.enabled -}}
+{{- if and (.Values.alertmanagerConfig).enabled (.Capabilities.APIVersions.Has "monitoring.coreos.com/v1alpha1") -}}
 apiVersion: monitoring.coreos.com/v1alpha1
 kind: AlertmanagerConfig
 metadata:
   name: {{ template "application.name" . }}
-  namespace: {{ template "application.namespace" . }}
+  namespace: {{ include "application.namespace" . }}
   labels:
-{{ include "application.labels.stakater" . | indent 4 }}
-{{ include "application.labels.chart" . | indent 4 }}
+{{ include "application.labels" . | indent 4 }}
 {{ toYaml .Values.alertmanagerConfig.selectionLabels | indent 4 }}
 spec:
 {{- if .Values.alertmanagerConfig.spec.route }}
@@ -20,7 +18,5 @@ spec:
 {{- end -}}
 {{- if .Values.alertmanagerConfig.spec.inhibitRules }}
     inhibitRules: {{ toYaml .Values.alertmanagerConfig.spec.inhibitRules | nindent 6 }}
-{{- end -}}
-
 {{- end -}}
 {{- end -}}

@@ -1,4 +1,5 @@
 {{/* vim: set filetype=mustache: */}}
+
 {{/*
 Define the name of the chart/application.
 */}}
@@ -6,23 +7,24 @@ Define the name of the chart/application.
 {{- default .Chart.Name .Values.applicationName | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{- define "application.labels.selector" -}}
-app: {{ template "application.name" . }}
-{{- end -}}
+{{/*
+Create a default fully qualified app name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+If release name contains chart name it will be used as a full name.
+*/}}
+{{- define "application.fullname" -}}
+{{- if .Values.fullnameOverride }}
+{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- $name := default .Chart.Name .Values.nameOverride }}
+{{- if contains $name .Release.Name }}
+{{- .Release.Name | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
+{{- end }}
+{{- end }}
+{{- end }}
 
-{{- define "application.labels.stakater" -}}
-{{ template "application.labels.selector" . }}
-appVersion: "{{ .Values.deployment.image.tag | trunc 63 | trimSuffix "-" -}}"
-{{- end -}}
-
-{{- define "application.labels.chart" -}}
-group: {{ .Values.labels.group }}
-provider: stakater
-team: {{ .Values.labels.team }}
-chart: "{{ .Chart.Name }}"
-release: {{ .Release.Name | quote }}
-heritage: {{ .Release.Service | quote }}
-{{- end -}}
 {{/*
 Renders a value that contains template.
 Usage:
@@ -36,13 +38,35 @@ Usage:
     {{- end }}
 {{- end -}}
 
-{{- define "application.namespace" -}}
-    
-        {{- if .Values.namespaceOverride }}
-            {{- .Values.namespaceOverride -}}
-        {{- else -}}
-            {{- .Release.Namespace -}}
-        {{- end -}}
-
+{{/*
+Create chart name and version as used by the chart label.
+*/}}
+{{- define "application.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
+{{/*
+Common labels
+*/}}
+{{- define "application.labels" -}}
+helm.sh/chart: {{ include "application.chart" . }}
+app.kubernetes.io/name: {{ include "application.name" . }}
+app.kubernetes.io/version: {{- .Values.deployment.image.tag | trunc 63 | trimSuffix "-" -}}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+app.kubernetes.io/component: {{ include "application.name" . }}
+app.kubernetes.io/part-of: {{ include "application.name" . }}
+{{- end }}
+
+{{/*
+Selector labels
+*/}}
+{{- define "application.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "application.name" . }}
+{{- end }}
+
+{{/*
+Allow the release namespace to be overridden
+*/}}
+{{- define "application.namespace" -}}
+{{- default .Release.Namespace .Values.namespaceOverride -}}
+{{- end -}}

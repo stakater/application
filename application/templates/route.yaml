@@ -1,13 +1,11 @@
-{{- if .Values.route -}}
-{{- if .Values.route.enabled -}}
+{{- if and (.Values.route).enabled (.Capabilities.APIVersions.Has "route.openshift.io/v1") -}}
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   name: {{ template "application.name" . }}
-  namespace: {{ template "application.namespace" . }}
+  namespace: {{ include "application.namespace" . }}
   labels:
-{{ include "application.labels.stakater" . | indent 4 }}
-{{ include "application.labels.chart" . | indent 4 }}
+{{ include "application.labels" . | indent 4 }}
 {{- if .Values.route.additionalLabels }}
 {{ toYaml .Values.route.additionalLabels | indent 4 }}
 {{- end }}
@@ -46,5 +44,4 @@ spec:
     name: {{ .Values.route.alternateBackends.name }}
     weight: {{ .Values.route.alternateBackends.weight }}
   {{- end -}}
-{{- end -}}
 {{- end -}}

@@ -1,9 +1,16 @@
+# -- Same as nameOverride but for the namespace.
+namespaceOverride: ""
+
+# -- Same as nameOverride but for the component.
+componentOverride: ""
+
+# -- Same as nameOverride but for the partOf.
+partOfOverride: ""
+
 ##########################################################
 # Name of the application.
 ##########################################################
 applicationName: "application"
-
-namespaceOverride: ""
 
 ##########################################################
 # Global labels
@@ -11,9 +18,6 @@ namespaceOverride: ""
 # and you can add additional labels from below 
 # on individual resource
 ##########################################################
-labels:
-  group: com.stakater.platform
-  team: stakater
   
 cronJob: 
   enabled: false

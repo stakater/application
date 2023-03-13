@@ -8,6 +8,13 @@ Define the name of the chart/application.
 {{- end -}}
 
 {{/*
+Define the name of the chart/application.
+*/}}
+{{- define "application.version" -}}
+{{ regexReplaceAll "[^a-zA-Z0-9_\\.\\-]" .Values.deployment.image.tag "-" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
@@ -51,7 +58,7 @@ Common labels
 {{- define "application.labels" -}}
 helm.sh/chart: {{ include "application.chart" . }}
 app.kubernetes.io/name: {{ include "application.name" . }}
-app.kubernetes.io/version: {{- .Values.deployment.image.tag | trunc 63 | trimSuffix "-" -}}
+app.kubernetes.io/version: {{ include "application.version" . }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 app.kubernetes.io/component: {{ include "application.name" . }}
 app.kubernetes.io/part-of: {{ include "application.name" . }}

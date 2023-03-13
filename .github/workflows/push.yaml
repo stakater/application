@@ -18,29 +18,22 @@ jobs:
   build:
     name: Build
     if: "! contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
-    runs-on: ubuntu-latest
+    runs-on: sno2
     
     steps:
 
     - name: Check out code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
         fetch-depth: 0 # otherwise, you will fail to push refs to dest repo
 
-    - name: Authenticate to OC cluster
-      uses: redhat-actions/oc-login@v1
-      with:
-        openshift_server_url: ${{ secrets.STAKATER_TEST_CLUSTER }}
-        openshift_username: ${{ secrets.STAKATER_TEST_USER }}
-        openshift_password: ${{ secrets.STAKATER_TEST_PASSWORD }}
-
     # Generate tag for chart without "v" prefix
     - name: Generate Tag
       id: generate_tag
-      uses: anothrNick/github-tag-action@1.36.0
+      uses: anothrNick/github-tag-action@1.61.0
       env:
-        GITHUB_TOKEN: ${{ secrets.STAKATER_GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         WITH_V: false
         DEFAULT_BUMP: patch
         DRY_RUN: true
@@ -54,9 +47,9 @@ jobs:
 
     # Set Up Helm
     - name: Set up Helm
-      uses: azure/setup-helm@v1
+      uses: azure/setup-helm@v3
       with:
-        version: v3.7.0
+        version: v3.8.2
 
     # Lint
     - name: Helm Lint
@@ -67,6 +60,7 @@ jobs:
     - name: Dry Run Chart
       run: |
         helm install ${CHART_NAME} ${CHART_NAME} -f ${CHART_NAME}/values-test.yaml -n stakater-chart-pipeline-test --dry-run --debug
+
     # Publish helm chart
     - name: Publish Helm chart
       uses: stefanprodan/helm-gh-pages@master
@@ -93,50 +87,17 @@ jobs:
 
     # Push Chart.yaml with Updated Version
     - name: Push changes
-      shell: bash {0}
-      run: |
-        git config --local user.email "stakater@gmail.com"
-        git config --local user.name "stakater-user"
-        git remote set-url origin https://x-access-token:${{ secrets.STAKATER_GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
-        git push origin
-        if [ $? -eq 0 ]; then
-            echo OK Pushed Succesfully.
-        else
-          for i in 1 2 3
-          do
-            echo "Trying Push Again Attempt:" $i
-            git pull --rebase --strategy-option theirs
-            if [ $? -eq 0 ]; then
-                echo OK Pulled
-            else
-                continue
-            fi
-            git push origin
-            if [ $? -eq 0 ]; then
-                echo OK Pushed
-                break
-            else
-                if [ $i -eq 3 ];then
-                 echo "Fail: Couldnt Push to Remote"
-                 exit 1
-                fi
-                continue
-            fi
-          done
-        fi
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.STAKATER_GITHUB_TOKEN }}
+        branch: ${{ inputs.RELEASE_BRANCH }}
   
     - name: Push Latest Tag
-      uses: anothrNick/github-tag-action@1.36.0
+      uses: anothrNick/github-tag-action@1.61.0
       env:
         GITHUB_TOKEN: ${{ secrets.STAKATER_GITHUB_TOKEN }}
         WITH_V: true
         DEFAULT_BUMP: patch
-
-    - name: Clean up KUBECONFIG
-      if: always() 
-      run: |
-         rm $KUBECONFIG
-    
 
     - name: Notify Slack
       uses: 8398a7/action-slack@v3
@@ -145,5 +106,4 @@ jobs:
         status: ${{ job.status }}
         fields: repo,author,action,eventName,ref,workflow
       env:
-        GITHUB_TOKEN: ${{ secrets.STAKATER_GITHUB_TOKEN }}
         SLACK_WEBHOOK_URL: ${{ secrets.STAKATER_DELIVERY_SLACK_WEBHOOK }}

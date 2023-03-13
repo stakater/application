@@ -31,7 +31,6 @@ spec:
         metadata:
           labels:
           {{- include "application.labels" $ | nindent 12 }}
-          {{- include "" $ | nindent 12 }}
         spec:
           {{- if $.Values.rbac.serviceAccount.name }}
           serviceAccountName: {{ $.Values.rbac.serviceAccount.name }}

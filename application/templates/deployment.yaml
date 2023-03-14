@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-{{ include "application.labels" . | indent 4 }}
+  {{- include "application.labels" . | nindent 4 }}
 {{- if .Values.deployment.additionalLabels }}
 {{ toYaml .Values.deployment.additionalLabels | indent 4 }}
 {{- end }}

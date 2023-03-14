@@ -4,7 +4,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   labels:
-{{ include "application.labels" $ | indent 4 }}
+  {{- include "application.labels" $ | nindent 4 }}
 {{- if $job.additionalLabels }}
 {{ $job.additionalLabels | indent 4 }}
 {{- end }}

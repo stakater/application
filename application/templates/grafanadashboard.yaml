@@ -8,7 +8,7 @@ metadata:
   labels:
     # this label is used as dashboard selector by grafana operator 
     grafanaDashboard: grafana-operator
-{{ include "application.labels" $ | indent 4 }}
+  {{- include "application.labels" $ | nindent 4 }}
 {{- if $.Values.grafanaDashboard.additionalLabels }}
 {{ toYaml $.Values.grafanaDashboard.additionalLabels | indent 4 }}
 {{- end }}

@@ -2,11 +2,8 @@ load('ext://helm_resource', 'helm_resource', 'helm_repo')
 load('ext://namespace', 'namespace_create', 'namespace_inject')
 
 settings = read_json('tilt-settings-sno3.json', default={})
-helm_registry_user = settings.get("helm_registry_user")
-helm_registry_pwd = settings.get("helm_registry_pwd")
 
-if settings.get("allow_k8s_contexts"):
-  allow_k8s_contexts(settings.get("allow_k8s_contexts"))
+allow_k8s_contexts(k8s_context()) # disable check
 
 # Add helm repos
 helm_repo('stakater', 'https://stakater.github.io/stakater-charts')

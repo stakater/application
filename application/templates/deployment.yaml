@@ -273,7 +273,11 @@ spec:
         {{- if (eq .Values.persistence.mountPVC true) }}
       - name: {{ template "application.name" . }}-data
         persistentVolumeClaim:
+          {{- if .Values.persistence.name }}
+          claimName: {{ .Values.persistence.name }}
+          {{- else }}
           claimName: {{ template "application.name" . }}-data
+          {{- end }}
         {{- end }}
         {{- if .Values.deployment.volumes }}
         {{- range $key, $value := .Values.deployment.volumes  }}

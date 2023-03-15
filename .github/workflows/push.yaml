@@ -56,10 +56,42 @@ jobs:
       run: |
         helm lint ${CHART_NAME}
 
+    - name: Install kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: v1.26.0
+
+    - name: Install tilt
+      run: curl -fsSL https://raw.githubusercontent.com/tilt-dev/tilt/master/scripts/install.sh | bash
+
+    - name: Install CLI tools from OpenShift Mirror
+      uses: redhat-actions/openshift-tools-installer@v1
+      with:
+        oc: "4"
+
+    # This is used to setup kubeconfig, required by Tilt
+    - name: Login to cluster
+      run: oc login --token=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token) --server=https://api.vmw-sno2.office.stakater.com:6443 --insecure-skip-tls-verify=true
+
+    # This is required for adding ghcr helm registry
+    - name: Login to Container Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io/stakater
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Tilt up
+      run: tilt ci --timeout 5m0s
+
     # Dry run to ensure that manifests are generated successfully 
     - name: Dry Run Chart
       run: |
         helm install ${CHART_NAME} ${CHART_NAME} -f ${CHART_NAME}/values-test.yaml -n stakater-chart-pipeline-test --dry-run --debug
+
+    - name: Tilt down
+      if: always()
+      run: tilt down --delete-namespaces --file ./Tiltfile-delete
 
     # Publish helm chart
     - name: Publish Helm chart

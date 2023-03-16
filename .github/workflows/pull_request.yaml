@@ -50,7 +50,7 @@ jobs:
 
     # This is used to setup kubeconfig, required by Tilt
     - name: Login to cluster
-      run: oc login --token=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token) --server=https://api.vmw-sno2.office.stakater.com:6443 --insecure-skip-tls-verify=true
+      run: oc login --token=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token) --server=https://kubernetes.default.svc --insecure-skip-tls-verify=true
 
     # This is required for adding ghcr helm registry
     - name: Login to Container Registry

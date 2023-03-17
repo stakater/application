@@ -22,7 +22,7 @@ helm_resource('forecastle', 'stakater/forecastle', namespace=forecastle_namespac
 # Install SealedSecrets
 sealedsecrets_namespace = "sealed-secrets"
 namespace_create(sealedsecrets_namespace)
-helm_resource('sealedsecrets', 'sealed-secrets/sealed-secrets', namespace=sealedsecrets_namespace)
+helm_resource('sealedsecrets', 'sealed-secrets/sealed-secrets', namespace=sealedsecrets_namespace, flags=['--set', 'podSecurityContext.enabled=false','--set', 'containerSecurityContext.enabled=false'])
 
 # Install ExternalSecrets
 externalsecrets_namespace = "external-secrets-operator"

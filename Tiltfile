@@ -11,6 +11,7 @@ helm_repo('sealed-secrets', 'https://bitnami-labs.github.io/sealed-secrets')
 
 # Install IMC
 imc_namespace = "stakater-ingress-monitor-controller"
+namespace_create(imc_namespace)
 helm_resource('imc', 'oci://ghcr.io/stakater/charts/ingress-monitor-controller', namespace=imc_namespace,flags=['--set','developmentMode=true'])
 
 # Install Forecastle

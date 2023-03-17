@@ -12,7 +12,7 @@ helm_repo('sealed-secrets', 'https://bitnami-labs.github.io/sealed-secrets')
 # Install IMC
 imc_namespace = "stakater-imc"
 namespace_create(imc_namespace)
-helm_resource('imc', 'stakater/ingressmonitorcontroller', namespace=imc_namespace)
+helm_resource('imc', 'oci://ghcr.io/stakater/charts/ingress-monitor-controller', namespace=imc_namespace,flags=['--set','developmentMode=true'])
 
 # Install Forecastle
 forecastle_namespace = "stakater-forecastle"
@@ -36,10 +36,3 @@ helm_resource('grafana-operator', 'oci://ghcr.io/stakater/charts/grafana-operato
 
 # Install cert-manager
 # it exists already
-
-
-def create_imc_secret():
-    print('Creating imc secret')
-    local('oc create secret generic imc-config -n stakater-imc')
-
-create_imc_secret()

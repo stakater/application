@@ -27,7 +27,7 @@ helm_resource('sealedsecrets', 'sealed-secrets/sealed-secrets', namespace=sealed
 # Install ExternalSecrets
 externalsecrets_namespace = "external-secrets-operator"
 namespace_create(externalsecrets_namespace)
-helm_resource('external-secrets-operator', 'oci://ghcr.io/stakater/charts/external-secrets-operator', namespace=externalsecrets_namespace, flags=['--version=0.0.2','--username=helm_registry_user','--password=helm_registry_pwd','--set','operator.installPlanApproval=Automatic'])
+helm_resource('external-secrets-operator', 'oci://ghcr.io/stakater/charts/external-secrets-operator', namespace=externalsecrets_namespace, flags=['--version=0.0.2','--username=helm_registry_user','--password=helm_registry_pwd','--set','operator.installPlanApproval=Automatic','--set', 'securityContext.runAsUser=""','--set', 'securityContext.fsGroup=""'])
 
 # Install grafana-operator
 grafana_namespace = "grafana-operator"

@@ -10,7 +10,7 @@ helm_repo('stakater', 'https://stakater.github.io/stakater-charts')
 helm_repo('sealed-secrets', 'https://bitnami-labs.github.io/sealed-secrets')
 
 # Install IMC
-imc_namespace = "stakater-imc"
+imc_namespace = "stakater-ingress-monitor-controller"
 namespace_create(imc_namespace)
 helm_resource('imc', 'oci://ghcr.io/stakater/charts/ingress-monitor-controller', namespace=imc_namespace,flags=['--set','developmentMode=true'])
 

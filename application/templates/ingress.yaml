@@ -24,7 +24,6 @@ spec:
     {{- range .Values.ingress.hosts }}
     - host: {{ tpl .host $ }}
       http:
-        {{- if }}
         {{- range .paths }}
         paths:
         - path: {{ .path }}

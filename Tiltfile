@@ -5,7 +5,7 @@ settings = read_json('tilt-settings-sno3.json', default={})
 
 allow_k8s_contexts(k8s_context()) # disable check
 
-# Add helm repos
+# Add Helm repos
 helm_repo('stakater', 'https://stakater.github.io/stakater-charts')
 helm_repo('sealed-secrets', 'https://bitnami-labs.github.io/sealed-secrets')
 
@@ -17,12 +17,12 @@ helm_resource('imc', 'oci://ghcr.io/stakater/charts/ingress-monitor-controller',
 # Install Forecastle
 forecastle_namespace = "stakater-forecastle"
 namespace_create(forecastle_namespace)
-helm_resource('forecastle', 'stakater/forecastle', namespace=forecastle_namespace)
+helm_resource('forecastle', 'stakater/forecastle', namespace=forecastle_namespace, resource_deps=["stakater"])
 
 # Install SealedSecrets
 sealedsecrets_namespace = "sealed-secrets"
 namespace_create(sealedsecrets_namespace)
-helm_resource('sealedsecrets', 'sealed-secrets/sealed-secrets', namespace=sealedsecrets_namespace, flags=['--set', 'podSecurityContext.enabled=false','--set', 'containerSecurityContext.enabled=false'])
+helm_resource('sealedsecrets', 'sealed-secrets/sealed-secrets', namespace=sealedsecrets_namespace, flags=['--set', 'podSecurityContext.enabled=false','--set', 'containerSecurityContext.enabled=false'], resource_deps=["sealed-secrets"])
 
 # Install ExternalSecrets
 externalsecrets_namespace = "external-secrets-operator"

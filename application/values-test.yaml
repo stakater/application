@@ -441,7 +441,7 @@ configMap:
 sealedSecret:
   enabled: true
   additionalLabels:
-    key: value
+    # key: value
   annotations:
     # key: value
   files:

@@ -5,7 +5,7 @@ settings = read_json('tilt-settings-sno3.json', default={})
 
 allow_k8s_contexts(k8s_context()) # disable check
 
-# Add helm repos
+# Add Helm repos
 helm_repo('stakater', 'https://stakater.github.io/stakater-charts')
 helm_repo('sealed-secrets', 'https://bitnami-labs.github.io/sealed-secrets')
 

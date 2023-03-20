@@ -17,12 +17,12 @@ helm_resource('imc', 'oci://ghcr.io/stakater/charts/ingress-monitor-controller',
 # Install Forecastle
 forecastle_namespace = "stakater-forecastle"
 namespace_create(forecastle_namespace)
-helm_resource('forecastle', 'stakater/forecastle', namespace=forecastle_namespace)
+helm_resource('forecastle', 'stakater/forecastle', namespace=forecastle_namespace, resource_deps=["stakater"])
 
 # Install SealedSecrets
 sealedsecrets_namespace = "sealed-secrets"
 namespace_create(sealedsecrets_namespace)
-helm_resource('sealedsecrets', 'sealed-secrets/sealed-secrets', namespace=sealedsecrets_namespace, flags=['--set', 'podSecurityContext.enabled=false','--set', 'containerSecurityContext.enabled=false'])
+helm_resource('sealedsecrets', 'sealed-secrets/sealed-secrets', namespace=sealedsecrets_namespace, flags=['--set', 'podSecurityContext.enabled=false','--set', 'containerSecurityContext.enabled=false'], resource_deps=["sealed-secrets"])
 
 # Install ExternalSecrets
 externalsecrets_namespace = "external-secrets-operator"

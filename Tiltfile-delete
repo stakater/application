@@ -1,5 +1,13 @@
 include('Tiltfile')
 
+def delete_grafana_operator():
+    print('Deleting grafana operator')
+    local('helm uninstall grafana-operator -n grafana-operator')
+
+def delete_external_secrets_operator():
+    print('Deleting external-secrets operator')
+    local('helm uninstall external-secrets-operator -n external-secrets-operator')
+
 def delete_imc_crds():
     print('Deleting imc crds')
     local('oc get crds -o name | grep \'endpointmonitor\\.stakater\\.com\' | xargs -r -n 1 oc delete')
@@ -24,6 +32,8 @@ def delete_grafana_crds():
     local('oc get crds -o name | grep \'grafanafolders\\.integreatly\\.org\' | xargs -r -n 1 oc delete')
     local('oc get crds -o name | grep \'grafananotificationchannels\\.integreatly\\.org\' | xargs -r -n 1 oc delete')
 
+delete_grafana_operator()
+delete_external_secrets_operator()
 delete_imc_crds()
 delete_forecastle_crds()
 delete_ss_crds()

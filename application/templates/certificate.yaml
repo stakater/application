@@ -1,11 +1,11 @@
-{{- if .Values.certificate }}
-{{- if .Values.certificate.enabled }}
+{{- if and (.Values.certificate).enabled (.Capabilities.APIVersions.Has "cert-manager.io/v1") }}
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
+  name: {{ template "application.name" . }}-certificate
+  namespace: {{ include "application.namespace" . }}
   labels:
-{{ include "application.labels.stakater" . | indent 4 }}
-{{ include "application.labels.chart" . | indent 4 }}
+  {{- include "application.labels" . | nindent 4 }}
 {{- if .Values.certificate.additionalLabels }}
 {{ toYaml .Values.certificate.additionalLabels | indent 4 }}
 {{- end }}
@@ -15,8 +15,6 @@ metadata:
 {{- if .Values.certificate.annotations }}
 {{ toYaml .Values.certificate.annotations | indent 4 }}
 {{- end }}
-  name: {{ template "application.name" . }}-certificate
-  namespace: {{ template "application.namespace" . }}
 spec:
   secretName: {{ include "application.tplvalues.render" ( dict "value" .Values.certificate.secretName "context" $ ) }}
   duration: {{ .Values.certificate.duration }}
@@ -76,7 +74,6 @@ spec:
       passwordSecretRef:
         key: {{ .Values.certificate.keystores.pkcs12.key }}
         name: {{ include "application.tplvalues.render" ( dict "value" .Values.certificate.keystores.pkcs12.name "context" $ ) }}
-{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}

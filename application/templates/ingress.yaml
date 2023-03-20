@@ -1,15 +1,14 @@
-{{- if .Values.ingress -}}
-{{- if .Values.ingress.enabled -}}
+{{- if (.Values.ingress).enabled -}}
 {{- $servicePort := .Values.ingress.servicePort -}}
 {{- $pathType := .Values.ingress.pathType -}}
+{{- $applicationNameTpl := include "application.name" . -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ template "application.name" . }}
-  namespace: {{ template "application.namespace" . }}
+  namespace: {{ include "application.namespace" . }}
   labels:
-{{ include "application.labels.stakater" . | indent 4 }}
-{{ include "application.labels.chart" . | indent 4 }}
+  {{- include "application.labels" . | nindent 4 }}
 {{- if .Values.ingress.additionalLabels }}
 {{ toYaml .Values.ingress.additionalLabels | indent 4 }}
 {{- end }}
@@ -22,21 +21,22 @@ spec:
   ingressClassName: {{ .Values.ingress.ingressClassName }}
 {{- end}}
   rules:
-    {{- range $host := .Values.ingress.hosts }}
-    - host: {{ include "application.tplvalues.render" (dict "value" $host "context" $)  }}
+    {{- range .Values.ingress.hosts }}
+    - host: {{ tpl .host $ }}
       http:
+        {{- range .paths }}
         paths:
-          - path: /
-            pathType: {{ $pathType }}
-            backend:
-              service:
-                name: {{ template "application.name" $ }}
-                port:
-                  name: {{ $servicePort }}
+        - path: {{ .path }}
+          pathType: {{ default "ImplementationSpecific" (.pathType) }}
+          backend:
+            service:
+              name: {{ default $applicationNameTpl (.serviceName) }}
+              port:
+                name: {{ default "http" (.servicePort) }}
+        {{- end }}
     {{- end -}}
   {{- if .Values.ingress.tls }}
   tls:
 {{ include "application.tplvalues.render" (dict "value" .Values.ingress.tls "context" $) | indent 3 }}
   {{- end -}}
-{{- end -}}
 {{- end -}}

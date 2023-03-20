@@ -1,18 +1,15 @@
-{{- if .Values.prometheusRule -}}
-{{- if .Values.prometheusRule.enabled -}}
+{{- if and (.Values.prometheusRule).enabled (.Capabilities.APIVersions.Has "monitoring.coreos.com/v1") -}}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
+  name: {{ template "application.name" . }}
+  namespace: {{ include "application.namespace" . }}
   labels:
-{{ include "application.labels.stakater" . | indent 4 }}
-{{ include "application.labels.chart" . | indent 4 }}
+  {{- include "application.labels" . | nindent 4 }}
 {{- if .Values.prometheusRule.additionalLabels }}
 {{ toYaml .Values.prometheusRule.additionalLabels | indent 4 }}
 {{- end }}
-  name: {{ template "application.name" . }}
-  namespace: {{ template "application.namespace" . }}
 spec:
   groups:
 {{ toYaml .Values.prometheusRule.groups | indent 4 }}
-{{- end -}}
 {{- end -}}

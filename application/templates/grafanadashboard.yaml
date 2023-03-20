@@ -1,14 +1,14 @@
-{{- if .Values.grafanaDashboard -}}
-{{- if .Values.grafanaDashboard.enabled -}}
+{{- if and (.Values.grafanaDashboard).enabled (.Capabilities.APIVersions.Has "integreatly.org/v1alpha1") -}}
 {{- range $name, $content := .Values.grafanaDashboard.contents }}
 apiVersion: integreatly.org/v1alpha1
 kind: GrafanaDashboard
 metadata:
+  name: {{ $name }}
+  namespace: {{ template "application.namespace" $ }}
   labels:
     # this label is used as dashboard selector by grafana operator 
     grafanaDashboard: grafana-operator
-{{ include "application.labels.stakater" $ | indent 4 }}
-{{ include "application.labels.chart" $ | indent 4 }}
+  {{- include "application.labels" $ | nindent 4 }}
 {{- if $.Values.grafanaDashboard.additionalLabels }}
 {{ toYaml $.Values.grafanaDashboard.additionalLabels | indent 4 }}
 {{- end }}
@@ -16,8 +16,6 @@ metadata:
   annotations: 
 {{ toYaml $.Values.grafanaDashboard.annotations | indent 4 }}
 {{- end }}
-  name: {{ $name }}
-  namespace: {{ template "application.namespace" $ }}
 spec:
   {{- if $content.json }}
   json: 
@@ -27,6 +25,5 @@ spec:
   url: {{ $content.url }}
   {{- end }}
 ---
-{{- end }}
 {{- end }}
 {{- end }}

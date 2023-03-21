@@ -9,9 +9,7 @@ on:
     branches:
       - master
     paths-ignore:
-    - 'README.md'
-    - 'CHANGELOG.md'
-
+    - 'README.md'      
 
 env:
   CHART_NAME: "application"

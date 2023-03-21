@@ -2,6 +2,13 @@
 # Changelog
 
 All notable changes to this project will be documented here.
+
+### v2.1.2 && v2.1.3
+- Update: Improve enable conditions by adding capabilites, use `_helpers.tpl` properly, Move to common k8s labels and remove other labels [PR-226](https://github.com/stakater/application/pull/226)
+- Feature: Make `ingress` path configurable [PR-226](https://github.com/stakater/application/pull/226)
+- Fix: Add dependency for `helm_resource` on relevant `helm_repo` in tiltfile [PR-231](https://github.com/stakater/application/pull/231)
+
+
 ### v2.1.1
 - Fix: added template for oauth proxy deployment to use http container port in case of ingress
 

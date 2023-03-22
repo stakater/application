@@ -24,8 +24,8 @@ spec:
     {{- range .Values.ingress.hosts }}
     - host: {{ tpl .host $ }}
       http:
-        {{- range .paths }}
         paths:
+        {{- range .paths }}
         - path: {{ .path }}
           pathType: {{ default "ImplementationSpecific" (.pathType) }}
           backend:

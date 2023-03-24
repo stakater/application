@@ -39,7 +39,9 @@ Common labels
 */}}
 {{- define "application.labels" -}}
 helm.sh/chart: {{ include "application.chart" . }}
+{{- if .Values.deployment.image.tag }}
 app.kubernetes.io/version: {{ include "application.version" . | quote }}
+{{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 app.kubernetes.io/part-of: {{ include "application.name" . }}
 {{- end }}

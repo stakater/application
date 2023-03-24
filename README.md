@@ -97,7 +97,7 @@ To uninstall the chart:
 | Name                     | Description                                                                                  | Value           |
 | ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | deployment.image.repository | Image repository for the application                                                      | `repository/image-name`  |
-| deployment.image.tag | Tag of the application image                                                                     | `v1.0.0`        |
+| deployment.image.tag | Tag of the application image                                                                     | `null`          |
 | deployment.image.digest | Digest of the application image                                                               | ``              |
 | deployment.image.pullPolicy | Pull policy for the application image                                                     | `IfNotPresent`  |
 

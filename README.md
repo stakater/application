@@ -55,6 +55,7 @@ To uninstall the chart:
 | deployment.args                     | Arg for primary container of deployment                                                                                                    | `[]`           |
 | deployment.tolerations              | Taint tolerations for nodes                                                                                                                | `[]`           |
 | deployment.affinity                 | Affinity for pod/node                                                                                                                      | `[]`           |
+| deployment.topologySpreadConstraints| Topology spread constraints definitions                                           | `[]`           |
 | deployment.ports                    | Ports for primary container                                                                                                                | `[]`           |
 | deployment.securityContext          | Security Context for the pod                                                                                                               | `{}`           |
 | deployment.additionalContainers     | Add additional containers besides init and app containers                                                                                  | `[]`           |

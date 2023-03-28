@@ -286,6 +286,10 @@ ingress:
       #  pathType: ''
       #  serviceName: ''
       #  servicePort: ''
+      - path: /subpath
+      #  pathType: ''
+      #  serviceName: ''
+      #  servicePort: ''
     - host: '{{ .Release.Name }}.stakater.com'
       paths:
       - path: /

@@ -3,9 +3,11 @@
 
 All notable changes to this project will be documented here.
 
-### v2.x [unreleased]
+### v2.1.6
+- Feature: Add topologySpreadConstraints [PR-239](https://github.com/stakater/application/pull/239)
 
-- Feat: Add topologySpreadConstraints [PR-239](https://github.com/stakater/application/pull/239)
+### v2.1.4
+- Fix: Repair ingress multiple paths definitions [PR-233](https://github.com/stakater/application/pull/233)
 
 ### v2.1.2 && v2.1.3
 - Update: Improve enable conditions by adding capabilites, use `_helpers.tpl` properly, Move to common k8s labels and remove other labels [PR-226](https://github.com/stakater/application/pull/226)

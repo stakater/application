@@ -4,7 +4,6 @@
 All notable changes to this project will be documented here.
 
 ### v2.1.4
-
 - Fix: Repair ingress multiple paths definitions [PR-233](https://github.com/stakater/application/pull/233)
 
 ### v2.1.2 && v2.1.3

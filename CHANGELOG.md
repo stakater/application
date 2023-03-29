@@ -4,7 +4,7 @@
 All notable changes to this project will be documented here.
 
 ### v2.1.7
-- Fix: Add ingress path with default configuration if not specified at all. [PR-](https://github.com/stakater/application/pull/)
+- Fix: Add ingress path with default configuration if not specified at all. [PR-240](https://github.com/stakater/application/pull/240)
 
 ### v2.1.6
 - Fix: Qoute application version label in labels [PR-238](https://github.com/stakater/application/pull/238)

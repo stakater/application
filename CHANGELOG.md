@@ -3,11 +3,17 @@
 
 All notable changes to this project will be documented here.
 
+### v2.1.7
+- Fix: Add ingress path with default configuration if not specified at all. [PR-240](https://github.com/stakater/application/pull/240)
+
+### v2.1.6
+- Fix: Qoute application version label in labels [PR-238](https://github.com/stakater/application/pull/238)
+
 ### v2.1.5
-- Fix: Qoute application version label in labels [PR-38](https://github.com/stakater/application/pull/238)
+- Fix: Repair ingress multiple paths definitions [PR-233](https://github.com/stakater/application/pull/233)
 
 ### v2.1.4
-- Fix: Repair ingress multiple paths definitions [PR-233](https://github.com/stakater/application/pull/233)
+- Update: Add MIT License [PR-237](https://github.com/stakater/application/pull/237)
 
 ### v2.1.2 && v2.1.3
 - Update: Improve enable conditions by adding capabilites, use `_helpers.tpl` properly, Move to common k8s labels and remove other labels [PR-226](https://github.com/stakater/application/pull/226)

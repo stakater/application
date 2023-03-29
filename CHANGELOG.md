@@ -3,10 +3,13 @@
 
 All notable changes to this project will be documented here.
 
-### v2.1.5
-- Fix: Qoute application version label in labels [PR-38](https://github.com/stakater/application/pull/238)
+### v2.1.7
+- Fix: Add ingress path with default configuration if not specified at all. [PR-](https://github.com/stakater/application/pull/)
 
-### v2.1.4
+### v2.1.6
+- Fix: Qoute application version label in labels [PR-238](https://github.com/stakater/application/pull/238)
+
+### v2.1.5
 - Fix: Repair ingress multiple paths definitions [PR-233](https://github.com/stakater/application/pull/233)
 
 ### v2.1.2 && v2.1.3

@@ -6,9 +6,6 @@ All notable changes to this project will be documented here.
 ### v2.1.7
 - Feature: Add topologySpreadConstraints [PR-239](https://github.com/stakater/application/pull/239)
 
-### v2.1.6
-- Fix quote app.kubernetes.io/version label [PR-238](https://github.com/stakater/application/pull/238)
-
 ### v2.1.5
 - Fix: Qoute application version label in labels [PR-38](https://github.com/stakater/application/pull/238)
 

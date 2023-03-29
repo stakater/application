@@ -211,9 +211,9 @@ Periodic probe of container liveness. Container will be restarted if the probe f
 | Name | Description | Value |
 | ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | ingress.enabled | Enable ingress | `false` |
-| ingress.servicePort | Port of the service that serves pod. | `8080` |
-| ingress.pathType | Each path in an Ingress is required to have a corresponding path type of ingress hosts to validate rules properly | `ImplementationSpecific` |
-| ingress.hosts | Array of hosts to be served by this ingress. See example. | `[]` |
+| ingress.hosts | Array of hosts to be served by this ingress. | `[]` |
+| ingress.hosts[].host | Host to be served. [See example](application/values-test.yaml). | `[]` |
+| ingress.hosts[].paths | Paths to be served against the host. If not specified, default configuration is added, [See example](application/values-test.yaml). | `[]` |
 | ingress.additionalLabels | Labels for ingress | `{}` |
 | ingress.annotations | Annotations for ingress | `{}` |
 | ingress.tls | TLS block for ingress | `[]` |

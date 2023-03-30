@@ -3,6 +3,9 @@
 
 All notable changes to this project will be documented here.
 
+### v2.1.9
+- UFix: Make servicePort var override possible with ingress hosts [PR-243](https://github.com/stakater/application/pull/243)
+
 ### v2.1.8
 - Update: Use new API versions for HPA and CronJob if available [PR-221](https://github.com/stakater/application/pull/221)
 

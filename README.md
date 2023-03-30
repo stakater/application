@@ -1,3 +1,5 @@
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 # Application
 
 Generic helm chart for applications which are:
@@ -209,10 +211,10 @@ Periodic probe of container liveness. Container will be restarted if the probe f
 | Name | Description | Value |
 | ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | ingress.enabled | Enable ingress | `false` |
-| ingress.servicePort | Port of the service that serves pod | `8080` |
-| ingress.pathType | Each path in an Ingress is required to have a corresponding path type of ingress hosts to validate rules properly | `ImplementationSpecific` |
-| ingress.hosts | Array of FQDN hosts to be served by this ingress | `- chart-example.local` |
-| ingress.additionalLables | Labels for ingress | `{}` |
+| ingress.hosts | Array of hosts to be served by this ingress. | `[]` |
+| ingress.hosts[].host | Host to be served. [See example](application/values-test.yaml). | `[]` |
+| ingress.hosts[].paths | Paths against the host. If not specified, default configuration is added, [See example](application/values-test.yaml). | `[]` |
+| ingress.additionalLabels | Labels for ingress | `{}` |
 | ingress.annotations | Annotations for ingress | `{}` |
 | ingress.tls | TLS block for ingress | `[]` |
 | ingress.ingressClassName | Name of the ingress class | '' |

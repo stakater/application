@@ -3,8 +3,21 @@
 
 All notable changes to this project will be documented here.
 
+### v2.1.8
+- Update: Use new API versions for HPA and CronJob if available [PR-221](https://github.com/stakater/application/pull/221)
+
 ### v2.1.7
-- Update: Use newer API versions for HPA and CronJob if available [PR-221](https://github.com/stakater/application/pull/221).
+- Fix: Add ingress path with default configuration if not specified at all. [PR-240](https://github.com/stakater/application/pull/240)
+
+### v2.1.6
+- Fix: Qoute application version label in labels [PR-238](https://github.com/stakater/application/pull/238)
+
+### v2.1.5
+- Fix: Repair ingress multiple paths definitions [PR-233](https://github.com/stakater/application/pull/233)
+
+### v2.1.4
+- Update: Add MIT License [PR-237](https://github.com/stakater/application/pull/237)
+
 ### v2.1.2 && v2.1.3
 - Update: Improve enable conditions by adding capabilites, use `_helpers.tpl` properly, Move to common k8s labels and remove other labels [PR-226](https://github.com/stakater/application/pull/226)
 - Feature: Make `ingress` path configurable [PR-226](https://github.com/stakater/application/pull/226)

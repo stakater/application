@@ -24,8 +24,9 @@ spec:
     {{- range .Values.ingress.hosts }}
     - host: {{ tpl .host $ }}
       http:
-        {{- range .paths }}
         paths:
+        {{- if .paths }}
+        {{- range .paths }}
         - path: {{ .path }}
           pathType: {{ default "ImplementationSpecific" (.pathType) }}
           backend:
@@ -33,6 +34,15 @@ spec:
               name: {{ default $applicationNameTpl (.serviceName) }}
               port:
                 name: {{ default "http" (.servicePort) }}
+        {{- end }}
+        {{- else }}
+        - path: "/"
+          pathType: "ImplementationSpecific"
+          backend:
+            service:
+              name: {{ $applicationNameTpl }}
+              port:
+                name: "http"
         {{- end }}
     {{- end -}}
   {{- if .Values.ingress.tls }}

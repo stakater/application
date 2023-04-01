@@ -25,12 +25,22 @@ spec:
     - host: {{ tpl .host $ }}
       http:
         paths:
+        {{- if .paths }}
         {{- range .paths }}
         - path: {{ .path }}
           pathType: {{ default "ImplementationSpecific" (.pathType) }}
           backend:
             service:
               name: {{ default $applicationNameTpl (.serviceName) }}
+              port:
+                name: {{ default "http" (.servicePort) }}
+        {{- end }}
+        {{- else }}
+        - path: "/"
+          pathType: "ImplementationSpecific"
+          backend:
+            service:
+              name: {{ $applicationNameTpl }}
               port:
                 name: {{ default "http" (.servicePort) }}
         {{- end }}

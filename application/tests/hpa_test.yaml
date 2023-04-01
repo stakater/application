@@ -1,0 +1,82 @@
+suite: HorizontalPodAutoscaler
+
+templates:
+  - hpa.yaml
+
+tests:
+  - it: does not yield HPA resource if autoscaling.enabled is false
+    set:
+      autoscaling.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: does not yield HPA resource if deployment is disabled
+    set:
+      autoscaling.enabled: true
+      deployment.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: yields HPA resource if autoscaling and deployment are both enabled
+    set:
+      autoscaling.enabled: true
+      deployment.enabled: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: HorizontalPodAutoscaler
+
+  - it: renders additional labels passed through values
+    set:
+      autoscaling:
+        enabled: true
+        additionalLabels:
+          foo: bar
+          test: ing
+    asserts:
+      - equal:
+          path: metadata.labels.foo
+          value: bar
+      - equal:
+          path: metadata.labels.test
+          value: ing
+
+  - it: renders annotations passed through values
+    set:
+      autoscaling:
+        enabled: true
+        annotations:
+          foo: bar
+          test: ing
+    asserts:
+      - equal:
+          path: metadata.annotations
+          value:
+            foo: bar
+            test: ing
+
+  - it: uses API version autoscaling/v2 when available
+    set:
+      autoscaling.enabled: true
+      deployment.enabled: true
+    capabilities:
+      apiVersions:
+        - apps/v1
+        - autoscaling/v2/HorizontalPodAutoscaler
+    asserts:
+      - isAPIVersion:
+          of: autoscaling/v2
+
+  - it: uses API version autoscaling/v2beta2 when v2 is unavailable
+    set:
+      autoscaling.enabled: true
+      deployment.enabled: true
+    capabilities:
+      apiVersions:
+        - apps/v1
+    asserts:
+      - isAPIVersion:
+          of: autoscaling/v2beta2

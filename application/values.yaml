@@ -352,8 +352,8 @@ ingress:
   # List of host addresses to be exposed by this Ingress
   hosts:
     - host: chart-example.local
-      paths: 
-      - path: /
+      # paths: 
+      # - path: /
       #  pathType: ''
       #  serviceName: ''
       #  servicePort: ''

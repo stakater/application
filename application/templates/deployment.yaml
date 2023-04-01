@@ -93,9 +93,9 @@ spec:
       affinity:
 {{ toYaml .Values.deployment.affinity | indent 8 -}}
       {{- end }}
-      {{- if .Values.deployment.topologySpreadConstraints }}
+      {{- with .Values.deployment.topologySpreadConstraints }}
       topologySpreadConstraints:
-{{ toYaml .Values.deployment.topologySpreadConstraints | indent 8 }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- if .Values.deployment.imagePullSecrets }}      
       imagePullSecrets:

@@ -1,22 +1,24 @@
-{{- if and (.Values.autoscaling).enabled .Values.deployment }}
-{{ if .Capabilities.APIVersions.Has "autoscaling/v2/HorizontalPodAutoscaler" -}}
+{{- if and .Values.autoscaling.enabled .Values.deployment.enabled }}
+
+{{- if .Capabilities.APIVersions.Has "autoscaling/v2/HorizontalPodAutoscaler" }}
 apiVersion: autoscaling/v2
-{{- else -}}
+{{- else }}
 apiVersion: autoscaling/v2beta2
 {{- end }}
+
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ template "application.name" . }}
   namespace: {{ include "application.namespace" . }}
   labels:
-  {{- include "application.labels" . | nindent 4 }}
-  {{- if .Values.autoscaling.additionalLabels }}
-    {{- toYaml .Values.autoscaling.additionalLabels | nindent 4 }}
-  {{- end }}
+    {{- include "application.labels" . | nindent 4 }}
+    {{- with .Values.autoscaling.additionalLabels }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
   {{- if .Values.autoscaling.annotations }}
   annotations:
     {{- toYaml .Values.autoscaling.annotations | nindent 4 }}
-  {{- end }}    
+  {{- end }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1

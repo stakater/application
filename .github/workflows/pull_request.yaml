@@ -90,11 +90,11 @@ jobs:
         fields: repo,author,action,eventName,ref,workflow
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.STAKATER_DELIVERY_SLACK_WEBHOOK }}
-  
+
   unittest:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: d3adb5/helm-unittest-action@v1
+      - uses: d3adb5/helm-unittest-action@v2
         with:
           charts: application

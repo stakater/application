@@ -1,0 +1,128 @@
+suite: PersistentVolumeClaim
+
+templates:
+  - pvc.yaml
+
+tests:
+  - it: does not yield PVC if persistence is disabled
+    set:
+      persistence.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: does not yield PVC if there's an existing claim
+    set:
+      persistence:
+        enabled: true
+        existingClaim: true
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: yields a PVC when persistence is enabled and there's no existing claim
+    set:
+      persistence:
+        enabled: true
+        existingClaim: false
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: PersistentVolumeClaim
+
+  - it: includes additional labels when defined in values
+    set:
+      persistence:
+        enabled: true
+        existingClaim: false
+        additionalLabels:
+          foo: bar
+          test: ing
+    asserts:
+      - equal:
+          path: metadata.labels.foo
+          value: bar
+      - equal:
+          path: metadata.labels.test
+          value: ing
+
+  - it: includes annotations when defined in values
+    set:
+      persistence:
+        enabled: true
+        existingClaim: false
+        annotations:
+          foo: bar
+          test: ing
+    asserts:
+      - equal:
+          path: metadata.annotations
+          value:
+            foo: bar
+            test: ing
+
+  - it: uses name override when it is defined in values
+    set:
+      persistence:
+        enabled: true
+        existingClaim: false
+        name: example-name-that-should-be-used
+    asserts:
+      - equal:
+          path: metadata.name
+          value: example-name-that-should-be-used
+
+  - it: storage class name is unset if not in values
+    set:
+      persistence:
+        enabled: true
+        existingClaim: false
+        storageClass: null
+    asserts:
+      - isNull:
+          path: spec.storageClassName
+
+  - it: storage class name is an empty string if set to '-'
+    set:
+      persistence:
+        enabled: true
+        existingClaim: false
+        storageClass: "-"
+    asserts:
+      - equal:
+          path: spec.storageClassName
+          value: ""
+
+  - it: storage class name is used if present and not '-'
+    set:
+      persistence:
+        enabled: true
+        existingClaim: false
+        storageClass: example-class-that-should-be-used
+    asserts:
+      - equal:
+          path: spec.storageClassName
+          value: example-class-that-should-be-used
+
+  - it: volume mode is used if present
+    set:
+      persistence:
+        enabled: true
+        existingClaim: false
+        volumeMode: ExampleVolumeMode
+    asserts:
+      - equal:
+          path: spec.volumeMode
+          value: ExampleVolumeMode
+
+  - it: volume name is used if present
+    set:
+      persistence:
+        enabled: true
+        existingClaim: false
+        volumeName: ExampleVolumeName
+    asserts:
+      - equal:
+          path: spec.volumeName
+          value: ExampleVolumeName

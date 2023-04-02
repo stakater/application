@@ -19,6 +19,8 @@ jobs:
   call-ci-workflow:
     uses: ./.github/workflows/ci.yaml
     secrets: inherit
+    with:
+      skip-slack-notification: true
 
   publish:
     name: Publish Chart

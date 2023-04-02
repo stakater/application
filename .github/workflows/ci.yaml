@@ -1,7 +1,13 @@
 name: CI
 
 on:
-  workflow_call: {}
+  workflow_call:
+    inputs:
+      skip-slack-notification:
+        description: Whether to skip sending a notification to Slack.
+        required: true
+        type: boolean
+
   pull_request_target:
     branches:
       - master
@@ -86,7 +92,7 @@ jobs:
 
       - name: Notify Slack
         uses: 8398a7/action-slack@v3
-        if: always()
+        if: always() && ! inputs.skip-slack-notification
         with:
           status: ${{ steps.workflow.outputs.status }}
           fields: repo,author,action,eventName,ref,workflow

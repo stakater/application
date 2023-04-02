@@ -1,0 +1,120 @@
+name: CD
+
+concurrency:
+ group: push_on_master
+ cancel-in-progress: false
+
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+    - 'README.md'
+    - 'LICENSE'
+
+env:
+  CHART_NAME: "application"
+
+jobs:
+  call-ci-workflow:
+    uses: ./.github/workflows/ci.yaml
+    secrets: inherit
+
+  publish:
+    name: Publish Chart
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [call-ci-workflow]
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+
+      - name: Generate New Tag
+        id: generate_tag
+        uses: anothrNick/github-tag-action@1.61.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: false
+          DEFAULT_BUMP: patch
+          DRY_RUN: true
+
+      - name: Update chart version
+        env:
+          VERSION: ${{ steps.generate_tag.outputs.new_tag }}
+        run: |
+          make bump-chart
+
+      - name: Publish Helm chart
+        uses: stefanprodan/helm-gh-pages@master
+        with:
+          branch: master
+          repository: stakater-charts
+          target_dir: docs
+          token: ${{ secrets.STAKATER_GITHUB_TOKEN }}
+          charts_dir: .
+          charts_url: https://stakater.github.io/stakater-charts
+          owner: stakater
+          linting: off
+          commit_username: stakater-user
+          commit_email: stakater@gmail.com
+
+  bump-version:
+    name: Bump Version
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [publish]
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Commit files
+        run: |
+          git config --local user.email "stakater@gmail.com"
+          git config --local user.name "stakater-user"
+          git status
+          git add application/Chart.yaml
+          git commit -m "[skip-ci] Update artifacts"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.STAKATER_GITHUB_TOKEN }}
+          branch: ${{ inputs.RELEASE_BRANCH }}
+
+      - name: Push latest tag
+        uses: anothrNick/github-tag-action@1.61.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.STAKATER_GITHUB_TOKEN }}
+          WITH_V: true
+          DEFAULT_BUMP: patch
+
+  notify:
+    name: Notify Results
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [publish, bump-version]
+    if: always()
+
+    steps:
+      - id: workflow
+        name: Compute workflow status
+        run: |
+          if [ "${{ contains(needs.*.result, 'failure') }}" = "true" ]; then
+            echo "status=failure" >> "$GITHUB_OUTPUT"
+          else
+            echo "status=success" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Notify Slack
+        uses: 8398a7/action-slack@v3
+        if: always()
+        with:
+          status: ${{ steps.workflow.outputs.status }}
+          fields: repo,author,action,eventName,ref,workflow
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.STAKATER_DELIVERY_SLACK_WEBHOOK }}

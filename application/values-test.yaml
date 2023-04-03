@@ -526,6 +526,27 @@ autoscaling:
          type: Utilization
          averageUtilization: 60
 
+# autoscaling is used for vertical pod autoscaling
+vpa:
+# enabled is a boolean flag for enabling or disabling vpa 
+  enabled: true
+# additionalLabels defines additional labels
+  additionalLabels: 
+    # key: value
+# annotations defines annotations in key value pair
+  annotations: 
+    # key: value
+# container policies for individual containers. 
+# There can be at most one entry for every named container and optionally a single wildcard entry with `containerName = '*'`, which handles all containers that do not have individual policies.
+  containerPolicies:
+    - containerName: '*'
+      minAllowed:
+        cpu: 0.5
+        memory: 1Gi
+      maxAllowed:
+        cpu: 1
+        memory: 5Gi
+
 # EndpointMonitor for IMC (https://github.com/stakater/IngressMonitorController)
 endpointMonitor:
   enabled: true

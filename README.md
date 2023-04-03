@@ -302,6 +302,15 @@ Stakater [Forecastle](https://github.com/stakater/Forecastle) parameters
 | autoscaling.minReplicas | Sets minimum replica count when autoscaling is enabled                                                                                                                                           | `1`                                                                                                                                                   |
 | autoscaling.maxReplicas | Sets maximum replica count when autoscaling is enabled                                                                                                                                           | `10`                                                                                                                                                  |
 | autoscaling.metrics | Configuration for hpa metrics, set when autoscaling is enabled                                                                                                                                   | `{}`                                                                                                                                                  |
+### VPA - Vertical Pod Autoscaler Paramaters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
+| vpa.enabled              | Enable vertical pod autoscaler                                                               | `false`         |
+| vpa.additionalLabels     | Labels for vertical pod autoscaler                                                           | `{}`            |
+| vpa.annotations          | Annotations for vertical pod autoscaler                                                      | `{}`            |
+| vpa.containerPolicies    | container policies for individual containers.                                                | `[]`            |
+
 
 ### EndpointMonitor Paramaters
 

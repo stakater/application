@@ -40,5 +40,13 @@ local_resource(
     cmd='helm install grafana-operator -n grafana-operator oci://ghcr.io/stakater/charts/grafana-operator --version=0.0.1 --set operator.installPlanApproval=Automatic'
     )
 
+# Install openshift-vertical-pod-autoscaler
+vpa_namespace = "openshift-vertical-pod-autoscaler"
+namespace_create(vpa_namespace)
+local_resource(
+    'openshift-vertical-pod-autoscaler', 
+    cmd='helm install openshift-vertical-pod-autoscaler -n openshift-vertical-pod-autoscaler oci://ghcr.io/stakater/charts/openshift-vertical-pod-autoscaler'
+    )
+
 # Install cert-manager
 # it exists already

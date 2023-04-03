@@ -4,7 +4,7 @@
 All notable changes to this project will be documented here.
 
 ### v2.2.1
-- Fix: Reverts, This can already be configured via `paths` [PR-243](https://github.com/stakater/application/pull/243) [PR-247](https://github.com/stakater/application/pull/247)
+- Fix: Reverts [PR-243](https://github.com/stakater/application/pull/243), This can already be configured via `paths` [PR-247](https://github.com/stakater/application/pull/247)
 
 ### v2.2.0
 - Feature: Add topologySpreadConstraints [PR-239](https://github.com/stakater/application/pull/239)

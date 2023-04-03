@@ -3,8 +3,11 @@
 
 All notable changes to this project will be documented here.
 
-### v2.2.0
+### v2.1.11
 - Feature: Add topologySpreadConstraints [PR-239](https://github.com/stakater/application/pull/239)
+
+### v2.1.10
+- Chore: Add some basic unit tests and update CI workflow [PR-218](https://github.com/stakater/application/pull/218)
 
 ### v2.1.9
 - Fix: Make servicePort var override possible with ingress hosts [PR-243](https://github.com/stakater/application/pull/243)

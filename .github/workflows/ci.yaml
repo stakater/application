@@ -1,0 +1,100 @@
+name: CI
+
+on:
+  workflow_call:
+    inputs:
+      skip-slack-notification:
+        description: Whether to skip sending a notification to Slack.
+        required: true
+        type: boolean
+
+  pull_request_target:
+    branches:
+      - master
+    paths-ignore:
+      - 'README.md'
+      - 'LICENSE'
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    if: "! contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: azure/setup-helm@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - run: helm lint application
+
+  unittest:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    if: "! contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: d3adb5/helm-unittest-action@v2
+        with:
+          charts: application
+
+  dry-run:
+    name: Install Dry Run
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    if: "! contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: helm/kind-action@v1.5.0
+      - uses: azure/setup-helm@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - run: |
+          helm install --debug --dry-run test-release application \
+            -f application/values-test.yaml
+
+  notify:
+    name: Notify Results
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [lint, unittest, dry-run]
+    if: always() && ! contains(toJSON(github.event.commits.*.message), '[skip-ci]')
+
+
+    steps:
+      - id: workflow
+        name: Compute workflow status
+        run: |
+          if [ "${{ contains(needs.*.result, 'failure') }}" = "true" ]; then
+            echo "status=failure" >> "$GITHUB_OUTPUT"
+          else
+            echo "status=success" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Comment on PR
+        uses: mshick/add-pr-comment@v2
+        with:
+          repo-token: ${{ secrets.STAKATER_GITHUB_TOKEN }}
+          status: ${{ steps.workflow.outputs.status }}
+          message-success: >-
+            @${{ github.actor }} Your PR has passed the status checks! :tada:
+          message-failure: >-
+            @${{ github.actor }} Yikes! You better fix your PR before anyone
+            else finds out! It seems some status checks have failed.
+          allow-repeats: false
+
+      - name: Notify Slack
+        uses: 8398a7/action-slack@v3
+        if: always() && ! inputs.skip-slack-notification
+        with:
+          status: ${{ steps.workflow.outputs.status }}
+          fields: repo,author,action,eventName,ref,workflow
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.STAKATER_DELIVERY_SLACK_WEBHOOK }}

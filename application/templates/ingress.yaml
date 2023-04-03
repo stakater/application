@@ -42,7 +42,7 @@ spec:
             service:
               name: {{ $applicationNameTpl }}
               port:
-                name: {{ default "http" (.servicePort) }}
+                name: "http"
         {{- end }}
     {{- end -}}
   {{- if .Values.ingress.tls }}

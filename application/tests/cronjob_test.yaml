@@ -1,0 +1,79 @@
+suite: CronJob
+
+templates:
+  - cronjob.yaml
+
+tests:
+  - it: does not fail rendering when job image tag and digest are absent
+    set:
+      cronJob:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: ""
+              digest: ""
+    asserts:
+      - equal:
+          path: spec.jobTemplate.spec.template.spec.containers[0].image
+          value: example-image
+
+  - it: fails rendering when job image repository is not given
+    set:
+      cronJob:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: ""
+              tag: doesnt
+              digest: matter
+    asserts:
+      - failedTemplate:
+          errorMessage: "Undefined image repo for container 'example'"
+
+  - it: uses tag when defined
+    set:
+      cronJob:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: example-tag
+              digest: ""
+    asserts:
+      - equal:
+          path: spec.jobTemplate.spec.template.spec.containers[0].image
+          value: example-image:example-tag
+
+  - it: uses digest when defined
+    set:
+      cronJob:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: ""
+              digest: sha256:example-digest
+    asserts:
+      - equal:
+          path: spec.jobTemplate.spec.template.spec.containers[0].image
+          value: example-image@sha256:example-digest
+
+  - it: uses both tag and digest when given both
+    set:
+      cronJob:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: example-tag
+              digest: sha256:example-digest
+    asserts:
+      - equal:
+          path: spec.jobTemplate.spec.template.spec.containers[0].image
+          value: example-image:example-tag@sha256:example-digest

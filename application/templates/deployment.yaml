@@ -130,17 +130,12 @@ spec:
           name: proxy-tls 
         {{- end }}
       - name: {{ template "application.name" . }}
-        {{- if .Values.deployment.image.tag }}
-        {{- if .Values.deployment.image.digest }}
-        image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}@{{ .Values.deployment.image.digest }}"
-        {{- else }}
-        image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
-        {{- end }}
-        {{- else if .Values.deployment.image.digest }}
-        image: "{{ .Values.deployment.image.repository }}@{{ .Values.deployment.image.digest }}"
-        {{- else }}
-        image: "{{ .Values.deployment.image.repository }}"
-        {{- end }}
+
+        {{- $image := required "Undefined image for application container" .Values.deployment.image.repository }}
+        {{- with .Values.deployment.image.tag    }} {{- $image = print $image ":" . }} {{- end }}
+        {{- with .Values.deployment.image.digest }} {{- $image = print $image "@" . }} {{- end }}
+        image: {{ $image }}
+
         imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
         {{- if .Values.deployment.command }}
         command: {{- include "application.tplvalues.render" (dict "value" .Values.deployment.command "context" $) | nindent 12 }}

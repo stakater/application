@@ -50,6 +50,9 @@ tests:
       - equal:
           path: spec.template.spec.containers[0].image
           value: example-image:example-tag
+      - equal:
+          path: metadata.labels["app.kubernetes.io/version"]
+          value: example-tag
 
   - it: uses image digest when given
     set:
@@ -60,6 +63,8 @@ tests:
       - equal:
           path: spec.template.spec.containers[0].image
           value: example-image@sha256:example-digest
+      - isNull:
+          path: metadata.labels["app.kubernetes.io/version"]
 
   - it: uses both image digest and tag when given both
     set:

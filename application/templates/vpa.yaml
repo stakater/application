@@ -1,5 +1,5 @@
 {{- if .Values.vpa.enabled -}}
-{{- if not (.Capabilities.APIVersions.Has "autoscaling.k8s.io/v1/VerticalPodAutoscaler) }}
+{{- if not (.Capabilities.APIVersions.Has "autoscaling.k8s.io/v1/VerticalPodAutoscaler") }}
   {{- fail "There is no VerticalPodAutoscaler resource definition in the target cluster!" }}
 {{- end }}
 apiVersion: "autoscaling.k8s.io/v1"

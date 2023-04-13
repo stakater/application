@@ -3,11 +3,17 @@
 
 All notable changes to this project will be documented here.
 
-### v2.2.1
+### v2.1.13
 - Fix: Reverts [PR-243](https://github.com/stakater/application/pull/243), This can already be configured via `paths` [PR-247](https://github.com/stakater/application/pull/247)
 
-### v2.2.0
+### v2.1.12
+- Update: Changelog updates. This release shouldnt have been made as the head commit had [`[skip ci]`](https://docs.github.com/en/actions/managing-workflow-runs/skipping-workflow-runs). [PR-248](https://github.com/stakater/application/pull/248)
+
+### v2.1.11
 - Feature: Add topologySpreadConstraints [PR-239](https://github.com/stakater/application/pull/239)
+
+### v2.1.10
+- Chore: Add some basic unit tests and update CI workflow [PR-218](https://github.com/stakater/application/pull/218)
 
 ### v2.1.9
 - Fix: Make servicePort var override possible with ingress hosts [PR-243](https://github.com/stakater/application/pull/243)

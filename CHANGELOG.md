@@ -3,6 +3,10 @@
 
 All notable changes to this project will be documented here.
 
+### v2.2.0
+
+- Fix: make deployment.image.tag and job.image.tag optional [PR-234](https://github.com/stakater/application/pull/234)
+
 ### v2.1.11
 - Feature: Add topologySpreadConstraints [PR-239](https://github.com/stakater/application/pull/239)
 

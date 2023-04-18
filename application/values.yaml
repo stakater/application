@@ -190,7 +190,7 @@ deployment:
   # Image of the app container
   image: 
     repository: repository/image-name
-    tag: v1.0.0
+    tag: ''
     digest: '' # if set to a non empty value, digest takes precedence on the tag
     pullPolicy: IfNotPresent
   dnsConfig:

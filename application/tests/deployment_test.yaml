@@ -23,3 +23,55 @@ tests:
           content:
             image: openshift/oauth-proxy:latest
           any: true
+
+  - it: does not fail to render when image tag and digest are not given
+    set:
+      deployment.image.repository: example-image
+      deployment.image.tag: ""
+      deployment.image.digest: ""
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: example-image
+
+  - it: fails to render when image repository is not present
+    set:
+      deployment.image.repository: ""
+    asserts:
+      - failedTemplate:
+          errorMessage: "Undefined image for application container"
+
+  - it: uses image tag when given
+    set:
+      deployment.image.repository: example-image
+      deployment.image.tag: example-tag
+      deployment.image.digest: ""
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: example-image:example-tag
+      - equal:
+          path: metadata.labels["app.kubernetes.io/version"]
+          value: example-tag
+
+  - it: uses image digest when given
+    set:
+      deployment.image.repository: example-image
+      deployment.image.tag: ""
+      deployment.image.digest: sha256:example-digest
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: example-image@sha256:example-digest
+      - isNull:
+          path: metadata.labels["app.kubernetes.io/version"]
+
+  - it: uses both image digest and tag when given both
+    set:
+      deployment.image.repository: example-image
+      deployment.image.tag: example-tag
+      deployment.image.digest: sha256:example-digest
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: example-image:example-tag@sha256:example-digest

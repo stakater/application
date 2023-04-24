@@ -48,5 +48,12 @@ local_resource(
     cmd='helm install openshift-vertical-pod-autoscaler -n openshift-vertical-pod-autoscaler oci://ghcr.io/stakater/charts/openshift-vertical-pod-autoscaler'
     )
 
+# Wait until VPA CRD becomes available
+local_resource(
+    'wait-for-crds', 
+    cmd='timeout 300s bash -c "until kubectl wait --for condition=Established crd/verticalpodautoscalers.autoscaling.k8s.io; do sleep 10; done"',
+    resource_deps=[
+        'openshift-vertical-pod-autoscaler'
+    ])
 # Install cert-manager
 # it exists already

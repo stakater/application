@@ -3,7 +3,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: {{ template "application.name" $ }}-role-{{ .name }}
+  name: {{ template "application.fullname" $ }}-role-{{ .name }}
   namespace: {{ template "application.namespace" $ }}
   labels:
   {{- include "application.labels" $ | nindent 4 }}

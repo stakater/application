@@ -5,7 +5,7 @@ metadata:
 {{- if .Values.persistence.name }}
   name: "{{ .Values.persistence.name }}"
 {{- else }}
-  name: {{ template "application.name" . }}-data
+  name: {{ template "application.fullname" . }}-data
 {{- end }}
   namespace: {{ include "application.namespace" . }}
   labels:
@@ -30,10 +30,10 @@ spec:
   storageClassName: "{{ .Values.persistence.storageClass }}"
 {{- end }}
 {{- end }}
-{{- if .Values.persistence.volumeMode }}  
+{{- if .Values.persistence.volumeMode }}
   volumeMode: "{{ .Values.persistence.volumeMode }}"
 {{- end }}
-{{- if .Values.persistence.volumeName }}  
+{{- if .Values.persistence.volumeName }}
   volumeName: "{{ .Values.persistence.volumeName }}"
 {{- end }}
 {{- end }}

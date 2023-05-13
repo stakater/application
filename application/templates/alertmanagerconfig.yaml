@@ -2,7 +2,7 @@
 apiVersion: monitoring.coreos.com/v1alpha1
 kind: AlertmanagerConfig
 metadata:
-  name: {{ template "application.name" . }}
+  name: {{ template "application.fullname" . }}
   namespace: {{ include "application.namespace" . }}
   labels:
   {{- include "application.labels" . | nindent 4 }}
@@ -13,7 +13,7 @@ spec:
 {{ toYaml .Values.alertmanagerConfig.spec.route | indent 6 }}
 {{- end -}}
 {{- if .Values.alertmanagerConfig.spec.receivers }}
-    receivers: 
+    receivers:
 {{ toYaml .Values.alertmanagerConfig.spec.receivers | indent 6 }}
 {{- end -}}
 {{- if .Values.alertmanagerConfig.spec.inhibitRules }}

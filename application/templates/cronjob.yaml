@@ -39,7 +39,7 @@ spec:
           {{- if $.Values.rbac.serviceAccount.name }}
           serviceAccountName: {{ $.Values.rbac.serviceAccount.name }}
             {{- else }}
-          serviceAccountName: {{ template "application.name" $ }}
+          serviceAccountName: {{ template "application.fullname" $ }}
           {{- end }}
           containers:
           - name: {{ $name }}
@@ -96,7 +96,7 @@ spec:
           restartPolicy: OnFailure
           {{ end }}
           {{- with $job.imagePullSecrets}}
-          imagePullSecrets: 
+          imagePullSecrets:
 {{ toYaml . | indent 12 }}
           {{ end }}
           {{- with $job.volumes }}

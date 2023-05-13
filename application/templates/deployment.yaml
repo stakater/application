@@ -13,10 +13,10 @@ metadata:
 {{- if .Values.deployment.annotations }}
 {{ toYaml .Values.deployment.annotations | indent 4 }}
 {{- end }}
-{{- if .Values.deployment.reloadOnChange }} 
+{{- if .Values.deployment.reloadOnChange }}
     reloader.stakater.com/auto: "true"
 {{- end }}
-  name: {{ template "application.name" . }}
+  name: {{ template "application.fullname" . }}
   namespace: {{ include "application.namespace" . }}
 spec:
 {{- if .Values.deployment.replicas }}
@@ -32,7 +32,7 @@ spec:
   template:
     metadata:
       labels:
-{{ include "application.selectorLabels" . | indent 8 }}
+{{ include "application.labels" . | indent 8 }}
 {{- if .Values.deployment.podLabels }}
 {{ toYaml .Values.deployment.podLabels | indent 8 }}
 {{- end }}
@@ -52,7 +52,7 @@ spec:
                   "expressionFirstLine": "{{ .Values.deployment.fluentdConfigAnnotations.regexFirstLine }}",
                   "expression": "{{ .Values.deployment.fluentdConfigAnnotations.regex }}",
                   "timeFormat": "{{ .Values.deployment.fluentdConfigAnnotations.timeFormat }}",
-                  "containerName": "{{ template "application.name" . }}"
+                  "containerName": "{{ template "application.fullname" . }}"
                 }
               ]{{- with .Values.deployment.fluentdConfigAnnotations.notifications }},
               "notifications": {
@@ -71,7 +71,7 @@ spec:
 {{- end }}
     spec:
       {{- if .Values.deployment.hostAliases }}
-      hostAliases:      
+      hostAliases:
 {{ toYaml .Values.deployment.hostAliases | indent 6 }}
       {{- end }}
       {{- if .Values.deployment.initContainers }}
@@ -97,7 +97,7 @@ spec:
       topologySpreadConstraints:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if .Values.deployment.imagePullSecrets }}      
+      {{- if .Values.deployment.imagePullSecrets }}
       imagePullSecrets:
       - name: {{ .Values.deployment.imagePullSecrets }}
       {{- end }}
@@ -111,7 +111,7 @@ spec:
         {{- end }}
         - --provider=openshift
         - --upstream=http://localhost:{{ .Values.deployment.openshiftOAuthProxy.port }}
-        - --openshift-service-account={{ template "application.name" . }}
+        - --openshift-service-account={{ template "application.fullname" . }}
         - --tls-cert=/etc/tls/private/tls.crt
         - --tls-key=/etc/tls/private/tls.key
         - --cookie-secret=SECRET
@@ -127,9 +127,9 @@ spec:
           name: proxy
         volumeMounts:
         - mountPath: /etc/tls/private
-          name: proxy-tls 
+          name: proxy-tls
         {{- end }}
-      - name: {{ template "application.name" . }}
+      - name: {{ template "application.fullname" . }}
 
         {{- $image := required "Undefined image for application container" .Values.deployment.image.repository }}
         {{- with .Values.deployment.image.tag    }} {{- $image = print $image ":" . }} {{- end }}
@@ -155,9 +155,9 @@ spec:
             {{- if .name }}
             name: {{ include "application.tplvalues.render" ( dict "value" $value.name "context" $ ) }}
             {{- else if .nameSuffix }}
-            name: {{ template "application.name" $ }}-{{ include "application.tplvalues.render" ( dict "value" $value.nameSuffix "context" $ ) }}
+            name: {{ template "application.fullname" $ }}-{{ include "application.tplvalues.render" ( dict "value" $value.nameSuffix "context" $ ) }}
             {{- else }}
-            name: {{ template "application.name" $ }}
+            name: {{ template "application.fullname" $ }}
             {{- end }}
         {{- end }}
         {{- if (eq .type "secret") }}
@@ -165,9 +165,9 @@ spec:
             {{- if .name }}
             name: {{ include "application.tplvalues.render" ( dict "value" $value.name "context" $ ) }}
             {{- else if .nameSuffix }}
-            name: {{ template "application.name" $ }}-{{ include "application.tplvalues.render" ( dict "value" $value.nameSuffix "context" $ ) }}
+            name: {{ template "application.fullname" $ }}-{{ include "application.tplvalues.render" ( dict "value" $value.nameSuffix "context" $ ) }}
             {{- else }}
-            name: {{ template "application.name" $ }}
+            name: {{ template "application.fullname" $ }}
             {{- end }}
         {{- end }}
         {{- end }}
@@ -197,7 +197,7 @@ spec:
             {{- toYaml .Values.deployment.startupProbe.tcpSocket | nindent 12 }}
           {{- end }}
         {{- end }}
-        {{- if .Values.deployment.livenessProbe.enabled }} 
+        {{- if .Values.deployment.livenessProbe.enabled }}
         livenessProbe:
           failureThreshold: {{ .Values.deployment.livenessProbe.failureThreshold }}
           periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
@@ -215,7 +215,7 @@ spec:
             {{- toYaml .Values.deployment.livenessProbe.tcpSocket | nindent 12 }}
           {{- end }}
         {{- end }}
-        {{- if .Values.deployment.readinessProbe.enabled }} 
+        {{- if .Values.deployment.readinessProbe.enabled }}
         readinessProbe:
           failureThreshold: {{ .Values.deployment.readinessProbe.failureThreshold }}
           periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds }}
@@ -233,11 +233,11 @@ spec:
             {{- toYaml .Values.deployment.readinessProbe.tcpSocket | nindent 12 }}
           {{- end }}
         {{- end }}
-      {{- if or (.Values.deployment.volumeMounts) (and (eq .Values.persistence.enabled true) (eq .Values.persistence.mountPVC true) )}} 
+      {{- if or (.Values.deployment.volumeMounts) (and (eq .Values.persistence.enabled true) (eq .Values.persistence.mountPVC true) )}}
         volumeMounts:
         {{- if (eq .Values.persistence.mountPVC true) }}
         - mountPath: {{ .Values.persistence.mountPath }}
-          name: {{ template "application.name" . }}-data
+          name: {{ template "application.fullname" . }}-data
         {{- end }}
         {{- if .Values.deployment.volumeMounts }}
         {{- range $key, $value := .Values.deployment.volumeMounts }}
@@ -261,14 +261,14 @@ spec:
 {{ toYaml .Values.deployment.additionalContainers | indent 6 }}
         {{- end }}
         {{- if .Values.deployment.securityContext }}
-      securityContext:      
+      securityContext:
 {{ toYaml .Values.deployment.securityContext | indent 8 }}
           {{- end }}
       {{- if .Values.deployment.dnsConfig }}
-      dnsConfig:      
+      dnsConfig:
 {{ toYaml .Values.deployment.dnsConfig | indent 8 }}
           {{- end }}
-      {{- if or (.Values.deployment.openshiftOAuthProxy.enabled) (.Values.deployment.volumes) (and (eq .Values.persistence.enabled true) (eq .Values.persistence.mountPVC true) )}} 
+      {{- if or (.Values.deployment.openshiftOAuthProxy.enabled) (.Values.deployment.volumes) (and (eq .Values.persistence.enabled true) (eq .Values.persistence.mountPVC true) )}}
       volumes:
         {{- if .Values.deployment.openshiftOAuthProxy.enabled }}
       - name: proxy-tls
@@ -276,12 +276,12 @@ spec:
           secretName: {{ .Values.deployment.openshiftOAuthProxy.secretName }}
         {{- end }}
         {{- if (eq .Values.persistence.mountPVC true) }}
-      - name: {{ template "application.name" . }}-data
+      - name: {{ template "application.fullname" . }}-data
         persistentVolumeClaim:
           {{- if .Values.persistence.name }}
           claimName: {{ .Values.persistence.name }}
           {{- else }}
-          claimName: {{ template "application.name" . }}-data
+          claimName: {{ template "application.fullname" . }}-data
           {{- end }}
         {{- end }}
         {{- if .Values.deployment.volumes }}
@@ -294,6 +294,6 @@ spec:
       {{- if .Values.rbac.serviceAccount.name }}
       serviceAccountName: {{ .Values.rbac.serviceAccount.name }}
         {{- else }}
-      serviceAccountName: {{ template "application.name" . }}
+      serviceAccountName: {{ template "application.fullname" . }}
       {{- end }}
 {{- end }}

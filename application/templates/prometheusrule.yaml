@@ -2,7 +2,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: {{ template "application.name" . }}
+  name: {{ template "application.fullname" . }}
   namespace: {{ include "application.namespace" . }}
   labels:
   {{- include "application.labels" . | nindent 4 }}

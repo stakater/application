@@ -10,7 +10,7 @@ kind: PodDisruptionBudget
 metadata:
   labels:
     {{- include "application.labels" . | nindent 4 }}
-  name: {{ template "application.name" . }}
+  name: {{ template "application.fullname" . }}
   namespace: {{ include "application.namespace" . }}
 spec:
   {{- if .Values.pdb.minAvailable }}

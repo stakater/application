@@ -2,7 +2,7 @@
 apiVersion: "monitoring.coreos.com/v1"
 kind: ServiceMonitor
 metadata:
-  name: {{ template "application.name" . }}-svc-monitor
+  name: {{ template "application.fullname" . }}-svc-monitor
   namespace: {{ include "application.namespace" . }}
   labels:
   {{- include "application.labels" . | nindent 4 }}
@@ -18,7 +18,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: {{ template "application.name" . }}
+{{ include "application.selectorLabels" . | indent 6 }}
   namespaceSelector:
     matchNames:
     - {{ .Release.Namespace }}

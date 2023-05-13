@@ -8,6 +8,19 @@ Define the name of the chart/application.
 {{- end -}}
 
 {{/*
+Define a fully qualified app name with Release.Name and chart/application name
+If release name contains chart name it will be used as a full name.
+*/}}
+{{- define "application.fullname" -}}
+{{- $name := default .Chart.Name .Values.applicationName -}}
+{{- if contains $name .Release.Name -}}
+{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Define the name of the chart/application.
 */}}
 {{- define "application.version" -}}
@@ -39,12 +52,19 @@ Create chart name and version as used by the chart label.
 Common labels
 */}}
 {{- define "application.labels" -}}
+app.kubernetes.io/name: {{ include "application.name" . }}
 helm.sh/chart: {{ include "application.chart" . }}
 {{- with include "application.version" . }}
 app.kubernetes.io/version: {{ quote . }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
-app.kubernetes.io/part-of: {{ include "application.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- if .Values.partOfOverride }}
+app.kubernetes.io/part-of: {{ .Values.partOfOverride }}
+{{- end }}
+{{- if .Values.componentOverride }}
+app.kubernetes.io/component: {{ .Values.componentOverride }}
+{{- end }}
 {{- end }}
 
 {{/*
@@ -52,6 +72,7 @@ Selector labels
 */}}
 {{- define "application.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "application.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*

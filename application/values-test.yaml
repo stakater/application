@@ -19,11 +19,11 @@ deployment:
     rollingUpdate:
       maxSurge: 25%
       maxUnavailable: 25%
-  
+
   # Reload deployment if configMap/secret updates
   reloadOnChange: true
 
-  # Select nodes to deploy which matches the following labels  
+  # Select nodes to deploy which matches the following labels
   nodeSelector:
     # cloud.google.com/gke-nodepool: default-pool
 
@@ -48,7 +48,7 @@ deployment:
   # Additional labels for Deployment
   additionalLabels:
     key: value
-  
+
   # Additional label added on pod which is used in Service's Label Selector
   podLabels:
     env: prod
@@ -59,7 +59,7 @@ deployment:
   # Additional Pod Annotations added on pod created by this Deployment
   additionalPodAnnotations:
     key: value
-  
+
   # Annotations for fluentd Configurations
   fluentdConfigAnnotations:
     fluentd:
@@ -88,7 +88,7 @@ deployment:
   env:
     ENVIRONMENT:
        value: "dev"
-  
+
   # Volumes to be added to the pod
   volumes:
     config-volume:
@@ -96,7 +96,7 @@ deployment:
         name: configmap-name
     configmap-volume:
       configMap:
-        name: '{{ template "application.name" . }}-configmap-nameSuffix'
+        name: '{{ template "application.fullname" . }}-configmap-nameSuffix'
     secret-volume:
       secret:
         secretName: secret-name
@@ -106,9 +106,9 @@ deployment:
       persistentVolumeClaim:
         claimName: claim-name
 
-  # Mount path for Volumes 
+  # Mount path for Volumes
   volumeMounts:
-      volume-name: 
+      volume-name:
          mountPath: /path1
 
   # Taint tolerations for nodes
@@ -152,7 +152,7 @@ deployment:
     successThreshold: 1
     timeoutSeconds: 1
     initialDelaySeconds: 10
-    exec: 
+    exec:
       command:
         - cat
         - tmp/healthy
@@ -198,7 +198,7 @@ deployment:
   # Security Context for the pod
   securityContext:
     # fsGroup: 2000
-  
+
   # Command for primary container
   command: []
 
@@ -251,12 +251,12 @@ service:
     config.xposer.stakater.com/IngressURLPath: /
     config.xposer.stakater.com/IngressURLTemplate: '{{ "{{.Service}}.{{.Namespace}}.{{.Domain}}" }}'
     service.alpha.openshift.io/serving-cert-secret-name: |
-      '{{ template "application.name" . }}-tls'
+      '{{ template "application.fullname" . }}-tls'
     xposer.stakater.com/annotations: |-
       kubernetes.io/ingress.class: external-ingress
       ingress.kubernetes.io/rewrite-target: /
       ingress.kubernetes.io/force-ssl-redirect: "true"
-  
+
   ports:
     - port: 8080
       name: http
@@ -273,16 +273,16 @@ ingress:
 
   # Port of the service that serves pods
   servicePort: http
-  
+
   #Set pathType: default is ImplementationSpecific; Options: Exact, Prefix
-  pathType: ImplementationSpecific 
+  pathType: ImplementationSpecific
 
   # List of host addresses to be exposed by this Ingress
 
   hosts:
     - host: chart-example-1.local
     - host: chart-example-2.local
-      paths: 
+      paths:
       - path: /
       #  pathType: ''
       #  serviceName: ''
@@ -322,11 +322,11 @@ route:
     kubernetes.io/ingress.class: external-ingress
     ingress.kubernetes.io/rewrite-target: /
     ingress.kubernetes.io/force-ssl-redirect: "true"
-  
+
   # Additional labels for this Route
   additionalLabels:
     key: value
-  
+
   # If no host is added then openshift inserts the default hostname. To Add host explicitly, use host attribute
   host:
 
@@ -360,7 +360,7 @@ secretProviderClass:
   objects: |
     - objectName: "MONGO_HOST"
       secretPath: "testing/data/mongoDb"
-      secretKey: "MONGO_HOST"  
+      secretKey: "MONGO_HOST"
   secretObjects:
     - data:
       - key: MONGO_HOST
@@ -376,19 +376,19 @@ forecastle:
   # Add additional labels on Forecastle Custom Resource
   additionalLabels:
     key: value
-  
+
   # URL of the icon for the custom app
   icon: https://raw.githubusercontent.com/stakater/ForecastleIcons/master/stakater-big.png
-  
+
   # Name of the application to be displayed on the Forecastle Dashboard
   displayName: "application"
-  
+
   # Group for the custom app (default: .Release.Namespace)
   group: ""
 
   # Add properties to Custom Resource
   properties:
-  
+
   # Whether app is network restricted or not
   networkRestricted: false
 
@@ -404,8 +404,8 @@ rbac:
     # Additional Labels on service account
     additionalLabels:
       key: value
-    
-    # Annotations on service account 
+
+    # Annotations on service account
     annotations:
       # key: value
 
@@ -428,7 +428,7 @@ rbac:
       verbs:
       - get
 
-# Additional ConfigMaps  
+# Additional ConfigMaps
 configMap:
   enabled: true
   additionalLabels:
@@ -482,7 +482,7 @@ secret:
 # Service Monitor to collect Prometheus metrices
 serviceMonitor:
   enabled: true
-  
+
   # Additional labels
   additionalLabels:
     key: value
@@ -529,7 +529,7 @@ autoscaling:
 # EndpointMonitor for IMC (https://github.com/stakater/IngressMonitorController)
 endpointMonitor:
   enabled: true
-  
+
   # Additional labels
   additionalLabels:
     key: value
@@ -541,7 +541,7 @@ endpointMonitor:
 # Certficate CRD to generate the certificate
 certificate:
   enabled: false
-  
+
   # Additional labels
   additionalLabels:
     key: value
@@ -602,7 +602,7 @@ certificate:
 # AlertmanagerConfig object for defining application specific alertmanager configurations
 alertmanagerConfig:
   enabled: true
-  
+
   # AlertmanagerConfig selectionLabels to specify label to be picked up by Alertmanager to add it to base config. Read more about it at [https://docs.openshift.com/container-platform/4.7/rest_api/monitoring_apis/alertmanager-monitoring-coreos-com-v1.html] under .spec.alertmanagerConfigSelector
   selectionLabels:
     alertmanagerConfig: "workload"
@@ -636,7 +636,7 @@ alertmanagerConfig:
 # PrometheusRule object for defining application alerting rules
 prometheusRule:
   enabled: true
-  
+
   # PrometheusRule labels
   additionalLabels:
     prometheus: stakater-workload-monitoring
@@ -663,13 +663,13 @@ externalSecret:
   #SecretStore defines which SecretStore to use when fetching the secret data
   secretStore:
     name: example-secret-store
-    #kind: SecretStore # or ClusterSecretStore  
+    #kind: SecretStore # or ClusterSecretStore
 
   # RefreshInterval is the amount of time before the values reading again from the SecretStore provider
   refreshInterval: "1m"
   files:
     secret-1-name:
-      #Data defines the connection between the Kubernetes Secret keys and the Provider data 
+      #Data defines the connection between the Kubernetes Secret keys and the Provider data
       data:
         example-secret-key:
           remoteRef:
@@ -689,7 +689,7 @@ externalSecret:
 ##########################################################
 # Network Policy
 ##########################################################
-networkPolicy: 
+networkPolicy:
   enabled: false
   # Additional labels
   additionalLabels:
@@ -698,7 +698,7 @@ networkPolicy:
   # Additional annotations
   annotations:
     # key: value
-  
+
   # Ingress rules
   ingress:
   - from:
@@ -715,7 +715,7 @@ networkPolicy:
     ports:
     - protocol: TCP
       port: 6379
-      
+
   # Egress rules
   egress:
     - to:
@@ -1237,22 +1237,22 @@ grafanaDashboard:
         }
 
 
-cronJob: 
+cronJob:
   enabled: true
   jobs:
     db-migration:
       schedule: "* * * 8 *"
       imagePullSecrets:
        - name: nexus-secret
-      image: 
+      image:
         repository: docker.io/nginx
         tag: v1.0.0
-      env: 
+      env:
         KEY:
           value: VALUE
       command: ["/bin/bash"]
       args: ["-c","sleep 5000"]
-      resources:  
+      resources:
         requests:
             memory: 5Gi
             cpu: 1

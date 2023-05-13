@@ -2,7 +2,7 @@
 apiVersion: endpointmonitor.stakater.com/v1alpha1
 kind: EndpointMonitor
 metadata:
-  name: {{ template "application.name" . }}
+  name: {{ template "application.fullname" . }}
   namespace: {{ include "application.namespace" . }}
   labels:
   {{- include "application.labels" . | nindent 4 }}
@@ -18,11 +18,11 @@ spec:
   urlFrom:
 {{- if and .Values.route .Values.route.enabled }}
     routeRef:
-      name:  {{ template "application.name" . }}
+      name:  {{ template "application.fullname" . }}
 {{- end }}
 {{- if and .Values.ingress .Values.ingress.enabled }}
     ingressRef:
-      name:  {{ template "application.name" . }}
+      name:  {{ template "application.fullname" . }}
 {{- end }}
 {{- if .Values.endpointMonitor.additionalConfig }}
 {{ toYaml .Values.endpointMonitor.additionalConfig | indent 2 }}

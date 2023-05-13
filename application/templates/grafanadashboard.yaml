@@ -6,19 +6,19 @@ metadata:
   name: {{ $name }}
   namespace: {{ template "application.namespace" $ }}
   labels:
-    # this label is used as dashboard selector by grafana operator 
+    # this label is used as dashboard selector by grafana operator
     grafanaDashboard: grafana-operator
   {{- include "application.labels" $ | nindent 4 }}
 {{- if $.Values.grafanaDashboard.additionalLabels }}
 {{ toYaml $.Values.grafanaDashboard.additionalLabels | indent 4 }}
 {{- end }}
 {{- if $.Values.grafanaDashboard.annotations }}
-  annotations: 
+  annotations:
 {{ toYaml $.Values.grafanaDashboard.annotations | indent 4 }}
 {{- end }}
 spec:
   {{- if $content.json }}
-  json: 
+  json:
     {{ $content.json | toJson }}
   {{- end }}
   {{- if $content.url }}

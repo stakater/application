@@ -1,11 +1,11 @@
 {{- if (.Values.ingress).enabled -}}
 {{- $servicePort := .Values.ingress.servicePort -}}
 {{- $pathType := .Values.ingress.pathType -}}
-{{- $applicationNameTpl := include "application.name" . -}}
+{{- $applicationNameTpl := include "application.fullname" . -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ template "application.name" . }}
+  name: {{ template "application.fullname" . }}
   namespace: {{ include "application.namespace" . }}
   labels:
   {{- include "application.labels" . | nindent 4 }}

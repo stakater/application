@@ -2,7 +2,7 @@
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: {{ template "application.name" . }}
+  name: {{ template "application.fullname" . }}
   namespace: {{ include "application.namespace" . }}
   labels:
   {{- include "application.labels" . | nindent 4 }}
@@ -28,7 +28,7 @@ spec:
     {{- end }}
   to:
     kind: Service
-    name: {{ template "application.name" . }}
+    name: {{ template "application.fullname" . }}
     {{- if .Values.route.to }}
     weight: {{ .Values.route.to.weight }}
     {{- else }}

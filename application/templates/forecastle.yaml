@@ -2,7 +2,7 @@
 apiVersion: forecastle.stakater.com/v1alpha1
 kind: ForecastleApp
 metadata:
-  name: {{ template "application.name" . }}
+  name: {{ template "application.fullname" . }}
   namespace: {{ include "application.namespace" . }}
   labels:
   {{- include "application.labels" . | nindent 4 }}
@@ -16,10 +16,10 @@ spec:
   urlFrom:
   {{- if .Values.ingress.enabled }}
     ingressRef:
-      name: {{ template "application.name" . }}
+      name: {{ template "application.fullname" . }}
   {{- else }}
     routeRef:
-      name: {{ template "application.name" . }}
+      name: {{ template "application.fullname" . }}
   {{- end }}
   networkRestricted: {{ .Values.forecastle.networkRestricted }}
   {{- if .Values.forecastle.properties }}

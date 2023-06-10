@@ -24,7 +24,7 @@ To uninstall the chart:
 
     helm delete <name-of-the-chart>
 
-## Paramaters
+## Parameters
 
 | Name | Description                                                                                | Value                                       |
 | ---| ---------------------------------------------------------------------------------------------|---------------------------------------------|

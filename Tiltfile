@@ -55,5 +55,6 @@ local_resource(
     resource_deps=[
         'openshift-vertical-pod-autoscaler'
     ])
+
 # Install cert-manager
 # it exists already

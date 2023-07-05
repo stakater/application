@@ -3,8 +3,11 @@
 
 All notable changes to this project will be documented here.
 
-### v2.1.13
+### v2.1.14
 - Fix: Reverts [PR-243](https://github.com/stakater/application/pull/243), This can already be configured via `paths` [PR-247](https://github.com/stakater/application/pull/247)
+
+### v2.1.13
+- Fix: make deployment.image.tag and job.image.tag optional [PR-234](https://github.com/stakater/application/pull/234)
 
 ### v2.1.12
 - Update: Changelog updates. This release shouldnt have been made as the head commit had [`[skip ci]`](https://docs.github.com/en/actions/managing-workflow-runs/skipping-workflow-runs). [PR-248](https://github.com/stakater/application/pull/248)

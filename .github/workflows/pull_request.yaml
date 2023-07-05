@@ -92,9 +92,12 @@ jobs:
         SLACK_WEBHOOK_URL: ${{ secrets.STAKATER_DELIVERY_SLACK_WEBHOOK }}
 
   unittest:
+    name: Unit Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{github.event.pull_request.head.sha}}
       - uses: d3adb5/helm-unittest-action@v2
         with:
           charts: application

@@ -11,7 +11,8 @@ Define the name of the chart/application.
 Define the name of the chart/application.
 */}}
 {{- define "application.version" -}}
-{{ regexReplaceAll "[^a-zA-Z0-9_\\.\\-]" .Values.deployment.image.tag "-" | trunc 63 | trimSuffix "-" -}}
+  {{- $version := default "" .Values.deployment.image.tag -}}
+  {{- regexReplaceAll "[^a-zA-Z0-9_\\.\\-]" $version "-" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -39,7 +40,9 @@ Common labels
 */}}
 {{- define "application.labels" -}}
 helm.sh/chart: {{ include "application.chart" . }}
-app.kubernetes.io/version: {{ include "application.version" . | quote }}
+{{- with include "application.version" . }}
+app.kubernetes.io/version: {{ quote . }}
+{{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 app.kubernetes.io/part-of: {{ include "application.name" . }}
 {{- end }}

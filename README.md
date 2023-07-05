@@ -302,7 +302,8 @@ Stakater [Forecastle](https://github.com/stakater/Forecastle) parameters
 | autoscaling.minReplicas | Sets minimum replica count when autoscaling is enabled                                                                                                                                           | `1`                                                                                                                                                   |
 | autoscaling.maxReplicas | Sets maximum replica count when autoscaling is enabled                                                                                                                                           | `10`                                                                                                                                                  |
 | autoscaling.metrics | Configuration for hpa metrics, set when autoscaling is enabled                                                                                                                                   | `{}`                                                                                                                                                  |
-### VPA - Vertical Pod Autoscaler Paramaters
+
+### VPA - Vertical Pod Autoscaler Parameters
 
 | Name                     | Description                                                                                  | Value           |
 | ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |

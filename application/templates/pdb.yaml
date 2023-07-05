@@ -1,4 +1,4 @@
-{{- if or .Values.pdb.minAvailable .Values.pdb.maxUnavailable | and .Values.pdb.enabled }}
+{{- if .Values.pdb.enabled }}
 
 {{- if .Capabilities.APIVersions.Has "policy/v1/PodDisruptionBudget" }}
 apiVersion: policy/v1
@@ -15,7 +15,8 @@ metadata:
 spec:
   {{- if .Values.pdb.minAvailable }}
   minAvailable: {{ .Values.pdb.minAvailable }}
-  {{- else }}
+  {{- end }}
+  {{- if .Values.pdb.maxUnavailable }}
   maxUnavailable: {{ .Values.pdb.maxUnavailable }}
   {{- end }}
   selector:

@@ -3,6 +3,9 @@
 
 All notable changes to this project will be documented here.
 
+### v2.1.14
+- feat: allow overriding revisionHistoryLimit [PR-257](https://github.com/stakater/application/pull/257)
+
 ### v2.1.13
 - Fix: make deployment.image.tag and job.image.tag optional [PR-234](https://github.com/stakater/application/pull/234)
 

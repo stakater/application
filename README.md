@@ -1,3 +1,5 @@
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 # Application
 
 Generic helm chart for applications which are:
@@ -22,7 +24,7 @@ To uninstall the chart:
 
     helm delete <name-of-the-chart>
 
-## Paramaters
+## Parameters
 
 | Name | Description                                                                                | Value                                       |
 | ---| ---------------------------------------------------------------------------------------------|---------------------------------------------|
@@ -53,6 +55,7 @@ To uninstall the chart:
 | deployment.args                     | Arg for primary container of deployment                                                                                                    | `[]`           |
 | deployment.tolerations              | Taint tolerations for nodes                                                                                                                | `[]`           |
 | deployment.affinity                 | Affinity for pod/node                                                                                                                      | `[]`           |
+| deployment.topologySpreadConstraints| Topology spread constraints definitions                                           | `[]`           |
 | deployment.ports                    | Ports for primary container                                                                                                                | `[]`           |
 | deployment.securityContext          | Security Context for the pod                                                                                                               | `{}`           |
 | deployment.additionalContainers     | Add additional containers besides init and app containers                                                                                  | `[]`           |
@@ -94,7 +97,7 @@ To uninstall the chart:
 | Name                     | Description                                                                                  | Value           |
 | ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | deployment.image.repository | Image repository for the application                                                      | `repository/image-name`  |
-| deployment.image.tag | Tag of the application image                                                                     | `v1.0.0`        |
+| deployment.image.tag | Tag of the application image                                                                     | `null`          |
 | deployment.image.digest | Digest of the application image                                                               | ``              |
 | deployment.image.pullPolicy | Pull policy for the application image                                                     | `IfNotPresent`  |
 
@@ -153,11 +156,13 @@ Periodic probe of container liveness. Container will be restarted if the probe f
 
 #### Deployment OpenshiftOAuthProxy Paramaters
 
-| Name                     | Description                                                                                  | Value           |
-| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
-| deployment.openshiftOAuthProxy.enabled | Add Openshift OAuth Proxy as SideCar Container                                 | `false`         |
-| deployment.openshiftOAuthProxy.port | Application port so proxy should forward to this port                             | `8080`          |
-| deployment.openshiftOAuthProxy.secretName | Secret name containing the TLS cert                                         | `openshift-oauth-proxy-tls`|
+| Name                                      | Description                                           | Value           |
+|-------------------------------------------|-------------------------------------------------------| --------------- |
+| deployment.openshiftOAuthProxy.enabled    | Add Openshift OAuth Proxy as SideCar Container        | `false`         |
+| deployment.openshiftOAuthProxy.port       | Application port so proxy should forward to this port | `8080`          |
+| deployment.openshiftOAuthProxy.secretName | Secret name containing the TLS cert                   | `openshift-oauth-proxy-tls`|
+| deployment.openshiftOAuthProxy.image      | image for oauth sidecar container                     | `openshift/oauth-proxy:latest`|
+| deployment.openshiftOAuthProxy.disableTLSArg      | If disabled --http-address=:8081 will be used instead of --https-address=:8443             | false           |
 
 ### Deployment Dns Paramaters
 
@@ -207,10 +212,10 @@ Periodic probe of container liveness. Container will be restarted if the probe f
 | Name | Description | Value |
 | ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | ingress.enabled | Enable ingress | `false` |
-| ingress.servicePort | Port of the service that serves pod | `8080` |
-| ingress.pathType | Each path in an Ingress is required to have a corresponding path type of ingress hosts to validate rules properly | `ImplementationSpecific` |
-| ingress.hosts | Array of FQDN hosts to be served by this ingress | `- chart-example.local` |
-| ingress.additionalLables | Labels for ingress | `{}` |
+| ingress.hosts | Array of hosts to be served by this ingress. | `[]` |
+| ingress.hosts[].host | Host to be served. [See example](application/values-test.yaml). | `[]` |
+| ingress.hosts[].paths | Paths against the host. If not specified, default configuration is added, [See example](application/values-test.yaml). | `[]` |
+| ingress.additionalLabels | Labels for ingress | `{}` |
 | ingress.annotations | Annotations for ingress | `{}` |
 | ingress.tls | TLS block for ingress | `[]` |
 | ingress.ingressClassName | Name of the ingress class | '' |

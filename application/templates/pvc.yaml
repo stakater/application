@@ -1,11 +1,15 @@
-{{- if .Values.persistence }}
-{{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) }}
+{{- if and (.Values.persistence).enabled (not .Values.persistence.existingClaim) }}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
+{{- if .Values.persistence.name }}
+  name: "{{ .Values.persistence.name }}"
+{{- else }}
+  name: {{ template "application.name" . }}-data
+{{- end }}
+  namespace: {{ include "application.namespace" . }}
   labels:
-{{ include "application.labels.stakater" . | indent 4 }}
-{{ include "application.labels.chart" . | indent 4 }}
+  {{- include "application.labels" . | nindent 4 }}
 {{- if .Values.persistence.additionalLabels }}
 {{ toYaml .Values.persistence.additionalLabels | indent 4 }}
 {{- end }}
@@ -13,12 +17,6 @@ metadata:
   annotations:
 {{ toYaml .Values.persistence.annotations | indent 4 }}
 {{- end }}
-{{- if .Values.persistence.name }}
-  name: "{{ .Values.persistence.name }}"
-{{- else }}
-  name: {{ template "application.name" . }}-data
-{{- end }}
-  namespace: {{ template "application.namespace" . }}
 spec:
   accessModes:
     - {{ .Values.persistence.accessMode | quote }}
@@ -37,6 +35,5 @@ spec:
 {{- end }}
 {{- if .Values.persistence.volumeName }}  
   volumeName: "{{ .Values.persistence.volumeName }}"
-{{- end }}
 {{- end }}
 {{- end }}

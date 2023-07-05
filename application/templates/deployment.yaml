@@ -1,11 +1,9 @@
-{{- if .Values.deployment }}
-{{- if .Values.deployment.enabled }}
+{{- if (.Values.deployment).enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-{{ include "application.labels.stakater" . | indent 4 }}
-{{ include "application.labels.chart" . | indent 4 }}
+  {{- include "application.labels" . | nindent 4 }}
 {{- if .Values.deployment.additionalLabels }}
 {{ toYaml .Values.deployment.additionalLabels | indent 4 }}
 {{- end }}
@@ -19,14 +17,14 @@ metadata:
     reloader.stakater.com/auto: "true"
 {{- end }}
   name: {{ template "application.name" . }}
-  namespace: {{ template "application.namespace" . }}
+  namespace: {{ include "application.namespace" . }}
 spec:
 {{- if .Values.deployment.replicas }}
   replicas: {{ .Values.deployment.replicas }}
 {{- end }}
   selector:
     matchLabels:
-{{ include "application.labels.selector" . | indent 6 }}
+{{ include "application.selectorLabels" . | indent 6 }}
   {{- if .Values.deployment.strategy }}
   strategy:
 {{ toYaml .Values.deployment.strategy | indent 4 }}
@@ -34,7 +32,7 @@ spec:
   template:
     metadata:
       labels:
-{{ include "application.labels.selector" . | indent 8 }}
+{{ include "application.selectorLabels" . | indent 8 }}
 {{- if .Values.deployment.podLabels }}
 {{ toYaml .Values.deployment.podLabels | indent 8 }}
 {{- end }}
@@ -95,6 +93,10 @@ spec:
       affinity:
 {{ toYaml .Values.deployment.affinity | indent 8 -}}
       {{- end }}
+      {{- with .Values.deployment.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       {{- if .Values.deployment.imagePullSecrets }}      
       imagePullSecrets:
       - name: {{ .Values.deployment.imagePullSecrets }}
@@ -102,29 +104,38 @@ spec:
       containers:
         {{- if .Values.deployment.openshiftOAuthProxy.enabled }}
       - args:
+        {{- if .Values.deployment.openshiftOAuthProxy.disableTLSArg }}
+        - --http-address=:8081
+        {{- else }}
         - --https-address=:8443
+        {{- end }}
         - --provider=openshift
         - --upstream=http://localhost:{{ .Values.deployment.openshiftOAuthProxy.port }}
         - --openshift-service-account={{ template "application.name" . }}
         - --tls-cert=/etc/tls/private/tls.crt
         - --tls-key=/etc/tls/private/tls.key
         - --cookie-secret=SECRET
-        image: openshift/oauth-proxy:latest
+        image: {{ .Values.deployment.openshiftOAuthProxy.image  | default "openshift/oauth-proxy:latest" }}
         imagePullPolicy: IfNotPresent
         name: oauth-proxy
         ports:
+        {{- if .Values.deployment.openshiftOAuthProxy.disableTLSArg }}
+        - containerPort: 8081
+        {{- else }}
         - containerPort: 8443
+        {{- end }}
           name: proxy
         volumeMounts:
         - mountPath: /etc/tls/private
           name: proxy-tls 
         {{- end }}
       - name: {{ template "application.name" . }}
-        {{- if .Values.deployment.image.digest }}
-        image: "{{ .Values.deployment.image.repository }}@{{ .Values.deployment.image.digest }}"
-        {{- else if .Values.deployment.image.tag }}
-        image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
-        {{- end }}
+
+        {{- $image := required "Undefined image for application container" .Values.deployment.image.repository }}
+        {{- with .Values.deployment.image.tag    }} {{- $image = print $image ":" . }} {{- end }}
+        {{- with .Values.deployment.image.digest }} {{- $image = print $image "@" . }} {{- end }}
+        image: {{ $image }}
+
         imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
         {{- if .Values.deployment.command }}
         command: {{- include "application.tplvalues.render" (dict "value" .Values.deployment.command "context" $) | nindent 12 }}
@@ -267,7 +278,11 @@ spec:
         {{- if (eq .Values.persistence.mountPVC true) }}
       - name: {{ template "application.name" . }}-data
         persistentVolumeClaim:
+          {{- if .Values.persistence.name }}
+          claimName: {{ .Values.persistence.name }}
+          {{- else }}
           claimName: {{ template "application.name" . }}-data
+          {{- end }}
         {{- end }}
         {{- if .Values.deployment.volumes }}
         {{- range $key, $value := .Values.deployment.volumes  }}
@@ -283,5 +298,4 @@ spec:
       serviceAccountName: {{ template "application.name" $ }}
       {{- end }}
       {{- end }}
-{{- end }}   
 {{- end }}

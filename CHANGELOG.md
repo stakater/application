@@ -2,6 +2,48 @@
 # Changelog
 
 All notable changes to this project will be documented here.
+
+### v2.1.13
+- Fix: make deployment.image.tag and job.image.tag optional [PR-234](https://github.com/stakater/application/pull/234)
+
+### v2.1.12
+- Caused by Change Log update
+
+### v2.1.11
+- Feature: Add topologySpreadConstraints [PR-239](https://github.com/stakater/application/pull/239)
+
+### v2.1.10
+- Chore: Add some basic unit tests and update CI workflow [PR-218](https://github.com/stakater/application/pull/218)
+
+### v2.1.9
+- Fix: Make servicePort var override possible with ingress hosts [PR-243](https://github.com/stakater/application/pull/243)
+
+### v2.1.8
+- Update: Use new API versions for HPA and CronJob if available [PR-221](https://github.com/stakater/application/pull/221)
+
+### v2.1.7
+- Fix: Add ingress path with default configuration if not specified at all. [PR-240](https://github.com/stakater/application/pull/240)
+
+### v2.1.6
+- Fix: Qoute application version label in labels [PR-238](https://github.com/stakater/application/pull/238)
+
+### v2.1.5
+- Fix: Repair ingress multiple paths definitions [PR-233](https://github.com/stakater/application/pull/233)
+
+### v2.1.4
+- Update: Add MIT License [PR-237](https://github.com/stakater/application/pull/237)
+
+### v2.1.2 && v2.1.3
+- Update: Improve enable conditions by adding capabilites, use `_helpers.tpl` properly, Move to common k8s labels and remove other labels [PR-226](https://github.com/stakater/application/pull/226)
+- Feature: Make `ingress` path configurable [PR-226](https://github.com/stakater/application/pull/226)
+- Fix: Add dependency for `helm_resource` on relevant `helm_repo` in tiltfile [PR-231](https://github.com/stakater/application/pull/231)
+
+### v2.1.1
+- Fix: added template for oauth proxy deployment to use http container port in case of ingress
+
+### v2.1.0
+- Fix: added oauth proxy image template and test to ensure oauth deployment image is not added in default case
+
 ### v2.0.0
 - Update: Updating ExternalSecret from v1alpha1 to v1beta1
 

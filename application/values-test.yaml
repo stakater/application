@@ -278,9 +278,22 @@ ingress:
   pathType: ImplementationSpecific 
 
   # List of host addresses to be exposed by this Ingress
+
   hosts:
-    - chart-example.local
-    - '{{ .Release.Name }}.stakater.com'
+    - host: chart-example-1.local
+    - host: chart-example-2.local
+      paths: 
+      - path: /
+      #  pathType: ''
+      #  serviceName: ''
+      #  servicePort: ''
+      - path: /subpath
+      #  pathType: ''
+      #  serviceName: ''
+      #  servicePort: ''
+    - host: '{{ .Release.Name }}.stakater.com'
+      paths:
+      - path: /
 
   # Additional labels for this Ingress
   additionalLabels:
@@ -433,7 +446,7 @@ configMap:
 sealedSecret:
   enabled: true
   additionalLabels:
-    key: value
+    # key: value
   annotations:
     # key: value
   files:

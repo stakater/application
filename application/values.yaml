@@ -1,9 +1,16 @@
+# -- Same as nameOverride but for the namespace.
+namespaceOverride: ""
+
+# -- Same as nameOverride but for the component.
+componentOverride: ""
+
+# -- Same as nameOverride but for the partOf.
+partOfOverride: ""
+
 ##########################################################
 # Name of the application.
 ##########################################################
 applicationName: "application"
-
-namespaceOverride: ""
 
 ##########################################################
 # Global labels
@@ -11,9 +18,6 @@ namespaceOverride: ""
 # and you can add additional labels from below 
 # on individual resource
 ##########################################################
-labels:
-  group: com.stakater.platform
-  team: stakater
   
 cronJob: 
   enabled: false
@@ -162,10 +166,31 @@ deployment:
   #          values:
   #          - ssd
 
+  # Topology spread constraints
+  topologySpreadConstraints:
+    # - maxSkew: 1
+    #   topologyKey: kubernetes.io/hostname
+    #   whenUnsatisfiable: ScheduleAnyway
+    #   labelSelector:
+    #     matchExpressions:
+    #     - key: disktype
+    #       operator: In
+    #       values:
+    #       - ssd
+    # - maxSkew: 1
+    #   topologyKey: topology.kubernetes.io/zone
+    #   whenUnsatisfiable: ScheduleAnyway
+    #   labelSelector:
+    #     matchExpressions:
+    #     - key: disktype
+    #       operator: In
+    #       values:
+    #       - ssd
+
   # Image of the app container
   image: 
     repository: repository/image-name
-    tag: v1.0.0
+    tag: ''
     digest: '' # if set to a non empty value, digest takes precedence on the tag
     pullPolicy: IfNotPresent
   dnsConfig:
@@ -222,9 +247,10 @@ deployment:
   
   openshiftOAuthProxy: 
     enabled: false
-    port: 8080
+    port: 8080   # Port on which application is running inside container
     secretName: "openshift-oauth-proxy-tls"
-
+    image: openshift/oauth-proxy:latest       # If you have a custom container for oauth-proxy that can be updated here
+    disableTLSArg: false # If disabled --http-address=:8081 will be used instead of --https-address=:8443 , to be used when an ingress is used for application
   # Add additional containers besides init and app containers
   additionalContainers:
   # - name: sidecar-contaner
@@ -325,8 +351,12 @@ ingress:
   
   # List of host addresses to be exposed by this Ingress
   hosts:
-    - chart-example.local
-
+    - host: chart-example.local
+      # paths: 
+      # - path: /
+      #  pathType: ''
+      #  serviceName: ''
+      #  servicePort: ''
   # Additional labels for this Ingress
   additionalLabels:
 

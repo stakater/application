@@ -1,10 +1,12 @@
-apiVersion: v1
+apiVersion: v2
 name: application
 description: Generic helm chart for all kind of applications
 
+type: application
+
 # Helm chart Version
 
-version: 2.0.0
+version: 2.1.13
 
 
 keywords:
@@ -15,7 +17,7 @@ keywords:
   - stakater
   - application
 
-home: https://github.com/stakater-charts/application
+home: https://github.com/stakater/application
 maintainers:
 - name: Stakater
   email: hello@stakater.com

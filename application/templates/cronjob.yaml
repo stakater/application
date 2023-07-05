@@ -1,11 +1,14 @@
-{{- if .Values.cronJob.enabled }}
+{{- if (.Values.cronJob).enabled }}
 {{- range $name, $job := .Values.cronJob.jobs }}
+{{ if $.Capabilities.APIVersions.Has "batch/v1/CronJob" -}}
+apiVersion: batch/v1
+{{- else -}}
 apiVersion: batch/v1beta1
+{{- end }}
 kind: CronJob
 metadata:
   labels:
-{{ include "application.labels.stakater" $ | indent 4 }}
-{{ include "application.labels.chart" $ | indent 4 }}
+  {{- include "application.labels" $ | nindent 4 }}
 {{- if $job.additionalLabels }}
 {{ $job.additionalLabels | indent 4 }}
 {{- end }}
@@ -31,8 +34,7 @@ spec:
       template:
         metadata:
           labels:
-          {{- include "application.labels.stakater" $ | nindent 12 }}
-          {{- include "application.labels.chart" $ | nindent 12 }}
+          {{- include "application.labels" $ | nindent 12 }}
         spec:
           {{- if $.Values.rbac.serviceAccount.name }}
           serviceAccountName: {{ $.Values.rbac.serviceAccount.name }}
@@ -41,11 +43,12 @@ spec:
           {{- end }}
           containers:
           - name: {{ $name }}
-            {{- if $job.image.digest }}
-            image: "{{ $job.image.repository }}@{{ $job.image.digest }}"
-            {{- else if $job.image.tag }}
-            image: "{{ $job.image.repository }}:{{ $job.image.tag }}"
-            {{- end }}
+
+            {{- $image := required (print "Undefined image repo for container '" $name "'") $job.image.repository }}
+            {{- with $job.image.tag    }} {{- $image = print $image ":" . }} {{- end }}
+            {{- with $job.image.digest }} {{- $image = print $image "@" . }} {{- end }}
+            image: {{ $image }}
+
             {{- if $job.image.imagePullPolicy }}
             imagePullPolicy: {{ $job.image.imagePullPolicy }}
             {{ end }}

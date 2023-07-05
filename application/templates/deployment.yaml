@@ -1,4 +1,4 @@
-{{- if (.Values.deployment).enabled }}
+{{- if .Values.deployment.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -295,5 +295,8 @@ spec:
       serviceAccountName: {{ .Values.rbac.serviceAccount.name }}
         {{- else }}
       serviceAccountName: {{ template "application.name" . }}
+      {{- end }}
+      {{- with .Values.deployment.revisionHistoryLimit }}
+      revisionHistoryLimit: {{ . }}
       {{- end }}
 {{- end }}

@@ -246,9 +246,9 @@ spec:
         {{- end }}
         {{- end }}
       {{- end }}
-        {{- if .Values.deployment.resources }}
+        {{- with .Values.deployment.resources }}
         resources:
-{{ toYaml .Values.deployment.resources | indent 10 }}
+          {{- toYaml . | nindent 10 }}
         {{- end }}
         {{- if .Values.deployment.containerSecurityContext }}
         securityContext:

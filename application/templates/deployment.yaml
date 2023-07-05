@@ -283,9 +283,5 @@ spec:
       serviceAccountName: {{ template "application.name" $ }}
       {{- end }}
       {{- end }}
-      serviceAccountName: {{ .Values.rbac.serviceAccount.name }}
-      {{- end }}
-      {{- end }}
-      {{- end }}      
 {{- end }}   
 {{- end }}

@@ -3,6 +3,9 @@
 
 All notable changes to this project will be documented here.
 
+### v2.1.16
+- fix: optional service account [PR-213](https://github.com/stakater/application/pull/213)
+
 ### v2.1.15
 - fix: allow setting arbitrary resource constraints [PR-255](https://github.com/stakater/application/pull/255)
 

@@ -3,6 +3,9 @@
 
 All notable changes to this project will be documented here.
 
+### v2.1.18
+- feat: Add vertical pod autoscaler template [PR-249](https://github.com/stakater/application/pull/249)
+
 ### v2.1.17
 - feat: allow overriding revisionHistoryLimit [PR-257](https://github.com/stakater/application/pull/257)
 

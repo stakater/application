@@ -617,6 +617,21 @@ autoscaling:
          averageUtilization: 60
 
 ##########################################################
+# VPA - Vertical Pod Autoscaling
+##########################################################
+vpa:
+# enabled is a boolean flag for enabling or disabling vpa 
+  enabled: false
+# additionalLabels defines additional labels
+  additionalLabels: 
+    # key: value
+# annotations defines annotations in key value pair
+  annotations: 
+    # key: value
+# container policies for individual containers.
+  containerPolicies: []
+    
+##########################################################
 # EndpointMonitor for IMC
 # https://github.com/stakater/IngressMonitorController
 ##########################################################

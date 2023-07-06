@@ -8,6 +8,10 @@ def delete_external_secrets_operator():
     print('Deleting external-secrets operator')
     local('helm uninstall external-secrets-operator -n external-secrets-operator')
 
+def delete_openshift_vertical_pod_autoscaler():
+    print('Uninstalling openshift-vertical-pod-autoscaler')
+    local('helm uninstall openshift-vertical-pod-autoscaler -n openshift-vertical-pod-autoscaler')
+    
 def delete_imc_crds():
     print('Deleting imc crds')
     local('oc get crds -o name | grep \'endpointmonitor\\.stakater\\.com\' | xargs -r -n 1 oc delete')
@@ -34,6 +38,7 @@ def delete_grafana_crds():
 
 delete_grafana_operator()
 delete_external_secrets_operator()
+delete_openshift_vertical_pod_autoscaler()
 delete_imc_crds()
 delete_forecastle_crds()
 delete_ss_crds()

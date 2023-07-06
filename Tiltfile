@@ -46,5 +46,21 @@ local_resource(
     cmd='helm install grafana-operator -n grafana-operator oci://ghcr.io/stakater/charts/grafana-operator --version=0.0.1 --set operator.installPlanApproval=Automatic'
     )
 
+# Install openshift-vertical-pod-autoscaler
+vpa_namespace = "openshift-vertical-pod-autoscaler"
+namespace_create(vpa_namespace)
+local_resource(
+    'openshift-vertical-pod-autoscaler', 
+    cmd='helm install openshift-vertical-pod-autoscaler -n openshift-vertical-pod-autoscaler oci://ghcr.io/stakater/charts/openshift-vertical-pod-autoscaler'
+    )
+
+# Wait until VPA CRD becomes available
+local_resource(
+    'wait-for-crds', 
+    cmd='timeout 300s bash -c "until kubectl wait --for condition=Established crd/verticalpodautoscalers.autoscaling.k8s.io; do sleep 10; done"',
+    resource_deps=[
+        'openshift-vertical-pod-autoscaler'
+    ])
+
 # Install cert-manager
 # it exists already

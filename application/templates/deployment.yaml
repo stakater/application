@@ -246,13 +246,10 @@ spec:
         {{- end }}
         {{- end }}
       {{- end }}
+        {{- with .Values.deployment.resources }}
         resources:
-          limits:
-            memory: {{ .Values.deployment.resources.limits.memory }}
-            cpu: {{ .Values.deployment.resources.limits.cpu }}
-          requests:
-            memory: {{ .Values.deployment.resources.requests.memory }}
-            cpu: {{ .Values.deployment.resources.requests.cpu }}
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
         {{- if .Values.deployment.containerSecurityContext }}
         securityContext:
 {{ toYaml .Values.deployment.containerSecurityContext | indent 10 }}

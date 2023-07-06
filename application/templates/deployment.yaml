@@ -29,6 +29,9 @@ spec:
   strategy:
 {{ toYaml .Values.deployment.strategy | indent 4 }}
   {{- end }}
+  {{- if not (kindIs "invalid" .Values.deployment.revisionHistoryLimit) }}
+  revisionHistoryLimit: {{ .Values.deployment.revisionHistoryLimit }}
+  {{- end }}
   template:
     metadata:
       labels:
@@ -292,8 +295,5 @@ spec:
       serviceAccountName: {{ .Values.rbac.serviceAccount.name }}
         {{- else }}
       serviceAccountName: {{ template "application.name" . }}
-      {{- end }}
-      {{- if not (kindIs "invalid" .Values.deployment.revisionHistoryLimit) }}
-      revisionHistoryLimit: {{ .Values.deployment.revisionHistoryLimit }}
       {{- end }}
 {{- end }}

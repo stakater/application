@@ -6,6 +6,8 @@ All notable changes to this project will be documented here.
 ### v2.1.16
 - feat: allow overriding revisionHistoryLimit [PR-257](https://github.com/stakater/application/pull/257)
 
+  > Caution: This PR changes the default value for `revisionHistoryLimit` from 10 to 2.
+
 ### v2.1.15
 - fix: allow setting arbitrary resource constraints [PR-255](https://github.com/stakater/application/pull/255)
 

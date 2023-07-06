@@ -15,7 +15,7 @@ namespace_create(imc_namespace)
 helm_resource('imc', 'oci://ghcr.io/stakater/charts/ingress-monitor-controller', namespace=imc_namespace)
 
 # Install IMC Config
-helm_resource('imc', 'oci://ghcr.io/stakater/charts/ingress-monitor-controller-config', namespace=imc_namespace,flags=['--set','developmentMode=true'])
+helm_resource('imc-config', 'oci://ghcr.io/stakater/charts/ingress-monitor-controller-config', namespace=imc_namespace,flags=['--set','developmentMode=true'])
 
 # Install Forecastle
 forecastle_namespace = "stakater-forecastle"

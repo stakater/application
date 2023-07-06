@@ -1,4 +1,4 @@
-{{- if (.Values.deployment).enabled }}
+{{- if .Values.deployment.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -28,6 +28,9 @@ spec:
   {{- if .Values.deployment.strategy }}
   strategy:
 {{ toYaml .Values.deployment.strategy | indent 4 }}
+  {{- end }}
+  {{- if not (kindIs "invalid" .Values.deployment.revisionHistoryLimit) }}
+  revisionHistoryLimit: {{ .Values.deployment.revisionHistoryLimit }}
   {{- end }}
   template:
     metadata:
@@ -246,13 +249,10 @@ spec:
         {{- end }}
         {{- end }}
       {{- end }}
+        {{- with .Values.deployment.resources }}
         resources:
-          limits:
-            memory: {{ .Values.deployment.resources.limits.memory }}
-            cpu: {{ .Values.deployment.resources.limits.cpu }}
-          requests:
-            memory: {{ .Values.deployment.resources.requests.memory }}
-            cpu: {{ .Values.deployment.resources.requests.cpu }}
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
         {{- if .Values.deployment.containerSecurityContext }}
         securityContext:
 {{ toYaml .Values.deployment.containerSecurityContext | indent 10 }}
@@ -291,9 +291,11 @@ spec:
         {{- end }}
         {{- end }}
       {{- end }}
+      {{- if .Values.rbac.serviceAccount.enabled }}
       {{- if .Values.rbac.serviceAccount.name }}
       serviceAccountName: {{ .Values.rbac.serviceAccount.name }}
-        {{- else }}
-      serviceAccountName: {{ template "application.name" . }}
+      {{- else }}
+      serviceAccountName: {{ template "application.name" $ }}
+      {{- end }}
       {{- end }}
 {{- end }}

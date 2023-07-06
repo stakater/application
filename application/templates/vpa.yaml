@@ -1,0 +1,27 @@
+{{- if .Values.vpa.enabled -}}
+{{- if not (.Capabilities.APIVersions.Has "autoscaling.k8s.io/v1/VerticalPodAutoscaler") }}
+  {{- fail "There is no VerticalPodAutoscaler resource definition in the target cluster!" }}
+{{- end }}
+apiVersion: "autoscaling.k8s.io/v1"
+kind: VerticalPodAutoscaler
+metadata:
+  name: {{ template "application.name" . }}
+  namespace: {{ include "application.namespace" . }}
+  labels:
+    {{- include "application.labels" . | nindent 4 }}
+    {{- with .Values.vpa.additionalLabels }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- if .Values.vpa.annotations }}
+  annotations:
+    {{- toYaml .Values.vpa.annotations | nindent 4 }}
+  {{- end }}
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ template "application.name" . }}
+  resourcePolicy:
+    containerPolicies:
+      {{- toYaml .Values.vpa.containerPolicies | nindent 6 }}
+{{- end }}

@@ -187,6 +187,9 @@ deployment:
     #       values:
     #       - ssd
 
+  # Number of ReplicaSet versions to retain
+  revisionHistoryLimit: 2
+
   # Image of the app container
   image: 
     repository: repository/image-name
@@ -333,6 +336,9 @@ service:
       protocol: TCP
       targetPort: 8080
   type: ClusterIP
+
+  # Set to 'None' will make this service headless 
+  clusterIP:
 
 ##########################################################
 # Ingress object for exposing services
@@ -610,6 +616,21 @@ autoscaling:
          type: Utilization
          averageUtilization: 60
 
+##########################################################
+# VPA - Vertical Pod Autoscaling
+##########################################################
+vpa:
+# enabled is a boolean flag for enabling or disabling vpa 
+  enabled: false
+# additionalLabels defines additional labels
+  additionalLabels: 
+    # key: value
+# annotations defines annotations in key value pair
+  annotations: 
+    # key: value
+# container policies for individual containers.
+  containerPolicies: []
+    
 ##########################################################
 # EndpointMonitor for IMC
 # https://github.com/stakater/IngressMonitorController

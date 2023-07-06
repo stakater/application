@@ -3,8 +3,25 @@
 
 All notable changes to this project will be documented here.
 
-### v2.1.14
+### v2.1.19
 - Fix: Reverts [PR-240](https://github.com/stakater/application/pull/240), This can already be configured via `paths` [PR-247](https://github.com/stakater/application/pull/247)
+
+### v2.1.18
+- feat: Add vertical pod autoscaler template [PR-249](https://github.com/stakater/application/pull/249)
+
+### v2.1.17
+- feat: allow overriding revisionHistoryLimit [PR-257](https://github.com/stakater/application/pull/257)
+
+  > Caution: This PR changes the default value for `revisionHistoryLimit` from 10 to 2.
+
+### v2.1.16
+- fix: optional service account [PR-213](https://github.com/stakater/application/pull/213)
+
+### v2.1.15
+- fix: allow setting arbitrary resource constraints [PR-255](https://github.com/stakater/application/pull/255)
+
+### v2.1.14
+- feat: allow overriding clusterIP [PR-258](https://github.com/stakater/application/pull/258)
 
 ### v2.1.13
 - Fix: make deployment.image.tag and job.image.tag optional [PR-234](https://github.com/stakater/application/pull/234)

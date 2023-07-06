@@ -9,7 +9,7 @@ def delete_external_secrets_operator():
     local('helm uninstall external-secrets-operator -n external-secrets-operator')
 
 def delete_openshift_vertical_pod_autoscaler():
-    print('Deleting external-secrets operator')
+    print('Uninstalling openshift-vertical-pod-autoscaler')
     local('helm uninstall openshift-vertical-pod-autoscaler -n openshift-vertical-pod-autoscaler')
     
 def delete_imc_crds():

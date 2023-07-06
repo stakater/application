@@ -3,6 +3,9 @@
 
 All notable changes to this project will be documented here.
 
+### v2.1.15
+- fix: allow setting arbitrary resource constraints [PR-255](https://github.com/stakater/application/pull/255)
+
 ### v2.1.14
 - feat: allow overriding clusterIP [PR-258](https://github.com/stakater/application/pull/258)
 

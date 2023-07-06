@@ -3,6 +3,11 @@
 
 All notable changes to this project will be documented here.
 
+### v2.1.17
+- feat: allow overriding revisionHistoryLimit [PR-257](https://github.com/stakater/application/pull/257)
+
+  > Caution: This PR changes the default value for `revisionHistoryLimit` from 10 to 2.
+
 ### v2.1.16
 - fix: optional service account [PR-213](https://github.com/stakater/application/pull/213)
 

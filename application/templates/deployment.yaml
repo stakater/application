@@ -296,7 +296,7 @@ spec:
         {{- else }}
       serviceAccountName: {{ template "application.name" . }}
       {{- end }}
-      {{- with .Values.deployment.revisionHistoryLimit }}
-      revisionHistoryLimit: {{ . }}
+      {{- if not (kindIs "invalid" .Values.deployment.revisionHistoryLimit) }}
+      revisionHistoryLimit: {{ .Values.deployment.revisionHistoryLimit }}
       {{- end }}
 {{- end }}

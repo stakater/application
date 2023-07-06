@@ -187,6 +187,9 @@ deployment:
     #       values:
     #       - ssd
 
+  # Number of ReplicaSet versions to retain
+  revisionHistoryLimit: 2
+
   # Image of the app container
   image: 
     repository: repository/image-name

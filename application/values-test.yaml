@@ -399,7 +399,7 @@ rbac:
   # Service Account to use by pods
   serviceAccount:
     enabled: true
-    name: ""
+    name: "application"
 
     # Additional Labels on service account
     additionalLabels:

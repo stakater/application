@@ -17,6 +17,9 @@ spec:
 {{- if .Values.service.type }}  
   type: "{{ .Values.service.type }}"
 {{- end }}
+{{- with .Values.service.clusterIP }}
+  clusterIP: {{ . }}
+{{- end }}
   selector:
 {{ include "application.selectorLabels" . | indent 4 }}
 {{- if .Values.deployment.podLabels }}

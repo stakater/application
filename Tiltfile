@@ -51,7 +51,7 @@ vpa_namespace = "openshift-vertical-pod-autoscaler"
 namespace_create(vpa_namespace)
 local_resource(
     'openshift-vertical-pod-autoscaler', 
-    cmd='helm install openshift-vertical-pod-autoscaler -n openshift-vertical-pod-autoscaler oci://ghcr.io/stakater/charts/openshift-vertical-pod-autoscaler'
+    cmd='helm install openshift-vertical-pod-autoscaler -n openshift-vertical-pod-autoscaler oci://ghcr.io/stakater/charts/openshift-vertical-pod-autoscaler --version=0.0.3'
     )
 
 # Wait until VPA CRD becomes available

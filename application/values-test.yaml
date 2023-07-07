@@ -280,8 +280,7 @@ ingress:
   # List of host addresses to be exposed by this Ingress
 
   hosts:
-    - host: chart-example-1.local
-    - host: chart-example-2.local
+    - host: chart-example.local
       paths: 
       - path: /
       #  pathType: ''

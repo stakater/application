@@ -3,6 +3,9 @@
 
 All notable changes to this project will be documented here.
 
+### v2.1.19
+- Fix: Reverts [PR-240](https://github.com/stakater/application/pull/240), It can already be configured via `paths` [PR-247](https://github.com/stakater/application/pull/247)
+
 ### v2.1.18
 - feat: Add vertical pod autoscaler template [PR-249](https://github.com/stakater/application/pull/249)
 
@@ -24,7 +27,7 @@ All notable changes to this project will be documented here.
 - Fix: make deployment.image.tag and job.image.tag optional [PR-234](https://github.com/stakater/application/pull/234)
 
 ### v2.1.12
-- Caused by Change Log update
+- Update: Changelog updates. This release shouldnt have been made as the head commit had [`[skip ci]`](https://docs.github.com/en/actions/managing-workflow-runs/skipping-workflow-runs). [PR-248](https://github.com/stakater/application/pull/248)
 
 ### v2.1.11
 - Feature: Add topologySpreadConstraints [PR-239](https://github.com/stakater/application/pull/239)

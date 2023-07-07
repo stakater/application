@@ -4,7 +4,7 @@
 All notable changes to this project will be documented here.
 
 ### v2.1.19
-- Fix: Reverts [PR-240](https://github.com/stakater/application/pull/240), This can already be configured via `paths` [PR-247](https://github.com/stakater/application/pull/247)
+- Fix: Reverts [PR-240](https://github.com/stakater/application/pull/240), It can already be configured via `paths` [PR-247](https://github.com/stakater/application/pull/247)
 
 ### v2.1.18
 - feat: Add vertical pod autoscaler template [PR-249](https://github.com/stakater/application/pull/249)

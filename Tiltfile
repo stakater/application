@@ -2,6 +2,7 @@ load('ext://helm_resource', 'helm_resource', 'helm_repo')
 load('ext://namespace', 'namespace_create', 'namespace_inject')
 
 settings = read_json('tilt-settings-sno3.json', default={})
+update_settings ( max_parallel_updates = 3 , k8s_upsert_timeout_secs = 120 ) 
 
 allow_k8s_contexts(k8s_context()) # disable check
 

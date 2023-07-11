@@ -1,7 +1,7 @@
 load('ext://helm_resource', 'helm_resource', 'helm_repo')
 load('ext://namespace', 'namespace_create', 'namespace_inject')
 
-update_settings ( max_parallel_updates = 3 , k8s_upsert_timeout_secs = 120 ) 
+update_settings ( max_parallel_updates = 1 , k8s_upsert_timeout_secs = 120 ) 
 
 allow_k8s_contexts(k8s_context()) # disable check
 

@@ -439,7 +439,7 @@ Stakater [IngressMonitorController](https://github.com/stakater/IngressMonitorCo
 | `cronJob.enabled`        | Enable cronjob in application chart                                                          | `""`            |
 | `cronJob.jobs`           | cronjobs spec                                                                                | {}              |
 
-Job parameter for each cronjob object at `cronJob.jobs` 
+Job parameter for each cronjob object at `cronJob.jobs`
 
 | Name                                | Description                                   |
 | ----------------------------------- | --------------------------------------------- |

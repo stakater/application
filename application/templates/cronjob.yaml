@@ -31,8 +31,8 @@ spec:
 {{ end }}
   jobTemplate:
     spec:
-{{- if $job.activeDeadlineSeconds }}
-      activeDeadlineSeconds: {{ $job.activeDeadlineSeconds }}
+{{- with $job.activeDeadlineSeconds }}
+      activeDeadlineSeconds: {{ . }}
 {{- end }}
       template:
         metadata:

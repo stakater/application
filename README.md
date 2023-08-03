@@ -466,6 +466,7 @@ Job parameter for each cronjob object at `cronJob.jobs`
 | `<name>.activeDeadlineSeconds`      | ActiveDeadlineSeconds of job                  |
 | `<name>.additionalPodAnnotations`   | Additional annotations of pod of job          |
 | `<name>.additionalPodLabels`        | Additional labels of pod of job               |
+| `<name>.topologySpreadConstraints`  | TopologySpreadConstraints of pod of job       |
 
 ## Naming convention for ConfigMap, Secret, SealedSecret and ExternalSecret
 

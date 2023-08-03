@@ -99,6 +99,10 @@ spec:
           tolerations:
 {{ toYaml . | indent 12 }}
           {{- end }}
+          {{- with $job.topologySpreadConstraints }}
+          topologySpreadConstraints:
+{{ toYaml . | indent 12 }}
+          {{- end }}
           {{- if $job.restartPolicy}}
           restartPolicy: {{ $job.restartPolicy }}
           {{ else }}

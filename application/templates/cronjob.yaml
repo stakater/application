@@ -33,14 +33,13 @@ spec:
     spec:
 {{- if $job.activeDeadlineSeconds }}
       activeDeadlineSeconds: {{ $job.activeDeadlineSeconds }}
-{{ end }}
+{{- end }}
       template:
         metadata:
           labels:
           {{- include "application.labels" $ | nindent 12 }}
           {{- with $job.additionalPodAnnotations }}
-          annotations:
-{{ toYaml . | indent 12 }}
+          annotations: {{ toYaml . | nindent 12 }}
           {{- end }}
         spec:
           {{- if $.Values.rbac.serviceAccount.name }}

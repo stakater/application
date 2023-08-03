@@ -38,6 +38,9 @@ spec:
         metadata:
           labels:
           {{- include "application.labels" $ | nindent 12 }}
+          {{- with $job.additionalPodLabels }}
+          {{ toYaml . | nindent 12 }}
+          {{- end }}
           {{- with $job.additionalPodAnnotations }}
           annotations: {{ toYaml . | nindent 12 }}
           {{- end }}

@@ -439,7 +439,7 @@ Stakater [IngressMonitorController](https://github.com/stakater/IngressMonitorCo
 | `cronJob.enabled`        | Enable cronjob in application chart                                                          | `""`            |
 | `cronJob.jobs`           | cronjobs spec                                                                                | {}              |
 
-Job paramater for each cronjob object at `cronJob.jobs` 
+Job parameter for each cronjob object at `cronJob.jobs` 
 
 | Name                               | Description                                                                                  
 | -----------------------------------| -------------------------------------------------------------------------------------------- |
@@ -447,7 +447,7 @@ Job paramater for each cronjob object at `cronJob.jobs`
 | `<name>.image.repository`          | Repository of container image of cronjob                                                     |
 | `<name>.image.tag`                 | Tag of container image of cronjob                                                            |
 | `<name>.image.digest`              | Digest of container image of cronjob                                                         |
-| `<name>.image.imagePullPolicy`     | ImagePullPolicy of container image ofcronjob                                                                                                                           |
+| `<name>.image.imagePullPolicy`     | ImagePullPolicy of container image of cronjob                                                                                                                           |
 | `<name>.command`                   | Command of container of job                                                                  |
 | `<name>.args`                      | Args of container of job                                                                     |
 | `<name>.resources`                 | Resources of container of job                                                                |
@@ -463,6 +463,8 @@ Job paramater for each cronjob object at `cronJob.jobs`
 | `<name>.tolerations`               | Tolerations of cronjob                                                                       | 
 | `<name>.restartPolicy`             | RestartPolicy of cronjob                                                                     |
 | `<name>.imagePullSecrets`          | ImagePullSecrets of cronjob                                                                     |
+| `<name>.activeDeadlineSeconds` | ActiveDeadlineSeconds of job |
+| `<name>.additionalPodAnnotations` | Additional annotations of pod of job |
 
 ## Naming convention for ConfigMap, Secret, SealedSecret and ExternalSecret
 

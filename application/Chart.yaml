@@ -4,10 +4,9 @@ description: Generic helm chart for all kind of applications
 
 type: application
 
-# Helm chart Version
+# helm chart version
 
 version: 2.2.0
-
 
 keywords:
   - java

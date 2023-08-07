@@ -31,11 +31,11 @@ spec:
 {{ end }}
   jobTemplate:
     spec:
-      {{- with $job.activeDeadlineSeconds }}
-      activeDeadlineSeconds: {{ . }}
+      {{- if $job.activeDeadlineSeconds }}
+      activeDeadlineSeconds: {{ $job.activeDeadlineSeconds }}
       {{- end }}
-      {{- with $job.backoffLimit }}
-      backoffLimit: {{ . }}
+      {{- if $job.backoffLimit }}
+      backoffLimit: {{ $job.backoffLimit }}
       {{- end }}
       template:
         metadata:

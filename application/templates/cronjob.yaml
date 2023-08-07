@@ -34,7 +34,7 @@ spec:
       {{- with $job.activeDeadlineSeconds }}
       activeDeadlineSeconds: {{ . }}
       {{- end }}
-      {{- if not isNil $job.backoffLimit }}
+      {{- if not (isNil $job.backoffLimit) }}
       backoffLimit: {{ $job.backoffLimit }}
       {{- end }}
       template:

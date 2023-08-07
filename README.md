@@ -464,6 +464,7 @@ Job parameter for each cronjob object at `cronJob.jobs`
 | `<name>.restartPolicy`              | RestartPolicy of cronjob                      |
 | `<name>.imagePullSecrets`           | ImagePullSecrets of cronjob                   |
 | `<name>.activeDeadlineSeconds`      | ActiveDeadlineSeconds of job                  |
+| `<name>.backoffLimit`               | BackoffLimit of job                           |
 | `<name>.additionalPodAnnotations`   | Additional annotations of pod of job          |
 | `<name>.additionalPodLabels`        | Additional labels of pod of job               |
 | `<name>.topologySpreadConstraints`  | TopologySpreadConstraints of pod of job       |

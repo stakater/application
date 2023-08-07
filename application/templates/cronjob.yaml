@@ -34,6 +34,9 @@ spec:
       {{- with $job.activeDeadlineSeconds }}
       activeDeadlineSeconds: {{ . }}
       {{- end }}
+      {{- with $job.backoffLimit }}
+      backoffLimit: {{ . }}
+      {{- end }}
       template:
         metadata:
           labels:

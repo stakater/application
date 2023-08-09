@@ -3,7 +3,7 @@
 
 All notable changes to this project will be documented here.
 
-### v2.2.2
+### v2.2.3
 - feat: Add more properties to CronJob [PR-265](https://github.com/stakater/application/pull/265)
 
 ### v2.2.1

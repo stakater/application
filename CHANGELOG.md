@@ -3,6 +3,9 @@
 
 All notable changes to this project will be documented here.
 
+### v2.1.20
+- feat: Add more properties to CronJob [PR-265](https://github.com/stakater/application/pull/265)
+
 ### v2.1.19
 - Fix: Reverts [PR-240](https://github.com/stakater/application/pull/240), It can already be configured via `paths` [PR-247](https://github.com/stakater/application/pull/247)
 

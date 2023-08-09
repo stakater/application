@@ -31,10 +31,22 @@ spec:
 {{ end }}
   jobTemplate:
     spec:
+      {{- with $job.activeDeadlineSeconds }}
+      activeDeadlineSeconds: {{ . }}
+      {{- end }}
+      {{- if not (kindIs "invalid" $job.backoffLimit) }}
+      backoffLimit: {{ $job.backoffLimit }}
+      {{- end }}
       template:
         metadata:
           labels:
           {{- include "application.labels" $ | nindent 12 }}
+          {{- with $job.additionalPodLabels }}
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with $job.additionalPodAnnotations }}
+          annotations: {{ toYaml . | nindent 12 }}
+          {{- end }}
         spec:
           {{- if $.Values.rbac.serviceAccount.name }}
           serviceAccountName: {{ $.Values.rbac.serviceAccount.name }}
@@ -87,8 +99,13 @@ spec:
 {{ toYaml . | indent 12 }}
           {{- end }}
           {{- with $job.tolerations }}
-          tolerations:
-{{ toYaml . | indent 12 }}
+          tolerations: {{ toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with $job.topologySpreadConstraints }}
+          topologySpreadConstraints: {{ toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with $job.securityContext }}
+          securityContext: {{ toYaml . | nindent 12 }}
           {{- end }}
           {{- if $job.restartPolicy}}
           restartPolicy: {{ $job.restartPolicy }}

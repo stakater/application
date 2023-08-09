@@ -18,7 +18,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: {{ template "application.name" . }}
+      app.kubernetes.io/part-of: {{ include "application.name" . }}
   namespaceSelector:
     matchNames:
     - {{ .Release.Namespace }}

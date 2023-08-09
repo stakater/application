@@ -18,7 +18,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: {{ template "application.name" . }}
+{{ include "application.selectorLabels" . | indent 6 }}
   namespaceSelector:
     matchNames:
     - {{ .Release.Namespace }}

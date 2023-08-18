@@ -3,6 +3,9 @@
 
 All notable changes to this project will be documented here.
 
+### v2.2.5
+- fix: Namespace selector fixed for service monitor [PR-270](https://github.com/stakater/application/pull/270)
+
 ### v2.2.4
 - fix: Matchlabel fixed for service monitor [PR-269](https://github.com/stakater/application/pull/269)
 

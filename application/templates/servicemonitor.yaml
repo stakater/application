@@ -21,7 +21,7 @@ spec:
 {{ include "application.labels" . | indent 6 }}
   namespaceSelector:
     matchNames:
-    - {{ .Release.Namespace }}
+    - {{ include "application.namespace" . }}
   endpoints:
 {{ toYaml .Values.serviceMonitor.endpoints | indent 4 }}
 {{- end }}

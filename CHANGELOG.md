@@ -3,6 +3,9 @@
 
 All notable changes to this project will be documented here.
 
+### v2.2.4
+- fix: Matchlabel fixed for service monitor [PR-269](https://github.com/stakater/application/pull/269)
+
 ### v2.2.3
 - feat: Add more properties to CronJob [PR-265](https://github.com/stakater/application/pull/265)
 

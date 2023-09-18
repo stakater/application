@@ -1,3 +1,10 @@
+{{- define "renderedValues" -}}
+{{- $originalValues := .Values | toYaml }}
+{{- $newValuesYaml := tpl $originalValues . }}
+{{- $newValues := $newValuesYaml | fromYaml }}
+{{- $_ := set $ "Values" $newValues -}}
+{{- end }}
+
 {{/* vim: set filetype=mustache: */}}
 
 {{/*

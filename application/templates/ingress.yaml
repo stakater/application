@@ -1,4 +1,5 @@
 {{- if (.Values.ingress).enabled -}}
+---
 {{- $servicePort := .Values.ingress.servicePort -}}
 {{- $pathType := .Values.ingress.pathType -}}
 {{- $applicationNameTpl := include "application.name" . -}}

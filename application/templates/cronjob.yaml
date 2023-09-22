@@ -1,5 +1,6 @@
 {{- if (.Values.cronJob).enabled }}
 {{- range $name, $job := .Values.cronJob.jobs }}
+---
 {{ if $.Capabilities.APIVersions.Has "batch/v1/CronJob" -}}
 apiVersion: batch/v1
 {{- else -}}

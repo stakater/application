@@ -19,7 +19,7 @@ jobs:
   helm-dry-run:
     name: helm-dry-run
     if: "! contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
-    runs-on: om-sno6-lcaas
+    runs-on: stakater-nonprod
     
     steps:
     - name: Check out code

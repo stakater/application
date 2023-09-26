@@ -5,6 +5,7 @@ on:
     branches:
       - master
     paths-ignore:
+    - '.github/workflows/pull_request.yaml'
     - 'README.md'
     - 'LICENSE'
 
@@ -15,7 +16,7 @@ jobs:
   build:
     name: Build
     if: "! contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
-    runs-on: om-sno6-lcaas
+    runs-on: stakater-nonprod
 
     steps:
 
@@ -41,9 +42,6 @@ jobs:
       with:
         version: v1.26.0
 
-    - name: Install tilt
-      run: curl -fsSL https://raw.githubusercontent.com/tilt-dev/tilt/master/scripts/install.sh | bash
-
     - name: Install CLI tools from OpenShift Mirror
       uses: redhat-actions/openshift-tools-installer@v1
       with:
@@ -61,17 +59,10 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Tilt up
-      run: tilt ci --timeout 5m0s
-
     # Dry run to ensure that manifests are generated successfully
     - name: Dry Run Chart
       run: |
         helm install ${CHART_NAME} ${CHART_NAME} -f ${CHART_NAME}/values-test.yaml -n stakater-chart-pipeline-test --dry-run --debug
-
-    - name: Tilt down
-      if: always()
-      run: tilt down --delete-namespaces --file ./Tiltfile-delete
 
     - name: Comment on PR
       uses: mshick/add-pr-comment@v2

@@ -19,7 +19,7 @@ jobs:
   helm-dry-run:
     name: helm-dry-run
     if: "! contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
-    runs-on: om-sno6-lcaas
+    runs-on: stakater-nonprod
     
     steps:
     - name: Check out code
@@ -44,9 +44,6 @@ jobs:
       with:
         version: v1.26.0
 
-    - name: Install tilt
-      run: curl -fsSL https://raw.githubusercontent.com/tilt-dev/tilt/master/scripts/install.sh | bash
-
     - name: Install CLI tools from OpenShift Mirror
       uses: redhat-actions/openshift-tools-installer@v1
       with:
@@ -64,17 +61,10 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Tilt up
-      run: tilt ci --timeout 5m0s
-
-    # Dry run to ensure that manifests are generated successfully 
+    # Dry run to ensure that manifests are generated successfully
     - name: Dry Run Chart
       run: |
         helm install ${CHART_NAME} ${CHART_NAME} -f ${CHART_NAME}/values-test.yaml -n stakater-chart-pipeline-test --dry-run --debug
-
-    - name: Tilt down
-      if: always()
-      run: tilt down --delete-namespaces --file ./Tiltfile-delete
 
     - name: Notify Slack
       uses: 8398a7/action-slack@v3

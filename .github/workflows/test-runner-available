@@ -1,0 +1,13 @@
+name: 'Check if runner present'
+
+on: workflow_dispatch
+jobs:
+The jobs key groups together all the jobs that run in the workflow file.
+
+  run-echo:
+    runs-on: "stakater-nonprod"
+
+    steps:
+
+      - name: Install
+        run: echo "Hello from Runner"

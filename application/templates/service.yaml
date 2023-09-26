@@ -7,20 +7,35 @@ metadata:
   namespace: {{ template "application.namespace" $ }}
   labels:
   {{- include "application.labels" . | nindent 4 }}
-{{- if .Values.service.additionalLabels }}
-{{ toYaml .Values.service.additionalLabels | indent 4 }}
-{{- end }}
-{{- if .Values.service.annotations }}
+  {{- if .Values.service.additionalLabels }}
+  {{ toYaml .Values.service.additionalLabels | indent 4 }}
+  {{- end }}
+  {{- if .Values.service.annotations }}
   annotations:
 {{ include "application.tplvalues.render" ( dict "value" .Values.service.annotations  "context" $ ) | indent 4 }}
 {{- end }}
 spec:
-{{- if .Values.service.type }}  
-  type: "{{ .Values.service.type }}"
-{{- end }}
-{{- with .Values.service.clusterIP }}
+{{- if (or (eq .Values.service.type "ClusterIP") (empty .Values.service.type)) }}
+  type: ClusterIP
+  {{- with .Values.service.clusterIP }}
   clusterIP: {{ . }}
-{{- end }}
+  {{- end }}
+  {{- else if eq .Values.service.type "LoadBalancer" }}
+  type: {{ .Values.service.type }}
+  {{- with .Values.service.loadBalancerIP }}
+  loadBalancerIP: {{ . }}
+  {{- end }}
+  {{- with .Values.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- else }}
+  type: {{ .Values.service.type }}
+  {{- end }}
+  {{- with .Values.service.externalIPs }}
+  externalIPs:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   selector:
 {{ include "application.selectorLabels" . | indent 4 }}
 {{- if .Values.deployment.podLabels }}

@@ -11,6 +11,7 @@ on:
 
 env:
   CHART_NAME: "application"
+  
 
 jobs:
   build:

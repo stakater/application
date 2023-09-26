@@ -5,6 +5,7 @@ on:
     branches:
       - master
     paths-ignore:
+    - '.github/workflows/pull_request.yaml'
     - 'README.md'
     - 'LICENSE'
 

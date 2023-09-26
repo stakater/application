@@ -2,15 +2,15 @@ include('Tiltfile')
 
 def delete_grafana_operator():
     print('Deleting grafana operator')
-    local('helm uninstall grafana-operator -n grafana-operator')
+    local('helm uninstall grafana-operator -n grafana-operator || true')
 
 def delete_external_secrets_operator():
     print('Deleting external-secrets operator')
-    local('helm uninstall external-secrets-operator -n external-secrets-operator')
+    local('helm uninstall external-secrets-operator -n external-secrets-operator || true')
 
 def delete_openshift_vertical_pod_autoscaler():
     print('Uninstalling openshift-vertical-pod-autoscaler')
-    local('helm uninstall openshift-vertical-pod-autoscaler -n openshift-vertical-pod-autoscaler')
+    local('helm uninstall openshift-vertical-pod-autoscaler -n openshift-vertical-pod-autoscaler || true')
     
 def delete_imc_crds():
     print('Deleting imc crds')
@@ -22,7 +22,7 @@ def delete_forecastle_crds():
 
 def delete_ss_crds():
     print('Deleting sealedsecrets crds')
-    local('oc get crds -o name | grep \'bitnami\\.com\' | xargs -r -n 1 oc delete')    
+    local('oc get crds -o name | grep \'bitnami\\.com\' | xargs -r -n 1 oc delete')
 
 def delete_es_crds():
     print('Deleting externalsecrets crds')

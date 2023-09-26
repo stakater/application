@@ -60,3 +60,11 @@ Allow the release namespace to be overridden
 {{- define "application.namespace" -}}
 {{- default .Release.Namespace .Values.namespaceOverride -}}
 {{- end -}}
+
+{{- define "application.sa.oauth-redirectreference" }}
+apiVersion: v1
+kind: OAuthRedirectReference
+reference:
+  kind: Route
+  name: {{ include "application.name" . }}
+{{- end }}

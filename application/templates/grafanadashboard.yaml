@@ -1,5 +1,6 @@
 {{- if and (.Values.grafanaDashboard).enabled (.Capabilities.APIVersions.Has "integreatly.org/v1alpha1") -}}
 {{- range $name, $content := .Values.grafanaDashboard.contents }}
+---
 apiVersion: integreatly.org/v1alpha1
 kind: GrafanaDashboard
 metadata:
@@ -24,6 +25,5 @@ spec:
   {{- if $content.url }}
   url: {{ $content.url }}
   {{- end }}
----
 {{- end }}
 {{- end }}

@@ -299,4 +299,5 @@ spec:
       serviceAccountName: {{ template "application.name" $ }}
       {{- end }}
       {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.deployment.terminationGracePeriodSeconds }}
 {{- end }}

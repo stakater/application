@@ -5,9 +5,10 @@ on:
     branches:
       - master
     paths-ignore:
-    - '.github/workflows/pull_request.yaml'
     - 'README.md'
     - 'LICENSE'
+    paths:
+      - '.github/workflows/pull_request.yaml'
 
 env:
   CHART_NAME: "application"

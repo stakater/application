@@ -479,10 +479,22 @@ secret:
 #     data:
 #       secretKey1: secretValue1
 #       secretKey2: secretValue2
+#     encodedData:
+#       secretKey3: c2VjcmV0VmFsdWUx
+#       secretKey4: c2VjcmV0VmFsdWUy
+#     stringData:
+#       secretKey5: secretValue1
+#       secretKey6: secretValue2
 #   password:
 #     data:
 #       secretKey1: secretValue1
 #       secretKey2: secretValue2
+#     encodedData:
+#       secretKey3: c2VjcmV0VmFsdWUx
+#       secretKey4: c2VjcmV0VmFsdWUy
+#     stringData:
+#       secretKey5: secretValue1
+#       secretKey6: secretValue2
 
 # Service Monitor to collect Prometheus metrices
 serviceMonitor:

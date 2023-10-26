@@ -4,9 +4,6 @@ on:
   pull_request_target:
     branches:
       - master
-    paths-ignore:
-    - 'README.md'
-    - 'LICENSE'
 
 env:
   CHART_NAME: "application"

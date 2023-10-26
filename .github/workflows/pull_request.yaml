@@ -7,8 +7,6 @@ on:
     paths-ignore:
     - 'README.md'
     - 'LICENSE'
-    paths:
-      - '.github/workflows/pull_request.yaml'
 
 env:
   CHART_NAME: "application"

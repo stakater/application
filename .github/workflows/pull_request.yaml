@@ -4,10 +4,6 @@ on:
   pull_request_target:
     branches:
       - master
-    paths-ignore:
-    - '.github/workflows/pull_request.yaml'
-    - 'README.md'
-    - 'LICENSE'
 
 env:
   CHART_NAME: "application"
@@ -36,6 +32,13 @@ jobs:
     - name: Helm Lint
       run: |
         helm lint ${CHART_NAME}
+
+    - name: Run Checkov action
+      uses: bridgecrewio/checkov-action@master
+      with:
+        quiet: true
+        file: ${CHART_NAME}/Chart.yaml
+        var_file: ${CHART_NAME}/values-test.yaml
 
     - name: Install kubectl
       uses: azure/setup-kubectl@v3

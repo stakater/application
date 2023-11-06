@@ -49,10 +49,12 @@ spec:
           annotations: {{ toYaml . | nindent 12 }}
           {{- end }}
         spec:
+          {{- if $.Values.rbac.enabled }}
           {{- if $.Values.rbac.serviceAccount.name }}
           serviceAccountName: {{ $.Values.rbac.serviceAccount.name }}
             {{- else }}
           serviceAccountName: {{ template "application.name" $ }}
+          {{- end }}
           {{- end }}
           containers:
           - name: {{ $name }}

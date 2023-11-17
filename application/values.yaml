@@ -633,6 +633,8 @@ vpa:
     # key: value
 # container policies for individual containers.
   containerPolicies: []
+  updatePolicy:
+    updateMode: Auto
     
 ##########################################################
 # EndpointMonitor for IMC

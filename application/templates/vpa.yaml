@@ -25,4 +25,6 @@ spec:
   resourcePolicy:
     containerPolicies:
       {{- toYaml .Values.vpa.containerPolicies | nindent 6 }}
+  updatePolicy:
+    {{- toYaml .Values.vpa.updatePolicy | nindent 4 }}
 {{- end }}

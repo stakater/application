@@ -32,6 +32,7 @@ jobs:
     - name: Helm Lint
       run: |
         helm lint ${CHART_NAME}
+        helm lint ${CHART_NAME} -f ${CHART_NAME}/values-test.yaml
 
     - name: Run Checkov action
       uses: bridgecrewio/checkov-action@master

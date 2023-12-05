@@ -38,6 +38,7 @@ jobs:
     - name: Helm Lint
       run: |
         helm lint ${CHART_NAME}
+        helm lint ${CHART_NAME} -f ${CHART_NAME}/values-test.yaml
 
     - name: Install kubectl
       uses: azure/setup-kubectl@v3

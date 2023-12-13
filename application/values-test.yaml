@@ -217,6 +217,9 @@ deployment:
     name: https
     protocol: TCP
 
+  # Networking using the host network
+  hostNetwork: true
+
   # Graceful termination timeout
   terminationGracePeriodSeconds: 120
 

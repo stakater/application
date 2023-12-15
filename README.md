@@ -269,21 +269,24 @@ Stakater [Forecastle](https://github.com/stakater/Forecastle) parameters
 
 ### ConfigMap Paramaters
 
-| Name                     | Description                                                                                  | Value           |
-| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
-| configMap.enabled | Enable configMaps                                                                                                                                                                                | `false`                                                                                                                                               |
-| configMap.additionalLabels | Labels for configMaps                                                                                                                                                                            | `{}`                                                                                                                                                  |
-| configMap.annotations | Annotations for configMaps                                                                                                                                                                       | `{}`                                                                                                                                                  |
-| configMap.files | Map of configMap files with suffixes and data contained in those files                                                                                                                           | `{}`                                                                                                                                                  |
+| Name                       | Description                                                                        | Value          |
+|----------------------------|------------------------------------------------------------------------------------|----------------|
+| configMap.enabled          | Enable configMaps                                                                  | `false`        |
+| configMap.additionalLabels | Labels for configMaps                                                              | `{}`           |
+| configMap.annotations      | Annotations for configMaps                                                         | `{}`           |
+| configMap.files            | Map of configMap files with suffixes and data contained in those files             | `{}`           |
 
 ### Secret Paramaters
 
-| Name                     | Description                                                                                  | Value           |
-| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
-| secret.enabled | Enable secret                                                                                                                                                                                    | `false`                                                                                                                                               |
-| secret.additionalLabels | Labels for secret                                                                                                                                                                                | `{}`                                                                                                                                                  |
-| secret.annotations | Annotations for secret                                                                                                                                                                           | `{}`                                                                                                                                                  |
-| secret.files | Map of secret files with suffixes and data contained in those files                                                                                                                              | `{}`                                                                                                                                                  |
+| Name                            | Description                                                                     | Value                  |
+|---------------------------------|---------------------------------------------------------------------------------|------------------------|
+| secret.enabled                  | Enable secret                                                                   | `false`                |
+| secret.additionalLabels         | Labels for secret                                                               | `{}`                   |
+| secret.annotations              | Annotations for secret                                                          | `{}`                   |
+| secret.files                    | Map of secret files with suffixes and data contained in those files             | `{}`                   |
+| secret.files.[name].stringData  | Allow to provide the clear text content inside the secret                       | `{}`                   |
+| secret.files.[name].data        | Allow to provide the text content inside the secret that will be base64 encoded | `{}`                   |
+| secret.files.[name].encodedData | Allow to provide the text content inside the secret already base64 encoded      | `{}`                   |
 
 ### ServiceMonitor Paramaters
 

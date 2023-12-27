@@ -3,6 +3,9 @@
 
 All notable changes to this project will be documented here.
 
+### v2.3.0
+- Feature: allow multiple provided text types on secret creation: stringData, data and encodedData [PR-282](https://github.com/stakater/application/pull/282)
+
 ### v2.2.6
 - fix: allow multiple cronjobs [PR-271](https://github.com/stakater/application/pull/271)
 

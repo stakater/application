@@ -570,6 +570,14 @@ secret:
 #     data:
 #       secretKey1: secretValue1
 #       secretKey2: secretValue2
+#   apiKey:
+#     stringData:
+#       secretKey1: secretValue1
+#       secretKey2: secretValue2
+#   secondApiKeu:
+#     encodedData:
+#       secretKey1: dGVzdFZhbHVl
+#       secretKey2: dGVzdFZhbHVl
 
 ##########################################################
 # Service Monitor to collect Prometheus metrices

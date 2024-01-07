@@ -1,0 +1,8 @@
+{{- if .Values.service.loadBalancerIP }}
+service.loadBalancerIP:
+  You have defined the value of service.loadBalancerIP for this release. Please
+  be mindful that this field has been deprecated as of Kubernetes v1.24 and may
+  be removed from the API in a later release.
+
+  Please refer to the Kubernetes documentation for more information.
+{{- end }}

@@ -8,11 +8,11 @@ metadata:
   labels:
   {{- include "application.labels" . | nindent 4 }}
   {{- if .Values.service.additionalLabels }}
-  {{ toYaml .Values.service.additionalLabels | indent 4 }}
+    {{- toYaml .Values.service.additionalLabels | nindent 4 }}
   {{- end }}
   {{- if .Values.service.annotations }}
   annotations:
-{{ include "application.tplvalues.render" ( dict "value" .Values.service.annotations  "context" $ ) | indent 4 }}
+    {{- include "application.tplvalues.render" ( dict "value" .Values.service.annotations  "context" $ ) | nindent 4 }}
 {{- end }}
 spec:
   type: {{ .Values.service.type }}

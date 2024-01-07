@@ -15,13 +15,12 @@ metadata:
 {{ include "application.tplvalues.render" ( dict "value" .Values.service.annotations  "context" $ ) | indent 4 }}
 {{- end }}
 spec:
+  type: {{ .Values.service.type }}
 {{- if (or (eq .Values.service.type "ClusterIP") (empty .Values.service.type)) }}
-  type: ClusterIP
   {{- with .Values.service.clusterIP }}
   clusterIP: {{ . }}
   {{- end }}
   {{- else if eq .Values.service.type "LoadBalancer" }}
-  type: {{ .Values.service.type }}
   {{- with .Values.service.loadBalancerIP }}
   loadBalancerIP: {{ . }}
   {{- end }}
@@ -30,7 +29,6 @@ spec:
     {{- toYaml . | nindent 4 }}
   {{- end }}
   {{- else }}
-  type: {{ .Values.service.type }}
   {{- end }}
   {{- with .Values.service.externalIPs }}
   externalIPs:

@@ -16,11 +16,9 @@ metadata:
 {{- end }}
 spec:
   type: {{ .Values.service.type }}
+  clusterIP: {{ .Values.service.clusterIP }}
 {{- if (or (eq .Values.service.type "ClusterIP") (empty .Values.service.type)) }}
-  {{- with .Values.service.clusterIP }}
-  clusterIP: {{ . }}
-  {{- end }}
-  {{- else if eq .Values.service.type "LoadBalancer" }}
+{{- else if eq .Values.service.type "LoadBalancer" }}
   {{- with .Values.service.loadBalancerIP }}
   loadBalancerIP: {{ . }}
   {{- end }}
@@ -28,8 +26,7 @@ spec:
   loadBalancerSourceRanges:
     {{- toYaml . | nindent 4 }}
   {{- end }}
-  {{- else }}
-  {{- end }}
+{{- end }}
   {{- with .Values.service.externalIPs }}
   externalIPs:
     {{- toYaml . | nindent 4 }}

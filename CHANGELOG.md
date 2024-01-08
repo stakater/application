@@ -3,6 +3,10 @@
 
 All notable changes to this project will be documented here.
 
+### v2.3.1
+- Feature: Allow loadbalancer service external IP [PR-275](https://github.com/stakater/application/pull/275)
+- Feature: Allowing HPA behavior to be set [PR-292](https://github.com/stakater/application/pull/292)
+
 ### v2.3.0
 - Feature: allow multiple provided text types on secret creation: stringData, data and encodedData [PR-282](https://github.com/stakater/application/pull/282)
 

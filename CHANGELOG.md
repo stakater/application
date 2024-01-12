@@ -3,6 +3,9 @@
 
 All notable changes to this project will be documented here.
 
+### v2.3.2
+- Feature: fix clusterIP null field introduced by [PR-275](https://github.com/stakater/application/pull/275) [PR-295](https://github.com/stakater/application/pull/295)
+
 ### v2.3.1
 - Feature: Allow loadbalancer service external IP [PR-275](https://github.com/stakater/application/pull/275)
 - Feature: Allowing HPA behavior to be set [PR-292](https://github.com/stakater/application/pull/292)

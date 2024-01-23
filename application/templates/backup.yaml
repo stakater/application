@@ -2,7 +2,7 @@
 apiVersion: velero.io/v1
 kind: Backup
 metadata:
-  name: {{ printf "%s-backup" .Values.application.applicationName | trunc 63 | quote }}
+  name: {{ printf "%s-backup" .Values.applicationName | trunc 63 | quote }}
   namespace: openshift-adp
 spec:
   includedNamespaces:

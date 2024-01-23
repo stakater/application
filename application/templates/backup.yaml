@@ -11,7 +11,7 @@ spec:
   storageLocation: {{ .Values.backup.storageLocation | quote }}
   ttl: {{ .Values.backup.ttl }}
   includeResources:
-{{ toYaml .Values.backup.includeResources | indent 4 }}
+{{ toYaml (.Values.backup).includeResources | indent 4 }}
   excludeResources:
-{{ toYaml .Values.backup.excludeResources | indent 4 }}
+{{ toYaml (.Values.backup).excludeResources | indent 4 }}
 {{- end }}

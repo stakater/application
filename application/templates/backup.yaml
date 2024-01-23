@@ -1,4 +1,4 @@
-{{- if .Values.backup.enabled }}
+{{- if (.Values.backup).enabled }}
 apiVersion: velero.io/v1
 kind: Backup
 metadata:

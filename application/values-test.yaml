@@ -1294,3 +1294,26 @@ cronJob:
         requests:
             memory: 5Gi
             cpu: 1
+
+# Take backup of application namespace
+backup:
+  enabled: true
+  backupCRName: "arsenal-backup"
+  includedNamespaces: "arsenal-dev"
+  snapshotVolumes: true
+  storageLocation: "dpa-1"
+  ttl: "1h0m0s"
+  includeResources: 
+    - deployments
+    - services
+    - persistentvolumeclaims
+    - secrets
+  excludeResources:
+    - kube-system
+    - daemonsets
+    - statefulsets
+    - nodes
+    - apiservices
+    - events
+    - resourcequotas
+    - controllerrevisions.apps

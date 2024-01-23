@@ -1303,12 +1303,12 @@ backup:
   snapshotVolumes: true
   storageLocation: "dpa-1"
   ttl: "1h0m0s"
-  includeResources: 
+  includedResources: 
     - deployments
     - services
     - persistentvolumeclaims
     - secrets
-  excludeResources:
+  excludedResources:
     - kube-system
     - daemonsets
     - statefulsets

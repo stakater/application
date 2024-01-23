@@ -1307,7 +1307,6 @@ backup:
     - persistentvolumeclaims
     - secrets
   excludedResources:
-    - kube-system
     - daemonsets
     - statefulsets
     - nodes

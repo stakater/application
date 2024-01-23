@@ -2,16 +2,16 @@
 apiVersion: velero.io/v1
 kind: Backup
 metadata:
-  name: {{ .Values.backup.backupCRName }}
+  name: {{ printf "%s-backup" .Values.application.applicationName | trunc 63 | quote }}
   namespace: openshift-adp
 spec:
   includedNamespaces:
-    - {{ .Values.backup.includedNamespaces | quote }}
+    - {{ printf "%s" .Release.Namespace | quote }}
   snapshotVolumes: {{ .Values.backup.snapshotVolumes }}
   storageLocation: {{ .Values.backup.storageLocation | quote }}
   ttl: {{ .Values.backup.ttl }}
-  includeResources:
-{{ toYaml (.Values.backup).includedResources | indent 4 }}
-  excludeResources:
-{{ toYaml (.Values.backup).excludedResources | indent 4 }}
+  includedResources:
+{{ toYaml .Values.backup.includedResources | indent 4 }}
+  excludedResources:
+{{ toYaml .Values.backup.excludedResources | indent 4 }}
 {{- end }}

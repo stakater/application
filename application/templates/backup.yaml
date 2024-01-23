@@ -10,8 +10,8 @@ spec:
   snapshotVolumes: {{ .Values.backup.snapshotVolumes }}
   storageLocation: {{ .Values.backup.storageLocation | quote }}
   ttl: {{ .Values.backup.ttl }}
-  includeResources:
+  includedResources:
 {{ toYaml (.Values.backup).includedResources | indent 4 }}
-  excludeResources:
+  excludedResources:
 {{ toYaml (.Values.backup).excludedResources | indent 4 }}
 {{- end }}

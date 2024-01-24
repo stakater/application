@@ -1297,6 +1297,7 @@ cronJob:
 
 # Take backup of application namespace
 backup:
+  namespace: openshift-adp
   enabled: true
   snapshotVolumes: true
   storageLocation: "dpa-1"
@@ -1306,6 +1307,7 @@ backup:
     - services
     - persistentvolumeclaims
     - secrets
+    - configmaps
   excludedResources:
     - daemonsets
     - statefulsets

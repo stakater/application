@@ -3,13 +3,13 @@ apiVersion: velero.io/v1
 kind: Backup
 metadata:
   name: {{ printf "%s-backup" .Values.applicationName | trunc 63 | quote }}
-  namespace: {{ .Values.backup.namespace | quote }}
+  namespace: {{ .Values.backup.namespace | default "openshift-adp" | quote }}
 spec:
   includedNamespaces:
     - {{ printf "%s" .Release.Namespace | quote }}
-  snapshotVolumes: {{ .Values.backup.snapshotVolumes }}
-  storageLocation: {{ .Values.backup.storageLocation | quote }}
-  ttl: {{ .Values.backup.ttl }}
+  snapshotVolumes: {{ .Values.backup.snapshotVolumes | default true }}
+  storageLocation: {{ .Values.backup.storageLocation | default "dpa-1" | quote }}
+  ttl: {{ .Values.backup.ttl | default "1h0m0s" }}
   includedResources:
 {{ toYaml .Values.backup.includedResources | indent 4 }}
   excludedResources:

@@ -1,0 +1,32 @@
+{{- if and .Values.deployment.enabled .Values.scaledObject.enabled }}
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: {{ template "application.name" . }}-scaled-object
+  namespace: {{ include "application.namespace" . }}
+  labels:
+    {{- include "application.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    name: {{ template "application.name" . }}
+  pollingInterval: {{ .Values.scaledObject.pollingInterval }}
+  cooldownPeriod: {{ .Values.scaledObject.cooldownPeriod }}
+  minReplicaCount: {{ .Values.scaledObject.minReplicaCount }}
+  maxReplicaCount: {{ .Values.scaledObject.maxReplicaCount }}
+{{- with .Values.scaledObject.fallback }}
+  fallback:
+    failureThreshold: {{ .failureThreshold }}
+    replicas: {{ .replicas }}
+{{- end }}
+  {{- if .Values.scaledObject.advanced }}
+  advanced:
+    horizontalPodAutoscalerConfig:
+      behavior:
+        scaleDown:
+{{ toYaml .Values.scaledObject.advanced.scaleDown | nindent 10 }}
+        scaleUp:
+{{ toYaml .Values.scaledObject.advanced.scaleUp | nindent 10 }}
+  {{- end }}
+  triggers:
+{{ tpl (toYaml .Values.scaledObject.triggers) $ | nindent 4 }}
+{{- end }}

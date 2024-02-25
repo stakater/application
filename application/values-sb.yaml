@@ -1,0 +1,47 @@
+# Deployment settings
+deployment:
+  enabled: true
+
+# scaledObjectAdvancedSb settings
+scaledObject:
+  enabled: true
+  pollingInterval: 30
+  cooldownPeriod: 300
+  minReplicaCount: 1
+  maxReplicaCount: 5
+  fallback:
+    failureThreshold: 3
+    replicas: 2
+
+  # Optional - use advanced scaling
+  advanced:
+    # ScaleDown configuration
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+        - type: Percent
+          value: 100
+          periodSeconds: 15
+      selectPolicy: Max
+
+    # ScaleUp configuration
+    scaleUp:
+      stabilizationWindowSeconds: 300
+      policies:
+        - type: Percent
+          value: 100
+          periodSeconds: 15
+      selectPolicy: Max
+
+  # Triggers for scaling
+  triggers:
+    - type: rabbitmq
+      metadata:
+        protocol: amqp
+        queueName: sepolia-identifiers
+        mode: QueueLength
+        value: "20"
+      authenticationRef:
+        kind: ClusterTriggerAuthentication
+        name: rabbitmq-trigger-auth
+    # Define additional triggers as needed

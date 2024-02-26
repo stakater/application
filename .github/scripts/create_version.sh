@@ -3,7 +3,9 @@
 # Ensure script exits on first error
 set -e
 
-cd application
+SCRIPT_DIR=$(dirname "$0")
+cd "${SCRIPT_DIR}/../../application"
+
 name=$(cat Chart.yaml | yq '.name')
 version=$(cat Chart.yaml | yq '.version')
 

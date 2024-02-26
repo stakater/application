@@ -64,4 +64,4 @@ if [[ $image_exists_status -eq 0 ]]; then
 fi
 
 aws --profile shared ecr-public get-login-password --region us-east-1 | helm registry login --username AWS --password-stdin public.ecr.aws
-helm push ${app_name} oci://public.ecr.aws/w8w5v2r8
+helm push ${app_name} oci://${registry_uri}

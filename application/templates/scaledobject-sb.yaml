@@ -1,0 +1,36 @@
+{{- if and .Values.deployment.enabled (and .Values.scaledObject (default false .Values.scaledObject.enabled)) }}
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: {{ template "application.name" . }}-scaled-object
+  namespace: {{ include "application.namespace" . }}
+  labels:
+    {{- include "application.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    name: {{ template "application.name" . }}
+  pollingInterval: {{ required "Undefined pollingInterval for ScaledObject" .Values.scaledObject.pollingInterval }}
+  cooldownPeriod: {{ required "Undefined cooldownPeriod for ScaledObject" .Values.scaledObject.cooldownPeriod }}
+  minReplicaCount: {{ required "Undefined minReplicaCount for ScaledObject" .Values.scaledObject.minReplicaCount }}
+  maxReplicaCount: {{ required "Undefined maxReplicaCount for ScaledObject" .Values.scaledObject.maxReplicaCount }}
+{{- $minReplicaCount := .Values.scaledObject.minReplicaCount }}
+{{- with .Values.scaledObject.fallback }}
+  fallback:
+    failureThreshold: {{ default 3 .failureThreshold }}
+    replicas: {{ default $minReplicaCount .replicas }}
+{{- end }}
+  {{- if .Values.scaledObject.advanced }}
+  {{- $scaleDown := required "Undefined scaleDown configuration in advanced settings" .Values.scaledObject.advanced.scaleDown }}
+  {{- $scaleUp := required "Undefined scaleUp configuration in advanced settings" .Values.scaledObject.advanced.scaleUp }}
+  advanced:
+    horizontalPodAutoscalerConfig:
+      behavior:
+        scaleDown:
+{{- toYaml $scaleDown | nindent 10 }}
+        scaleUp:
+{{- toYaml $scaleUp | nindent 10 }}
+  {{- end }}
+{{- $triggers := required "Undefined triggers for ScaledObject" .Values.scaledObject.triggers }}
+  triggers:
+{{- tpl (toYaml $triggers) $ | nindent 4 }}
+{{- end }}

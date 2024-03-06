@@ -888,3 +888,9 @@ grafanaDashboard:
     #       "data"
     #     }
     #   url: http://hostname/path/to/file.json
+
+##########################################################
+# Backup object for creating back using OADP/Velero
+##########################################################
+backup:
+  enabled: false

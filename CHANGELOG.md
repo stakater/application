@@ -3,6 +3,9 @@
 
 All notable changes to this project will be documented here.
 
+### v2.3.3
+- Feature: Updates the GrafanaDashboard api version to v1beta1 and adds new fields.
+
 ### v2.3.2
 - Feature: fix clusterIP null field introduced by [PR-275](https://github.com/stakater/application/pull/275) [PR-295](https://github.com/stakater/application/pull/295)
 

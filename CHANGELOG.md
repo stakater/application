@@ -3,7 +3,7 @@
 
 All notable changes to this project will be documented here.
 
-### v2.3.3
+### v3.0.0
 - Feature: Updates the GrafanaDashboard api version to v1beta1 and adds new fields.
 
 ### v2.3.2

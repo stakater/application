@@ -1,7 +1,7 @@
 {{- if (.Values.grafanaDashboard).enabled }}
 {{- range $name, $content := .Values.grafanaDashboard.contents }}
 ---
-apiVersion: integreatly.org/v1beta1
+apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
   name: {{ $name }}

@@ -427,14 +427,18 @@ Stakater [IngressMonitorController](https://github.com/stakater/IngressMonitorCo
 
 ### Grafana Dashboard Paramaters
 
-| Name                     | Description                                                                                  | Value           |
-| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
-| grafanaDashboard.enabled | Enables Grafana Dashboard                                                                    | `false`         |
-| grafanaDashboard.additionalLabels | Kubernetes labels object                                                            | `{}`            |
-| grafanaDashboard.annotations | Annotations for Grafana Dashboard                                                        | `{}`            |
-| grafanaDashboard.contents.key | Used as name of Grafana Dashboard object                                                | `""`            |
-| grafanaDashboard.contents.key.json | json string used as content of Grafana Dashboard object                            | `""`            |
-| grafanaDashboard.contents.key.url| Url used to fetch dashboard content. According to GrafanaDashboard behavior, if both url and json are specified then the GrafanaDashboard content will be updated with fetched content from url                                                    | `""`            |
+| Name                                           | Description                                                                                  | Value   |
+|------------------------------------------------| -------------------------------------------------------------------------------------------- |---------|
+| grafanaDashboard.enabled                       | Enables Grafana Dashboard                                                                    | `false` |
+| grafanaDashboard.additionalLabels              | Kubernetes labels object                                                            | `{}`    |
+| grafanaDashboard.annotations                   | Annotations for Grafana Dashboard                                                        | `{}`    |
+| grafanaDashboard.contents.key                  | Used as name of Grafana Dashboard object                                                | `""`    |
+| grafanaDashboard.contents.key.json             | json string used as content of Grafana Dashboard object                            | `""`    |
+| grafanaDashboard.contents.key.url              | Url used to fetch dashboard content. According to GrafanaDashboard behavior, if both url and json are specified then the GrafanaDashboard content will be updated with fetched content from url                                                    | `""`    |
+| grafanaDashboard.contents.key.instanceSelector | selects Grafana instances for import                                                  | `{}`    |
+| grafanaDashboard.contents.key.folder           | folder assignment for dashboard                                                | `""`    |
+| grafanaDashboard.contents.key.configMapRef     | dashboard from configmap                                               | `[]`    |
+| grafanaDashboard.contents.key.datasources      | maps required data sources to existing ones                                                  | `{}`    |
 
 ### CronJob Parameters
 

@@ -780,6 +780,9 @@ grafanaDashboard:
     test-annotation: chart
   contents:
     dashboard-test-name-1:
+      instanceSelector:
+        matchLabels:
+          app: test-1
       json: |-
         {
           "annotations": {
@@ -1279,12 +1282,12 @@ grafanaDashboard:
         key: json
         name: storage-observability-definition
       datasources:
-        - datasourceName: Prometheus
+        - datasourceName: Test
           inputName: DS_PROMETHEUS
       folder: Storage Observability
       instanceSelector:
         matchLabels:
-          app: grafana
+          app: test-2
 
 cronJob: 
   enabled: true

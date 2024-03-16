@@ -777,7 +777,7 @@ grafanaDashboard:
   additionalLabels:
     test-label: chart
   annotations:
-    test-annoation: chart
+    test-annotation: chart
   contents:
     dashboard-test-name-1:
       json: |-
@@ -1273,7 +1273,18 @@ grafanaDashboard:
           "uid": "OmHEcaFZz",
           "version": 3
         }
-
+    dashboard-test-name-2:
+      allowCrossNamespaceImport: true
+      configMapRef:
+        key: json
+        name: storage-observability-definition
+      datasources:
+        - datasourceName: Prometheus
+          inputName: DS_PROMETHEUS
+      folder: Storage Observability
+      instanceSelector:
+        matchLabels:
+          app: grafana
 
 cronJob: 
   enabled: true

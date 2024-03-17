@@ -888,15 +888,3 @@ grafanaDashboard:
     #       "data"
     #     }
     #   url: http://hostname/path/to/file.json
-    # dashboard-test-name-2:
-    #   allowCrossNamespaceImport: true
-    #   configMapRef:
-    #     key: json
-    #     name: storage-observability-definition
-    #   datasources:
-    #     - datasourceName: Test
-    #       inputName: DS_PROMETHEUS
-    #   folder: Storage Observability
-    #   instanceSelector:
-    #     matchLabels:
-    #       app: test-2

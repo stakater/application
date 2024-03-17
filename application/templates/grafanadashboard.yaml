@@ -1,29 +1,47 @@
-{{- if and (.Values.grafanaDashboard).enabled (.Capabilities.APIVersions.Has "integreatly.org/v1alpha1") -}}
+{{- if and (.Values.grafanaDashboard).enabled (.Capabilities.APIVersions.Has "grafana.integreatly.org/v1beta1") -}}
 {{- range $name, $content := .Values.grafanaDashboard.contents }}
 ---
-apiVersion: integreatly.org/v1alpha1
+apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
   name: {{ $name }}
   namespace: {{ template "application.namespace" $ }}
   labels:
-    # this label is used as dashboard selector by grafana operator 
+    # this label is used as dashboard selector by grafana operator
     grafanaDashboard: grafana-operator
   {{- include "application.labels" $ | nindent 4 }}
 {{- if $.Values.grafanaDashboard.additionalLabels }}
 {{ toYaml $.Values.grafanaDashboard.additionalLabels | indent 4 }}
 {{- end }}
 {{- if $.Values.grafanaDashboard.annotations }}
-  annotations: 
+  annotations:
 {{ toYaml $.Values.grafanaDashboard.annotations | indent 4 }}
 {{- end }}
 spec:
   {{- if $content.json }}
-  json: 
+  json:
     {{ $content.json | toJson }}
   {{- end }}
   {{- if $content.url }}
   url: {{ $content.url }}
+  {{- end }}
+  {{- if $content.allowCrossNamespaceImport }}
+  allowCrossNamespaceImport: {{ $content.allowCrossNamespaceImport }}
+  {{- end }}
+  {{- if $content.folder }}
+  folder: {{ $content.folder }}
+  {{- end }}
+  {{- if $content.instanceSelector }}
+  instanceSelector:
+{{ toYaml $content.instanceSelector  | indent 4 }}
+  {{- end }}
+  {{- if $content.configMapRef }}
+  configMapRef:
+{{ toYaml $content.configMapRef  | indent 4 }}
+  {{- end }}
+  {{- if $content.datasources }}
+  datasources:
+{{ toYaml $content.datasources  | indent 4 }}
   {{- end }}
 {{- end }}
 {{- end }}

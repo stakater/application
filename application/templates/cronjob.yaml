@@ -1,5 +1,6 @@
 {{- if (.Values.cronJob).enabled }}
 {{- range $name, $job := .Values.cronJob.jobs }}
+---
 {{ if $.Capabilities.APIVersions.Has "batch/v1/CronJob" -}}
 apiVersion: batch/v1
 {{- else -}}
@@ -48,10 +49,12 @@ spec:
           annotations: {{ toYaml . | nindent 12 }}
           {{- end }}
         spec:
+          {{- if $.Values.rbac.enabled }}
           {{- if $.Values.rbac.serviceAccount.name }}
           serviceAccountName: {{ $.Values.rbac.serviceAccount.name }}
             {{- else }}
           serviceAccountName: {{ template "application.name" $ }}
+          {{- end }}
           {{- end }}
           containers:
           - name: {{ $name }}

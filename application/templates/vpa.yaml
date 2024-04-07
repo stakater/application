@@ -2,6 +2,7 @@
 {{- if not (.Capabilities.APIVersions.Has "autoscaling.k8s.io/v1/VerticalPodAutoscaler") }}
   {{- fail "There is no VerticalPodAutoscaler resource definition in the target cluster!" }}
 {{- end }}
+---
 apiVersion: "autoscaling.k8s.io/v1"
 kind: VerticalPodAutoscaler
 metadata:
@@ -24,4 +25,6 @@ spec:
   resourcePolicy:
     containerPolicies:
       {{- toYaml .Values.vpa.containerPolicies | nindent 6 }}
+  updatePolicy:
+    {{- toYaml .Values.vpa.updatePolicy | nindent 4 }}
 {{- end }}

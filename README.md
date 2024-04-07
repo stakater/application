@@ -35,32 +35,33 @@ To uninstall the chart:
 
 ### Deployment Paramaters
 
-| Name                                | Description                                                                                                                                | Value          |
-|-------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|----------------|
-| deployment.enabled                  | Enable deployment on helm chart deployments                                                                                                | `true`         |
-| deployment.strategy                 | Strategy for updating deployments                                                                                                          | `RollingUpdate` |
-| deployment.reloadOnChange           | Reload deployment if configMap/secret mounted are updated                                                                                  | `true`         |
-| deployment.nodeSelector             | Select node to deploy this application                                                                                                     | `{}`           |
-| deployment.hostAliases              | Adding entries to a Pod's /etc/hosts file provides Pod-level override of hostname resolution when DNS and other options are not applicable | `[]`           |
-| deployment.additionalLabels         | Additional labels for Deployment                                                                                                           | `{}`           |
-| deployment.podLabels                | Additional label added on pod which is used in Service's Label Selector                                                                    | {}             |
-| deployment.annotations              | Annotations on deployments                                                                                                                 | `{}`           |
-| deployment.additionalPodAnnotations | Additional Pod Annotations added on pod created by this Deployment                                                                         | `{}`           |
-| deployment.replicas                 | Replicas to be created                                                                                                                     | ``             |
-| deployment.imagePullSecrets         | Secrets used to pull image                                                                                                                 | `""`           |
-| deployment.env                      | Environment variables to be passed to the app container                                                                                    | `{}`           |
-| deployment.volumes                  | Volumes to be added to the pod                                                                                                             | `{}`           |
-| deployment.volumeMounts             | Mount path for Volumes                                                                                                                     | `{}`           |
-| deployment.revisionHistoryLimit     | The number of old history to retain to allow rollback                                                                                      | `2`            |
-| deployment.command                  | Command for primary container of deployment                                                                                                | `[]`           |
-| deployment.args                     | Arg for primary container of deployment                                                                                                    | `[]`           |
-| deployment.tolerations              | Taint tolerations for nodes                                                                                                                | `[]`           |
-| deployment.affinity                 | Affinity for pod/node                                                                                                                      | `[]`           |
-| deployment.topologySpreadConstraints| Topology spread constraints definitions                                           | `[]`           |
-| deployment.ports                    | Ports for primary container                                                                                                                | `[]`           |
-| deployment.securityContext          | Security Context for the pod                                                                                                               | `{}`           |
-| deployment.additionalContainers     | Add additional containers besides init and app containers                                                                                  | `[]`           |
-| deployment.containerSecurityContext | Add security context at container level                                                                                                    | `{}`           |
+| Name                                     | Description                                                                                                                                | Value          |
+|------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|----------------|
+| deployment.enabled                       | Enable deployment on helm chart deployments                                                                                                | `true`         |
+| deployment.strategy                      | Strategy for updating deployments                                                                                                          | `RollingUpdate` |
+| deployment.reloadOnChange                | Reload deployment if configMap/secret mounted are updated                                                                                  | `true`         |
+| deployment.nodeSelector                  | Select node to deploy this application                                                                                                     | `{}`           |
+| deployment.hostAliases                   | Adding entries to a Pod's /etc/hosts file provides Pod-level override of hostname resolution when DNS and other options are not applicable | `[]`           |
+| deployment.additionalLabels              | Additional labels for Deployment                                                                                                           | `{}`           |
+| deployment.podLabels                     | Additional label added on pod which is used in Service's Label Selector                                                                    | {}             |
+| deployment.annotations                   | Annotations on deployments                                                                                                                 | `{}`           |
+| deployment.additionalPodAnnotations      | Additional Pod Annotations added on pod created by this Deployment                                                                         | `{}`           |
+| deployment.replicas                      | Replicas to be created                                                                                                                     | ``             |
+| deployment.imagePullSecrets              | Secrets used to pull image                                                                                                                 | `""`           |
+| deployment.env                           | Environment variables to be passed to the app container                                                                                    | `{}`           |
+| deployment.volumes                       | Volumes to be added to the pod                                                                                                             | `{}`           |
+| deployment.volumeMounts                  | Mount path for Volumes                                                                                                                     | `{}`           |
+| deployment.revisionHistoryLimit          | The number of old history to retain to allow rollback                                                                                      | `2`            |
+| deployment.command                       | Command for primary container of deployment                                                                                                | `[]`           |
+| deployment.args                          | Arg for primary container of deployment                                                                                                    | `[]`           |
+| deployment.tolerations                   | Taint tolerations for nodes                                                                                                                | `[]`           |
+| deployment.affinity                      | Affinity for pod/node                                                                                                                      | `[]`           |
+| deployment.topologySpreadConstraints     | Topology spread constraints definitions                                                                                                    | `[]`           |
+| deployment.ports                         | Ports for primary container                                                                                                                | `[]`           |
+| deployment.securityContext               | Security Context for the pod                                                                                                               | `{}`           |
+| deployment.additionalContainers          | Add additional containers besides init and app containers                                                                                  | `[]`           |
+| deployment.containerSecurityContext      | Add security context at container level                                                                                                    | `{}`           |
+| deployment.terminationGracePeriodSeconds | Graceful termination timeout                                                                                                               | ``           |
 
 #### Deployment Resources Parameters
 
@@ -268,21 +269,24 @@ Stakater [Forecastle](https://github.com/stakater/Forecastle) parameters
 
 ### ConfigMap Paramaters
 
-| Name                     | Description                                                                                  | Value           |
-| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
-| configMap.enabled | Enable configMaps                                                                                                                                                                                | `false`                                                                                                                                               |
-| configMap.additionalLabels | Labels for configMaps                                                                                                                                                                            | `{}`                                                                                                                                                  |
-| configMap.annotations | Annotations for configMaps                                                                                                                                                                       | `{}`                                                                                                                                                  |
-| configMap.files | Map of configMap files with suffixes and data contained in those files                                                                                                                           | `{}`                                                                                                                                                  |
+| Name                       | Description                                                                        | Value          |
+|----------------------------|------------------------------------------------------------------------------------|----------------|
+| configMap.enabled          | Enable configMaps                                                                  | `false`        |
+| configMap.additionalLabels | Labels for configMaps                                                              | `{}`           |
+| configMap.annotations      | Annotations for configMaps                                                         | `{}`           |
+| configMap.files            | Map of configMap files with suffixes and data contained in those files             | `{}`           |
 
 ### Secret Paramaters
 
-| Name                     | Description                                                                                  | Value           |
-| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
-| secret.enabled | Enable secret                                                                                                                                                                                    | `false`                                                                                                                                               |
-| secret.additionalLabels | Labels for secret                                                                                                                                                                                | `{}`                                                                                                                                                  |
-| secret.annotations | Annotations for secret                                                                                                                                                                           | `{}`                                                                                                                                                  |
-| secret.files | Map of secret files with suffixes and data contained in those files                                                                                                                              | `{}`                                                                                                                                                  |
+| Name                            | Description                                                                     | Value                  |
+|---------------------------------|---------------------------------------------------------------------------------|------------------------|
+| secret.enabled                  | Enable secret                                                                   | `false`                |
+| secret.additionalLabels         | Labels for secret                                                               | `{}`                   |
+| secret.annotations              | Annotations for secret                                                          | `{}`                   |
+| secret.files                    | Map of secret files with suffixes and data contained in those files             | `{}`                   |
+| secret.files.[name].stringData  | Allow to provide the clear text content inside the secret                       | `{}`                   |
+| secret.files.[name].data        | Allow to provide the text content inside the secret that will be base64 encoded | `{}`                   |
+| secret.files.[name].encodedData | Allow to provide the text content inside the secret already base64 encoded      | `{}`                   |
 
 ### ServiceMonitor Paramaters
 
@@ -431,6 +435,10 @@ Stakater [IngressMonitorController](https://github.com/stakater/IngressMonitorCo
 | grafanaDashboard.contents.key | Used as name of Grafana Dashboard object                                                | `""`            |
 | grafanaDashboard.contents.key.json | json string used as content of Grafana Dashboard object                            | `""`            |
 | grafanaDashboard.contents.key.url| Url used to fetch dashboard content. According to GrafanaDashboard behavior, if both url and json are specified then the GrafanaDashboard content will be updated with fetched content from url                                                    | `""`            |
+| grafanaDashboard.contents.key.instanceSelector | selects Grafana instances for import                                                  | `{}`    |
+| grafanaDashboard.contents.key.folder           | folder assignment for dashboard                                                | `""`    |
+| grafanaDashboard.contents.key.configMapRef     | dashboard from configmap                                               | `[]`    |
+| grafanaDashboard.contents.key.datasources      | maps required data sources to existing ones                                                  | `{}`    |
 
 ### CronJob Parameters
 

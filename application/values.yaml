@@ -285,6 +285,12 @@ deployment:
   #  name: https
   #  protocol: TCP
 
+  # Networking using the host network
+  hostNetwork:
+
+  # Graceful termination timeout
+  terminationGracePeriodSeconds:
+
 ##########################################################
 # Add Storage volumes to the pods
 ##########################################################
@@ -564,6 +570,14 @@ secret:
 #     data:
 #       secretKey1: secretValue1
 #       secretKey2: secretValue2
+#   apiKey:
+#     stringData:
+#       secretKey1: secretValue1
+#       secretKey2: secretValue2
+#   secondApiKeu:
+#     encodedData:
+#       secretKey1: dGVzdFZhbHVl
+#       secretKey2: dGVzdFZhbHVl
 
 ##########################################################
 # Service Monitor to collect Prometheus metrices
@@ -630,6 +644,8 @@ vpa:
     # key: value
 # container policies for individual containers.
   containerPolicies: []
+  updatePolicy:
+    updateMode: Auto
     
 ##########################################################
 # EndpointMonitor for IMC
@@ -872,3 +888,15 @@ grafanaDashboard:
     #       "data"
     #     }
     #   url: http://hostname/path/to/file.json
+    # dashboard-test-name-2:
+    #   allowCrossNamespaceImport: true
+    #   configMapRef:
+    #     key: json
+    #     name: storage-observability-definition
+    #   datasources:
+    #     - datasourceName: Test
+    #       inputName: DS_PROMETHEUS
+    #   folder: Storage Observability
+    #   instanceSelector:
+    #     matchLabels:
+    #       app: test-2

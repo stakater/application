@@ -9,30 +9,52 @@ cd "${SCRIPT_DIR}/../../application"
 name=$(cat Chart.yaml | yq '.name')
 version=$(cat Chart.yaml | yq '.version')
 
-# Define the internal variable (set it to true if it's sendblocks changes and not official changes by the author)
+# Prompt user to specify if the version is internal
+echo "Is the version internal? (yes/no)"
+read answer
 internal=false
+if [ "${answer}" == "yes" ]; then
+    internal=true
+fi
 
 # Backup the original Chart.yaml
 cp Chart.yaml Chart.yaml.backup
 
-# Check if internal is true and append "_sb" to the version if it is
+# The version in Chart.yaml remains unchanged
+new_version=${version}
+
 if $internal; then
-    new_version="${version}-sb"
-    yq eval -i ".version = \"$new_version\"" Chart.yaml
+    # Fetch all versions from ECR starting with the specified version prefix and ending with -sb.x
+    # Note: Adjust the following command to match your AWS CLI version and query capabilities
+    versions=$(aws --profile shared ecr-public describe-images --region us-east-1 --repository-name ${name} --query 'sort_by(imageDetails,& imagePushedAt)[*].imageTags' --output text | grep "^${version}-sb" | sort -V)
+    if [ -z "${versions}" ]; then
+        # If no versions found, start with -sb.1
+        ecr_version="${version}-sb.1"
+    else
+        # If versions found, pick the last one and increment
+        last_version=$(echo "${versions}" | tail -n 1)
+        num=$(echo "$last_version" | grep -o -E '[0-9]+$')
+        new_num=$((num + 1))
+        ecr_version="${version}-sb.${new_num}"
+    fi
+    # For internal use, we will use ecr_version to tag the ECR image
+    yq eval -i ".version = \"${ecr_version}\"" Chart.yaml
 else
-    new_version=$version
+    # For non-internal use, we keep the ECR tag same as the Chart version
+    ecr_version=$version
 fi
 
+# Proceed with packaging using the original version in Chart.yaml
 output=$(helm package .)
-app_name=$(echo "$output" | awk '{print $NF}')
+chart_tgz_path=$(echo "$output" | awk '{print $NF}')
 
 # Restore the original Chart.yaml from the backup
 mv Chart.yaml.backup Chart.yaml
 
-# Temporarily disable exit on error
+# Temporarily disable exit on error for AWS CLI operations
 set +e
 
-create_output=$(aws --profile shared ecr-public create-repository --repository-name ${name} --region us-east-1 2>&1)
+create_output=$(aws --profile shared ecr-public create-repository --region us-east-1 --repository-name ${name} 2>&1)
 create_status=$?
 
 # Re-enable exit on error
@@ -47,21 +69,30 @@ else
     exit 1
 fi
 
-registry_uri=$(aws --profile shared ecr-public describe-registries --region us-east-1 --query "registries[0].registryUri" --output text)
-
-# Temporarily disable exit on error
+# Temporarily disable exit on error for AWS CLI operations
 set +e
 
-image_exists=$(aws --profile shared ecr-public describe-images --repository-name ${name} --image-ids imageTag=${new_version} --region us-east-1 2>&1)
+registry_uri=$(aws --profile shared ecr-public describe-registries --region us-east-1 --query "registries[0].registryUri" --output text)
+# Check if the image version (for internal use, the ecr_version) already exists in the repository
+image_exists=$(aws --profile shared ecr-public describe-images --region us-east-1 --repository-name ${name} --image-ids imageTag=${ecr_version} 2>&1)
 image_exists_status=$?
 
 # Re-enable exit on error
 set -e
 
 if [[ $image_exists_status -eq 0 ]]; then
-    echo "Error: The version ${new_version} already exists in the repository."
+    echo "Error: The version ${ecr_version} already exists in the repository."
+    rm ${chart_tgz_path}
     exit 1
 fi
 
+# Login to ECR and push the image
 aws --profile shared ecr-public get-login-password --region us-east-1 | helm registry login --username AWS --password-stdin public.ecr.aws
-helm push ${app_name} oci://${registry_uri}
+echo "chart tgz path: ${chart_tgz_path}"
+echo "registry: oci://${registry_uri}"
+echo "version: ${ecr_version}"
+helm push ${chart_tgz_path} oci://${registry_uri}
+
+rm ${chart_tgz_path}
+
+echo "Completed successfully"

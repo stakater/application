@@ -490,6 +490,40 @@ Job parameter for each cronjob object at `cronJob.jobs`
 | `<name>.topologySpreadConstraints`  | TopologySpreadConstraints of pod of job                        |
 | `<name>.securityContext`            | SecurityContext of pod of job                                  |
 
+### Job Parameters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
+| `job.enabled`            | Enable job in application chart                                                              | `""`            |
+| `job.jobs`               | jobs spec                                                                                    | {}              |
+
+Job parameter for each job object at `job.jobs`
+
+| Name                                | Description                                   |
+| ----------------------------------- | --------------------------------------------- |
+| `<name>.image.repository`           | Repository of container image of job          |
+| `<name>.image.tag`                  | Tag of container image of job                 |
+| `<name>.image.digest`               | Digest of container image of job              |
+| `<name>.image.imagePullPolicy`      | ImagePullPolicy of container image of job     |
+| `<name>.command`                    | Command of container of job                   |
+| `<name>.args`                       | Args of container of job                      |
+| `<name>.resources`                  | Resources of container of job                 |
+| `<name>.additionalLabels`           | Additional labels of job                      |
+| `<name>.annotations`                | Annotation of job                             |
+| `<name>.volumeMounts`               | Volume mounts  of job                         |
+| `<name>.volumes`                    | Volumes  of job                               |
+| `<name>.nodeSelector`               | Node selector of job                          |
+| `<name>.affinity`                   | Affinity of job                               |
+| `<name>.tolerations`                | Tolerations of job                            |
+| `<name>.restartPolicy`              | RestartPolicy of job                          |
+| `<name>.imagePullSecrets`           | ImagePullSecrets of job                       |
+| `<name>.activeDeadlineSeconds`      | ActiveDeadlineSeconds of job                  |
+| `<name>.backoffLimit`               | BackoffLimit of job                           |
+| `<name>.additionalPodAnnotations`   | Additional annotations of pod of job          |
+| `<name>.additionalPodLabels`        | Additional labels of pod of job               |
+| `<name>.topologySpreadConstraints`  | TopologySpreadConstraints of pod of job       |
+| `<name>.securityContext`            | SecurityContext of pod of job                 |
+
 ## Naming convention for ConfigMap, Secret, SealedSecret and ExternalSecret
 
 Name format of ConfigMap, Secret, SealedSecret and ExternalSecret is ```{{ template "application.name" $ }}-{{ $nameSuffix }}``` then:

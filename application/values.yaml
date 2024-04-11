@@ -39,6 +39,31 @@ cronJob:
     #         memory: 5Gi
     #         cpu: 1
   
+
+job:
+  enabled: false
+  jobs:
+    # db-migration:
+    #   additionalPodAnnotations:
+    #     helm.sh/hook: "pre-install,pre-upgrade"
+    #     helm.sh/hook-weight: "-1"
+    #     helm.sh/hook-delete-policy: "before-hook-creation"
+    #   env: 
+    #     KEY:
+    #       value: VALUE
+    #   image: 
+    #     repository: docker.io/nginx
+    #     tag: v1.0.0
+    #     digest: '' # if set to a non empty value, digest takes precedence on the tag
+    #     imagePullPolicy: IfNotPresent
+    #   command: ["/bin/bash"]
+    #   args: ["-c","sleep 5000"]
+    #   resources:  
+    #     requests:
+    #         memory: 5Gi
+    #         cpu: 1
+  
+
 ##########################################################
 # Deployment
 ##########################################################

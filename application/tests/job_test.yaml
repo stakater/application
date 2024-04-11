@@ -1,0 +1,97 @@
+suite: Job
+
+templates:
+  - job.yaml
+
+tests:
+  - it: does not fail rendering when job image tag and digest are absent
+    set:
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: ""
+              digest: ""
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: example-image
+
+  - it: fails rendering when job image repository is not given
+    set:
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: ""
+              tag: doesnt
+              digest: matter
+    asserts:
+      - failedTemplate:
+          errorMessage: "Undefined image repo for container 'example'"
+
+  - it: uses tag when defined
+    set:
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: example-tag
+              digest: ""
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: example-image:example-tag
+
+  - it: uses digest when defined
+    set:
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: ""
+              digest: sha256:example-digest
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: example-image@sha256:example-digest
+
+  - it: uses both tag and digest when given both
+    set:
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: example-tag
+              digest: sha256:example-digest
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: example-image:example-tag@sha256:example-digest
+
+  - it: applies the additionalPodAnnotations correctly on the pods
+    set:
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: example-tag
+              digest: sha256:example-digest
+            additionalPodAnnotations:
+              helm.sh/hook: "pre-install,pre-upgrade"
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations
+          value:
+            helm.sh/hook: "pre-install,pre-upgrade"

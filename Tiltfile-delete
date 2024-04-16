@@ -22,7 +22,7 @@ def delete_forecastle_crds():
 
 def delete_ss_crds():
     print('Deleting sealedsecrets crds')
-    local('oc get crds -o name | grep \'bitnami\\.com\' | xargs -r -n 1 oc delete')    
+    local('oc get crds -o name | grep \'bitnami\\.com\' | xargs -r -n 1 oc delete')
 
 def delete_es_crds():
     print('Deleting externalsecrets crds')

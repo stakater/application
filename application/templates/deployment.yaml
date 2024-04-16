@@ -1,4 +1,5 @@
 {{- if .Values.deployment.enabled }}
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -298,4 +299,8 @@ spec:
       serviceAccountName: {{ template "application.name" $ }}
       {{- end }}
       {{- end }}
+      {{- if .Values.deployment.hostNetwork }}
+      hostNetwork: {{ .Values.deployment.hostNetwork }}
+      {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.deployment.terminationGracePeriodSeconds }}
 {{- end }}

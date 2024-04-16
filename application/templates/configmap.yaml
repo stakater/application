@@ -1,5 +1,6 @@
 {{- if (.Values.configMap).enabled }}
 {{- range $nameSuffix, $data := .Values.configMap.files }}
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -16,6 +17,5 @@ metadata:
 {{- end }}
 data:
 {{ include "application.tplvalues.render" ( dict "value" $data "context" $ ) | indent 2 }}
----
 {{- end }}
 {{- end }}

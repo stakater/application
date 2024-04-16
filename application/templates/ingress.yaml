@@ -2,6 +2,7 @@
 {{- $servicePort := .Values.ingress.servicePort -}}
 {{- $pathType := .Values.ingress.pathType -}}
 {{- $applicationNameTpl := include "application.name" . -}}
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:

@@ -3,6 +3,22 @@
 
 All notable changes to this project will be documented here.
 
+### v3.0.0
+- Feature: Updates the GrafanaDashboard api version to v1beta1.
+
+### v2.3.2
+- Feature: fix clusterIP null field introduced by [PR-275](https://github.com/stakater/application/pull/275) [PR-295](https://github.com/stakater/application/pull/295)
+
+### v2.3.1
+- Feature: Allow loadbalancer service external IP [PR-275](https://github.com/stakater/application/pull/275)
+- Feature: Allowing HPA behavior to be set [PR-292](https://github.com/stakater/application/pull/292)
+
+### v2.3.0
+- Feature: allow multiple provided text types on secret creation: stringData, data and encodedData [PR-282](https://github.com/stakater/application/pull/282)
+
+### v2.2.6
+- fix: allow multiple cronjobs [PR-271](https://github.com/stakater/application/pull/271)
+
 ### v2.2.5
 - fix: Namespace selector fixed for service monitor [PR-270](https://github.com/stakater/application/pull/270)
 

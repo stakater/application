@@ -1,0 +1,19 @@
+suite: NOTES.txt
+
+templates:
+  - NOTES.txt
+
+tests:
+  - it: warns the user of the deprecation of loadBalancerIP
+    set:
+      service.loadBalancerIP: 1.1.1.1
+    asserts:
+      - matchRegexRaw:
+          pattern: 'service.loadBalancerIP:'
+
+  - it: does not emit a warning for loadBalancerIP when not set
+    set:
+      service.loadBalancerIP: null
+    asserts:
+      - notMatchRegexRaw:
+          pattern: 'service.loadBalancerIP:'

@@ -21,6 +21,11 @@ metadata:
   namespace: {{ template "application.namespace" $ }}
 spec:
   schedule: {{ $job.schedule | quote }}
+{{- if ge $.Capabilities.KubeVersion.Minor 27  }}
+{{- if $job.timeZone }}
+  timeZone: {{ $job.timeZone }}
+{{ end }}
+{{- end }}
 {{- if $job.successfulJobsHistoryLimit }}
   successfulJobsHistoryLimit: {{ $job.successfulJobsHistoryLimit }}
 {{ end }}
@@ -116,7 +121,7 @@ spec:
           restartPolicy: OnFailure
           {{ end }}
           {{- with $job.imagePullSecrets}}
-          imagePullSecrets: 
+          imagePullSecrets:
 {{ toYaml . | indent 12 }}
           {{ end }}
           {{- with $job.volumes }}

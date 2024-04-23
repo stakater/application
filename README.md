@@ -449,34 +449,35 @@ Stakater [IngressMonitorController](https://github.com/stakater/IngressMonitorCo
 
 Job parameter for each cronjob object at `cronJob.jobs`
 
-| Name                                | Description                                   |
-| ----------------------------------- | --------------------------------------------- |
-| `<name>.schedule`                   | Schedule of cronjob                           |
-| `<name>.image.repository`           | Repository of container image of cronjob      |
-| `<name>.image.tag`                  | Tag of container image of cronjob             |
-| `<name>.image.digest`               | Digest of container image of cronjob          |
-| `<name>.image.imagePullPolicy`      | ImagePullPolicy of container image of cronjob |
-| `<name>.command`                    | Command of container of job                   |
-| `<name>.args`                       | Args of container of job                      |
-| `<name>.resources`                  | Resources of container of job                 |
-| `<name>.additionalLabels`           | Additional labels of cronjob                  |
-| `<name>.annotations`                | Annotation of cronjob                         |
-| `<name>.successfulJobsHistoryLimit` | Successful jobs historyLimit of cronjob       |
-| `<name>.concurrencyPolicy`          | ConcurrencyPolicy of cronjob                  |
-| `<name>.failedJobsHistoryLimit`     | FailedJobsHistoryLimit of cronjob             |
-| `<name>.volumeMounts`               | Volume mounts  of cronjob                     |
-| `<name>.volumes`                    | Volumes  of cronjob                           |
-| `<name>.nodeSelector`               | Node selector of cronjob                      |
-| `<name>.affinity`                   | Affinity of cronjob                           |
-| `<name>.tolerations`                | Tolerations of cronjob                        |
-| `<name>.restartPolicy`              | RestartPolicy of cronjob                      |
-| `<name>.imagePullSecrets`           | ImagePullSecrets of cronjob                   |
-| `<name>.activeDeadlineSeconds`      | ActiveDeadlineSeconds of job                  |
-| `<name>.backoffLimit`               | BackoffLimit of job                           |
-| `<name>.additionalPodAnnotations`   | Additional annotations of pod of job          |
-| `<name>.additionalPodLabels`        | Additional labels of pod of job               |
-| `<name>.topologySpreadConstraints`  | TopologySpreadConstraints of pod of job       |
-| `<name>.securityContext`            | SecurityContext of pod of job                 |
+| Name                                | Description                                                    |
+| ----------------------------------- | -------------------------------------------------------------- |
+| `<name>.schedule`                   | Schedule of cronjob                                            |
+| `<name>.timeZone`                   | Time zone of cronjob (Supported on K8s version 1.27 or Higher) |
+| `<name>.image.repository`           | Repository of container image of cronjob                       |
+| `<name>.image.tag`                  | Tag of container image of cronjob                              |
+| `<name>.image.digest`               | Digest of container image of cronjob                           |
+| `<name>.image.imagePullPolicy`      | ImagePullPolicy of container image of cronjob                  |
+| `<name>.command`                    | Command of container of job                                    |
+| `<name>.args`                       | Args of container of job                                       |
+| `<name>.resources`                  | Resources of container of job                                  |
+| `<name>.additionalLabels`           | Additional labels of cronjob                                   |
+| `<name>.annotations`                | Annotation of cronjob                                          |
+| `<name>.successfulJobsHistoryLimit` | Successful jobs historyLimit of cronjob                        |
+| `<name>.concurrencyPolicy`          | ConcurrencyPolicy of cronjob                                   |
+| `<name>.failedJobsHistoryLimit`     | FailedJobsHistoryLimit of cronjob                              |
+| `<name>.volumeMounts`               | Volume mounts  of cronjob                                      |
+| `<name>.volumes`                    | Volumes  of cronjob                                            |
+| `<name>.nodeSelector`               | Node selector of cronjob                                       |
+| `<name>.affinity`                   | Affinity of cronjob                                            |
+| `<name>.tolerations`                | Tolerations of cronjob                                         |
+| `<name>.restartPolicy`              | RestartPolicy of cronjob                                       |
+| `<name>.imagePullSecrets`           | ImagePullSecrets of cronjob                                    |
+| `<name>.activeDeadlineSeconds`      | ActiveDeadlineSeconds of job                                   |
+| `<name>.backoffLimit`               | BackoffLimit of job                                            |
+| `<name>.additionalPodAnnotations`   | Additional annotations of pod of job                           |
+| `<name>.additionalPodLabels`        | Additional labels of pod of job                                |
+| `<name>.topologySpreadConstraints`  | TopologySpreadConstraints of pod of job                        |
+| `<name>.securityContext`            | SecurityContext of pod of job                                  |
 
 ## Naming convention for ConfigMap, Secret, SealedSecret and ExternalSecret
 

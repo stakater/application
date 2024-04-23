@@ -21,7 +21,7 @@ metadata:
   namespace: {{ template "application.namespace" $ }}
 spec:
   schedule: {{ $job.schedule | quote }}
-{{- if ge $.Capabilities.KubeVersion.Minor 27  }}
+{{- if ge (int $.Capabilities.KubeVersion.Minor) 27  }}
 {{- if $job.timeZone }}
   timeZone: {{ $job.timeZone }}
 {{ end }}

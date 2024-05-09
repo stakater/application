@@ -209,6 +209,7 @@ deployment:
     httpGet: {}
     exec: {}
     tcpSocket: {}
+    grpc: {}
 
   readinessProbe:
     enabled: false
@@ -221,6 +222,7 @@ deployment:
     httpGet: {}
     exec: {}
     tcpSocket: {}
+    grpc: {}
 
   livenessProbe:
     enabled: false
@@ -233,6 +235,7 @@ deployment:
     httpGet: {}
     exec: {}
     tcpSocket: {}
+    grpc: {}
 
   # Resources to be defined for pod
   resources:

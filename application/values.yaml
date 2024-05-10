@@ -209,6 +209,7 @@ deployment:
     httpGet: {}
     exec: {}
     tcpSocket: {}
+    grpc: {}
 
   readinessProbe:
     enabled: false
@@ -221,6 +222,7 @@ deployment:
     httpGet: {}
     exec: {}
     tcpSocket: {}
+    grpc: {}
 
   livenessProbe:
     enabled: false
@@ -233,6 +235,7 @@ deployment:
     httpGet: {}
     exec: {}
     tcpSocket: {}
+    grpc: {}
 
   # Resources to be defined for pod
   resources:
@@ -888,9 +891,23 @@ grafanaDashboard:
     #       "data"
     #     }
     #   url: http://hostname/path/to/file.json
+    
+    # dashboard-test-name-2:
+    #   allowCrossNamespaceImport: true
+    #   configMapRef:
+    #     key: json
+    #     name: storage-observability-definition
+    #   datasources:
+    #     - datasourceName: Test
+    #       inputName: DS_PROMETHEUS
+    #   folder: Storage Observability
+    #   instanceSelector:
+    #     matchLabels:
+    #       app: test-2
 
 ##########################################################
 # Backup object for creating back using OADP/Velero
 ##########################################################
 backup:
   enabled: false
+

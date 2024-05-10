@@ -101,3 +101,24 @@ tests:
       - equal:
           path: spec.template.spec.serviceAccountName
           value: example-app
+
+  - it: uses grpc probing when set
+    set:
+      applicationName: example-app
+      deployment.startupProbe.enabled: true
+      deployment.startupProbe.grpc.port: 5000
+      deployment.readinessProbe.enabled: true
+      deployment.readinessProbe.grpc.port: 5000
+      deployment.livenessProbe.enabled: true
+      deployment.livenessProbe.grpc.port: 5000
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].startupProbe.grpc.port
+          value: 5000
+      - equal:
+          path: spec.template.spec.containers[0].readinessProbe.grpc.port
+          value: 5000
+      - equal:
+          path: spec.template.spec.containers[0].livenessProbe.grpc.port
+          value: 5000
+

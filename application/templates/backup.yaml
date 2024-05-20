@@ -5,8 +5,11 @@ metadata:
   name: {{ printf "%s-backup" .Values.applicationName | trunc 63 | quote }}
   namespace: {{ .Values.backup.namespace | default ( include "application.namespace" . ) | quote }}
 spec:
+  labelSelector:
+    matchLabels:
+{{ include "application.selectorLabels" . | indent 6 }}
   includedNamespaces:
-    - {{ printf "%s" .Release.Namespace | quote }}
+    - {{ include "application.namespace" . }}
   snapshotVolumes: {{ .Values.backup.snapshotVolumes | default true }}
   storageLocation: {{ .Values.backup.storageLocation | quote }}
   ttl: {{ .Values.backup.ttl | default "1h0m0s" }}

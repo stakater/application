@@ -891,6 +891,7 @@ grafanaDashboard:
     #       "data"
     #     }
     #   url: http://hostname/path/to/file.json
+    
     # dashboard-test-name-2:
     #   allowCrossNamespaceImport: true
     #   configMapRef:
@@ -903,3 +904,10 @@ grafanaDashboard:
     #   instanceSelector:
     #     matchLabels:
     #       app: test-2
+
+##########################################################
+# Backup object for creating back using OADP/Velero
+##########################################################
+backup:
+  enabled: false
+

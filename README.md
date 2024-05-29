@@ -425,6 +425,17 @@ Stakater [IngressMonitorController](https://github.com/stakater/IngressMonitorCo
 | networkPolicy.ingress | Ingress ruels for NetworkPolicy                                                                 | `[]`            |
 | networkPolicy.egress | egress rules for NetworkPolicy                                                                   | `[]`            |
 
+### Backup Paramaters
+| Name | Description | Value |
+| ---- | ----------- | ----- |
+| backup.enabled    | Enable Backup | `false` |
+| backup.namespace | Backup Namespace | `""` |
+| backup.storageLocation | StorageLocation for Backup | `""` |
+| backup.includedNamespaces | Namespaces to be included in Backup | `[]` |
+| backup.excludedResources | Resources to be excluded in Backup | `[]` |
+| backup.ttl | Time Duration for Backup | `1h0m0s` |
+| backup.snapshotVolumes | Weather SnapshotVolumes in Backup | `true` |
+
 ### Grafana Dashboard Paramaters
 
 | Name                     | Description                                                                                  | Value           |

@@ -1305,3 +1305,25 @@ cronJob:
         requests:
             memory: 5Gi
             cpu: 1
+
+# Take backup of application namespace
+backup:
+  namespace: openshift-adp
+  enabled: true
+  snapshotVolumes: true
+  storageLocation: "dpa-1"
+  ttl: "1h0m0s"
+  includedResources: 
+    - deployments
+    - services
+    - persistentvolumeclaims
+    - secrets
+    - configmaps
+  excludedResources:
+    - daemonsets
+    - statefulsets
+    - nodes
+    - apiservices
+    - events
+    - resourcequotas
+    - controllerrevisions.apps

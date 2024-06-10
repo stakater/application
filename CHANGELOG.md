@@ -2,7 +2,9 @@
 # Changelog
 
 All notable changes to this project will be documented here.
-
+### v4.1.2
+- BugFix: Incorrect selectorLabels were previously added to the Backup Template
+- 
 ### v4.1.1
 - Feature: Edit Backup template 
 

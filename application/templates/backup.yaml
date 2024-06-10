@@ -10,6 +10,7 @@ spec:
 {{ include "application.selectorLabels" . | indent 6 }}
   includedNamespaces:
     - {{ include "application.namespace" . }}
+  defaultVolumesToRestic: {{  .Values.backup.defaultVolumesToRestic | default true }}
   snapshotVolumes: {{ .Values.backup.snapshotVolumes | default true }}
   storageLocation: {{ .Values.backup.storageLocation | quote }}
   ttl: {{ .Values.backup.ttl | default "1h0m0s" }}

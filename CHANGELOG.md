@@ -3,6 +3,9 @@
 
 All notable changes to this project will be documented here.
 
+### v4.1.1
+- Feature: Edit Backup template 
+
 ### v4.1.0
 - Feature: Add Backup template [PR-296](https://github.com/stakater/application/pull/296)
 

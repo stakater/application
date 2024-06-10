@@ -7,7 +7,7 @@ metadata:
 spec:
   labelSelector:
     matchLabels:
-{{ include "application.labels" . | nindent 6 }}
+       app.kubernetes.io/part-of: {{ include "application.name" . }}
   includedNamespaces:
     - {{ include "application.namespace" . }}
   defaultVolumesToRestic: {{  .Values.backup.defaultVolumesToRestic | default true }}

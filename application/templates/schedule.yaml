@@ -1,0 +1,27 @@
+{{- if (.Values.schedule).enabled }}
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: {{ printf "%s-schedule" .Values.applicationName | trunc 63 | quote }}
+  namespace: {{ .Values.schedule.namespace | default ( include "application.namespace" . ) | quote }}
+spec:
+  schedule: {{ .Values.schedule.cronSchedule | quote }}
+  template:
+    labelSelector:
+      matchLabels:
+        app.kubernetes.io/part-of: {{ include "application.name" . }}
+    includedNamespaces:
+      - {{ include "application.namespace" . }}
+    defaultVolumesToRestic: {{ .Values.schedule.defaultVolumesToRestic | default true }}
+    snapshotVolumes: {{ .Values.schedule.snapshotVolumes | default true }}
+    storageLocation: {{ .Values.schedule.storageLocation | quote }}
+    ttl: {{ .Values.schedule.ttl | default "24h0m0s" }}
+  {{- if .Values.schedule.includedResources }}
+includedResources:
+  {{ toYaml .Values.schedule.includedResources | indent 6 }}
+  {{- end -}}
+  {{- if .Values.schedule.excludedResources }}
+excludedResources:
+  {{ toYaml .Values.schedule.excludedResources | indent 6 }}
+  {{- end -}}
+  {{- end }}

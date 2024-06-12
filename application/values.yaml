@@ -906,8 +906,8 @@ grafanaDashboard:
     #       app: test-2
 
 ##########################################################
-# Backup object for creating back using OADP/Velero
+# Backup schedule object for creating back using OADP/Velero
 ##########################################################
-backup:
+schedule:
   enabled: false
 

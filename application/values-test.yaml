@@ -1307,7 +1307,7 @@ cronJob:
             cpu: 1
 
 # Take backup of application namespace
-backup:
+schedule:
   namespace: openshift-adp
   enabled: true
   snapshotVolumes: true

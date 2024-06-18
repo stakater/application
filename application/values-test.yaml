@@ -1327,3 +1327,26 @@ backup:
     - events
     - resourcequotas
     - controllerrevisions.apps
+
+job: 
+  enabled: true
+  jobs:
+    db-migration:
+      additionalPodAnnotations:
+        helm.sh/hook: "pre-install,pre-upgrade"
+        helm.sh/hook-weight: "-1"
+        helm.sh/hook-delete-policy: "before-hook-creation"
+      imagePullSecrets:
+       - name: nexus-secret
+      image: 
+        repository: docker.io/nginx
+        tag: v1.0.0
+      env: 
+        KEY:
+          value: VALUE
+      command: ["/bin/bash"]
+      args: ["-c","sleep 5000"]
+      resources:  
+        requests:
+            memory: 5Gi
+            cpu: 1

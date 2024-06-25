@@ -63,12 +63,10 @@ spec:
           {{- end }}
           containers:
           - name: {{ $name }}
-
             {{- $image := required (print "Undefined image repo for container '" $name "'") $job.image.repository }}
             {{- with $job.image.tag    }} {{- $image = print $image ":" . }} {{- end }}
             {{- with $job.image.digest }} {{- $image = print $image "@" . }} {{- end }}
             image: {{ $image }}
-
             {{- if $job.image.imagePullPolicy }}
             imagePullPolicy: {{ $job.image.imagePullPolicy }}
             {{ end }}
@@ -103,11 +101,11 @@ spec:
 {{ toYaml . | indent 12 }}
           {{- end }}
           {{- with $job.affinity }}
-          {{- with $job.priorityClassName }}
-          priorityClassName: {{ . }}
-          {{- end }}
           affinity:
 {{ toYaml . | indent 12 }}
+          {{- end }}
+          {{- with $job.priorityClassName }}
+          priorityClassName: {{ . }}
           {{- end }}
           {{- with $job.tolerations }}
           tolerations: {{ toYaml . | nindent 12 }}
@@ -118,12 +116,12 @@ spec:
           {{- with $job.securityContext }}
           securityContext: {{ toYaml . | nindent 12 }}
           {{- end }}
-          {{- if $job.restartPolicy}}
+          {{- if $job.restartPolicy }}
           restartPolicy: {{ $job.restartPolicy }}
           {{ else }}
           restartPolicy: OnFailure
           {{ end }}
-          {{- with $job.imagePullSecrets}}
+          {{- with $job.imagePullSecrets }}
           imagePullSecrets:
 {{ toYaml . | indent 12 }}
           {{ end }}

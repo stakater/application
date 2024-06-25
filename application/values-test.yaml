@@ -111,6 +111,9 @@ deployment:
       volume-name: 
          mountPath: /path1
 
+  # The priority class for pod scheduling
+  priorityClassName: ""
+
   # Taint tolerations for nodes
   tolerations:
     - key: "dedicated"
@@ -222,6 +225,12 @@ deployment:
 
   # Graceful termination timeout
   terminationGracePeriodSeconds: 120
+
+  # Container lifecycle management for graceful startup and shutdown procedures
+  lifecycle:
+    preStop:
+      exec:
+        command: ["/bin/sh", "-c", "sleep 20"]
 
 # Add Storage volumes to the pods
 persistence:
@@ -1291,6 +1300,7 @@ cronJob:
   jobs:
     db-migration:
       schedule: "* * * 8 *"
+      priorityClassName: high-priority
       imagePullSecrets:
        - name: nexus-secret
       image: 

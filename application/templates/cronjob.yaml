@@ -103,6 +103,9 @@ spec:
 {{ toYaml . | indent 12 }}
           {{- end }}
           {{- with $job.affinity }}
+          {{- with $job.priorityClassName }}
+          priorityClassName: {{ . }}
+          {{- end }}
           affinity:
 {{ toYaml . | indent 12 }}
           {{- end }}

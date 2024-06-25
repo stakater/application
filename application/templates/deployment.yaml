@@ -89,6 +89,9 @@ spec:
       nodeSelector:
 {{ toYaml .Values.deployment.nodeSelector | indent 8 }}
       {{- end }}
+      {{- if .Values.deployment.priorityClassName }}
+      priorityClassName: {{ .Values.deployment.priorityClassName }}
+      {{- end }}
       {{- if .Values.deployment.tolerations }}
       tolerations:
 {{ toYaml .Values.deployment.tolerations | indent 8 -}}
@@ -141,6 +144,10 @@ spec:
         image: {{ $image }}
 
         imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+        {{- if .Values.deployment.lifecycle }}
+        lifecycle:
+          {{- toYaml .Values.deployment.lifecycle | nindent 10 }}
+        {{- end }}
         {{- if .Values.deployment.command }}
         command: {{- include "application.tplvalues.render" (dict "value" .Values.deployment.command "context" $) | nindent 12 }}
         {{- end }}

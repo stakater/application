@@ -24,6 +24,7 @@ cronJob:
   jobs:
     # db-migration:
     #   schedule: "* * * 8 *"
+    #   priorityClassName: high-priority
     #   env: 
     #     KEY:
     #       value: VALUE
@@ -173,6 +174,9 @@ deployment:
     # volume-name-2:
     #    mountPath: path-2
 
+  # priorityClassName defines the priority class for pod scheduling
+  priorityClassName: ''
+
   # Taint tolerations for nodes
   tolerations:
     # - key: "dedicated"
@@ -318,6 +322,13 @@ deployment:
 
   # Graceful termination timeout
   terminationGracePeriodSeconds:
+
+  # Default lifecycle configuration
+  lifecycle: {}
+    # Example for a preStop hook:
+    # preStop:
+    #   exec:
+    #     command: ["/bin/bash", "-c", "sleep 20"]
 
 ##########################################################
 # Add Storage volumes to the pods

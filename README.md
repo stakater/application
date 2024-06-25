@@ -54,6 +54,7 @@ To uninstall the chart:
 | deployment.revisionHistoryLimit          | The number of old history to retain to allow rollback                                                                                      | `2`            |
 | deployment.command                       | Command for primary container of deployment                                                                                                | `[]`           |
 | deployment.args                          | Arg for primary container of deployment                                                                                                    | `[]`           |
+| deployment.priorityClassName             | Defines the priority class for pod scheduling                                                                                              | `""`           |
 | deployment.tolerations                   | Taint tolerations for nodes                                                                                                                | `[]`           |
 | deployment.affinity                      | Affinity for pod/node                                                                                                                      | `[]`           |
 | deployment.topologySpreadConstraints     | Topology spread constraints definitions                                                                                                    | `[]`           |
@@ -62,6 +63,7 @@ To uninstall the chart:
 | deployment.additionalContainers          | Add additional containers besides init and app containers                                                                                  | `[]`           |
 | deployment.containerSecurityContext      | Add security context at container level                                                                                                    | `{}`           |
 | deployment.terminationGracePeriodSeconds | Graceful termination timeout                                                                                                               | ``           |
+| deployment.lifecycle                     | Container lifecycle management for graceful startup and shutdown procedures                                                                | `{}`           |
 
 #### Deployment Resources Parameters
 

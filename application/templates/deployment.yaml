@@ -89,7 +89,7 @@ spec:
       nodeSelector:
 {{ toYaml .Values.deployment.nodeSelector | indent 8 }}
       {{- end }}
-      {{- if .Values.deployment.priorityClassName }}
+      {{- with .Values.deployment.priorityClassName }}
       priorityClassName: {{ .Values.deployment.priorityClassName }}
       {{- end }}
       {{- if .Values.deployment.tolerations }}
@@ -144,7 +144,7 @@ spec:
         image: {{ $image }}
 
         imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
-        {{- if .Values.deployment.lifecycle }}
+        {{- with .Values.deployment.lifecycle }}
         lifecycle:
           {{- toYaml .Values.deployment.lifecycle | nindent 10 }}
         {{- end }}

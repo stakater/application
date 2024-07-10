@@ -472,6 +472,7 @@ Job parameter for each cronjob object at `cronJob.jobs`
 | `<name>.image.imagePullPolicy`      | ImagePullPolicy of container image of cronjob                  |
 | `<name>.command`                    | Command of container of job                                    |
 | `<name>.args`                       | Args of container of job                                       |
+| `<name>.priorityClassName`          | Defines the priority class of job                              |
 | `<name>.resources`                  | Resources of container of job                                  |
 | `<name>.additionalLabels`           | Additional labels of cronjob                                   |
 | `<name>.annotations`                | Annotation of cronjob                                          |

@@ -99,10 +99,10 @@ deployment:
 
   # Init containers which runs before the app container
   initContainers:
-    #  init-contaner:
-    #    image: busybox
-    #    imagePullPolicy: IfNotPresent
-    #    command: ['/bin/sh']
+    # init-contaner:
+    #   image: busybox
+    #   imagePullPolicy: IfNotPresent
+    #   command: ['/bin/sh']
 
   # Additional labels for Deployment
   additionalLabels:

@@ -34,13 +34,6 @@ jobs:
         helm lint ${CHART_NAME}
         helm lint ${CHART_NAME} -f ${CHART_NAME}/values-test.yaml
 
-    - name: Run Checkov action
-      uses: bridgecrewio/checkov-action@master
-      with:
-        quiet: true
-        file: ${CHART_NAME}/Chart.yaml
-        var_file: ${CHART_NAME}/values-test.yaml
-
     - name: Install kubectl
       uses: azure/setup-kubectl@v3
       with:
@@ -62,6 +55,14 @@ jobs:
         registry: ghcr.io/stakater
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Run Checkov action
+      uses: bridgecrewio/checkov-action@master
+      with:
+        quiet: true
+        soft_fail: false
+        file: ${{ env.CHART_NAME }}/Chart.yaml
+        var_file: ${{ env.CHART_NAME }}/values-test.yaml
 
     # Dry run to ensure that manifests are generated successfully
     - name: Dry Run Chart

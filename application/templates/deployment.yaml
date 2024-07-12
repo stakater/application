@@ -146,7 +146,7 @@ spec:
         imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
         {{- with .Values.deployment.lifecycle }}
         lifecycle:
-          {{- toYaml .Values.deployment.lifecycle | nindent 10 }}
+          {{- toYaml . | nindent 10 }}
         {{- end }}
         {{- if .Values.deployment.command }}
         command: {{- include "application.tplvalues.render" (dict "value" .Values.deployment.command "context" $) | nindent 12 }}

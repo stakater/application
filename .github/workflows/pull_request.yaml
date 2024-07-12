@@ -51,7 +51,6 @@ jobs:
       with:
         version: '4.7.0' # Choose a compatible version
 
-
     # This is used to setup kubeconfig, required by Tilt
     - name: Login to cluster
       run: oc login --token=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token) --server=https://kubernetes.default.svc --insecure-skip-tls-verify=true

@@ -1,9 +1,7 @@
 name: Pull Request
 
 on:
-  pull_request_target:
-    branches:
-      - master
+  pull_request:
 
 env:
   CHART_NAME: "application"

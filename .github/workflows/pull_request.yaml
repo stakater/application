@@ -38,8 +38,8 @@ jobs:
       uses: bridgecrewio/checkov-action@master
       with:
         quiet: true
-        file: ${CHART_NAME}/Chart.yaml
-        var_file: ${CHART_NAME}/values-test.yaml
+        file: ${{ env.CHART_NAME }}/Chart.yaml
+        var_file: ${{ env.CHART_NAME }}/values-test.yaml
 
     - name: Install kubectl
       uses: azure/setup-kubectl@v3

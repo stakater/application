@@ -46,10 +46,11 @@ jobs:
       with:
         version: v1.26.0
 
-    - name: Install CLI tools from OpenShift Mirror
-      uses: redhat-actions/openshift-tools-installer@v1
+    - name: Install OpenShift CLI
+      uses: redhat-actions/oc-installer@v1
       with:
-        oc: "4"
+        version: '4.7.0' # Choose a compatible version
+
 
     # This is used to setup kubeconfig, required by Tilt
     - name: Login to cluster

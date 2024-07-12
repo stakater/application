@@ -38,6 +38,7 @@ jobs:
       uses: bridgecrewio/checkov-action@master
       with:
         quiet: true
+        soft_fail: false
         file: ${{ env.CHART_NAME }}/Chart.yaml
         var_file: ${{ env.CHART_NAME }}/values-test.yaml
 

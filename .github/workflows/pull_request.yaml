@@ -49,7 +49,7 @@ jobs:
     - name: Install CLI tools from OpenShift Mirror
       uses: redhat-actions/openshift-tools-installer@v1
       with:
-        oc: "4.2"
+        oc: "latest"
 
     # This is used to setup kubeconfig, required by Tilt
     - name: Login to cluster

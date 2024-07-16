@@ -75,12 +75,12 @@ spec:
 {{- end }}
     spec:
       {{- if .Values.deployment.hostAliases }}
-      hostAliases:      
+      hostAliases:
 {{ toYaml .Values.deployment.hostAliases | indent 6 }}
       {{- end }}
       {{- if .Values.deployment.initContainers }}
       initContainers:
-  {{- range $key, $value := .Values.deployment.initContainers  }}
+  {{- range $key, $value := .Values.deployment.initContainers }}
       - name: {{ $key }}
 {{ include "application.tplvalues.render" ( dict "value" $value "context" $ ) | indent 8 }}
       {{- end }}
@@ -88,6 +88,9 @@ spec:
       {{- if .Values.deployment.nodeSelector }}
       nodeSelector:
 {{ toYaml .Values.deployment.nodeSelector | indent 8 }}
+      {{- end }}
+      {{- with .Values.deployment.priorityClassName }}
+      priorityClassName: {{ .Values.deployment.priorityClassName }}
       {{- end }}
       {{- if .Values.deployment.tolerations }}
       tolerations:
@@ -101,7 +104,7 @@ spec:
       topologySpreadConstraints:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if .Values.deployment.imagePullSecrets }}      
+      {{- if .Values.deployment.imagePullSecrets }}
       imagePullSecrets:
       - name: {{ .Values.deployment.imagePullSecrets }}
       {{- end }}
@@ -119,7 +122,7 @@ spec:
         - --tls-cert=/etc/tls/private/tls.crt
         - --tls-key=/etc/tls/private/tls.key
         - --cookie-secret=SECRET
-        image: {{ .Values.deployment.openshiftOAuthProxy.image  | default "openshift/oauth-proxy:latest" }}
+        image: {{ .Values.deployment.openshiftOAuthProxy.image | default "openshift/oauth-proxy:latest" }}
         imagePullPolicy: IfNotPresent
         name: oauth-proxy
         ports:
@@ -131,7 +134,7 @@ spec:
           name: proxy
         volumeMounts:
         - mountPath: /etc/tls/private
-          name: proxy-tls 
+          name: proxy-tls
         {{- end }}
       - name: {{ template "application.name" . }}
 
@@ -141,6 +144,10 @@ spec:
         image: {{ $image }}
 
         imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+        {{- with .Values.deployment.lifecycle }}
+        lifecycle:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
         {{- if .Values.deployment.command }}
         command: {{- include "application.tplvalues.render" (dict "value" .Values.deployment.command "context" $) | nindent 12 }}
         {{- end }}
@@ -246,7 +253,7 @@ spec:
             {{- toYaml .Values.deployment.readinessProbe.grpc | nindent 12 }}
           {{- end }}
         {{- end }}
-      {{- if or (.Values.deployment.volumeMounts) (and (eq .Values.persistence.enabled true) (eq .Values.persistence.mountPVC true) )}} 
+      {{- if or (.Values.deployment.volumeMounts) (and (eq .Values.persistence.enabled true) (eq .Values.persistence.mountPVC true) )}}
         volumeMounts:
         {{- if (eq .Values.persistence.mountPVC true) }}
         - mountPath: {{ .Values.persistence.mountPath }}
@@ -255,7 +262,7 @@ spec:
         {{- if .Values.deployment.volumeMounts }}
         {{- range $key, $value := .Values.deployment.volumeMounts }}
         - name: {{ $key }}
-{{  include "application.tplvalues.render" ( dict "value" $value "context" $ ) | indent 10 }} 	
+{{  include "application.tplvalues.render" ( dict "value" $value "context" $ ) | indent 10 }}
         {{- end }}
         {{- end }}
       {{- end }}
@@ -271,14 +278,14 @@ spec:
 {{ toYaml .Values.deployment.additionalContainers | indent 6 }}
         {{- end }}
         {{- if .Values.deployment.securityContext }}
-      securityContext:      
+      securityContext:
 {{ toYaml .Values.deployment.securityContext | indent 8 }}
           {{- end }}
       {{- if .Values.deployment.dnsConfig }}
-      dnsConfig:      
+      dnsConfig:
 {{ toYaml .Values.deployment.dnsConfig | indent 8 }}
           {{- end }}
-      {{- if or (.Values.deployment.openshiftOAuthProxy.enabled) (.Values.deployment.volumes) (and (eq .Values.persistence.enabled true) (eq .Values.persistence.mountPVC true) )}} 
+      {{- if or (.Values.deployment.openshiftOAuthProxy.enabled) (.Values.deployment.volumes) (and (eq .Values.persistence.enabled true) (eq .Values.persistence.mountPVC true) )}}
       volumes:
         {{- if .Values.deployment.openshiftOAuthProxy.enabled }}
       - name: proxy-tls
@@ -295,8 +302,8 @@ spec:
           {{- end }}
         {{- end }}
         {{- if .Values.deployment.volumes }}
-        {{- range $key, $value := .Values.deployment.volumes  }}
-      - name: {{ $key  }}
+        {{- range $key, $value := .Values.deployment.volumes }}
+      - name: {{ $key }}
 {{ include "application.tplvalues.render" ( dict "value" $value "context" $ ) | indent 8 }}
         {{- end }}
         {{- end }}

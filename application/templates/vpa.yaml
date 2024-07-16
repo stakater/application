@@ -9,7 +9,7 @@ metadata:
   name: {{ template "application.name" . }}
   namespace: {{ include "application.namespace" . }}
   labels:
-    {{- include "application.labels" . | nindent 4 }}
+    {{- include "application.labels" $ | nindent 4 }}
     {{- with .Values.vpa.additionalLabels }}
       {{- toYaml . | nindent 4 }}
     {{- end }}

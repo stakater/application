@@ -1,0 +1,10 @@
+repos:
+  - repo: https://github.com/norwoodj/helm-docs
+    rev: v1.14.2
+    hooks:
+      - id: helm-docs-built
+        args:
+          - --chart-to-generate=application
+          - --template-files=./README.md.gotmpl
+          - --output-file=./../README.md
+          - --sort-values-order=file

@@ -99,3 +99,17 @@ jobs:
         with:
           charts: application
           unittest-version: v0.5.x
+
+  check-helm-docs:
+    name: Check Helm Docs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{github.event.pull_request.head.sha}}
+      - name: Run helm-docs and check diff
+        uses: losisin/helm-docs-github-action@v1
+        with:
+          output-file: README.md
+          template-files: README.md.gotmpl
+          fail-on-diff: true

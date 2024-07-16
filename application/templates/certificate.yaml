@@ -6,7 +6,7 @@ metadata:
   name: {{ template "application.name" . }}-certificate
   namespace: {{ include "application.namespace" . }}
   labels:
-  {{- include "application.labels" . | nindent 4 }}
+  {{- include "application.labels" $ | nindent 4 }}
 {{- if .Values.certificate.additionalLabels }}
 {{ toYaml .Values.certificate.additionalLabels | indent 4 }}
 {{- end }}
@@ -23,7 +23,7 @@ spec:
   subject:
 {{ include "application.tplvalues.render" ( dict "value" .Values.certificate.subject "context" $ ) | indent 4 }}
   commonName: {{ include "application.tplvalues.render" ( dict "value" .Values.certificate.commonName "context" $ )  }}
- {{- if .Values.certificate.isCA }} 
+ {{- if .Values.certificate.isCA }}
   isCA: {{ .Values.certificate.isCA }}
 {{- end }}
   usages:

@@ -98,3 +98,4 @@ jobs:
       - uses: d3adb5/helm-unittest-action@v2
         with:
           charts: application
+          unittest-version: v0.5.x

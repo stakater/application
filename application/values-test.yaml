@@ -285,12 +285,6 @@ ingress:
   # Name of the ingress class
   ingressClassName: nginx
 
-  # Port of the service that serves pods
-  servicePort: http
-
-  #Set pathType: default is ImplementationSpecific; Options: Exact, Prefix
-  pathType: ImplementationSpecific 
-
   # List of host addresses to be exposed by this Ingress
 
   hosts:

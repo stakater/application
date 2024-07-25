@@ -8,7 +8,7 @@ apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
   labels:
-    {{- include "application.labels" . | nindent 4 }}
+    {{- include "application.labels" $ | nindent 4 }}
   name: {{ template "application.name" . }}
   namespace: {{ include "application.namespace" . }}
 spec:

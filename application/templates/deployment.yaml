@@ -90,7 +90,7 @@ spec:
 {{ toYaml .Values.deployment.nodeSelector | indent 8 }}
       {{- end }}
       {{- with .Values.deployment.priorityClassName }}
-      priorityClassName: {{ .Values.deployment.priorityClassName }}
+      priorityClassName: {{ . }}
       {{- end }}
       {{- if .Values.deployment.tolerations }}
       tolerations:

@@ -13,6 +13,9 @@ spec:
   cooldownPeriod: {{ required "Undefined cooldownPeriod for ScaledObject" .Values.scaledObject.cooldownPeriod }}
   minReplicaCount: {{ required "Undefined minReplicaCount for ScaledObject" .Values.scaledObject.minReplicaCount }}
   maxReplicaCount: {{ required "Undefined maxReplicaCount for ScaledObject" .Values.scaledObject.maxReplicaCount }}
+  {{- if (not (eq .Values.scaledObject.idleReplicaCount nil)) }}
+  idleReplicaCount: {{ .Values.scaledObject.idleReplicaCount }}
+  {{- end }}
 {{- $minReplicaCount := .Values.scaledObject.minReplicaCount }}
 {{- with .Values.scaledObject.fallback }}
   fallback:

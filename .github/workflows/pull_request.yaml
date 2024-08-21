@@ -49,14 +49,6 @@ jobs:
     - name: Login to cluster
       run: oc login --token=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token) --server=https://kubernetes.default.svc --insecure-skip-tls-verify=true
 
-    # # This is required for adding ghcr helm registry
-    # - name: Login to Container Registry
-    #   uses: docker/login-action@v3
-    #   with:
-    #     registry: ghcr.io/stakater
-    #     username: ${{ github.actor }}
-    #     password: ${{ secrets.GITHUB_TOKEN }}
-
     - name: Run Checkov action
       uses: bridgecrewio/checkov-action@master
       with:
@@ -69,24 +61,6 @@ jobs:
     - name: Dry Run Chart
       run: |
         helm install ${CHART_NAME} ${CHART_NAME} -f ${CHART_NAME}/values-test.yaml -n stakater-chart-pipeline-test --dry-run --debug
-
-    # - name: Comment on PR
-    #   uses: mshick/add-pr-comment@v2
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.STAKATER_GITHUB_TOKEN }}
-    #   with:
-    #     message-success: '@${{ github.actor }} validation successful`'
-    #     message-failure: '@${{ github.actor }} Yikes! You better fix it before anyone else finds out! [Build](https://github.com/${{ github.repository }}/commit/${{ github.event.pull_request.head.sha }}/checks) has Failed!'
-    #     allow-repeats: false
-
-    # - name: Notify Slack
-    #   uses: 8398a7/action-slack@v3
-    #   if: always() # Pick up events even if the job fails or is canceled.
-    #   with:
-    #     status: ${{ job.status }}
-    #     fields: repo,author,action,eventName,ref,workflow
-    #   env:
-    #     SLACK_WEBHOOK_URL: ${{ secrets.STAKATER_DELIVERY_SLACK_WEBHOOK }}
 
   unittest:
     name: Unit Tests

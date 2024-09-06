@@ -4,6 +4,8 @@ kind: Backup
 metadata:
   name: {{ printf "%s-backup" .Values.applicationName | trunc 63 | quote }}
   namespace: {{ .Values.backup.namespace | default ( include "application.namespace" . ) | quote }}
+  labels:
+  {{- include "application.labels" . | nindent 4 }}
 spec:
   labelSelector:
     matchLabels:

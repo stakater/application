@@ -139,13 +139,13 @@ jobs:
     - name: Push changes
       uses: ad-m/github-push-action@master
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        github_token: ${{ secrets.PUBLISH_TOKEN }}
         branch: ${{ inputs.RELEASE_BRANCH }}
 
     - name: Push Latest Tag
       uses: anothrNick/github-tag-action@1.70.0
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
         WITH_V: true
         DEFAULT_BUMP: patch
 

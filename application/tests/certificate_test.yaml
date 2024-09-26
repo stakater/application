@@ -1,0 +1,160 @@
+suite: Certificate
+
+templates:
+  - certificate.yaml
+
+tests:
+  - it: does not yield Certificate resource if certificate.enabled is false
+    set:
+      certificate:
+        enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: does not yield Certificate resource if cert-manager API version is not available
+    set:
+      certificate:
+        enabled: true
+    capabilities:
+      apiVersions:
+        - apps/v1
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: yields Certificate resource if enabled and API version is available
+    set:
+      certificate:
+        enabled: true
+        secretName: my-secret
+        duration: 2160h
+        renewBefore: 360h
+        subject:
+          organizations:
+            - MyOrg
+        commonName: mydomain.com
+        usages:
+          - digital signature
+          - key encipherment
+        dnsNames:
+          - mydomain.com
+          - www.mydomain.com
+        issuerRef:
+          name: my-issuer
+          kind: Issuer
+    capabilities:
+      apiVersions:
+        - cert-manager.io/v1
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Certificate
+
+  - it: includes additional labels when defined
+    set:
+      certificate:
+        enabled: true
+        additionalLabels:
+          foo: bar
+          test: ing
+    capabilities:
+      apiVersions:
+        - cert-manager.io/v1
+    asserts:
+      - equal:
+          path: metadata.labels.foo
+          value: bar
+      - equal:
+          path: metadata.labels.test
+          value: ing
+
+  - it: includes annotations when defined
+    set:
+      certificate:
+        enabled: true
+        annotations:
+          foo: bar
+          test: ing
+    capabilities:
+      apiVersions:
+        - cert-manager.io/v1
+    asserts:
+      - equal:
+          path: metadata.annotations.foo
+          value: bar
+      - equal:
+          path: metadata.annotations.test
+          value: ing
+
+  - it: does not include annotations if none are defined
+    set:
+      certificate:
+        enabled: true
+        annotations: {}
+    capabilities:
+      apiVersions:
+        - cert-manager.io/v1
+    asserts:
+      - notExists:
+          path: metadata.annotations
+
+  - it: includes issuer reference details
+    set:
+      certificate:
+        enabled: true
+        issuerRef:
+          name: my-issuer
+          kind: Issuer
+          group: cert-manager.io
+    capabilities:
+      apiVersions:
+        - cert-manager.io/v1
+    asserts:
+      - equal:
+          path: spec.issuerRef.name
+          value: my-issuer
+      - equal:
+          path: spec.issuerRef.kind
+          value: Issuer
+      - equal:
+          path: spec.issuerRef.group
+          value: cert-manager.io
+
+  - it: does not include keystores if not enabled
+    set:
+      certificate:
+        enabled: true
+        keystores:
+          enabled: false
+    capabilities:
+      apiVersions:
+        - cert-manager.io/v1
+    asserts:
+      - notExists:
+          path: spec.keystores
+
+  - it: includes keystores if enabled
+    set:
+      certificate:
+        enabled: true
+        keystores:
+          enabled: true
+          jks:
+            create: true
+            key: my-jks-key
+            name: my-jks-name
+    capabilities:
+      apiVersions:
+        - cert-manager.io/v1
+    asserts:
+      - equal:
+          path: spec.keystores.jks.create
+          value: true
+      - equal:
+          path: spec.keystores.jks.passwordSecretRef.key
+          value: my-jks-key
+      - equal:
+          path: spec.keystores.jks.passwordSecretRef.name
+          value: my-jks-name

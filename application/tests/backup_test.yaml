@@ -1,0 +1,93 @@
+suite: Backup
+
+templates:
+  - backup.yaml
+
+tests:
+  - it: does not yield Backup resource if backup.enabled is false
+    set:
+      backup:
+        enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: yields Backup resource if backup.enabled is true
+    set:
+      backup:
+        enabled: true
+        namespace: my-namespace
+        storageLocation: my-storage-location
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Backup
+
+  - it: includes correct metadata name
+    set:
+      backup:
+        enabled: true
+        namespace: my-namespace
+        storageLocation: my-storage-location
+      applicationName: my-app
+    asserts:
+      - equal:
+          path: metadata.name
+          value: my-app-backup
+
+  - it: includes correct namespace
+    set:
+      backup:
+        enabled: true
+        namespace: my-namespace
+        storageLocation: my-storage-location
+    asserts:
+      - equal:
+          path: metadata.namespace
+          value: my-namespace
+
+  - it: uses default values for optional fields
+    set:
+      backup:
+        enabled: true
+        namespace: my-namespace
+        storageLocation: my-storage-location
+    asserts:
+      - equal:
+          path: spec.defaultVolumesToRestic
+          value: true
+      - equal:
+          path: spec.snapshotVolumes
+          value: true
+      - equal:
+          path: spec.ttl
+          value: "1h0m0s"
+
+  - it: includes includedResources when defined
+    set:
+      backup:
+        enabled: true
+        includedResources:
+          - deployments
+          - services
+    asserts:
+      - equal:
+          path: spec.includedResources
+          value:
+            - deployments
+            - services
+
+  - it: includes excludedResources when defined
+    set:
+      backup:
+        enabled: true
+        excludedResources:
+          - secrets
+          - configmaps
+    asserts:
+      - equal:
+          path: spec.excludedResources
+          value:
+            - secrets
+            - configmaps

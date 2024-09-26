@@ -1,0 +1,138 @@
+suite: PrometheusRule
+
+templates:
+  - prometheusrule.yaml
+
+tests:
+  - it: does not render when prometheusRule is not enabled
+    set:
+      prometheusRule:
+        enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: does not render when the API version is not available
+    set:
+      prometheusRule:
+        enabled: true
+        groups: []
+    capabilities:
+      apiVersions:
+        - "v1"
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: renders a basic PrometheusRule with minimal configuration
+    set:
+      applicationName: my-app
+      prometheusRule:
+        enabled: true
+        groups:
+          - name: example-group
+            rules:
+              - alert: ExampleAlert
+                expr: up == 0
+                for: 5m
+                labels:
+                  severity: critical
+                annotations:
+                  summary: "Instance {{ $labels.instance }} is down"
+    capabilities:
+      apiVersions:
+        - "monitoring.coreos.com/v1"
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: PrometheusRule
+      - equal:
+          path: metadata.name
+          value: my-app
+      - equal:
+          path: spec.groups[0].name
+          value: example-group
+      - equal:
+          path: spec.groups[0].rules[0].alert
+          value: ExampleAlert
+
+  - it: renders PrometheusRule with additional labels
+    set:
+      prometheusRule:
+        enabled: true
+        additionalLabels:
+          custom: label
+        groups:
+          - name: example-group
+            rules:
+              - alert: ExampleAlert
+                expr: up == 0
+                for: 5m
+                labels:
+                  severity: critical
+                annotations:
+                  summary: "Instance {{ $labels.instance }} is down"
+    capabilities:
+      apiVersions:
+        - "monitoring.coreos.com/v1"
+    asserts:
+      - equal:
+          path: metadata.labels.custom
+          value: label
+
+  - it: renders PrometheusRule with multiple groups
+    set:
+      prometheusRule:
+        enabled: true
+        groups:
+          - name: group1
+            rules:
+              - alert: Alert1
+                expr: up == 0
+                for: 5m
+                labels:
+                  severity: critical
+                annotations:
+                  summary: "Instance {{ $labels.instance }} is down"
+          - name: group2
+            rules:
+              - alert: Alert2
+                expr: http_requests_total > 100
+                for: 10m
+                labels:
+                  severity: warning
+                annotations:
+                  summary: "High request rate on {{ $labels.instance }}"
+    capabilities:
+      apiVersions:
+        - "monitoring.coreos.com/v1"
+    asserts:
+      - equal:
+          path: spec.groups[0].name
+          value: group1
+      - equal:
+          path: spec.groups[1].name
+          value: group2
+
+  - it: renders PrometheusRule with complex rules
+    set:
+      prometheusRule:
+        enabled: true
+        groups:
+          - name: complex-group
+            rules:
+              - alert: ComplexAlert
+                expr: sum(rate(http_requests_total[5m])) by (instance) > 100
+                for: 10m
+                labels:
+                  severity: warning
+                annotations:
+                  summary: "High request rate on {{ $labels.instance }}"
+    capabilities:
+      apiVersions:
+        - "monitoring.coreos.com/v1"
+    asserts:
+      - equal:
+          path: spec.groups[0].rules[0].expr
+          value: sum(rate(http_requests_total[5m])) by (instance) > 100

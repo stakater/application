@@ -1,0 +1,161 @@
+suite: Role
+
+templates:
+  - role.yaml
+
+tests:
+  - it: does not render when RBAC is not enabled
+    set:
+      rbac:
+        enabled: false
+        roles: []
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: does not render when no roles are defined
+    set:
+      rbac:
+        enabled: true
+        roles: []
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: renders a basic Role with minimal configuration
+    set:
+      applicationName: my-app
+      rbac:
+        enabled: true
+        roles:
+          - name: example
+            rules:
+              - apiGroups: ["*"]
+                resources: ["pods"]
+                verbs: ["get", "list"]
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Role
+      - equal:
+          path: metadata.name
+          value: my-app-role-example
+      - equal:
+          path: rules[0].apiGroups[0]
+          value: "*"
+      - equal:
+          path: rules[0].resources
+          value: ["pods"]
+      - equal:
+          path: rules[0].verbs
+          value: ["get", "list"]
+
+  - it: renders Role with additional labels
+    set:
+      rbac:
+        enabled: true
+        additionalLabels:
+          custom: label
+        roles:
+          - name: example
+            rules:
+              - apiGroups: ["*"]
+                resources: ["pods"]
+                verbs: ["get", "list"]
+    asserts:
+      - equal:
+          path: metadata.labels.custom
+          value: label
+
+  - it: renders Role with annotations
+    set:
+      rbac:
+        enabled: true
+        annotations:
+          custom: annotation
+        roles:
+          - name: example
+            rules:
+              - apiGroups: ["*"]
+                resources: ["pods"]
+                verbs: ["get", "list"]
+    asserts:
+      - equal:
+          path: metadata.annotations.custom
+          value: annotation
+
+  - it: renders Role with multiple rules
+    set:
+      rbac:
+        enabled: true
+        roles:
+          - name: example
+            rules:
+              - apiGroups: ["*"]
+                resources: ["pods"]
+                verbs: ["get", "list"]
+              - apiGroups: ["apps"]
+                resources: ["deployments"]
+                verbs: ["create", "update"]
+    asserts:
+      - equal:
+          path: rules[1].apiGroups[0]
+          value: "apps"
+      - equal:
+          path: rules[1].resources[0]
+          value: "deployments"
+      - equal:
+          path: rules[1].verbs[0]
+          value: "create"
+
+  - it: renders multiple roles
+    set:
+      applicationName: my-app
+      rbac:
+        enabled: true
+        roles:
+          - name: role1
+            rules:
+              - apiGroups: ["*"]
+                resources: ["pods"]
+                verbs: ["get"]
+          - name: role2
+            rules:
+              - apiGroups: ["apps"]
+                resources: ["deployments"]
+                verbs: ["create"]
+    asserts:
+      - hasDocuments:
+          count: 2
+
+  - it: renders Role with specific namespace
+    set:
+      rbac:
+        enabled: true
+        roles:
+          - name: example
+            rules:
+              - apiGroups: ["*"]
+                resources: ["pods"]
+                verbs: ["get", "list"]
+    asserts:
+      - equal:
+          path: metadata.namespace
+          value: NAMESPACE
+
+  - it: renders Role with namespace override
+    set:
+      rbac:
+        enabled: true
+        roles:
+          - name: example
+            rules:
+              - apiGroups: ["*"]
+                resources: ["pods"]
+                verbs: ["get", "list"]
+      namespaceOverride: "custom-namespace"
+    asserts:
+      - equal:
+          path: metadata.namespace
+          value: custom-namespace

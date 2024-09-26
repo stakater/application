@@ -1,0 +1,71 @@
+suite: AlertmanagerConfig
+
+templates:
+  - alertmanagerconfig.yaml
+
+tests:
+  - it: does not yield AlertmanagerConfig if alertmanagerConfig.enabled is false
+    set:
+      alertmanagerConfig:
+        enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: does not yield AlertmanagerConfig if API version is not available
+    set:
+      alertmanagerConfig:
+        enabled: true
+    capabilities:
+      apiVersions:
+        - apps/v1
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: yields AlertmanagerConfig if enabled and API version is available
+    set:
+      alertmanagerConfig:
+        enabled: true
+        spec:
+          route:
+            groupBy: ['alertname']
+            groupInterval: 5m
+            groupWait: 30s
+            repeatInterval: 1h
+          receivers:
+            - name: 'team-X-mails'
+              emailConfigs:
+                - to: 'team-X@example.com'
+          inhibitRules:
+            - sourceMatch:
+                severity: warning
+              targetMatch:
+                severity: critical
+              equal: ['alertname', 'team']
+    capabilities:
+      apiVersions:
+        - monitoring.coreos.com/v1alpha1
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: AlertmanagerConfig
+
+  - it: includes additional labels when defined in values
+    set:
+      alertmanagerConfig:
+        enabled: true
+        selectionLabels:
+          foo: bar
+          test: ing
+    capabilities:
+      apiVersions:
+        - monitoring.coreos.com/v1alpha1
+    asserts:
+      - equal:
+          path: metadata.labels.foo
+          value: bar
+      - equal:
+          path: metadata.labels.test
+          value: ing

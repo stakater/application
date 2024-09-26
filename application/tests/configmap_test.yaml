@@ -1,0 +1,127 @@
+suite: ConfigMap
+
+templates:
+  - configmap.yaml
+
+tests:
+  - it: does not yield ConfigMap if configMap.enabled is false
+    set:
+      configMap:
+        enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: yields ConfigMap if configMap.enabled is true
+    set:
+      configMap:
+        enabled: true
+        files:
+          test-config:
+            key1: value1
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: ConfigMap
+
+  - it: includes correct metadata name
+    set:
+      configMap:
+        enabled: true
+        files:
+          test-config:
+            key1: value1
+      applicationName: my-app
+    asserts:
+      - equal:
+          path: metadata.name
+          value: my-app-test-config
+
+  - it: includes correct namespace
+    set:
+      configMap:
+        enabled: true
+        files:
+          test-config:
+            key1: value1
+      applicationName: my-app
+    release:
+      namespace: test-namespace
+    asserts:
+      - equal:
+          path: metadata.namespace
+          value: test-namespace
+
+  - it: includes additional labels when defined
+    set:
+      configMap:
+        enabled: true
+        additionalLabels:
+          foo: bar
+          test: ing
+        files:
+          test-config:
+            key1: value1
+    asserts:
+      - equal:
+          path: metadata.labels.foo
+          value: bar
+      - equal:
+          path: metadata.labels.test
+          value: ing
+
+  - it: includes annotations when defined
+    set:
+      configMap:
+        enabled: true
+        annotations:
+          custom: annotation
+        files:
+          test-config:
+            key1: value1
+    asserts:
+      - equal:
+          path: metadata.annotations.custom
+          value: annotation
+
+  - it: does not include annotations if none are defined
+    set:
+      configMap:
+        enabled: true
+        annotations: {}
+        files:
+          test-config:
+            key1: value1
+    asserts:
+      - notExists:
+          path: metadata.annotations
+
+  - it: includes data from files correctly
+    set:
+      configMap:
+        enabled: true
+        files:
+          test-config:
+            key1: value1
+            key2: value2
+    asserts:
+      - equal:
+          path: data.key1
+          value: value1
+      - equal:
+          path: data.key2
+          value: value2
+
+  - it: renders multiple ConfigMaps when multiple files are defined
+    set:
+      configMap:
+        enabled: true
+        files:
+          config1:
+            key1: value1
+          config2:
+            key2: value2
+    asserts:
+      - hasDocuments:
+          count: 2

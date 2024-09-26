@@ -1,0 +1,176 @@
+suite: Service
+templates:
+  - service.yaml
+
+tests:
+  - it: does not yield Service if service.enabled is false
+    set:
+      service:
+        enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: yields Service if service.enabled is true
+    set:
+      service:
+        enabled: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Service
+
+  - it: includes correct metadata name
+    set:
+      service:
+        enabled: true
+      applicationName: my-app
+    asserts:
+      - equal:
+          path: metadata.name
+          value: my-app
+
+  - it: includes correct namespace
+    set:
+      service:
+        enabled: true
+      applicationName: my-app
+    release:
+      namespace: test-namespace
+    asserts:
+      - equal:
+          path: metadata.namespace
+          value: test-namespace
+
+  - it: includes additional labels when defined
+    set:
+      service:
+        enabled: true
+        additionalLabels:
+          foo: bar
+          test: ing
+    asserts:
+      - equal:
+          path: metadata.labels.foo
+          value: bar
+      - equal:
+          path: metadata.labels.test
+          value: ing
+
+  - it: includes annotations when defined
+    set:
+      service:
+        enabled: true
+        annotations:
+          custom: annotation
+    asserts:
+      - equal:
+          path: metadata.annotations.custom
+          value: annotation
+
+  - it: does not include annotations if none are defined
+    set:
+      service:
+        enabled: true
+        annotations: {}
+    asserts:
+      - notExists:
+          path: metadata.annotations
+
+  - it: includes clusterIP when defined
+    set:
+      service:
+        enabled: true
+        clusterIP: 10.0.0.1
+    asserts:
+      - equal:
+          path: spec.clusterIP
+          value: 10.0.0.1
+
+  - it: does not include clusterIP if not defined
+    set:
+      service:
+        enabled: true
+    asserts:
+      - notExists:
+          path: spec.clusterIP
+
+  - it: includes loadBalancerIP when service type is LoadBalancer
+    set:
+      service:
+        enabled: true
+        type: LoadBalancer
+        loadBalancerIP: 10.0.0.2
+    asserts:
+      - equal:
+          path: spec.loadBalancerIP
+          value: 10.0.0.2
+
+  - it: does not include loadBalancerIP if service type is not LoadBalancer
+    set:
+      service:
+        enabled: true
+        type: ClusterIP
+    asserts:
+      - notExists:
+          path: spec.loadBalancerIP
+
+  - it: includes loadBalancerSourceRanges when defined
+    set:
+      service:
+        enabled: true
+        type: LoadBalancer
+        loadBalancerSourceRanges:
+          - 0.0.0.0/0
+    asserts:
+      - equal:
+          path: spec.loadBalancerSourceRanges[0]
+          value: 0.0.0.0/0
+
+  - it: does not include loadBalancerSourceRanges if service type is not LoadBalancer
+    set:
+      service:
+        enabled: true
+        type: ClusterIP
+    asserts:
+      - notExists:
+          path: spec.loadBalancerSourceRanges
+
+  - it: includes externalIPs when defined
+    set:
+      service:
+        enabled: true
+        externalIPs:
+          - 192.168.1.1
+    asserts:
+      - equal:
+          path: spec.externalIPs[0]
+          value: 192.168.1.1
+
+  - it: does not include externalIPs if not defined
+    set:
+      service:
+        enabled: true
+    asserts:
+      - notExists:
+          path: spec.externalIPs
+
+  - it: includes ports when defined
+    set:
+      service:
+        enabled: true
+        ports:
+          - name: http
+            port: 80
+            targetPort: 8080
+    asserts:
+      - equal:
+          path: spec.ports[0].name
+          value: http
+      - equal:
+          path: spec.ports[0].port
+          value: 80
+      - equal:
+          path: spec.ports[0].targetPort
+          value: 8080

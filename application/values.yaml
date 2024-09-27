@@ -1,31 +1,33 @@
-# -- Same as nameOverride but for the namespace.
+# -- (string) Override the namespace for all resources.
+# @section -- Parameters
 namespaceOverride: ""
 
-# -- Same as nameOverride but for the component.
+# -- (string) Override the component label for all resources.
+# @section -- Parameters
 componentOverride: ""
 
-# -- Same as nameOverride but for the partOf.
+# -- (string) Override the partOf label for all resources.
+# @section -- Parameters
 partOfOverride: ""
 
-##########################################################
-# Name of the application.
-##########################################################
-applicationName: "application"
-
-##########################################################
-# Global labels
-# These labels will be added on all resources,
-# and you can add additional labels from below
-# on individual resource
-##########################################################
+# -- (string) Application name.
+# @default -- `{{ .Chart.Name }}`
+# @section -- Parameters
+applicationName: ""
 
 cronJob:
+  # -- (bool) Deploy CronJob resources.
+  # @section -- CronJob Parameters
   enabled: false
+  # -- (object) Map of CronJob resources.
+  # Key will be used as a name suffix for the CronJob. Value is the CronJob configuration.
+  # See values for more details.
+  # @section -- CronJob Parameters
   jobs:
     # db-migration:
     #   schedule: "* * * 8 *"
     #   priorityClassName: high-priority
-    #   env: 
+    #   env:
     #     KEY:
     #       value: VALUE
     #   image:
@@ -39,54 +41,72 @@ cronJob:
     #     requests:
     #         memory: 5Gi
     #         cpu: 1
-  
+
 
 job:
+  # -- (bool) Deploy Job resources.
+  # @section -- Job Parameters
   enabled: false
+  # -- (object) Map of Job resources.
+  # Key will be used as a name suffix for the Job. Value is the Job configuration.
+  # See values for more details.
+  # @section -- Job Parameters
   jobs:
     # db-migration:
     #   additionalPodAnnotations:
     #     helm.sh/hook: "pre-install,pre-upgrade"
     #     helm.sh/hook-weight: "-1"
     #     helm.sh/hook-delete-policy: "before-hook-creation"
-    #   env: 
+    #   env:
     #     KEY:
     #       value: VALUE
-    #   image: 
+    #   image:
     #     repository: docker.io/nginx
     #     tag: v1.0.0
     #     digest: '' # if set to a non empty value, digest takes precedence on the tag
     #     imagePullPolicy: IfNotPresent
     #   command: ["/bin/bash"]
     #   args: ["-c","sleep 5000"]
-    #   resources:  
+    #   resources:
     #     requests:
     #         memory: 5Gi
     #         cpu: 1
-  
 
-##########################################################
-# Deployment
-##########################################################
 deployment:
-
+  # -- (bool) Enable Deployment.
+  # @section -- Deployment Parameters
   enabled: true
-  # By default deploymentStrategy is set to rollingUpdate with maxSurge of 25% and maxUnavailable of 25%
-  # You can change type to `Recreate` or can uncomment `rollingUpdate` specification and adjust them to your usage.
+  # -- (object) Additional labels for Deployment.
+  # @section -- Deployment Parameters
+  additionalLabels:
+  # -- (object) Additional pod labels which are used in Service's Label Selector.
+  # @section -- Deployment Parameters
+  podLabels:
+  # -- (object) Annotations for Deployment.
+  # @section -- Deployment Parameters
+  annotations:
+  # -- (object) Additional pod annotations.
+  # @section -- Deployment Parameters
+  additionalPodAnnotations:
   strategy:
+    # -- (string) Type of deployment strategy.
+    # @section -- Deployment Parameters
     type: RollingUpdate
-    # rollingUpdate:
-    #   maxSurge: 25%
-    #   maxUnavailable: 25%
-  
-  # Reload deployment if configMap/secret updates
+    rollingUpdate:
+      # -- (string) Max unavailable pods during update.
+      # @section -- Deployment Parameters
+      maxUnavailable: 25%
+      # -- (string) Max surge pods during update.
+      # @section -- Deployment Parameters
+      maxSurge: 25%
+  # -- (bool) Reload deployment if attached Secret/ConfigMap changes.
+  # @section -- Deployment Parameters
   reloadOnChange: true
-
-  # Select nodes to deploy which matches the following labels
+  # -- (object) Select the node where the pods should be scheduled.
+  # @section -- Deployment Parameters
   nodeSelector:
-    # cloud.google.com/gke-nodepool: default-pool
-
-  # Init containers which runs before the app container
+  # -- (list) Add host aliases to the pods.
+  # @section -- Deployment Parameters
   hostAliases:
   # - ip: "127.0.0.1"
   #   hostnames:
@@ -96,42 +116,34 @@ deployment:
   #   hostnames:
   #   - "foo.remote"
   #   - "bar.remote"
-
-  # Init containers which runs before the app container
+  # -- (object) Add init containers to the pods.
+  # @section -- Deployment Parameters
   initContainers:
-    # init-contaner:
+    # init-something:
     #   image: busybox
     #   imagePullPolicy: IfNotPresent
     #   command: ['/bin/sh']
-
-  # Additional labels for Deployment
-  additionalLabels:
-    # key: value
-
-  # Additional label added on pod which is used in Service's Label Selector
-  podLabels:
-    # env: prod
-
-  # Annotations on deployments
-  annotations:
-
-  # Additional Pod Annotations added on pod created by this Deployment
-  additionalPodAnnotations:
-    # key: value
-
-  # Annotations for fluentd Configurations
+  # -- (object) Configuration details for fluentdConfigurations.
+  # Only works for specific setup, see <https://medium.com/stakater/dynamic-log-processing-with-fluentd-konfigurator-and-slack-935a5de4eddb>.
+  # @section -- Deployment Parameters
   fluentdConfigAnnotations:
-    # fluentd:
-    #   regex: hello
-    #   timeFormat: world
-
-  # Replicas to be created
+    # regex: hello
+    # regexFirstLine: hello
+    # timeFormat: world
+    # notifications:
+    #   key: value
+    #   pattern: value
+    #   slack:
+    #     webhookURL: https://hooks.slack.com/services/XXXXX/XXXXX/XXXXX
+    #     channelName: "#channel"
+  # -- (int) Number of replicas.
+  # @section -- Deployment Parameters
   replicas:
-
-  # Secrets used to pull image
+  # -- (string) Secret to be used for pulling the images (a single secret is supported).
+  # @section -- Deployment Parameters
   imagePullSecrets: ""
-
-  # If want to mount Envs from configmap or secret
+  # -- (object) Mount environment variables from ConfigMap or Secret to the pod.
+  # @section -- Deployment Parameters
   envFrom:
   #  production-cm:
   #    type: configmap
@@ -142,8 +154,8 @@ deployment:
   #  postgres-config:
   #    type: secret
   #    nameSuffix: postgres
-
-  # Environment variables to be passed to the app container
+  # -- (object) Environment variables to be added to the pod.
+  # @section -- Deployment Parameters
   env:
   #  ENVIRONMENT:
   #     value: "dev"
@@ -152,8 +164,9 @@ deployment:
   #        configMapKeyRef:
   #           name: config
   #           key: frequency
-  
-  # Volumes to be added to the pod
+  # -- (object) Volumes to be added to the pod.
+  # Key is the name of the volume. Value is the volume definition.
+  # @section -- Deployment Parameters
   volumes:
     # configmap-volume:
     #   configMap:
@@ -164,27 +177,27 @@ deployment:
     # persistent-volume-name:
     #   persistentVolumeClaim:
     #     claimName: claim-name
-
-  # Mount path for Volumes
+  # -- (object) Mount path for Volumes.
+  # Key is the name of the volume. Value is the volume mount definition.
+  # @section -- Deployment Parameters
   volumeMounts:
     # volume-name:
     #    mountPath: path
     #    subPath: szy
-
     # volume-name-2:
     #    mountPath: path-2
-
-  # priorityClassName defines the priority class for pod scheduling
-  priorityClassName: ''
-
-  # Taint tolerations for nodes
+  # -- (string) Define the priority class for the pod.
+  # @section -- Deployment Parameters
+  priorityClassName: ""
+  # -- (list) Taint tolerations for the pods.
+  # @section -- Deployment Parameters
   tolerations:
     # - key: "dedicated"
     #   operator: "Equal"
     #   value: "app"
     #   effect: "NoSchedule"
-
-  # Pod affinity and pod anti-affinity allow you to specify rules about how pods should be placed relative to other pods.
+  # -- (object) Affinity for the pods.
+  # @section -- Deployment Parameters
   affinity:
   #  nodeAffinity:
   #    requiredDuringSchedulingIgnoredDuringExecution:
@@ -194,8 +207,8 @@ deployment:
   #          operator: In
   #          values:
   #          - ssd
-
-  # Topology spread constraints
+  # -- (list) Topology spread constraints for the pods.
+  # @section -- Deployment Parameters
   topologySpreadConstraints:
     # - maxSkew: 1
     #   topologyKey: kubernetes.io/hostname
@@ -215,58 +228,128 @@ deployment:
     #       operator: In
     #       values:
     #       - ssd
-
-  # Number of ReplicaSet versions to retain
+  # -- (int) Number of ReplicaSet revisions to retain.
+  # @section -- Deployment Parameters
   revisionHistoryLimit: 2
-
-  # Image of the app container
   image:
-    repository: repository/image-name
-    tag: ''
-    digest: '' # if set to a non empty value, digest takes precedence on the tag
+    # -- (string) Repository.
+    # @section -- Deployment Parameters
+    repository: ""
+    # -- (string) Tag.
+    # @section -- Deployment Parameters
+    tag: ""
+    # -- (string) Image digest. If set to a non-empty value, digest takes precedence on the tag.
+    # @section -- Deployment Parameters
+    digest: ""
+    # -- (string) Image pull policy.
+    # @section -- Deployment Parameters
     pullPolicy: IfNotPresent
+  # -- (object) DNS config for the pods.
+  # @section -- Deployment Parameters
   dnsConfig:
     # options:
     # - name: ndots
     #   value: '1'
-  # Startup, Readiness and Liveness probes
+  # -- (object) Startup probe.
+  # @default -- See below
+  # Must specify either one of the following field when enabled: httpGet, exec, tcpSocket, grpc
+  # @section -- Deployment Parameters
   startupProbe:
+    # -- (bool) Enable Startup probe.
+    # @section -- Deployment Parameters
     enabled: false
+    # -- (int) Number of retries before marking the pod as failed.
+    # @section -- Deployment Parameters
     failureThreshold: 30
+    # -- (int) Time between retries.
+    # @section -- Deployment Parameters
     periodSeconds: 10
-    # Must specify either one of the following field when enabled
+    # -- (int) Number of successful probes before marking the pod as ready.
+    # @section -- Deployment Parameters
+    successThreshold: 1
+    # -- (int) Time before the probe times out.
+    # @section -- Deployment Parameters
+    timeoutSeconds: 1
+    # -- (object) HTTP Get probe.
+    # @section -- Deployment Parameters
     httpGet: {}
+    # -- (object) Exec probe.
+    # @section -- Deployment Parameters
     exec: {}
+    # -- (object) TCP Socket probe.
+    # @section -- Deployment Parameters
     tcpSocket: {}
+    # -- (object) gRPC probe.
+    # @section -- Deployment Parameters
     grpc: {}
 
+  # -- (object) Readiness probe.
+  # @default -- See below
+  # Must specify either one of the following field when enabled: httpGet, exec, tcpSocket, grpc
+  # @section -- Deployment Parameters
   readinessProbe:
+    # -- (bool) Enable Readiness probe.
+    # @section -- Deployment Parameters
     enabled: false
-    failureThreshold: 3
+    # -- (int) Number of retries before marking the pod as failed.
+    # @section -- Deployment Parameters
+    failureThreshold: 30
+    # -- (int) Time between retries.
+    # @section -- Deployment Parameters
     periodSeconds: 10
+    # -- (int) Number of successful probes before marking the pod as ready.
+    # @section -- Deployment Parameters
     successThreshold: 1
+    # -- (int) Time before the probe times out.
+    # @section -- Deployment Parameters
     timeoutSeconds: 1
-    initialDelaySeconds: 10
-    # Must specify either one of the following field when enabled
+    # -- (object) HTTP Get probe.
+    # @section -- Deployment Parameters
     httpGet: {}
+    # -- (object) Exec probe.
+    # @section -- Deployment Parameters
     exec: {}
+    # -- (object) TCP Socket probe.
+    # @section -- Deployment Parameters
     tcpSocket: {}
+    # -- (object) gRPC probe.
+    # @section -- Deployment Parameters
     grpc: {}
 
+  # -- (object) Liveness probe.
+  # @default -- See below
+  # Must specify either one of the following field when enabled: httpGet, exec, tcpSocket, grpc
+  # @section -- Deployment Parameters
   livenessProbe:
+    # -- (bool) Enable Liveness probe.
+    # @section -- Deployment Parameters
     enabled: false
-    failureThreshold: 3
+    # -- (int) Number of retries before marking the pod as failed.
+    # @section -- Deployment Parameters
+    failureThreshold: 30
+    # -- (int) Time between retries.
+    # @section -- Deployment Parameters
     periodSeconds: 10
+    # -- (int) Number of successful probes before marking the pod as ready.
+    # @section -- Deployment Parameters
     successThreshold: 1
+    # -- (int) Time before the probe times out.
+    # @section -- Deployment Parameters
     timeoutSeconds: 1
-    initialDelaySeconds: 10
-    # Must specify either one of the following field when enabled
+    # -- (object) HTTP Get probe.
+    # @section -- Deployment Parameters
     httpGet: {}
+    # -- (object) Exec probe.
+    # @section -- Deployment Parameters
     exec: {}
+    # -- (object) TCP Socket probe.
+    # @section -- Deployment Parameters
     tcpSocket: {}
+    # -- (object) gRPC probe.
+    # @section -- Deployment Parameters
     grpc: {}
-
-  # Resources to be defined for pod
+  # -- (object) Resource limits and requests for the pod.
+  # @section -- Deployment Parameters
   resources:
     limits:
       memory: 256Mi
@@ -274,93 +357,118 @@ deployment:
     requests:
       memory: 128Mi
       cpu: 0.1
-
-  #  Security Context at Container Level
+  # -- (object) Security Context at Container Level.
+  # @section -- Deployment Parameters
   containerSecurityContext:
     readOnlyRootFilesystem: true
     runAsNonRoot: true
-
   openshiftOAuthProxy:
+    # -- (bool) Enable [OpenShift OAuth Proxy](https://github.com/openshift/oauth-proxy).
+    # @section -- Deployment Parameters
     enabled: false
-    port: 8080   # Port on which application is running inside container
+    # -- (int) Port on which application is running inside container.
+    # @section -- Deployment Parameters
+    port: 8080
+    # -- (string) Secret name for the OAuth Proxy TLS certificate.
+    # @section -- Deployment Parameters
     secretName: "openshift-oauth-proxy-tls"
-    image: openshift/oauth-proxy:latest       # If you have a custom container for oauth-proxy that can be updated here
-    disableTLSArg: false # If disabled --http-address=:8081 will be used instead of --https-address=:8443 , to be used when an ingress is used for application
-  # Add additional containers besides init and app containers
+    # -- (string) Image for the OAuth Proxy.
+    # @section -- Deployment Parameters
+    image: openshift/oauth-proxy:latest
+    # -- (bool) If disabled `--http-address=:8081` will be used instead of `--https-address=:8443`.
+    # It can be useful when an ingress is enabled for the application.
+    # @section -- Deployment Parameters
+    disableTLSArg: false
+  # -- (object) Security Context for the pod.
+  # @section -- Deployment Parameters
+  securityContext:
+    # fsGroup: 2000
+  # -- (list) Command for the app container.
+  # @section -- Deployment Parameters
+  command: []
+  # -- (list) Args for the app container.
+  # @section -- Deployment Parameters
+  args: []
+  # -- (list) List of ports for the app container.
+  # @section -- Deployment Parameters
+  ports:
+  # - containerPort: 8080
+  #   name: http
+  #   protocol: TCP
+  # - containerPort: 8443
+  #   name: https
+  #   protocol: TCP
+  # -- (bool) Host network connectivity.
+  # @section -- Deployment Parameters
+  hostNetwork:
+  # -- (int) Gracefull termination period.
+  # @section -- Deployment Parameters
+  terminationGracePeriodSeconds:
+  # -- (object) Lifecycle configuration for the pod.
+  # @section -- Deployment Parameters
+  lifecycle: {}
+    # preStop:
+    #   exec:
+    #     command: ["/bin/bash", "-c", "sleep 20"]
+  # -- (list) Additional containers besides init and app containers (without templating).
+  # @section -- Deployment Parameters
   additionalContainers:
-  # - name: sidecar-contaner
+  # - name: sidecar-container
   #   image: busybox
   #   imagePullPolicy: IfNotPresent
   #   command: ['/bin/sh']
 
-  # Security Context for the pod
-  securityContext:
-    # fsGroup: 2000
-
-  # Command for primary container
-  command: []
-
-  # Args for primary contaner
-  args: []
-
-  # List of ports for the primary container
-  ports:
-  #- containerPort: 8080
-  #  name: http
-  #  protocol: TCP
-  #- containerPort: 8778
-  #  name: jolokia
-  #  protocol: TCP
-  #- containerPort: 8443
-  #  name: https
-  #  protocol: TCP
-
-  # Networking using the host network
-  hostNetwork:
-
-  # Graceful termination timeout
-  terminationGracePeriodSeconds:
-
-  # Default lifecycle configuration
-  lifecycle: {}
-    # Example for a preStop hook:
-    # preStop:
-    #   exec:
-    #     command: ["/bin/bash", "-c", "sleep 20"]
-
-##########################################################
-# Add Storage volumes to the pods
-##########################################################
 persistence:
+  # -- (bool) Enable persistence.
+  # @section -- Deployment Parameters
   enabled: false
+  # -- (bool) Whether to mount the created PVC to the deployment.
+  # @section -- Deployment Parameters
   mountPVC: false
+  # -- (string) If `persistence.mountPVC` is enabled, where to mount the volume in the containers.
+  # @section -- Deployment Parameters
   mountPath: "/"
+  # -- (string) Name of the PVC.
+  # @default -- `{{ include "application.name" $ }}-data`
+  # @section -- Deployment Parameters
   name: ""
+  # -- (string) Access mode for volume.
+  # @section -- Deployment Parameters
   accessMode: ReadWriteOnce
-  ## If defined, storageClass: <storageClass>
-  ## If set to "-", storageClass: "", which disables dynamic provisioning
-  ## If undefined (the default) or set to null, no storageClass spec is
-  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-  ##   GKE, AWS & OpenStack)
-  ##
-  storageClass: "-"
+  # -- (string) Storage class for volume.
+  # If defined, use that value
+  # If set to "-" or "", disable dynamic provisioning
+  # If undefined or set to null (the default), no storageClass spec is
+  #   set, choosing the default provisioner.
+  # @section -- Deployment Parameters
+  storageClass: null
+  # -- (object) Additional labels for persistent volume.
+  # @section -- Deployment Parameters
   additionalLabels:
-    # key: "value"
+    # key: value
+  # -- (object) Annotations for persistent volume.
+  # @section -- Deployment Parameters
   annotations:
-  #  "helm.sh/resource-policy": keep
+    # "helm.sh/resource-policy": keep
+  # -- (string) Size of the persistent volume.
+  # @section -- Deployment Parameters
   storageSize: 8Gi
+  # -- (string) PVC Volume Mode.
+  # @section -- Deployment Parameters
   volumeMode: ""
+  # -- (string) Name of the volume.
+  # @section -- Deployment Parameters
   volumeName: ""
 
-
-##########################################################
-# Service object for servicing pods
-##########################################################
 service:
+  # -- (bool) Enable Service.
+  # @section -- Service Parameters
   enabled: true
+  # -- (object) Additional labels for service.
+  # @section -- Service Parameters
   additionalLabels:
-    # expose: "true"
-
+  # -- (object) Annotations for service.
+  # @section -- Service Parameters
   annotations:
     # config.xposer.stakater.com/Domain: stakater.com
     # config.xposer.stakater.com/IngressNameTemplate: '{{ "{{.Service}}-{{.Namespace}}" }}'
@@ -372,157 +480,197 @@ service:
     #   kubernetes.io/ingress.class: external-ingress
     #   ingress.kubernetes.io/rewrite-target: /
     #   ingress.kubernetes.io/force-ssl-redirect: true
-
+  # -- (list) Ports for applications service.
+  # @section -- Service Parameters
   ports:
     - port: 8080
       name: http
       protocol: TCP
       targetPort: 8080
+  # -- (string) Type of service.
+  # @section -- Service Parameters
   type: ClusterIP
-
-  # Set to 'None' will make this service headless
+  # -- (string) Fixed IP for a ClusterIP service.
+  # Set to `None` for an headless service
+  # @section -- Service Parameters
   clusterIP:
 
-##########################################################
-# Ingress object for exposing services
-##########################################################
 ingress:
+  # -- (bool) Enable Ingress.
+  # @section -- Ingress Parameters
   enabled: false
-
-  # Name of the ingress class
-  ingressClassName: ''
-
-  # List of host addresses to be exposed by this Ingress
+  # -- (string) Name of the ingress class.
+  # @section -- Ingress Parameters
+  ingressClassName: ""
   hosts:
-    - host: chart-example.local
+    - # -- (tpl/string) Hostname.
+      # @section -- Ingress Parameters
+      host: chart-example.local
       paths:
-      - path: /
-      #  pathType: ''
-      #  serviceName: ''
-      #  servicePort: ''
-  # Additional labels for this Ingress
+      - # -- (string) Path.
+        # @section -- Ingress Parameters
+        path: /
+        # -- (string) Path type.
+        # @default -- `ImplementationSpecific`
+        # @section -- Ingress Parameters
+        pathType:
+        # -- (string) Service name.
+        # @default -- `{{ include "application.name" $ }}`
+        # @section -- Ingress Parameters
+        serviceName:
+        # -- (string) Service port.
+        # @default -- `http`
+        # @section -- Ingress Parameters
+        servicePort:
+  # -- (object) Additional labels for ingress.
+  # @section -- Ingress Parameters
   additionalLabels:
-
-  # Add annotations to this Ingress
+  # -- (object) Annotations for ingress.
+  # @section -- Ingress Parameters
   annotations:
     # kubernetes.io/ingress.class: external-ingress
     # ingress.kubernetes.io/rewrite-target: /
     # ingress.kubernetes.io/force-ssl-redirect: true
-
-  # TLS details for this Ingress
+  # -- (list) TLS configuration for ingress.
+  # Secrets must exist in the namespace.
+  # You may also configure Certificate resource to generate the secret.
+  # @section -- Ingress Parameters
   tls:
-    # Secrets must be manually created in the namespace.
     # - secretName: chart-example-tls
     #   hosts:
     #     - chart-example.local
 
-##########################################################
-# Route object for exposing services (OpenShift)
-##########################################################
 route:
+  # -- (bool) Deploy a Route (OpenShift) resource.
+  # @section -- Route Parameters
   enabled: false
-
-  # Add annotations to this Route
+  # -- (object) Additional labels for Route.
+  # @section -- Route Parameters
+  additionalLabels:
+  # -- (object) Annotations for Route.
+  # @section -- Route Parameters
   annotations:
     # kubernetes.io/ingress.class: external-ingress
     # ingress.kubernetes.io/rewrite-target: /
     # ingress.kubernetes.io/force-ssl-redirect: true
-  
-  # Additional labels for this Route
-  additionalLabels:
-  
-  # If no host is added then openshift inserts the default hostname. To Add host explicitly, use host attribute
+  # -- (string) Explicit host.
+  # If no host is added then openshift inserts the default hostname.
+  # @section -- Route Parameters
   host:
-
+  # -- (string) Path.
+  # @section -- Route Parameters
   path:
-  # Port of the service that serves pods
+  # -- (object) Service port.
+  # @section -- Route Parameters
   port:
     targetPort: http
-
   to:
-    weight: 100
-
+    # -- (int) Service weight.
+  # @section -- Route Parameters
+      weight: 100
+  # -- (string) Wildcard policy.
+  # @section -- Route Parameters
   wildcardPolicy: None
-
   tls:
-    # TLS Termination strategy
+    # -- (string) TLS termination strategy.
+  # @section -- Route Parameters
     termination: edge
+    # -- (string) TLS insecure termination policy.
+    # @section -- Route Parameters
     insecureEdgeTerminationPolicy: Redirect
-
+  # -- (list) Alternate backend with it's weight.
+  # @section -- Route Parameters
   alternateBackends:
     # kind: Service
     # name: alternate-application
     # weight: 20
 
-##########################################################
-# SecretProviderClass
-##########################################################
 secretProviderClass:
+  # -- (bool) Deploy a [Secrets Store CSI Driver SecretProviderClass](https://secrets-store-csi-driver.sigs.k8s.io/) resource.
+  # @section -- SecretProviderClass Parameters
   enabled: false
+  # -- (string) Name of the SecretProviderClass.
+  # Required if `secretProviderClass.enabled` is set to `true`.
+  # @section -- SecretProviderClass Parameters
   name: ""
-  # name: example
+  # -- (string) Name of the provider.
+  # Required if `secretProviderClass.enabled` is set to `true`.
+  # @section -- SecretProviderClass Parameters
   provider: ""
   # provider: vault
+  # -- (string) Vault Address.
+  # Required if `secretProviderClass.provider` is set to `vault`.
+  # @section -- SecretProviderClass Parameters
   vaultAddress: ""
   # vaultAddress: http://vault:8200
+  # -- (tpl/string) Vault Role Name.
+  # Required if `secretProviderClass.provider` is set to `vault`.
+  # @section -- SecretProviderClass Parameters
   roleName: ""
   # roleName: example-role
-  objects: 
-    #- objectName: MONGO_HOST
-    #  secretPath: testing/data/mongoDb
-    #  secretKey: MONGO_HOST
+  # -- (list) Objects definitions.
+  # @section -- SecretProviderClass Parameters
+  objects:
+    # - objectName: MONGO_HOST
+    #   secretPath: testing/data/mongoDb
+    #   secretKey: MONGO_HOST
+  # -- (list) Objects mapping.
+  # @section -- SecretProviderClass Parameters
   secretObjects:
-    #- data:
-    #  - key: MONGO_HOST
-    #    objectName: host
-    #  secretName: secret-mongo-host
-    #  type: Opaque
+    # - data:
+    #   - key: MONGO_HOST
+    #     objectName: host
+    #   secretName: secret-mongo-host
+    #   type: Opaque
 
-##########################################################
-# Expose Application on Forecastle Dashboard
-# https://github.com/stakater/Forecastle
-##########################################################
 forecastle:
+  # -- (bool) Deploy a [ForecastleApp](https://github.com/stakater/Forecastle) resource.
+  # @section -- ForecastleApp Parameters
   enabled: false
-
-  # Add additional labels on Forecastle Custom Resource
+  # -- (object) Additional labels for ForecastleApp.
+  # @section -- ForecastleApp Parameters
   additionalLabels:
-
-  # URL of the icon for the custom app
+  # -- (string) Icon URL.
+  # @section -- ForecastleApp Parameters
   icon: https://raw.githubusercontent.com/stakater/ForecastleIcons/master/stakater-big.png
-  
-  # Name of the application to be displayed on the Forecastle Dashboard
-  displayName: "application"
-  
-  # Group for the custom app (default: .Release.Namespace)
+  # -- (string) Application Name.
+  # Required if `forecastle.enabled` is set to `true`.
+  # @section -- ForecastleApp Parameters
+  displayName: ""
+  # -- (string) Application Group.
+  # @default -- `{{ .Release.Namespace }}`
+  # @section -- ForecastleApp Parameters
   group: ""
-
-  # Add properties to Custom Resource
+  # -- (object) Custom properties.
+  # @section -- ForecastleApp Parameters
   properties:
-
-  # Whether app is network restricted or not
+    # Owner: foo
+  # -- (bool) Is application network restricted?.
+  # @section -- ForecastleApp Parameters
   networkRestricted: false
 
-##########################################################
-# Role Based Access Control (RBAC)
-##########################################################
 rbac:
+  # -- (bool) Enable RBAC.
+  # @section -- RBAC Parameters
   enabled: true
-
-  # Service Account to use by pods
   serviceAccount:
+    # -- (bool) Deploy Service Account.
+    # @section -- RBAC Parameters
     enabled: false
+    # -- (string) Service Account Name.
+    # @default -- `{{ include "application.name" $ }}`
+    # @section -- RBAC Parameters
     name: ""
-
-    # Additional Labels on service account
+    # -- (object) Additional labels for Service Account.
+    # @section -- RBAC Parameters
     additionalLabels:
       # key: value
-
-    # Annotations on service account 
+    # -- (object) Annotations for Service Account.
+    # @section -- RBAC Parameters
     annotations:
       # key: value
-
-  # Create Roles (Namespaced)
+  # -- (list) Namespaced Roles.
+  # @section -- RBAC Parameters
   roles:
   # - name: configmaps
   #   rules:
@@ -541,17 +689,22 @@ rbac:
   #     verbs:
   #     - get
 
-##########################################################
-# Additional ConfigMaps
-##########################################################
 configMap:
+  # -- (bool) Deploy additional ConfigMaps.
+  # @section -- ConfigMap Parameters
   enabled: false
+  # -- (object) Additional labels for ConfigMaps.
+  # @section -- ConfigMap Parameters
   additionalLabels:
     # key: value
+  # -- (object) Annotations for ConfigMaps.
+  # @section -- ConfigMap Parameters
   annotations:
     # key: value
+  # -- (object) List of ConfigMap entries.
+  # Key will be used as a name suffix for the ConfigMap. Value is the ConfigMap content.
+  # @section -- ConfigMap Parameters
   files:
-  #   nameSuffix of configMap
   #  code-config:
   #     key1: value1
   #     key2: value2
@@ -559,94 +712,110 @@ configMap:
   #     key1: value1
   #     key2: value2
 
-##########################################################
-# SealedSecrets
-##########################################################
 sealedSecret:
+  # -- (bool) Deploy [SealedSecret](https://github.com/bitnami-labs/sealed-secrets) resources.
+  # @section -- SealedSecret Parameters
   enabled: false
+  # -- (object) Additional labels for SealedSecret.
+  # @section -- SealedSecret Parameters
   additionalLabels:
-    #key: value
+    # key: value
+  # -- (object) Annotations for SealedSecret.
+  # @section -- SealedSecret Parameters
   annotations:
-    #key: value
+    # key: value
+  # -- (object) List of SealedSecret entries.
+  # Key will be used as a name suffix for the SealedSecret. Value is the SealedSecret content.
+  # @section -- SealedSecret Parameters
   files:
-#  #nameSuffix of sealedSecret
-#     example:
-#       encryptedData:
-#         name: AgBghrdepGMKmp/rdtJrkBv/CWpJbtmoMsbKQ7QiZZ2kUoLeeTbrDnhmJY03kWKkNW4kN/sQRf6r1vvBEaR4nkHt5f/ayAeaH3NveI3bdb0xv/svvWjyjehwqwr/kNEAVWxRoUij0Y7MyIEAr4hnV2UnrhgvcjPJLNA8bK6spA+kuT328Vpyceyvnm6yArNn1aYlEckaFHrnculHWRpG73iRYxS5GWAY7EdkLXx7OLLWoopHtLcupklYyPfraJzPvBNZ5/PsyjlUBvoQbGV3cZlrdEj1WHj2S1RQ13ddf2WGtMHmY83t9B3LFZAZuA7BBt4rjludbwQm3/tJ5Kas1dDsSIRIIF7MTeum9YfRB8XUz8IxVKQ/JDskeynrWe3VzN/3HFVnv9GGFy+BCVXZKVU/roIRancz+nXkyoOHS722ZpBi53dfLItoS5dG+0EzArMTQzK/KXHz3b1rxp5oWWDNt3WggTiSg2zwy5ZR8VV2ToTDof6UrFmbCZv/kKriyxbVSxIo3KFnvuRiUZ5MwC0TNut4mW3LKyJfHqkUuLa1mYV6tKF58qBnoj/+JaibAIBEudT9hms5U52p7/jKmgHuop7XPEsz4OVwER//Vbv7X6ctoXtyPu6mZyOfOyJHM8Qj/H7/gwMBYhZHQ96DWrVmZOsWSRpZGJni4Xm7rgt2cFj6UtWv6lvl8aOi/HSZVC3TwWZ9mQrk
-#       annotations:
-#         key: value
-#       labels:
-#         key: value
-#       clusterWide: true
-#     example2:
-#       encryptedData:
-#         name: AgBghrdepGMKmp/rdtJrkBv/CWpJbtmoMsbKQ7QiZZ2kUoLeeTbrDnhmJY03kWKkNW4kN/sQRf6r1vvBEaR4nkHt5f/ayAeaH3NveI3bdb0xv/svvWjyjehwqwr/kNEAVWxRoUij0Y7MyIEAr4hnV2UnrhgvcjPJLNA8bK6spA+kuT328Vpyceyvnm6yArNn1aYlEckaFHrnculHWRpG73iRYxS5GWAY7EdkLXx7OLLWoopHtLcupklYyPfraJzPvBNZ5/PsyjlUBvoQbGV3cZlrdEj1WHj2S1RQ13ddf2WGtMHmY83t9B3LFZAZuA7BBt4rjludbwQm3/tJ5Kas1dDsSIRIIF7MTeum9YfRB8XUz8IxVKQ/JDskeynrWe3VzN/3HFVnv9GGFy+BCVXZKVU/roIRancz+nXkyoOHS722ZpBi53dfLItoS5dG+0EzArMTQzK/KXHz3b1rxp5oWWDNt3WggTiSg2zwy5ZR8VV2ToTDof6UrFmbCZv/kKriyxbVSxIo3KFnvuRiUZ5MwC0TNut4mW3LKyJfHqkUuLa1mYV6tKF58qBnoj/+JaibAIBEudT9hms5U52p7/jKmgHuop7XPEsz4OVwER//Vbv7X6ctoXtyPu6mZyOfOyJHM8Qj/H7/gwMBYhZHQ96DWrVmZOsWSRpZGJni4Xm7rgt2cFj6UtWv6lvl8aOi/HSZVC3TwWZ9mQrk
+#   example:
+#     encryptedData:
+#       name: AgBghrdepGMKmp/rdtJrkBv/CWpJbtmoMsbKQ7QiZZ2kUoLeeTbrDnhmJY03kWKkNW4kN/sQRf6r1vvBEaR4nkHt5f/ayAeaH3NveI3bdb0xv/svvWjyjehwqwr/kNEAVWxRoUij0Y7MyIEAr4hnV2UnrhgvcjPJLNA8bK6spA+kuT328Vpyceyvnm6yArNn1aYlEckaFHrnculHWRpG73iRYxS5GWAY7EdkLXx7OLLWoopHtLcupklYyPfraJzPvBNZ5/PsyjlUBvoQbGV3cZlrdEj1WHj2S1RQ13ddf2WGtMHmY83t9B3LFZAZuA7BBt4rjludbwQm3/tJ5Kas1dDsSIRIIF7MTeum9YfRB8XUz8IxVKQ/JDskeynrWe3VzN/3HFVnv9GGFy+BCVXZKVU/roIRancz+nXkyoOHS722ZpBi53dfLItoS5dG+0EzArMTQzK/KXHz3b1rxp5oWWDNt3WggTiSg2zwy5ZR8VV2ToTDof6UrFmbCZv/kKriyxbVSxIo3KFnvuRiUZ5MwC0TNut4mW3LKyJfHqkUuLa1mYV6tKF58qBnoj/+JaibAIBEudT9hms5U52p7/jKmgHuop7XPEsz4OVwER//Vbv7X6ctoXtyPu6mZyOfOyJHM8Qj/H7/gwMBYhZHQ96DWrVmZOsWSRpZGJni4Xm7rgt2cFj6UtWv6lvl8aOi/HSZVC3TwWZ9mQrk
+#     annotations:
+#       key: value
+#     labels:
+#       key: value
+#     clusterWide: true
+#   example2:
+#     encryptedData:
+#       name: AgBghrdepGMKmp/rdtJrkBv/CWpJbtmoMsbKQ7QiZZ2kUoLeeTbrDnhmJY03kWKkNW4kN/sQRf6r1vvBEaR4nkHt5f/ayAeaH3NveI3bdb0xv/svvWjyjehwqwr/kNEAVWxRoUij0Y7MyIEAr4hnV2UnrhgvcjPJLNA8bK6spA+kuT328Vpyceyvnm6yArNn1aYlEckaFHrnculHWRpG73iRYxS5GWAY7EdkLXx7OLLWoopHtLcupklYyPfraJzPvBNZ5/PsyjlUBvoQbGV3cZlrdEj1WHj2S1RQ13ddf2WGtMHmY83t9B3LFZAZuA7BBt4rjludbwQm3/tJ5Kas1dDsSIRIIF7MTeum9YfRB8XUz8IxVKQ/JDskeynrWe3VzN/3HFVnv9GGFy+BCVXZKVU/roIRancz+nXkyoOHS722ZpBi53dfLItoS5dG+0EzArMTQzK/KXHz3b1rxp5oWWDNt3WggTiSg2zwy5ZR8VV2ToTDof6UrFmbCZv/kKriyxbVSxIo3KFnvuRiUZ5MwC0TNut4mW3LKyJfHqkUuLa1mYV6tKF58qBnoj/+JaibAIBEudT9hms5U52p7/jKmgHuop7XPEsz4OVwER//Vbv7X6ctoXtyPu6mZyOfOyJHM8Qj/H7/gwMBYhZHQ96DWrVmZOsWSRpZGJni4Xm7rgt2cFj6UtWv6lvl8aOi/HSZVC3TwWZ9mQrk
 
-##########################################################
-# Additional Secrets
-##########################################################
 secret:
+  # -- (bool) Deploy additional Secret resources.
+  # @section -- Secret Parameters
   enabled: false
+  # -- (object) Additional labels for Secret.
+  # @section -- Secret Parameters
   additionalLabels:
     # key: value
+  # -- (object) Annotations for Secret.
+  # @section -- Secret Parameters
   annotations:
     # key: value
+  # -- (object) List of Secrets entries.
+  # Key will be used as a name suffix for the Secret.
+  # There a three allowed modes:
+  # - `data`: Data is base64 encoded by the chart
+  # - `encodedData`: Use raw values (already base64ed) inside the data map
+  # - `stringData`: Use raw values inside the stringData map
+  # @section -- Secret Parameters
   files:
-#  nameSuffix of Secret
-#   credentials:
-#     data:
-#       secretKey1: secretValue1
-#       secretKey2: secretValue2
-#   password:
-#     data:
-#       secretKey1: secretValue1
-#       secretKey2: secretValue2
-#   apiKey:
-#     stringData:
-#       secretKey1: secretValue1
-#       secretKey2: secretValue2
-#   secondApiKeu:
-#     encodedData:
-#       secretKey1: dGVzdFZhbHVl
-#       secretKey2: dGVzdFZhbHVl
+    # credentials:
+    #   data:
+    #     secretKey1: secretValue1
+    #     secretKey2: secretValue2
+    # password:
+    #   data:
+    #     secretKey1: secretValue1
+    #     secretKey2: secretValue2
+    # apiKey:
+    #   stringData:
+    #     secretKey1: secretValue1
+    #     secretKey2: secretValue2
+    # secondApiKeu:
+    #   encodedData:
+    #     secretKey1: dGVzdFZhbHVl
+    #     secretKey2: dGVzdFZhbHVl
 
-##########################################################
-# Service Monitor to collect Prometheus metrices
-##########################################################
 serviceMonitor:
+  # -- (bool) Deploy a ServiceMonitor (Prometheus Operator) resource.
+  # @section -- ServiceMonitor Parameters
   enabled: false
-
-  # Additional labels
+  # -- (object) Additional labels for ServiceMonitor.
+  # @section -- ServiceMonitor Parameters
   additionalLabels:
     # key: value
-
-  # Additional annotations
+  # -- (object) Annotations for ServiceMonitor.
+  # @section -- ServiceMonitor Parameters
   annotations:
     # key: value
-
-  # List of the endpoints of service from which prometheus will scrape data
+  # -- (list) Service endpoints from which prometheus will scrape data.
+  # @section -- ServiceMonitor Parameters
   endpoints:
   - interval: 5s
     path: /actuator/prometheus
     port: http
 
-##########################################################
-# HPA - Horizontal Pod Autoscaling
-##########################################################
 autoscaling:
-# enabled is a boolean flag for enabling or disabling autoscaling
+  # -- (bool) Enable Horizontal Pod Autoscaling.
+  # @section -- Autoscaling - Horizontal Pod Autoscaling Parameters
   enabled: false
-# additionalLabels defines additional labels
+  # -- (object) Additional labels for HPA.
+  # @section -- Autoscaling - Horizontal Pod Autoscaling Parameters
   additionalLabels:
     # key: value
-# annotations defines annotations in key value pair
+  # -- (object) Annotations for HPA.
+  # @section -- Autoscaling - Horizontal Pod Autoscaling Parameters
   annotations:
     # key: value
-# minReplicas sets the minimum number of replicas
+  # -- (int) Minimum number of replicas.
+  # @section -- Autoscaling - Horizontal Pod Autoscaling Parameters
   minReplicas: 1
-# maxReplicas sets the maximum number of replicas
+  # -- (int) Maximum number of replicas.
+  # @section -- Autoscaling - Horizontal Pod Autoscaling Parameters
   maxReplicas: 10
-# metrics is the list of metrics used for hpa
+  # -- (list) Metrics used for autoscaling.
+  # @section -- Autoscaling - Horizontal Pod Autoscaling Parameters
   metrics:
   - type: Resource
     resource:
@@ -661,55 +830,62 @@ autoscaling:
          type: Utilization
          averageUtilization: 60
 
-##########################################################
-# VPA - Vertical Pod Autoscaling
-##########################################################
 vpa:
-# enabled is a boolean flag for enabling or disabling vpa 
+  # -- (bool) Enable Vertical Pod Autoscaling.
+  # @section -- VPA - Vertical Pod Autoscaler Parameters
   enabled: false
-# additionalLabels defines additional labels
+  # -- (object) Additional labels for VPA.
+  # @section -- VPA - Vertical Pod Autoscaler Parameters
   additionalLabels:
     # key: value
-# annotations defines annotations in key value pair
+  # -- (object) Annotations for VPA.
+  # @section -- VPA - Vertical Pod Autoscaler Parameters
   annotations:
     # key: value
-# container policies for individual containers.
+  # -- (list) Container policies for individual containers.
+  # @section -- VPA - Vertical Pod Autoscaler Parameters
   containerPolicies: []
+  # -- (object) Update policy.
+  # @section -- VPA - Vertical Pod Autoscaler Parameters
   updatePolicy:
     updateMode: Auto
 
-##########################################################
-# EndpointMonitor for IMC
-# https://github.com/stakater/IngressMonitorController
-##########################################################
 endpointMonitor:
+  # -- (bool) Deploy an [IMC EndpointMonitor](https://github.com/stakater/IngressMonitorController) resource.
+  # @section -- EndpointMonitor Parameters
   enabled: false
-
-  # Additional labels
+  # -- (object) Additional labels for EndpointMonitor.
+  # @section -- EndpointMonitor Parameters
   additionalLabels:
     # key: value
-
-  # Additional annotations
+  # -- (object) Annotations for EndpointMonitor.
+  # @section -- EndpointMonitor Parameters
   annotations:
     # key: value
 
-##########################################################
-# Certficate CRD to generate the certificate
-##########################################################
 certificate:
+  # -- (bool) Deploy a [cert-manager Certificate](https://cert-manager.io) resource.
+  # @section -- cert-manager Certificate Parameters
   enabled: false
-
-  # Additional labels
+  # -- (object) Additional labels for Certificate.
+  # @section -- cert-manager Certificate Parameters
   additionalLabels:
     # key: value
-
-  # Additional annotations
+  # -- (object) Annotations for Certificate.
+  # @section -- cert-manager Certificate Parameters
   annotations:
     # key: value
-
+  # -- (tpl/string) Name of the secret resource that will be automatically created and managed by this Certificate resource.
+  # @section -- cert-manager Certificate Parameters
   secretName: tls-cert
+  # -- (string) The requested "duration" (i.e. lifetime) of the Certificate.
+  # @section -- cert-manager Certificate Parameters
   duration: 8760h0m0s # 1 year
+  # -- (string) The amount of time before the currently issued certificate's notAfter time that cert-manager will begin to attempt to renew the certificate.
+  # @section -- cert-manager Certificate Parameters
   renewBefore: 720h0m0s # 30d
+  # -- (tpl/object) Full X509 name specification for certificate.
+  # @section -- cert-manager Certificate Parameters
   subject:
   #  organizations:
   #    - stakater
@@ -721,54 +897,104 @@ certificate:
   #    - Stockholm
   #  provinces:
   #    - Stockholm
+  # -- (string) Common name as specified on the DER encoded CSR.
+  # @section -- cert-manager Certificate Parameters
   commonName: admin-app
+  # -- (string) Private key algorithm of the corresponding private key for this certificate.
+  # @section -- cert-manager Certificate Parameters
   keyAlgorithm: rsa
+  # -- (string) Private key cryptography standards (PKCS) for this certificate's private key to be encoded in.
+  # @section -- cert-manager Certificate Parameters
   keyEncoding: pkcs1
+  # -- (int) Key bit size of the corresponding private key for this certificate.
+  # @section -- cert-manager Certificate Parameters
   keySize: 2048
+  # -- (bool) Mark this Certificate as valid for certificate signing.
+  # @section -- cert-manager Certificate Parameters
   isCA: false
+  # -- (list) Set of x509 usages that are requested for the certificate.
+  # @section -- cert-manager Certificate Parameters
   usages:
   #  - digital signature
   #  - client auth
+  # -- (tpl/list) List of DNS subjectAltNames to be set on the certificate.
+  # @section -- cert-manager Certificate Parameters
   dnsNames:
   #  - admin-app
+  # -- (list) List of IP address subjectAltNames to be set on the certificate.
+  # @section -- cert-manager Certificate Parameters
   ipAddresses:
   #  - 192.168.0.5
+  # -- (list) List of URI subjectAltNames to be set on the certificate.
+  # @section -- cert-manager Certificate Parameters
   uriSANs:
   #  - spiffe://cluster.local/ns/sandbox/sa/example
+  # -- (list) List of email subjectAltNames to be set on the Certificate.
+  # @section -- cert-manager Certificate Parameters
   emailSANs:
-  #  - emailSubjectAltNames
+  #  - foo@bar.tld
   privateKey:
+    # -- (bool) Enable Private Key for the certificate.
+    # @section -- cert-manager Certificate Parameters
     enabled: false
+    # -- (string) Denotes how private keys should be generated or sourced when a certificate is being issued.
+    # @section -- cert-manager Certificate Parameters
     rotationPolicy: Always
   issuerRef:
+    # -- (string) Reference to the issuer for this certificate.
+    # @section -- cert-manager Certificate Parameters
     name: ca-issuer
-    # We can reference ClusterIssuers by changing the kind here.
+    # -- (string) Kind of the issuer being referred to.
+    # @section -- cert-manager Certificate Parameters
     kind: ClusterIssuer
-    group: #cert-manager.io
+    # kind: Issuer
+    # -- (string) Group of the issuer resource being refered to.
+    # @section -- cert-manager Certificate Parameters
+    group: cert-manager.io
   keystores:
+    # -- (bool) Enables keystore configuration.
+    # Keystores configures additional keystore output formats stored in the spec.secretName Secret resource.
+    # @section -- cert-manager Certificate Parameters
     enabled: false
     pkcs12:
+      # -- (bool) Enables PKCS12 keystore creation for the Certificate.
+      # PKCS12 configures options for storing a PKCS12 keystore in the spec.secretName Secret resource.
+      # @section -- cert-manager Certificate Parameters
       create: true
+      # -- (string) Key of the entry in the Secret resource's data field to be used.
+      # @section -- cert-manager Certificate Parameters
       key: test_key
+      # -- (string) Name of the Secret resource being referred to.
+      # @section -- cert-manager Certificate Parameters
       name: test-creds
     jks:
+      # -- (bool) Enables jks keystore creation for the Certificate.
+      # JKS configures options for storing a JKS keystore in the spec.secretName Secret resource.
+      # @section -- cert-manager Certificate Parameters
       create: false
+      # -- (tpl/string) Key of the entry in the Secret resource's data field to be used.
+      # @section -- cert-manager Certificate Parameters
       key: test_key
+      # -- (string) Name of the Secret resource being referred to.
+      # @section -- cert-manager Certificate Parameters
       name: test-creds
 
-##########################################################
-# AlertmanagerConfig object for defining application
-# specific alertmanager configurations
-##########################################################
 alertmanagerConfig:
+  # -- (bool) Deploy an AlertmanagerConfig (Prometheus Operator) resource.
+  # @section -- AlertmanagerConfig Parameters
   enabled: false
-
-  # AlertmanagerConfig selectionLabels to specify label to be picked up by Alertmanager to add it to base config. Read more about it at [https://docs.openshift.com/container-platform/4.7/rest_api/monitoring_apis/alertmanager-monitoring-coreos-com-v1.html] under .spec.alertmanagerConfigSelector
+  # -- (object) Labels to be picked up by Alertmanager to add it to base config.
+  # Read more about it at [https://docs.openshift.com/container-platform/4.7/rest_api/monitoring_apis/alertmanager-monitoring-coreos-com-v1.html](OpenShift's AlermanagerConfig documentation) under .spec.alertmanagerConfigSelector.
+  # @section -- AlertmanagerConfig Parameters
   selectionLabels:
-    alertmanagerConfig: "workload"
-
-  # AlertmanagerConfig spec, read details here [https://docs.openshift.com/container-platform/4.7/rest_api/monitoring_apis/alertmanagerconfig-monitoring-coreos-com-v1alpha1.html]
+    alertmanagerConfig: workload
+  # -- (object) AlertmanagerConfig spec.
+  # Read more about it at [https://docs.openshift.com/container-platform/4.7/rest_api/monitoring_apis/alertmanagerconfig-monitoring-coreos-com-v1alpha1.html](OpenShift's AlermanagerConfig documentation).
+  # @section -- AlertmanagerConfig Parameters
   spec:
+    # -- (object) Route definition for alerts matching the resource’s namespace.
+    # It will be added to the generated Alertmanager configuration as a first-level route.
+    # @section -- AlertmanagerConfig Parameters
     route:
     #   receiver: "null"
     #   groupBy:
@@ -782,8 +1008,12 @@ alertmanagerConfig:
     #   groupWait: 30s
     #   groupInterval: 5m
     #   repeatInterval: 12h
+    # -- (list) List of receivers.
+    # @section -- AlertmanagerConfig Parameters
     receivers: []
     # - name: "null"
+    # -- (list) Inhibition rules that allows to mute alerts when other alerts are already firing.
+    # @section -- AlertmanagerConfig Parameters
     inhibitRules: []
     # - sourceMatch:
     #     severity: 'critical'
@@ -791,20 +1021,18 @@ alertmanagerConfig:
     #     severity: 'warning'
     #   equal: ['cluster', 'service']
 
-##########################################################
-# PrometheusRule object for defining application
-# alerting rules
-##########################################################
 prometheusRule:
+  # -- (bool) Deploy a PrometheusRule (Prometheus Operator) resource.
+  # @section -- PrometheusRule Parameters
   enabled: false
-
-  # PrometheusRule labels
+  # -- (object) Additional labels for PrometheusRule.
+  # @section -- PrometheusRule Parameters
   additionalLabels:
     # prometheus: stakater-workload-monitoring
     # role: alert-rules
-
-  # Groups with alerting rules. Read more here [https://docs.openshift.com/container-platform/4.7/rest_api/monitoring_apis/prometheusrule-monitoring-coreos-com-v1.html]
-
+  # -- (list) Groups with alerting rules.
+  # Read more about it at [https://docs.openshift.com/container-platform/4.7/rest_api/monitoring_apis/prometheusrule-monitoring-coreos-com-v1.html](OpenShift's PrometheusRule documentation).
+  # @section -- PrometheusRule Parameters
   groups: []
     # - name: example-app-uptime
     #   rules:
@@ -817,46 +1045,69 @@ prometheusRule:
     #       labels:
     #         severity: critical
 
-##########################################################
-# External Secrets
-##########################################################
 externalSecret:
+  # -- (bool) Deploy [ExternalSecret](https://external-secrets.io/latest/) resources.
+  # @section -- ExternalSecret Parameters
   enabled: false
-
-  # Default SecretStore for all externalsecrets defines which SecretStore to use when fetching the secret data
-  secretStore:
-    name: tenant-vault-secret-store
-    #kind: ClusterSecretStore # Defaults to SecretStore if not specified 
-
-  # RefreshInterval is the amount of time before the values reading again from the SecretStore provider
-  refreshInterval: "1m"
-  files:
-    # mongodb:
-    # # Data defines the connection between the Kubernetes Secret keys and the Provider data
-    #   data:
-    #      mongo-password:
-    #        remoteRef: 
-    #           key: monodb
-    #           property: passowrd
-    #   secretStore:
-    #      name: secret-store-name-2    # specify if value is other than default secretstore
-    #   labels:
-    #      stakater.com/app: mongodb 
-    #   #
-    # postgres:
-      ## Used to fetch all properties from the Provider key
-      #   dataFrom:
-      #     key: postgres
-
-##########################################################
-# Network Policy
-##########################################################
-networkPolicy:
-  enabled: false
+  # -- (object) Additional labels for ExternalSecret.
+  # @section -- ExternalSecret Parameters
   additionalLabels:
   #   key: value
+  # -- (object) Annotations for ExternalSecret.
+  # @section -- ExternalSecret Parameters
   annotations:
   #   key: value
+  # -- (object) Default values for the SecretStore.
+  # Can be overriden per ExternalSecret in the `externalSecret.files` object.
+  # @section -- ExternalSecret Parameters
+  secretStore:
+    # -- (string) Name of the SecretStore to use.
+    # @section -- ExternalSecret Parameters
+    name: tenant-vault-secret-store
+    # -- (string) Kind of the SecretStore being refered to.
+    # @section -- ExternalSecret Parameters
+    kind: SecretStore
+    #kind: ClusterSecretStore
+  # -- (string) RefreshInterval is the amount of time before the values are read again from the SecretStore provider.
+  # @section -- ExternalSecret Parameters
+  refreshInterval: "1m"
+  # -- (object) List of ExternalSecret entries.
+  # Key will be used as a name suffix for the ExternalSecret.
+  # There a two allowed modes:
+  # - `data`: Data defines the connection between the Kubernetes Secret keys and the Provider data
+  # - `dataFrom`: Used to fetch all properties from the Provider key
+  # @section -- ExternalSecret Parameters
+  files:
+    # mongodb:
+    #   data:
+    #      mongo-password:
+    #        remoteRef:
+    #           key: monodb
+    #           property: password
+    #   secretStore:
+    #      name: secret-store-name-2
+    #   labels:
+    #      stakater.com/app: mongodb
+    #   annotations:
+    #      key: value
+    # postgres:
+    #   dataFrom:
+    #     key: postgres
+
+networkPolicy:
+  # -- (bool) Enable Network Policy.
+  # @section -- NetworkPolicy Parameters
+  enabled: false
+  # -- (object) Additional labels for Network Policy.
+  # @section -- NetworkPolicy Parameters
+  additionalLabels:
+  #   key: value
+  # -- (object) Annotations for Network Policy.
+  # @section -- NetworkPolicy Parameters
+  annotations:
+  #   key: value
+  # -- (list) Ingress rules for Network Policy.
+  # @section -- NetworkPolicy Parameters
   ingress:
   # - from:
   #   - ipBlock:
@@ -872,6 +1123,8 @@ networkPolicy:
   #   ports:
   #   - protocol: TCP
   #     port: 6379
+  # -- (list) Egress rules for Network Policy.
+  # @section -- NetworkPolicy Parameters
   egress:
   #   - to:
   #     - ipBlock:
@@ -880,46 +1133,42 @@ networkPolicy:
   #     - protocol: TCP
   #       port: 5978
 
-##########################################################
-# Pod disruption budget - PDB
-##########################################################
 pdb:
+  # -- (bool) Enable Pod Disruption Budget.
+  # @section -- PodDisruptionBudget Parameters
   enabled: false
+  # -- (int) Minimum number of pods that must be available after eviction.
+  # @section -- PodDisruptionBudget Parameters
   minAvailable: 1
-# maxUnavailable: 1
+  # -- (int) Maximum number of unavailable pods during voluntary disruptions.
+  # @section -- PodDisruptionBudget Parameters
+  maxUnavailable:
+  # maxUnavailable: 1
 
-##########################################################
-# grafanaDashboard object for defining application
-# Grafana Dashboard
-##########################################################
 grafanaDashboard:
+  # -- (bool) Deploy [GrafanaDashboard](https://github.com/grafana/grafana-operator) resources.
+  # @section -- GrafanaDashboard Parameters
   enabled: false
-
-  # GrafanaDashboard additonal labels
+  # -- (object) Additional labels for GrafanaDashboard.
+  # @section -- GrafanaDashboard Parameters
   additionalLabels:
     # grafanaDashboard: grafana-operator
-
-  # GrafanaDashboard annotations
+  # -- (object) Annotations for GrafanaDashboard.
+  # @section -- GrafanaDashboard Parameters
   annotations:
     # key: value
-
-  # GrafanaDashboard contents
-  # this includes pairs of dashboard name and associated json content
-  # Accoroding to GrafanaDashboard behavior, if both url and json are specified then the GrafanaDashboard content will be updated with fetched content from url
+  # -- (object) List of GrafanaDashboard entries.
+  # Key will be used as a name suffix for the GrafanaDashboard. Value is the GrafanaDashboard content.
+  # According to GrafanaDashboard behavior, `url` field takes precedence on the `json` field.
+  # @section -- GrafanaDashboard Parameters
   contents:
     # dashboard-name-1:
     #   json: |-
     #     {
     #       "data"
     #     }
-    #   url: http://hostname/path/to/file.json
     # dashboard-name-2:
-    #   json: |-
-    #     {
-    #       "data"
-    #     }
     #   url: http://hostname/path/to/file.json
-    
     # dashboard-test-name-2:
     #   allowCrossNamespaceImport: true
     #   configMapRef:
@@ -933,8 +1182,37 @@ grafanaDashboard:
     #     matchLabels:
     #       app: test-2
 
-##########################################################
-# Backup object for creating back using OADP/Velero
-##########################################################
 backup:
+  # -- (bool) Deploy a [Velero/OADP Backup](https://velero.io/docs/main/api-types/backup/) resource.
+  # @section -- Backup Parameters
   enabled: false
+  # -- (string) Namespace for Backup.
+  # @default -- `{{ .Release.Namespace }}`
+  # @section -- Backup Parameters
+  namespace:
+  # -- (object) Additional labels for Backup.
+  # @section -- Backup Parameters
+  additionalLabels:
+    # grafanaDashboard: grafana-operator
+  # -- (object) Annotations for Backup.
+  # @section -- Backup Parameters
+  annotations:
+    # key: value
+  # -- (bool) Whether to use Restic to take snapshots of all pod volumes by default.
+  # @section -- Backup Parameters
+  defaultVolumesToRestic: true
+  # -- (bool) Whether to take snapshots of persistent volumes as part of the backup.
+  # @section -- Backup Parameters
+  snapshotVolumes: true
+  # -- (string) Name of the backup storage location where the backup should be stored.
+  # @section -- Backup Parameters
+  storageLocation:
+  # -- (string) How long the Backup should be retained for.
+  # @section -- Backup Parameters
+  ttl: "1h0m0s"
+  # -- (list) List of resource types to include in the backup.
+  # @section -- Backup Parameters
+  includedResources:
+  # -- (list) List of resource types to exclude from the backup.
+  # @section -- Backup Parameters
+  excludedResources:

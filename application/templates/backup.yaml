@@ -5,17 +5,24 @@ metadata:
   name: {{ printf "%s-backup" .Values.applicationName | trunc 63 | quote }}
   namespace: {{ .Values.backup.namespace | default ( include "application.namespace" . ) | quote }}
   labels:
-  {{- include "application.labels" . | nindent 4 }}
+  {{- include "application.labels" $ | nindent 4 }}
+{{- if .Values.backup.additionalLabels }}
+{{ toYaml .Values.backup.additionalLabels | indent 4 }}
+{{- end }}
+{{- if .Values.backup.annotations }}
+  annotations:
+{{ toYaml .Values.backup.annotations | indent 4 }}
+{{- end }}
 spec:
   labelSelector:
     matchLabels:
        app.kubernetes.io/part-of: {{ include "application.name" . }}
   includedNamespaces:
     - {{ include "application.namespace" . }}
-  defaultVolumesToRestic: {{  .Values.backup.defaultVolumesToRestic | default true }}
-  snapshotVolumes: {{ .Values.backup.snapshotVolumes | default true }}
+  defaultVolumesToRestic: {{  .Values.backup.defaultVolumesToRestic }}
+  snapshotVolumes: {{ .Values.backup.snapshotVolumes }}
   storageLocation: {{ .Values.backup.storageLocation | quote }}
-  ttl: {{ .Values.backup.ttl | default "1h0m0s" }}
+  ttl: {{ .Values.backup.ttl }}
 {{- if .Values.backup.includedResources }}
   includedResources:
 {{ toYaml .Values.backup.includedResources | indent 4 }}

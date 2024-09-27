@@ -6,7 +6,7 @@ metadata:
   name: {{ template "application.name" . }}-svc-monitor
   namespace: {{ include "application.namespace" . }}
   labels:
-  {{- include "application.labels" . | nindent 4 }}
+  {{- include "application.labels" $ | nindent 4 }}
 {{- if .Values.serviceMonitor.additionalLabels }}
 {{ toYaml .Values.serviceMonitor.additionalLabels | indent 4 }}
 {{- end }}
@@ -19,7 +19,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-{{ include "application.labels" . | indent 6 }}
+{{ include "application.labels" $ | indent 6 }}
   namespaceSelector:
     matchNames:
     - {{ include "application.namespace" . }}

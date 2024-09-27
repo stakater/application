@@ -10,7 +10,7 @@ metadata:
 {{- end }}
   namespace: {{ include "application.namespace" . }}
   labels:
-  {{- include "application.labels" . | nindent 4 }}
+  {{- include "application.labels" $ | nindent 4 }}
 {{- if .Values.persistence.additionalLabels }}
 {{ toYaml .Values.persistence.additionalLabels | indent 4 }}
 {{- end }}
@@ -31,10 +31,10 @@ spec:
   storageClassName: "{{ .Values.persistence.storageClass }}"
 {{- end }}
 {{- end }}
-{{- if .Values.persistence.volumeMode }}  
+{{- if .Values.persistence.volumeMode }}
   volumeMode: "{{ .Values.persistence.volumeMode }}"
 {{- end }}
-{{- if .Values.persistence.volumeName }}  
+{{- if .Values.persistence.volumeName }}
   volumeName: "{{ .Values.persistence.volumeName }}"
 {{- end }}
 {{- end }}

@@ -1,0 +1,134 @@
+suite: VerticalPodAutoscaler
+
+templates:
+  - vpa.yaml
+
+tests:
+  - it: does not render when VPA is not enabled
+    set:
+      vpa:
+        enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: does not render when the API version is not available
+    set:
+      vpa:
+        enabled: true
+      capabilities:
+        apiVersions:
+          - "v1"
+    asserts:
+      - failedTemplate:
+          errorMessage: "There is no VerticalPodAutoscaler resource definition in the target cluster!"
+
+  - it: renders a basic VerticalPodAutoscaler with minimal configuration
+    set:
+      applicationName: example
+      vpa:
+        enabled: true
+        containerPolicies:
+          - containerName: "*"
+            minAllowed:
+              cpu: "100m"
+              memory: "128Mi"
+            maxAllowed:
+              cpu: "500m"
+              memory: "512Mi"
+        updatePolicy:
+          updateMode: "Auto"
+    capabilities:
+      apiVersions:
+        - "autoscaling.k8s.io/v1/VerticalPodAutoscaler"
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: VerticalPodAutoscaler
+      - equal:
+          path: metadata.name
+          value: example
+      - equal:
+          path: spec.targetRef.kind
+          value: Deployment
+      - equal:
+          path: spec.resourcePolicy.containerPolicies[0].minAllowed.cpu
+          value: "100m"
+
+  - it: renders VerticalPodAutoscaler with additional labels
+    set:
+      vpa:
+        enabled: true
+        additionalLabels:
+          custom: label
+        containerPolicies:
+          - containerName: "*"
+            minAllowed:
+              cpu: "100m"
+              memory: "128Mi"
+            maxAllowed:
+              cpu: "500m"
+              memory: "512Mi"
+        updatePolicy:
+          updateMode: "Auto"
+    capabilities:
+      apiVersions:
+        - "autoscaling.k8s.io/v1/VerticalPodAutoscaler"
+    asserts:
+      - equal:
+          path: metadata.labels.custom
+          value: label
+
+  - it: renders VerticalPodAutoscaler with annotations
+    set:
+      vpa:
+        enabled: true
+        annotations:
+          custom: annotation
+        containerPolicies:
+          - containerName: "*"
+            minAllowed:
+              cpu: "100m"
+              memory: "128Mi"
+            maxAllowed:
+              cpu: "500m"
+              memory: "512Mi"
+        updatePolicy:
+          updateMode: "Auto"
+    capabilities:
+      apiVersions:
+        - "autoscaling.k8s.io/v1/VerticalPodAutoscaler"
+    asserts:
+      - equal:
+          path: metadata.annotations.custom
+          value: annotation
+
+  - it: renders VerticalPodAutoscaler with multiple container policies
+    set:
+      vpa:
+        enabled: true
+        containerPolicies:
+          - containerName: "app-container"
+            minAllowed:
+              cpu: "100m"
+              memory: "128Mi"
+            maxAllowed:
+              cpu: "500m"
+              memory: "512Mi"
+          - containerName: "sidecar-container"
+            minAllowed:
+              cpu: "50m"
+              memory: "64Mi"
+            maxAllowed:
+              cpu: "200m"
+              memory: "256Mi"
+        updatePolicy:
+          updateMode: "Auto"
+    capabilities:
+      apiVersions:
+        - "autoscaling.k8s.io/v1/VerticalPodAutoscaler"
+    asserts:
+      - equal:
+          path: spec.resourcePolicy.containerPolicies[1].containerName
+          value: sidecar-container

@@ -1,0 +1,210 @@
+suite: GrafanaDashboard
+
+templates:
+  - grafanadashboard.yaml
+
+tests:
+  - it: does not render when grafanaDashboard is not enabled
+    set:
+      grafanaDashboard:
+        enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: does not render when API version is not available
+    set:
+      grafanaDashboard:
+        enabled: true
+    capabilities:
+      apiVersions:
+        - "v1"
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: renders a basic dashboard with minimal configuration
+    set:
+      grafanaDashboard:
+        enabled: true
+        contents:
+          example-dashboard:
+            json:
+              title: "Example Dashboard"
+              panels:
+                - type: graph
+                  title: "Example Graph"
+                  targets:
+                    - target: "some_metric"
+              time: "now"
+    capabilities:
+      apiVersions:
+        - "grafana.integreatly.org/v1beta1"
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: GrafanaDashboard
+      - equal:
+          path: metadata.name
+          value: example-dashboard
+      - equal:
+          path: spec.json.title
+          value: "Example Dashboard"
+
+  - it: renders multiple dashboards
+    set:
+      grafanaDashboard:
+        enabled: true
+        contents:
+          dashboard1:
+            json: '{"dashboard": "1"}'
+          dashboard2:
+            json: '{"dashboard": "2"}'
+    capabilities:
+      apiVersions:
+        - "grafana.integreatly.org/v1beta1"
+    asserts:
+      - hasDocuments:
+          count: 2
+
+  - it: includes additional labels when specified
+    set:
+      grafanaDashboard:
+        enabled: true
+        contents:
+          test-dashboard:
+            json: '{}'
+        additionalLabels:
+          custom: label
+    capabilities:
+      apiVersions:
+        - "grafana.integreatly.org/v1beta1"
+    asserts:
+      - equal:
+          path: metadata.labels.custom
+          value: label
+
+  - it: includes annotations when specified
+    set:
+      grafanaDashboard:
+        enabled: true
+        contents:
+          test-dashboard:
+            json: '{}'
+        annotations:
+          custom: annotation
+    capabilities:
+      apiVersions:
+        - "grafana.integreatly.org/v1beta1"
+    asserts:
+      - equal:
+          path: metadata.annotations.custom
+          value: annotation
+
+  - it: renders dashboard with URL instead of JSON
+    set:
+      grafanaDashboard:
+        enabled: true
+        contents:
+          test-dashboard:
+            url: https://example.com/dashboard
+    capabilities:
+      apiVersions:
+        - "grafana.integreatly.org/v1beta1"
+    asserts:
+      - equal:
+          path: spec.url
+          value: https://example.com/dashboard
+
+  - it: includes allowCrossNamespaceImport when specified
+    set:
+      grafanaDashboard:
+        enabled: true
+        contents:
+          test-dashboard:
+            json: '{}'
+            allowCrossNamespaceImport: true
+    capabilities:
+      apiVersions:
+        - "grafana.integreatly.org/v1beta1"
+    asserts:
+      - equal:
+          path: spec.allowCrossNamespaceImport
+          value: true
+
+  - it: includes folder when specified
+    set:
+      grafanaDashboard:
+        enabled: true
+        contents:
+          test-dashboard:
+            json: '{}'
+            folder: TestFolder
+    capabilities:
+      apiVersions:
+        - "grafana.integreatly.org/v1beta1"
+    asserts:
+      - equal:
+          path: spec.folder
+          value: TestFolder
+
+  - it: includes instanceSelector when specified
+    set:
+      grafanaDashboard:
+        enabled: true
+        contents:
+          test-dashboard:
+            json: '{}'
+            instanceSelector:
+              matchLabels:
+                grafana: main
+    capabilities:
+      apiVersions:
+        - "grafana.integreatly.org/v1beta1"
+    asserts:
+      - equal:
+          path: spec.instanceSelector.matchLabels.grafana
+          value: main
+
+  - it: includes configMapRef when specified
+    set:
+      grafanaDashboard:
+        enabled: true
+        contents:
+          test-dashboard:
+            json: '{}'
+            configMapRef:
+              name: dashboard-config
+              key: dashboard.json
+    capabilities:
+      apiVersions:
+        - "grafana.integreatly.org/v1beta1"
+    asserts:
+      - equal:
+          path: spec.configMapRef.name
+          value: dashboard-config
+      - equal:
+          path: spec.configMapRef.key
+          value: dashboard.json
+
+  - it: includes datasources when specified
+    set:
+      grafanaDashboard:
+        enabled: true
+        contents:
+          test-dashboard:
+            json: '{}'
+            datasources:
+              - inputName: DS_PROMETHEUS
+                datasourceName: Prometheus
+    capabilities:
+      apiVersions:
+        - "grafana.integreatly.org/v1beta1"
+    asserts:
+      - equal:
+          path: spec.datasources[0].inputName
+          value: DS_PROMETHEUS
+      - equal:
+          path: spec.datasources[0].datasourceName
+          value: Prometheus

@@ -1,0 +1,140 @@
+suite: Forecastle
+
+templates:
+  - forecastle.yaml
+
+tests:
+  - it: does not yield ForecastleApp resource if forecastle.enabled is false
+    set:
+      forecastle:
+        enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: does not yield ForecastleApp resource if forecastle API version is not available
+    set:
+      forecastle:
+        enabled: true
+    capabilities:
+      apiVersions:
+        - apps/v1
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: does not yield ForecastleApp resource if ingress is not enabled
+    set:
+      forecastle:
+        enabled: true
+        displayName: "My App"
+        icon: "https://example.com/icon.png"
+        group: "my-group"
+        additionalLabels:
+          foo: bar
+      ingress:
+        enabled: false
+    capabilities:
+      apiVersions:
+        - forecastle.stakater.com/v1alpha1
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: yields ForecastleApp resource if enabled, API version is available, and ingress is enabled
+    set:
+      forecastle:
+        enabled: true
+        displayName: "My App"
+        icon: "https://example.com/icon.png"
+        group: "my-group"
+        additionalLabels:
+          foo: bar
+      ingress:
+        enabled: true
+    capabilities:
+      apiVersions:
+        - forecastle.stakater.com/v1alpha1
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: ForecastleApp
+
+  - it: yields ForecastleApp resource with correct metadata
+    set:
+      applicationName: "my-app"
+      forecastle:
+        enabled: true
+        displayName: "My App"
+        icon: "https://example.com/icon.png"
+        group: "my-group"
+        additionalLabels:
+          foo: bar
+      ingress:
+        enabled: true
+    capabilities:
+      apiVersions:
+        - forecastle.stakater.com/v1alpha1
+    asserts:
+      - equal:
+          path: metadata.name
+          value: "my-app"
+      - equal:
+          path: metadata.labels.foo
+          value: bar
+
+  - it: yields ForecastleApp resource with correct namespace
+    set:
+      forecastle:
+        enabled: true
+        displayName: "My App"
+        icon: "https://example.com/icon.png"
+        group: "my-group"
+      ingress:
+        enabled: true
+    capabilities:
+      apiVersions:
+        - forecastle.stakater.com/v1alpha1
+    asserts:
+      - equal:
+          path: metadata.namespace
+          value: NAMESPACE
+
+  - it: yields ForecastleApp resource with specified namespace when namespaceOverride is set
+    set:
+      forecastle:
+        enabled: true
+      ingress:
+        enabled: true
+      namespaceOverride: "app-namespace" 
+    capabilities:
+      apiVersions:
+        - forecastle.stakater.com/v1alpha1
+    asserts:
+      - equal:
+          path: metadata.namespace
+          value: app-namespace
+
+  - it: yields ForecastleApp resource with correct spec properties
+    set:
+      forecastle:
+        enabled: true
+        displayName: "My App"
+        icon: "https://example.com/icon.png"
+        group: "my-group"
+        properties:
+          key1: value1
+          key2: value2
+      ingress:
+        enabled: true
+    capabilities:
+      apiVersions:
+        - forecastle.stakater.com/v1alpha1
+    asserts:
+      - equal:
+          path: spec.properties.key1
+          value: value1
+      - equal:
+          path: spec.properties.key2
+          value: value2

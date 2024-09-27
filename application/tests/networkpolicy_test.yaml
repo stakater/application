@@ -1,0 +1,165 @@
+suite: NetworkPolicy
+
+templates:
+  - networkpolicy.yaml
+
+tests:
+  - it: does not render when networkPolicy is not enabled
+    set:
+      networkPolicy:
+        enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: renders a basic network policy with minimal configuration
+    set:
+      applicationName: my-app
+      networkPolicy:
+        enabled: true
+        ingress: []
+        egress: []
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: NetworkPolicy
+      - equal:
+          path: metadata.name
+          value: my-app
+
+  - it: renders network policy with additional labels
+    set:
+      networkPolicy:
+        enabled: true
+        additionalLabels:
+          custom: label
+        ingress: []
+        egress: []
+    asserts:
+      - equal:
+          path: metadata.labels.custom
+          value: label
+
+  - it: renders network policy with annotations
+    set:
+      networkPolicy:
+        enabled: true
+        annotations:
+          custom: annotation
+        ingress: []
+        egress: []
+    asserts:
+      - equal:
+          path: metadata.annotations.custom
+          value: annotation
+
+  - it: renders network policy with ingress rules
+    set:
+      networkPolicy:
+        enabled: true
+        ingress:
+          - from:
+              - podSelector:
+                  matchLabels:
+                    role: frontend
+            ports:
+              - protocol: TCP
+                port: 80
+        egress: []
+    asserts:
+      - equal:
+          path: spec.ingress[0].from[0].podSelector.matchLabels.role
+          value: frontend
+      - equal:
+          path: spec.ingress[0].ports[0].protocol
+          value: TCP
+      - equal:
+          path: spec.ingress[0].ports[0].port
+          value: 80
+
+  - it: renders network policy with egress rules
+    set:
+      networkPolicy:
+        enabled: true
+        ingress: []
+        egress:
+          - to:
+              - podSelector:
+                  matchLabels:
+                    role: backend
+            ports:
+              - protocol: TCP
+                port: 443
+    asserts:
+      - equal:
+          path: spec.egress[0].to[0].podSelector.matchLabels.role
+          value: backend
+      - equal:
+          path: spec.egress[0].ports[0].protocol
+          value: TCP
+      - equal:
+          path: spec.egress[0].ports[0].port
+          value: 443
+
+  - it: renders network policy with both ingress and egress rules
+    set:
+      networkPolicy:
+        enabled: true
+        ingress:
+          - from:
+              - podSelector:
+                  matchLabels:
+                    role: frontend
+            ports:
+              - protocol: TCP
+                port: 80
+        egress:
+          - to:
+              - podSelector:
+                  matchLabels:
+                    role: backend
+            ports:
+              - protocol: TCP
+                port: 443
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: spec.ingress[0].from[0].podSelector.matchLabels.role
+          value: frontend
+      - equal:
+          path: spec.egress[0].to[0].podSelector.matchLabels.role
+          value: backend
+
+  - it: renders network policy with deployment pod labels
+    set:
+      networkPolicy:
+        enabled: true
+        ingress: []
+        egress: []
+      deployment:
+        podLabels:
+          app: my-app
+    asserts:
+      - equal:
+          path: spec.podSelector.matchLabels.app
+          value: my-app
+
+  - it: renders network policy with both additional labels and annotations
+    set:
+      networkPolicy:
+        enabled: true
+        additionalLabels:
+          custom: label
+        annotations:
+          custom: annotation
+        ingress: []
+        egress: []
+    asserts:
+      - equal:
+          path: metadata.labels.custom
+          value: label
+      - equal:
+          path: metadata.annotations.custom
+          value: annotation

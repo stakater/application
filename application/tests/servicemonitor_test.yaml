@@ -1,0 +1,133 @@
+suite: ServiceMonitor
+
+templates:
+  - servicemonitor.yaml
+
+tests:
+  - it: does not render when serviceMonitor is not enabled
+    set:
+      serviceMonitor:
+        enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: does not render when the API version is not available
+    set:
+      serviceMonitor:
+        enabled: true
+      capabilities:
+        apiVersions:
+          - "v1"
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: renders a basic ServiceMonitor with minimal configuration
+    set:
+      applicationName: my-app
+      serviceMonitor:
+        enabled: true
+        endpoints:
+          - port: http
+            interval: 30s
+    capabilities:
+      apiVersions:
+        - "monitoring.coreos.com/v1"
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: ServiceMonitor
+      - equal:
+          path: metadata.name
+          value: my-app-svc-monitor
+      - equal:
+          path: spec.endpoints[0].port
+          value: http
+      - equal:
+          path: spec.endpoints[0].interval
+          value: 30s
+
+  - it: renders ServiceMonitor with additional labels
+    set:
+      serviceMonitor:
+        enabled: true
+        additionalLabels:
+          custom: label
+        endpoints:
+          - port: http
+            interval: 30s
+    capabilities:
+        apiVersions:
+          - "monitoring.coreos.com/v1"
+    asserts:
+      - equal:
+          path: metadata.labels.custom
+          value: label
+
+  - it: renders ServiceMonitor with annotations
+    set:
+      serviceMonitor:
+        enabled: true
+        annotations:
+          custom: annotation
+        endpoints:
+          - port: http
+            interval: 30s
+    capabilities:
+        apiVersions:
+          - "monitoring.coreos.com/v1"
+    asserts:
+      - equal:
+          path: metadata.annotations.custom
+          value: annotation
+
+  - it: renders ServiceMonitor with multiple endpoints
+    set:
+      serviceMonitor:
+        enabled: true
+        endpoints:
+          - port: http
+            interval: 30s
+          - port: https
+            interval: 30s
+    capabilities:
+        apiVersions:
+          - "monitoring.coreos.com/v1"
+    asserts:
+      - equal:
+          path: spec.endpoints[0].port
+          value: http
+      - equal:
+          path: spec.endpoints[1].port
+          value: https
+
+  - it: renders ServiceMonitor with namespaceSelector
+    set:
+      serviceMonitor:
+        enabled: true
+        endpoints:
+          - port: http
+            interval: 30s
+    release:
+      namespace: my-namespace
+    capabilities:
+        apiVersions:
+          - "monitoring.coreos.com/v1"
+    asserts:
+      - equal:
+          path: spec.namespaceSelector.matchNames[0]
+          value: my-namespace
+
+  - it: fails when no endpoints are specified
+    set:
+      serviceMonitor:
+        enabled: true
+        endpoints: []
+      capabilities:
+        apiVersions:
+          - "monitoring.coreos.com/v1"
+    asserts:
+      - hasDocuments:
+          count: 0

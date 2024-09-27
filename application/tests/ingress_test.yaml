@@ -1,0 +1,192 @@
+suite: Ingress
+
+templates:
+  - ingress.yaml
+
+tests:
+  - it: does not render when ingress is not enabled
+    set:
+      ingress:
+        enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: renders a basic ingress with minimal configuration
+    set:
+      applicationName: "my-app"
+      ingress:
+        enabled: true
+        hosts:
+          - host: example.com
+            paths:
+              - path: /
+                pathType: ImplementationSpecific
+                serviceName: example-service
+                servicePort: http
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Ingress
+      - equal:
+          path: metadata.name
+          value: my-app
+      - equal:
+          path: spec.rules[0].host
+          value: example.com
+      - equal:
+          path: spec.rules[0].http.paths[0].path
+          value: /
+
+  - it: renders ingress with additional labels
+    set:
+      ingress:
+        enabled: true
+        additionalLabels:
+          custom: label
+        hosts:
+          - host: example.com
+            paths:
+              - path: /
+                pathType: ImplementationSpecific
+                serviceName: example-service
+                servicePort: http
+    asserts:
+      - equal:
+          path: metadata.labels.custom
+          value: label
+
+  - it: renders ingress with annotations
+    set:
+      ingress:
+        enabled: true
+        annotations:
+          custom: annotation
+        hosts:
+          - host: example.com
+            paths:
+              - path: /
+                pathType: ImplementationSpecific
+                serviceName: example-service
+                servicePort: http
+    asserts:
+      - equal:
+          path: metadata.annotations.custom
+          value: annotation
+
+  - it: renders ingress with ingressClassName
+    set:
+      ingress:
+        enabled: true
+        ingressClassName: nginx
+        hosts:
+          - host: example.com
+            paths:
+              - path: /
+                pathType: ImplementationSpecific
+                serviceName: example-service
+                servicePort: http
+    asserts:
+      - equal:
+          path: spec.ingressClassName
+          value: nginx
+
+  - it: fails when no paths are specified for a host
+    set:
+      ingress:
+        enabled: true
+        hosts:
+          - host: example.com
+            paths: []  # No paths provided
+    asserts:
+      - failedTemplate:
+          errorMessage: "Specify paths for ingress host, check values.yaml"
+
+  - it: renders ingress with multiple hosts
+    set:
+      ingress:
+        enabled: true
+        hosts:
+          - host: example.com
+            paths:
+              - path: /
+                pathType: ImplementationSpecific
+                serviceName: example-service
+                servicePort: http
+          - host: another-example.com
+            paths:
+              - path: /api
+                pathType: Prefix
+                serviceName: another-service
+                servicePort: http
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: spec.rules[0].host
+          value: example.com
+      - equal:
+          path: spec.rules[1].host
+          value: another-example.com
+
+  - it: renders ingress with TLS configuration
+    set:
+      ingress:
+        enabled: true
+        tls:
+          - hosts:
+              - example.com
+            secretName: example-tls
+        hosts:
+          - host: example.com
+            paths:
+              - path: /
+                pathType: ImplementationSpecific
+                serviceName: example-service
+                servicePort: http
+    asserts:
+      - equal:
+          path: spec.tls[0].hosts[0]
+          value: example.com
+      - equal:
+          path: spec.tls[0].secretName
+          value: example-tls
+
+  - it: renders ingress with multiple paths for a single host
+    set:
+      ingress:
+        enabled: true
+        hosts:
+          - host: example.com
+            paths:
+              - path: /
+                pathType: ImplementationSpecific
+                serviceName: example-service
+                servicePort: http
+              - path: /api
+                pathType: Prefix
+                serviceName: api-service
+                servicePort: http
+    asserts:
+      - equal:
+          path: spec.rules[0].http.paths[0].path
+          value: /
+      - equal:
+          path: spec.rules[0].http.paths[1].path
+          value: /api
+
+  - it: renders ingress with default pathType when not specified
+    set:
+      ingress:
+        enabled: true
+        hosts:
+          - host: example.com
+            paths:
+              - path: /
+                serviceName: example-service
+                servicePort: http
+    asserts:
+      - equal:
+          path: spec.rules[0].http.paths[0].pathType
+          value: ImplementationSpecific

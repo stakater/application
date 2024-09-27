@@ -138,4 +138,3 @@ tests:
       - equal:
           path: spec.properties.key2
           value: value2
-          

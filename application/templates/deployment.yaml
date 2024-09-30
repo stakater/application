@@ -104,9 +104,9 @@ spec:
       topologySpreadConstraints:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if .Values.deployment.imagePullSecrets }}
+      {{- with .Values.deployment.imagePullSecrets }}
       imagePullSecrets:
-      - name: {{ .Values.deployment.imagePullSecrets }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
         {{- if .Values.deployment.openshiftOAuthProxy.enabled }}

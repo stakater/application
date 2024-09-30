@@ -70,7 +70,7 @@ deployment:
   replicas: 2
 
   # Secrets used to pull image
-  imagePullSecrets: ""
+  imagePullSecrets: []
 
   # If want to mount Envs from configmap or secret
   envFrom:

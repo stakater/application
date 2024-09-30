@@ -82,8 +82,7 @@ jobs:
         with:
           ref: ${{github.event.pull_request.head.sha}}
       - name: Run helm-docs and check diff
-        # TODO: Move to upstream once https://github.com/losisin/helm-docs-github-action/pull/270 is merged
-        uses: losisin/helm-docs-github-action@0f2a7b456e9e4393faa24d4d2e1636bdb0a5b9b9
+        uses: losisin/helm-docs-github-action@57d2dc9379d9f0d5d22d2845a62c935d32cddfe2 # v1.3.3
         with:
           output-file: ./README.md
           template-files: ./README.md.gotmpl

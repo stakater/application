@@ -3,6 +3,9 @@ suite: Deployment
 templates:
   - deployment.yaml
 
+set:
+  deployment.image.repository: example-image
+
 tests:
   - it: does not include OAuth proxy container if disabled
     set:

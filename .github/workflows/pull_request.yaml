@@ -73,3 +73,19 @@ jobs:
         with:
           charts: application
           unittest-version: v0.5.x
+
+  check-helm-docs:
+    name: Check Helm Docs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{github.event.pull_request.head.sha}}
+      - name: Run helm-docs and check diff
+        # TODO: Move to upstream once https://github.com/losisin/helm-docs-github-action/pull/270 is merged
+        uses: losisin/helm-docs-github-action@0f2a7b456e9e4393faa24d4d2e1636bdb0a5b9b9
+        with:
+          output-file: ./README.md
+          template-files: ./README.md.gotmpl
+          sort-values-order: file
+          fail-on-diff: true

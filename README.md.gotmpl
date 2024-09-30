@@ -1,0 +1,168 @@
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+# Application
+
+Generic helm chart for applications which:
+
+- are stateless
+- creates only namespace scoped resources (e.g. it doesn't need CRB - Cluster Role Bindings)
+- don't need privileged containers
+- don't call the underlying Kubernetes API or use the underlying etcd as a database by defining custom resources
+- run either as deployment, job or cronjob
+
+## Installing the Chart
+
+To install the chart with the release name `my-application` in namespace `test`:
+
+```shell
+helm repo add stakater https://stakater.github.io/stakater-charts
+helm repo update
+helm install my-application stakater/application --namespace test
+```
+
+## Uninstall the Chart
+
+To uninstall the chart:
+
+```shell
+helm delete --namespace test my-application
+```
+
+{{ template "chart.valuesSection" . }}
+
+{{ template "helm-docs.versionFooter" . }}
+
+## Naming convention for ConfigMap, Secret, SealedSecret and ExternalSecret
+
+Name format of ConfigMap, Secret, SealedSecret and ExternalSecret is `{{`{{ template "application.name" $ }}-{{ $nameSuffix }}`}}` then:
+
+- `{{`{{ template "application.name" }}`}}` is a helper function that outputs `.Values.applicationName` if exist else return chart name as output
+- `nameSuffix` is the each key in `secret.files`, `configMap.files`, `sealedSecret.files` and `externalSecret.files`
+
+For example if we have following values file:
+
+```yaml
+applicationName: helloworld # {{`{{ template "application.name" $ }}`}}
+
+configMap:
+  files:
+    config: # {{`{{ $nameSuffix }}`}}
+      key: value
+```
+
+then the configmap name will be named `helloworld-config`.
+
+## Consuming environment variable in application chart
+
+In order to use environment variable in deployment or cronjob, you will have to provide environment variable in *key/value* pair in `env` value. where key being environment variable key and value varies in different scenarios
+
+- For simple key/value environment variable, just provide `value: <value>`
+
+  ```yaml
+  env:
+    KEY:
+      value: MY_VALUE
+  ```
+
+ - To get environement variable value from **ConfigMap**
+
+   Suppose we have a configmap created from application chart
+
+   ```yaml
+   applicationName: my-application
+   configMap:
+     enabled: true
+     files:
+       application-config:
+         LOG: DEBUG
+         VERBOSE: v1
+   ```
+
+   To get environment variable value from above created configmap, we will need to add following
+
+   ```yaml
+   env:
+    APP_LOG_LEVEL:
+     valueFrom:
+       configMapKeyRef:
+         name: my-application-appication-config
+         key: LOG
+   ```
+
+   To get all environment variables key/values from **ConfigMap**, where configmap key being key of environment variable and value being value
+
+   ```yaml
+   envFrom:
+     application-config-env:
+       type: configmap
+       nameSuffix: application-config
+   ```
+
+   You can either provide `nameSuffix` which means name added after prefix `<applicationName>-` or static name with `name` of configmap.
+
+- To get environment variable value from **Secret**
+
+   Suppose we have secret created from application chart
+
+   ```yaml
+   applicationName: my-application
+   secret:
+     enabled: true
+     files:
+        db-credentials:
+          PASSWORD: skljd#2Qer!!
+          USER: postgres
+   ```
+
+   To get environment variable value from above created secret, we will need to add following
+
+   ```yaml
+   env:
+     KEY:
+       valueFrom:
+       secretKeyRef:
+         name: my-application-db-credentials
+         key: USER
+   ```
+
+   To get environement variable value from **Secret**, where secret key being key of environment variable and value being value
+
+   ```yaml
+   envFrom:
+     database-credentials:
+        type: secret
+        nameSuffix: db-credentials
+   ```
+   you can either provide `nameSuffix` which means name added after prefix `<applicationName>-` or static name with `name` of secret
+
+   **Note:** first key after `envFrom` is just used to uniquely identify different objects in `envFrom` block. Make sure to keep it unique and relevant
+
+## Configuring probes
+
+To disable liveness or readiness probe, set value of `enabled` to `false`.
+
+```yaml
+livenessProbe:
+  enabled: false
+```
+
+By default probe handler type is `httpGet`. You just need to override `port` and `path` as per your need.
+
+```yaml
+livenessProbe:
+  enabled: true
+  httpGet:
+    path: '/path'
+    port: 8080
+```
+
+In order to use `exec` handler, you can define field `livenessProbe.exec` in your values.yaml.
+
+```yaml
+livenessProbe:
+  enabled: true
+  exec:
+    command:
+      - cat
+      - /tmp/healthy
+```

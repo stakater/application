@@ -6,7 +6,7 @@ metadata:
   name: {{ template "application.name" . }}
   namespace: {{ template "application.namespace" $ }}
   labels:
-  {{- include "application.labels" . | nindent 4 }}
+  {{- include "application.labels" $ | nindent 4 }}
   {{- if .Values.service.additionalLabels }}
     {{- toYaml .Values.service.additionalLabels | nindent 4 }}
   {{- end }}

@@ -20,7 +20,7 @@ metadata:
   name: {{ template "application.name" . }}
   namespace: {{ include "application.namespace" . }}
 spec:
-{{- if .Values.deployment.replicas }}
+{{- if not (quote .Values.deployment.replicas | empty) }}
   replicas: {{ .Values.deployment.replicas }}
 {{- end }}
   selector:

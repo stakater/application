@@ -97,7 +97,7 @@ spec:
 {{ toYaml . | indent 12 }}
             {{- end }}
             {{- with $job.securityContext }}
-            securityContext: {{ toYaml . | nindent 12 }}
+            securityContext: {{ toYaml . | nindent 14 }}
             {{- end }}
           {{- with $job.nodeSelector }}
           nodeSelector:

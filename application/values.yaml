@@ -139,9 +139,10 @@ deployment:
   # -- (int) Number of replicas.
   # @section -- Deployment Parameters
   replicas:
-  # -- (string) Secret to be used for pulling the images (a single secret is supported).
+  # -- (list) List of secrets to be used for pulling the images.
   # @section -- Deployment Parameters
-  imagePullSecrets: ""
+  imagePullSecrets: []
+  #  - name: docker-pull
   # -- (object) Mount environment variables from ConfigMap or Secret to the pod.
   # @section -- Deployment Parameters
   envFrom:

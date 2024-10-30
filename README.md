@@ -71,7 +71,7 @@ helm delete --namespace test my-application
 | deployment.initContainers | object | `nil` | Add init containers to the pods. |
 | deployment.fluentdConfigAnnotations | object | `nil` | Configuration details for fluentdConfigurations. Only works for specific setup, see <https://medium.com/stakater/dynamic-log-processing-with-fluentd-konfigurator-and-slack-935a5de4eddb>. |
 | deployment.replicas | int | `nil` | Number of replicas. |
-| deployment.imagePullSecrets | string | `""` | Secret to be used for pulling the images (a single secret is supported). |
+| deployment.imagePullSecrets | list | `[]` | List of secrets to be used for pulling the images. |
 | deployment.envFrom | object | `nil` | Mount environment variables from ConfigMap or Secret to the pod. |
 | deployment.env | object | `nil` | Environment variables to be added to the pod. |
 | deployment.volumes | object | `nil` | Volumes to be added to the pod. Key is the name of the volume. Value is the volume definition. |

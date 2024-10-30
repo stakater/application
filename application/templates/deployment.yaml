@@ -20,7 +20,7 @@ metadata:
   name: {{ template "application.name" . }}
   namespace: {{ include "application.namespace" . }}
 spec:
-{{- if .Values.deployment.replicas }}
+{{- if not (eq .Values.deployment.replicas nil) }}
   replicas: {{ .Values.deployment.replicas }}
 {{- end }}
   selector:
@@ -104,9 +104,9 @@ spec:
       topologySpreadConstraints:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if .Values.deployment.imagePullSecrets }}
+      {{- with .Values.deployment.imagePullSecrets }}
       imagePullSecrets:
-      - name: {{ .Values.deployment.imagePullSecrets }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
         {{- if .Values.deployment.openshiftOAuthProxy.enabled }}

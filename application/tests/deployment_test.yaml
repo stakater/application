@@ -57,6 +57,14 @@ tests:
           path: metadata.labels["app.kubernetes.io/version"]
           value: example-tag
 
+  - it: allows setting replicas zero
+    set:
+      deployment.replicas: 0
+    asserts:
+      - equal:
+          path: spec.replicas
+          value: 0
+
   - it: uses image digest when given
     set:
       deployment.image.repository: example-image

@@ -1193,6 +1193,7 @@ backup:
   namespace:
   # -- (object) Additional labels for Backup.
   # @section -- Backup Parameters
+  includedNamespaces:
   additionalLabels:
     # grafanaDashboard: grafana-operator
   # -- (object) Annotations for Backup.

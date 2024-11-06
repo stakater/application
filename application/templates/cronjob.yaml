@@ -96,7 +96,7 @@ spec:
             volumeMounts:
 {{ toYaml . | indent 12 }}
             {{- end }}
-            {{- with $job.securityContext }}
+            {{- with $job.containerSecurityContext }}
             securityContext: {{ toYaml . | nindent 14 }}
             {{- end }}
           {{- with $job.nodeSelector }}
@@ -115,6 +115,9 @@ spec:
           {{- end }}
           {{- with $job.topologySpreadConstraints }}
           topologySpreadConstraints: {{ toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with $job.securityContext }}
+          securityContext: {{ toYaml . | nindent 12 }}
           {{- end }}
           {{- if $job.restartPolicy }}
           restartPolicy: {{ $job.restartPolicy }}

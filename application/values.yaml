@@ -1214,8 +1214,8 @@ backup:
   # -- (tpl/list) List of namespaces to include objects from.
   # @default -- `[ {{ include "application.namespace" $ }} ]`
   # @section -- Backup Parameters
-  - '{{ include "application.namespace" $ }}'
   includedNamespaces:
+  - '{{ include "application.namespace" $ }}'
   # -- (list) List of resource types to include in the backup.
   # @section -- Backup Parameters
   includedResources:

@@ -64,6 +64,30 @@ tests:
           path: spec.ttl
           value: "1h0m0s"
 
+  - it: includes correct includedNamespaces by default
+    set:
+      namespaceOverride: base-namespace
+      backup:
+        enabled: true
+        storageLocation: my-storage-location
+    asserts:
+      - equal:
+          path: metadata.includedNamespaces[0]
+          value: base-namespace
+
+  - it: includes correct includedNamespaces when defined
+    set:
+      namespaceOverride: base-namespace
+      backup:
+        enabled: true
+        includedNamespaces:
+          - my-namespace
+        storageLocation: my-storage-location
+    asserts:
+      - equal:
+          path: metadata.includedNamespaces[0]
+          value: my-namespace
+
   - it: includes includedResources when defined
     set:
       backup:

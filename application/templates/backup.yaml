@@ -18,7 +18,7 @@ spec:
     matchLabels:
        app.kubernetes.io/part-of: {{ include "application.name" . }}
   includedNamespaces:
-    - {{ include "application.namespace" . }}
+    - {{ .Values.backup.includedNamespace | default ( include "application.namespace" . ) | quote }}
   defaultVolumesToRestic: {{  .Values.backup.defaultVolumesToRestic }}
   snapshotVolumes: {{ .Values.backup.snapshotVolumes }}
   storageLocation: {{ .Values.backup.storageLocation | quote }}

@@ -17,9 +17,9 @@ spec:
   labelSelector:
     matchLabels:
        app.kubernetes.io/part-of: {{ include "application.name" . }}
-  {{- with .Values.backup.includedNamespaces }}
+  {{- $namespace := range .Values.backup.includedNamespaces }}
   includedNamespaces:
-  - {{ include "application.tplvalues.render" ( dict "value" . "context" $ ) }}
+  - {{ include "application.tplvalues.render" ( dict "value" $namespace "context" $ ) }}
   {{- end }}
   defaultVolumesToRestic: {{  .Values.backup.defaultVolumesToRestic }}
   snapshotVolumes: {{ .Values.backup.snapshotVolumes }}

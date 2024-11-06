@@ -1,25 +1,25 @@
-# -- (string) Override the namespace for all resources.
+# namespaceOverride -- (string) Override the namespace for all resources.
 # @section -- Parameters
 namespaceOverride: ""
 
-# -- (string) Override the component label for all resources.
+# componentOverride -- (string) Override the component label for all resources.
 # @section -- Parameters
 componentOverride: ""
 
-# -- (string) Override the partOf label for all resources.
+# partOfOverride -- (string) Override the partOf label for all resources.
 # @section -- Parameters
 partOfOverride: ""
 
-# -- (string) Application name.
+# applicationName -- (string) Application name.
 # @default -- `{{ .Chart.Name }}`
 # @section -- Parameters
 applicationName: ""
 
 cronJob:
-  # -- (bool) Deploy CronJob resources.
+  # cronJob.enabled -- (bool) Deploy CronJob resources.
   # @section -- CronJob Parameters
   enabled: false
-  # -- (object) Map of CronJob resources.
+  # cronJob.jobs -- (object) Map of CronJob resources.
   # Key will be used as a name suffix for the CronJob. Value is the CronJob configuration.
   # See values for more details.
   # @section -- CronJob Parameters
@@ -42,12 +42,11 @@ cronJob:
     #         memory: 5Gi
     #         cpu: 1
 
-
 job:
-  # -- (bool) Deploy Job resources.
+  # job.enabled -- (bool) Deploy Job resources.
   # @section -- Job Parameters
   enabled: false
-  # -- (object) Map of Job resources.
+  # job.jobs -- (object) Map of Job resources.
   # Key will be used as a name suffix for the Job. Value is the Job configuration.
   # See values for more details.
   # @section -- Job Parameters
@@ -73,39 +72,39 @@ job:
     #         cpu: 1
 
 deployment:
-  # -- (bool) Enable Deployment.
+  # deployment.enabled -- (bool) Enable Deployment.
   # @section -- Deployment Parameters
   enabled: true
-  # -- (object) Additional labels for Deployment.
+  # deployment.additionalLabels -- (object) Additional labels for Deployment.
   # @section -- Deployment Parameters
   additionalLabels:
-  # -- (object) Additional pod labels which are used in Service's Label Selector.
+  # deployment.podLabels -- (object) Additional pod labels which are used in Service's Label Selector.
   # @section -- Deployment Parameters
   podLabels:
-  # -- (object) Annotations for Deployment.
+  # deployment.annotations -- (object) Annotations for Deployment.
   # @section -- Deployment Parameters
   annotations:
-  # -- (object) Additional pod annotations.
+  # deployment.additionalPodAnnotations -- (object) Additional pod annotations.
   # @section -- Deployment Parameters
   additionalPodAnnotations:
   strategy:
-    # -- (string) Type of deployment strategy.
+    # deployment.strategy.type -- (string) Type of deployment strategy.
     # @section -- Deployment Parameters
     type: RollingUpdate
     rollingUpdate:
-      # -- (string) Max unavailable pods during update.
+      # deployment.strategy.rollingUpdate.maxUnavailable -- (string) Max unavailable pods during update.
       # @section -- Deployment Parameters
       maxUnavailable: 25%
-      # -- (string) Max surge pods during update.
+      # deployment.strategy.rollingUpdate.maxSurge -- (string) Max surge pods during update.
       # @section -- Deployment Parameters
       maxSurge: 25%
-  # -- (bool) Reload deployment if attached Secret/ConfigMap changes.
+  # deployment.reloadOnChange -- (bool) Reload deployment if attached Secret/ConfigMap changes.
   # @section -- Deployment Parameters
   reloadOnChange: true
-  # -- (object) Select the node where the pods should be scheduled.
+  # deployment.nodeSelector -- (object) Select the node where the pods should be scheduled.
   # @section -- Deployment Parameters
   nodeSelector:
-  # -- (list) Add host aliases to the pods.
+  # deployment.hostAliases -- (list) Add host aliases to the pods.
   # @section -- Deployment Parameters
   hostAliases:
   # - ip: "127.0.0.1"
@@ -116,14 +115,14 @@ deployment:
   #   hostnames:
   #   - "foo.remote"
   #   - "bar.remote"
-  # -- (object) Add init containers to the pods.
+  # deployment.initContainers -- (object) Add init containers to the pods.
   # @section -- Deployment Parameters
   initContainers:
     # init-something:
     #   image: busybox
     #   imagePullPolicy: IfNotPresent
     #   command: ['/bin/sh']
-  # -- (object) Configuration details for fluentdConfigurations.
+  # deployment.fluentdConfigAnnotations -- (object) Configuration details for fluentdConfigurations.
   # Only works for specific setup, see <https://medium.com/stakater/dynamic-log-processing-with-fluentd-konfigurator-and-slack-935a5de4eddb>.
   # @section -- Deployment Parameters
   fluentdConfigAnnotations:
@@ -136,14 +135,14 @@ deployment:
     #   slack:
     #     webhookURL: https://hooks.slack.com/services/XXXXX/XXXXX/XXXXX
     #     channelName: "#channel"
-  # -- (int) Number of replicas.
+  # deployment.replicas -- (int) Number of replicas.
   # @section -- Deployment Parameters
   replicas:
-  # -- (list) List of secrets to be used for pulling the images.
+  # deployment.imagePullSecrets -- (list) List of secrets to be used for pulling the images.
   # @section -- Deployment Parameters
   imagePullSecrets: []
   #  - name: docker-pull
-  # -- (object) Mount environment variables from ConfigMap or Secret to the pod.
+  # deployment.envFrom -- (object) Mount environment variables from ConfigMap or Secret to the pod.
   # @section -- Deployment Parameters
   envFrom:
   #  production-cm:
@@ -155,7 +154,7 @@ deployment:
   #  postgres-config:
   #    type: secret
   #    nameSuffix: postgres
-  # -- (object) Environment variables to be added to the pod.
+  # deployment.env -- (object) Environment variables to be added to the pod.
   # @section -- Deployment Parameters
   env:
   #  ENVIRONMENT:
@@ -165,7 +164,7 @@ deployment:
   #        configMapKeyRef:
   #           name: config
   #           key: frequency
-  # -- (object) Volumes to be added to the pod.
+  # deployment.volumes -- (object) Volumes to be added to the pod.
   # Key is the name of the volume. Value is the volume definition.
   # @section -- Deployment Parameters
   volumes:
@@ -178,7 +177,7 @@ deployment:
     # persistent-volume-name:
     #   persistentVolumeClaim:
     #     claimName: claim-name
-  # -- (object) Mount path for Volumes.
+  # deployment.volumeMounts -- (object) Mount path for Volumes.
   # Key is the name of the volume. Value is the volume mount definition.
   # @section -- Deployment Parameters
   volumeMounts:
@@ -187,17 +186,17 @@ deployment:
     #    subPath: szy
     # volume-name-2:
     #    mountPath: path-2
-  # -- (string) Define the priority class for the pod.
+  # deployment.priorityClassName -- (string) Define the priority class for the pod.
   # @section -- Deployment Parameters
   priorityClassName: ""
-  # -- (list) Taint tolerations for the pods.
+  # deployment.tolerations -- (list) Taint tolerations for the pods.
   # @section -- Deployment Parameters
   tolerations:
     # - key: "dedicated"
     #   operator: "Equal"
     #   value: "app"
     #   effect: "NoSchedule"
-  # -- (object) Affinity for the pods.
+  # deployment.affinity -- (object) Affinity for the pods.
   # @section -- Deployment Parameters
   affinity:
   #  nodeAffinity:
@@ -208,7 +207,7 @@ deployment:
   #          operator: In
   #          values:
   #          - ssd
-  # -- (list) Topology spread constraints for the pods.
+  # deployment.topologySpreadConstraints -- (list) Topology spread constraints for the pods.
   # @section -- Deployment Parameters
   topologySpreadConstraints:
     # - maxSkew: 1
@@ -229,127 +228,126 @@ deployment:
     #       operator: In
     #       values:
     #       - ssd
-  # -- (int) Number of ReplicaSet revisions to retain.
+  # deployment.revisionHistoryLimit -- (int) Number of ReplicaSet revisions to retain.
   # @section -- Deployment Parameters
   revisionHistoryLimit: 2
   image:
-    # -- (string) Repository.
+    # deployment.image.repository -- (string) Repository.
     # @section -- Deployment Parameters
     repository: ""
-    # -- (string) Tag.
+    # deployment.image.tag -- (string) Tag.
     # @section -- Deployment Parameters
     tag: ""
-    # -- (string) Image digest. If set to a non-empty value, digest takes precedence on the tag.
+    # deployment.image.digest -- (string) Image digest. If set to a non-empty value, digest takes precedence on the tag.
     # @section -- Deployment Parameters
     digest: ""
-    # -- (string) Image pull policy.
+    # deployment.image.pullPolicy -- (string) Image pull policy.
     # @section -- Deployment Parameters
     pullPolicy: IfNotPresent
-  # -- (object) DNS config for the pods.
+  # deployment.dnsConfig -- (object) DNS config for the pods.
   # @section -- Deployment Parameters
   dnsConfig:
     # options:
     # - name: ndots
     #   value: '1'
-  # -- (object) Startup probe.
+  # deployment.startupProbe -- (object) Startup probe.
   # @default -- See below
   # Must specify either one of the following field when enabled: httpGet, exec, tcpSocket, grpc
   # @section -- Deployment Parameters
   startupProbe:
-    # -- (bool) Enable Startup probe.
+    # deployment.startupProbe.enabled -- (bool) Enable Startup probe.
     # @section -- Deployment Parameters
     enabled: false
-    # -- (int) Number of retries before marking the pod as failed.
+    # deployment.startupProbe.failureThreshold -- (int) Number of retries before marking the pod as failed.
     # @section -- Deployment Parameters
     failureThreshold: 30
-    # -- (int) Time between retries.
+    # deployment.startupProbe.periodSeconds -- (int) Time between retries.
     # @section -- Deployment Parameters
     periodSeconds: 10
-    # -- (int) Number of successful probes before marking the pod as ready.
+    # deployment.startupProbe.successThreshold -- (int) Number of successful probes before marking the pod as ready.
     # @section -- Deployment Parameters
     successThreshold: 1
-    # -- (int) Time before the probe times out.
+    # deployment.startupProbe.timeoutSeconds -- (int) Time before the probe times out.
     # @section -- Deployment Parameters
     timeoutSeconds: 1
-    # -- (object) HTTP Get probe.
+    # deployment.startupProbe.httpGet -- (object) HTTP Get probe.
     # @section -- Deployment Parameters
     httpGet: {}
-    # -- (object) Exec probe.
+    # deployment.startupProbe.exec -- (object) Exec probe.
     # @section -- Deployment Parameters
     exec: {}
-    # -- (object) TCP Socket probe.
+    # deployment.startupProbe.tcpSocket -- (object) TCP Socket probe.
     # @section -- Deployment Parameters
     tcpSocket: {}
-    # -- (object) gRPC probe.
+    # deployment.startupProbe.grpc -- (object) gRPC probe.
     # @section -- Deployment Parameters
     grpc: {}
-
-  # -- (object) Readiness probe.
+  # deployment.readinessProbe -- (object) Readiness probe.
   # @default -- See below
   # Must specify either one of the following field when enabled: httpGet, exec, tcpSocket, grpc
   # @section -- Deployment Parameters
   readinessProbe:
-    # -- (bool) Enable Readiness probe.
+    # deployment.readinessProbe.enabled -- (bool) Enable Readiness probe.
     # @section -- Deployment Parameters
     enabled: false
-    # -- (int) Number of retries before marking the pod as failed.
+    # deployment.readinessProbe.failureThreshold -- (int) Number of retries before marking the pod as failed.
     # @section -- Deployment Parameters
     failureThreshold: 30
-    # -- (int) Time between retries.
+    # deployment.readinessProbe.periodSeconds -- (int) Time between retries.
     # @section -- Deployment Parameters
     periodSeconds: 10
-    # -- (int) Number of successful probes before marking the pod as ready.
+    # deployment.readinessProbe.successThreshold -- (int) Number of successful probes before marking the pod as ready.
     # @section -- Deployment Parameters
     successThreshold: 1
-    # -- (int) Time before the probe times out.
+    # deployment.readinessProbe.timeoutSeconds -- (int) Time to wait for a probe to succeed.
     # @section -- Deployment Parameters
     timeoutSeconds: 1
-    # -- (object) HTTP Get probe.
+    # deployment.readinessProbe.httpGet -- (object) HTTP GET probe.
     # @section -- Deployment Parameters
     httpGet: {}
-    # -- (object) Exec probe.
+    # deployment.readinessProbe.exec -- (object) Exec probe.
     # @section -- Deployment Parameters
     exec: {}
-    # -- (object) TCP Socket probe.
+    # deployment.readinessProbe.tcpSocket -- (object) TCP Socket probe.
     # @section -- Deployment Parameters
     tcpSocket: {}
-    # -- (object) gRPC probe.
+    # deployment.readinessProbe.grpc -- (object) gRPC probe.
     # @section -- Deployment Parameters
     grpc: {}
-
-  # -- (object) Liveness probe.
+  # deployment.livenessProbe -- (object) Liveness probe.
   # @default -- See below
   # Must specify either one of the following field when enabled: httpGet, exec, tcpSocket, grpc
   # @section -- Deployment Parameters
   livenessProbe:
-    # -- (bool) Enable Liveness probe.
+    # deployment.livenessProbe.enabled -- (bool) Enable Liveness probe.
     # @section -- Deployment Parameters
     enabled: false
-    # -- (int) Number of retries before marking the pod as failed.
+    # deployment.livenessProbe.failureThreshold -- (int) Number of retries before marking the pod as failed.
     # @section -- Deployment Parameters
     failureThreshold: 30
-    # -- (int) Time between retries.
+    # deployment.livenessProbe.periodSeconds -- (int) Time between retries.
     # @section -- Deployment Parameters
     periodSeconds: 10
-    # -- (int) Number of successful probes before marking the pod as ready.
+    # deployment.livenessProbe.successThreshold -- (int) Number of successful probes before marking the pod as ready.
     # @section -- Deployment Parameters
     successThreshold: 1
-    # -- (int) Time before the probe times out.
+    # deployment.livenessProbe.timeoutSeconds -- (int) Time before the probe times out.
     # @section -- Deployment Parameters
     timeoutSeconds: 1
-    # -- (object) HTTP Get probe.
+    # deployment.livenessProbe.httpGet -- (object) HTTP Get probe.
     # @section -- Deployment Parameters
     httpGet: {}
-    # -- (object) Exec probe.
+    # deployment.livenessProbe.exec -- (object) Exec probe.
     # @section -- Deployment Parameters
     exec: {}
-    # -- (object) TCP Socket probe.
+    # deployment.livenessProbe.tcpSocket -- (object) TCP Socket probe.
     # @section -- Deployment Parameters
     tcpSocket: {}
-    # -- (object) gRPC probe.
+    # deployment.livenessProbe.grpc -- (object) gRPC probe.
     # @section -- Deployment Parameters
     grpc: {}
-  # -- (object) Resource limits and requests for the pod.
+
+  # deployment.resources -- (object) Resource limits and requests for the pod.
   # @section -- Deployment Parameters
   resources:
     limits:
@@ -358,39 +356,39 @@ deployment:
     requests:
       memory: 128Mi
       cpu: 0.1
-  # -- (object) Security Context at Container Level.
+  # deployment.containerSecurityContext -- (object) Security Context at Container Level.
   # @section -- Deployment Parameters
   containerSecurityContext:
     readOnlyRootFilesystem: true
     runAsNonRoot: true
   openshiftOAuthProxy:
-    # -- (bool) Enable [OpenShift OAuth Proxy](https://github.com/openshift/oauth-proxy).
+    # deployment.openshiftOAuthProxy.enabled -- (bool) Enable OpenShift OAuth Proxy.
     # @section -- Deployment Parameters
     enabled: false
-    # -- (int) Port on which application is running inside container.
+    # deployment.openshiftOAuthProxy.port -- (int) Port on which application is running inside container.
     # @section -- Deployment Parameters
     port: 8080
-    # -- (string) Secret name for the OAuth Proxy TLS certificate.
+    # deployment.openshiftOAuthProxy.secretName -- (string) Secret name for the OAuth Proxy TLS certificate.
     # @section -- Deployment Parameters
     secretName: "openshift-oauth-proxy-tls"
-    # -- (string) Image for the OAuth Proxy.
+    # deployment.openshiftOAuthProxy.image -- (string) Image for the OAuth Proxy.
     # @section -- Deployment Parameters
     image: openshift/oauth-proxy:latest
-    # -- (bool) If disabled `--http-address=:8081` will be used instead of `--https-address=:8443`.
+    # deployment.openshiftOAuthProxy.disableTLSArg -- (bool) If disabled `--http-address=:8081` will be used instead of `--https-address=:8443`.
     # It can be useful when an ingress is enabled for the application.
     # @section -- Deployment Parameters
     disableTLSArg: false
-  # -- (object) Security Context for the pod.
+  # deployment.securityContext -- (object) Security Context for the pod.
   # @section -- Deployment Parameters
   securityContext:
     # fsGroup: 2000
-  # -- (list) Command for the app container.
+  # deployment.command -- (list) Command for the app container.
   # @section -- Deployment Parameters
   command: []
-  # -- (list) Args for the app container.
+  # deployment.args -- (list) Args for the app container.
   # @section -- Deployment Parameters
   args: []
-  # -- (list) List of ports for the app container.
+  # deployment.ports -- (list) List of ports for the app container.
   # @section -- Deployment Parameters
   ports:
   # - containerPort: 8080
@@ -399,19 +397,19 @@ deployment:
   # - containerPort: 8443
   #   name: https
   #   protocol: TCP
-  # -- (bool) Host network connectivity.
+  # deployment.hostNetwork -- (bool) Host network connectivity.
   # @section -- Deployment Parameters
   hostNetwork:
-  # -- (int) Gracefull termination period.
+  # deployment.terminationGracePeriodSeconds -- (int) Gracefull termination period.
   # @section -- Deployment Parameters
   terminationGracePeriodSeconds:
-  # -- (object) Lifecycle configuration for the pod.
+  # deployment.lifecycle -- (object) Lifecycle configuration for the pod.
   # @section -- Deployment Parameters
   lifecycle: {}
     # preStop:
     #   exec:
     #     command: ["/bin/bash", "-c", "sleep 20"]
-  # -- (list) Additional containers besides init and app containers (without templating).
+  # deployment.additionalContainers -- (list) Additional containers besides init and app containers (without templating).
   # @section -- Deployment Parameters
   additionalContainers:
   # - name: sidecar-container
@@ -420,55 +418,55 @@ deployment:
   #   command: ['/bin/sh']
 
 persistence:
-  # -- (bool) Enable persistence.
+  # persistence.enabled -- (bool) Enable persistence.
   # @section -- Deployment Parameters
   enabled: false
-  # -- (bool) Whether to mount the created PVC to the deployment.
+  # persistence.mountPVC -- (bool) Whether to mount the created PVC to the deployment.
   # @section -- Deployment Parameters
   mountPVC: false
-  # -- (string) If `persistence.mountPVC` is enabled, where to mount the volume in the containers.
+  # persistence.mountPath -- (string) If `persistence.mountPVC` is enabled, where to mount the volume in the containers.
   # @section -- Deployment Parameters
   mountPath: "/"
-  # -- (string) Name of the PVC.
+  # persistence.name -- (string) Name of the PVC.
   # @default -- `{{ include "application.name" $ }}-data`
   # @section -- Deployment Parameters
   name: ""
-  # -- (string) Access mode for volume.
+  # persistence.accessMode -- (string) Access mode for volume.
   # @section -- Deployment Parameters
   accessMode: ReadWriteOnce
-  # -- (string) Storage class for volume.
+  # persistence.storageClass -- (string) Storage class for volume.
   # If defined, use that value
   # If set to "-" or "", disable dynamic provisioning
   # If undefined or set to null (the default), no storageClass spec is
   #   set, choosing the default provisioner.
   # @section -- Deployment Parameters
   storageClass: null
-  # -- (object) Additional labels for persistent volume.
+  # persistence.additionalLabels -- (object) Additional labels for persistent volume.
   # @section -- Deployment Parameters
   additionalLabels:
     # key: value
-  # -- (object) Annotations for persistent volume.
+  # persistence.annotations -- (object) Annotations for persistent volume.
   # @section -- Deployment Parameters
   annotations:
     # "helm.sh/resource-policy": keep
-  # -- (string) Size of the persistent volume.
+  # persistence.storageSize -- (string) Size of the persistent volume.
   # @section -- Deployment Parameters
   storageSize: 8Gi
-  # -- (string) PVC Volume Mode.
+  # persistence.volumeMode -- (string) PVC Volume Mode.
   # @section -- Deployment Parameters
   volumeMode: ""
-  # -- (string) Name of the volume.
+  # persistence.volumeName -- (string) Name of the volume.
   # @section -- Deployment Parameters
   volumeName: ""
 
 service:
-  # -- (bool) Enable Service.
+  # service.enabled -- (bool) Enable Service.
   # @section -- Service Parameters
   enabled: true
-  # -- (object) Additional labels for service.
+  # service.additionalLabels -- (object) Additional labels for service.
   # @section -- Service Parameters
   additionalLabels:
-  # -- (object) Annotations for service.
+  # service.annotations -- (object) Annotations for service.
   # @section -- Service Parameters
   annotations:
     # config.xposer.stakater.com/Domain: stakater.com
@@ -481,26 +479,26 @@ service:
     #   kubernetes.io/ingress.class: external-ingress
     #   ingress.kubernetes.io/rewrite-target: /
     #   ingress.kubernetes.io/force-ssl-redirect: true
-  # -- (list) Ports for applications service.
+  # service.ports -- (list) Ports for applications service.
   # @section -- Service Parameters
   ports:
     - port: 8080
       name: http
       protocol: TCP
       targetPort: 8080
-  # -- (string) Type of service.
+  # service.type -- (string) Type of service.
   # @section -- Service Parameters
   type: ClusterIP
-  # -- (string) Fixed IP for a ClusterIP service.
+  # service.clusterIP -- (string) Fixed IP for a ClusterIP service.
   # Set to `None` for an headless service
   # @section -- Service Parameters
   clusterIP:
 
 ingress:
-  # -- (bool) Enable Ingress.
+  # ingress.enabled -- (bool) Enable Ingress.
   # @section -- Ingress Parameters
   enabled: false
-  # -- (string) Name of the ingress class.
+  # ingress. -- (string) Name of the ingress class.
   # @section -- Ingress Parameters
   ingressClassName: ""
   hosts:

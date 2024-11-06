@@ -72,8 +72,8 @@ tests:
         storageLocation: my-storage-location
     asserts:
       - equal:
-          path: metadata.includedNamespaces[0]
-          value: base-namespace
+          path: metadata.includedNamespaces
+          value: [base-namespace]
 
   - it: includes correct includedNamespaces when defined
     set:
@@ -85,8 +85,8 @@ tests:
         storageLocation: my-storage-location
     asserts:
       - equal:
-          path: metadata.includedNamespaces[0]
-          value: my-namespace
+          path: metadata.includedNamespaces
+          value: [my-namespace]
 
   - it: includes includedResources when defined
     set:

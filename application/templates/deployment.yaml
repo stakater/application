@@ -308,12 +308,8 @@ spec:
         {{- end }}
         {{- end }}
       {{- end }}
-      {{- if .Values.rbac.serviceAccount.enabled }}
-      {{- if .Values.rbac.serviceAccount.name }}
-      serviceAccountName: {{ .Values.rbac.serviceAccount.name }}
-      {{- else }}
-      serviceAccountName: {{ template "application.name" $ }}
-      {{- end }}
+      {{- if and .Values.rbac.enabled .Values.rbac.serviceAccount.enabled }}
+      serviceAccountName: {{ default (include "application.name" .) .Values.rbac.serviceAccount.name }}
       {{- end }}
       {{- if .Values.deployment.hostNetwork }}
       hostNetwork: {{ .Values.deployment.hostNetwork }}

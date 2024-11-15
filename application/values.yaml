@@ -663,6 +663,9 @@ rbac:
   # -- (bool) Enable RBAC.
   # @section -- RBAC Parameters
   enabled: true
+  # -- (string) Existing Service Account Name.
+  # @section -- RBAC Parameters
+  existingServiceAccountName: ""
   serviceAccount:
     # -- (bool) Deploy Service Account.
     # @section -- RBAC Parameters

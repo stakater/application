@@ -68,3 +68,18 @@ reference:
   kind: Route
   name: {{ include "application.name" . }}
 {{- end }}
+
+{{- define "application.service-account-name" }}
+{{- if .Values.rbac.enabled }}
+  {{- if and .Values.rbac.serviceAccount.enabled .Values.rbac.existingServiceAccountName }}
+    {{- fail "Conflict: 'rbac.existingServiceAccountName' is set, but a new service account is being created. Please disable 'rbac.serviceAccount.enabled' or unset 'rbac.existingServiceAccountName'." }}
+  {{- end }}
+  {{- if .Values.rbac.serviceAccount.enabled }}
+    {{- default (include "application.name" .) .Values.rbac.serviceAccount.name }}
+  {{- else }}
+    {{- default "null" .Values.rbac.existingServiceAccountName }}
+  {{- end }}
+{{- else }}
+  null
+{{- end }}
+{{- end }}

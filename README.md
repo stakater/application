@@ -213,6 +213,7 @@ helm delete --namespace test my-application
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | rbac.enabled | bool | `true` | Enable RBAC. |
+| rbac.existingServiceAccountName | string | `""` | Existing Service Account Name. |
 | rbac.serviceAccount.enabled | bool | `false` | Deploy Service Account. |
 | rbac.serviceAccount.name | string | `{{ include "application.name" $ }}` | Service Account Name. |
 | rbac.serviceAccount.additionalLabels | object | `nil` | Additional labels for Service Account. |

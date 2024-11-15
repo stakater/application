@@ -74,6 +74,7 @@ spec:
           ]
 {{- end }}
     spec:
+      serviceAccountName: {{ template "application.service-account-name" $ }}
       {{- if .Values.deployment.hostAliases }}
       hostAliases:
 {{ toYaml .Values.deployment.hostAliases | indent 6 }}
@@ -310,13 +311,6 @@ spec:
 {{ include "application.tplvalues.render" ( dict "value" $value "context" $ ) | indent 8 }}
         {{- end }}
         {{- end }}
-      {{- end }}
-      {{- if .Values.rbac.serviceAccount.enabled }}
-      {{- if .Values.rbac.serviceAccount.name }}
-      serviceAccountName: {{ .Values.rbac.serviceAccount.name }}
-      {{- else }}
-      serviceAccountName: {{ template "application.name" $ }}
-      {{- end }}
       {{- end }}
       {{- if .Values.deployment.hostNetwork }}
       hostNetwork: {{ .Values.deployment.hostNetwork }}

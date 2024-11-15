@@ -86,8 +86,8 @@ jobs:
       - name: Run helm-docs and check diff
         uses: losisin/helm-docs-github-action@57d2dc9379d9f0d5d22d2845a62c935d32cddfe2 # v1.3.3
         with:
-          output-file: ../README.md
-          template-files: ../README.md.gotmpl
+          output-file: ./../README.md
+          template-files: ./README.md.gotmpl
           sort-values-order: file
           fail-on-diff: true
       - run: git status

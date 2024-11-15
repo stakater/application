@@ -83,7 +83,6 @@ jobs:
           ref: ${{github.event.pull_request.head.sha}}
       - run: git status
       - run: cat application/values.yaml | grep "Test"
-      - run: cat README.md | grep "Test"
       - name: Run helm-docs and check diff
         uses: losisin/helm-docs-github-action@57d2dc9379d9f0d5d22d2845a62c935d32cddfe2 # v1.3.3
         with:

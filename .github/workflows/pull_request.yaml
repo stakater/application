@@ -84,6 +84,7 @@ jobs:
       - name: Run helm-docs
         uses: losisin/helm-docs-github-action@57d2dc9379d9f0d5d22d2845a62c935d32cddfe2 # v1.3.3
         with:
+          # Keep args in sync with /.pre-commit-config.yaml
           output-file: ./../README.md
           template-files: ./README.md.gotmpl
           sort-values-order: file

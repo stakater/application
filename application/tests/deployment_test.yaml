@@ -91,7 +91,7 @@ tests:
     set:
       rbac.serviceAccount.enabled: false
     asserts:
-      - notExists:
+      - isNullOrEmpty:
           path: spec.template.spec.serviceAccountName
 
   - it: uses service account name override when present

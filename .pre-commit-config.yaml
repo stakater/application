@@ -4,8 +4,6 @@ repos:
     hooks:
       - id: helm-docs-built
         args:
-          - --chart-search-root=.
-          - --values-file=values.yaml
           - --output-file=./../README.md
           - --template-files=./README.md.gotmpl
           - --sort-values-order=file

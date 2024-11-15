@@ -81,10 +81,13 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{github.event.pull_request.head.sha}}
-      - name: Run helm-docs and check diff
+      - name: Run helm-docs
         uses: losisin/helm-docs-github-action@57d2dc9379d9f0d5d22d2845a62c935d32cddfe2 # v1.3.3
         with:
-          output-file: ./README.md
+          # Keep args in sync with /.pre-commit-config.yaml
+          output-file: ./../README.md
           template-files: ./README.md.gotmpl
           sort-values-order: file
-          fail-on-diff: true
+      - name: Check diff
+        run: |
+          git diff --exit-code README.md || { echo; echo "error: README.md is out of date. Please run `make build-docs` and commit the resulting file."; exit 1; }

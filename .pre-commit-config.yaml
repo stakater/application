@@ -4,8 +4,7 @@ repos:
     hooks:
       - id: helm-docs-built
         args:
-          - --chart-search-root=.
-          - --values-file=values.yaml
+          # Keep args in sync with /.github/workflows/pull_request.yaml
           - --output-file=./../README.md
           - --template-files=./README.md.gotmpl
           - --sort-values-order=file

@@ -88,4 +88,5 @@ jobs:
           template-files: ./README.md.gotmpl
           sort-values-order: file
       - name: Check diff
-        run: git diff --exit-code README.md
+        run: |
+          git diff --exit-code README.md || { echo; echo "README.md is out of date. Please run `make build-docs` and commit the resulting file."; exit 1 }

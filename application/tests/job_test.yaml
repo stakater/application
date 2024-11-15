@@ -95,3 +95,47 @@ tests:
           path: spec.template.metadata.annotations
           value:
             helm.sh/hook: "pre-install,pre-upgrade"
+
+  - it: yields empty service account name when disabled
+    set:
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+      rbac.serviceAccount.enabled: false
+    asserts:
+      - isNullOrEmpty:
+          path: spec.template.spec.serviceAccountName
+
+  - it: uses service account name override when present
+    set:
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+      rbac.serviceAccount.enabled: true
+      rbac.serviceAccount.name: example-sa
+    asserts:
+      - equal:
+          path: spec.template.spec.serviceAccountName
+          value: example-sa
+
+  - it: uses a generated service account name when not given
+    set:
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+      applicationName: example-app
+      rbac.serviceAccount.enabled: true
+      rbac.serviceAccount.name: ""
+    asserts:
+      - equal:
+          path: spec.template.spec.serviceAccountName
+          value: example-app

@@ -30,8 +30,6 @@ helm delete --namespace test my-application
 
 {{ template "chart.valuesSection" . }}
 
-{{ template "helm-docs.versionFooter" . }}
-
 ## Naming convention for ConfigMap, Secret, SealedSecret and ExternalSecret
 
 Name format of ConfigMap, Secret, SealedSecret and ExternalSecret is `{{`{{ template "application.name" $ }}-{{ $nameSuffix }}`}}` then:

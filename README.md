@@ -390,6 +390,7 @@ helm delete --namespace test my-application
 | backup.snapshotVolumes | bool | `true` | Whether to take snapshots of persistent volumes as part of the backup. |
 | backup.storageLocation | string | `nil` | Name of the backup storage location where the backup should be stored. |
 | backup.ttl | string | `"1h0m0s"` | How long the Backup should be retained for. |
+| backup.includedNamespaces | tpl/list | `[ {{ include "application.namespace" $ }} ]` | List of namespaces to include objects from. |
 | backup.includedResources | list | `nil` | List of resource types to include in the backup. |
 | backup.excludedResources | list | `nil` | List of resource types to exclude from the backup. |
 

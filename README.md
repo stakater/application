@@ -447,7 +447,7 @@ In order to use environment variable in deployment or cronjob, you will have to 
     APP_LOG_LEVEL:
      valueFrom:
        configMapKeyRef:
-         name: my-application-appication-config
+         name: my-application-application-config
          key: LOG
    ```
 

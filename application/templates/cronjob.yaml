@@ -125,6 +125,13 @@ spec:
           imagePullSecrets:
 {{ toYaml . | indent 12 }}
           {{ end }}
+          {{- if $job.dnsConfig }}
+          dnsConfig:
+{{ toYaml $job.dnsConfig | indent 12 }}
+              {{- end }}
+          {{- if $job.dnsPolicy }}
+          dnsPolicy: {{ $job.dnsPolicy }}
+          {{- end }}
           {{- with $job.volumes }}
           volumes:
 {{ toYaml . | indent 12 }}

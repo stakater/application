@@ -86,6 +86,7 @@ helm delete --namespace test my-application
 | deployment.image.digest | string | `""` | Image digest. If set to a non-empty value, digest takes precedence on the tag. |
 | deployment.image.pullPolicy | string | `"IfNotPresent"` | Image pull policy. |
 | deployment.dnsConfig | object | `nil` | DNS config for the pods. |
+| deployment.dnsPolicy | string | `""` | DNS Policy. |
 | deployment.startupProbe | object | See below | Startup probe. Must specify either one of the following field when enabled: httpGet, exec, tcpSocket, grpc |
 | deployment.startupProbe.enabled | bool | `false` | Enable Startup probe. |
 | deployment.startupProbe.failureThreshold | int | `30` | Number of retries before marking the pod as failed. |

@@ -93,12 +93,8 @@ deployment:
     # @section -- Deployment Parameters
     type: RollingUpdate
     # rollingUpdate:
-      # -- (string) Max unavailable pods during update.
-      # @section -- Deployment Parameters
-      # maxUnavailable: 25%
-      # -- (string) Max surge pods during update.
-      # @section -- Deployment Parameters
-      # maxSurge: 25%
+    #   maxUnavailable: 25%
+    #   maxSurge: 25%
   # -- (bool) Reload deployment if attached Secret/ConfigMap changes.
   # @section -- Deployment Parameters
   reloadOnChange: true

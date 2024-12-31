@@ -63,8 +63,6 @@ helm delete --namespace test my-application
 | deployment.annotations | object | `nil` | Annotations for Deployment. |
 | deployment.additionalPodAnnotations | object | `nil` | Additional pod annotations. |
 | deployment.strategy.type | string | `"RollingUpdate"` | Type of deployment strategy. |
-| deployment.strategy.rollingUpdate.maxUnavailable | string | `"25%"` | Max unavailable pods during update. |
-| deployment.strategy.rollingUpdate.maxSurge | string | `"25%"` | Max surge pods during update. |
 | deployment.reloadOnChange | bool | `true` | Reload deployment if attached Secret/ConfigMap changes. |
 | deployment.nodeSelector | object | `nil` | Select the node where the pods should be scheduled. |
 | deployment.hostAliases | list | `nil` | Add host aliases to the pods. |
@@ -86,6 +84,7 @@ helm delete --namespace test my-application
 | deployment.image.digest | string | `""` | Image digest. If set to a non-empty value, digest takes precedence on the tag. |
 | deployment.image.pullPolicy | string | `"IfNotPresent"` | Image pull policy. |
 | deployment.dnsConfig | object | `nil` | DNS config for the pods. |
+| deployment.dnsPolicy | string | `""` | DNS Policy. |
 | deployment.startupProbe | object | See below | Startup probe. Must specify either one of the following field when enabled: httpGet, exec, tcpSocket, grpc |
 | deployment.startupProbe.enabled | bool | `false` | Enable Startup probe. |
 | deployment.startupProbe.failureThreshold | int | `30` | Number of retries before marking the pod as failed. |

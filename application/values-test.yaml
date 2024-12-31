@@ -12,6 +12,7 @@ deployment:
     options:
     - name: ndots
       value: '1'
+  dnsPolicy: ClusterFirst
   # By default deploymentStrategy is set to rollingUpdate with maxSurge of 25% and maxUnavailable of 25%
   # You can change type to `Recreate` or can uncomment `rollingUpdate` specification and adjust them to your usage.
   strategy:
@@ -1307,6 +1308,10 @@ cronJob:
         requests:
             memory: 5Gi
             cpu: 1
+      dnsConfig:
+        options:
+          - name: ndots
+            value: '1'
 
 # Take backup of application namespace
 backup:
@@ -1352,3 +1357,7 @@ job:
         requests:
             memory: 5Gi
             cpu: 1
+      dnsConfig:
+        options:
+          - name: ndots
+            value: '1'

@@ -900,7 +900,8 @@ certificate:
   #    - Stockholm
   # -- (string) Common name as specified on the DER encoded CSR.
   # @section -- cert-manager Certificate Parameters
-  commonName: admin-app
+  commonName:
+  # admin-app
   # -- (string) Private key algorithm of the corresponding private key for this certificate.
   # @section -- cert-manager Certificate Parameters
   keyAlgorithm: rsa

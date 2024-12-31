@@ -296,7 +296,7 @@ helm delete --namespace test my-application
 | certificate.duration | string | `"8760h0m0s"` | The requested "duration" (i.e. lifetime) of the Certificate. |
 | certificate.renewBefore | string | `"720h0m0s"` | The amount of time before the currently issued certificate's notAfter time that cert-manager will begin to attempt to renew the certificate. |
 | certificate.subject | tpl/object | `nil` | Full X509 name specification for certificate. |
-| certificate.commonName | string | `"admin-app"` | Common name as specified on the DER encoded CSR. |
+| certificate.commonName | string | `nil` | Common name as specified on the DER encoded CSR. |
 | certificate.keyAlgorithm | string | `"rsa"` | Private key algorithm of the corresponding private key for this certificate. |
 | certificate.keyEncoding | string | `"pkcs1"` | Private key cryptography standards (PKCS) for this certificate's private key to be encoded in. |
 | certificate.keySize | int | `2048` | Key bit size of the corresponding private key for this certificate. |

@@ -63,8 +63,6 @@ helm delete --namespace test my-application
 | deployment.annotations | object | `nil` | Annotations for Deployment. |
 | deployment.additionalPodAnnotations | object | `nil` | Additional pod annotations. |
 | deployment.strategy.type | string | `"RollingUpdate"` | Type of deployment strategy. |
-| deployment.strategy.rollingUpdate.maxUnavailable | string | `"25%"` | Max unavailable pods during update. |
-| deployment.strategy.rollingUpdate.maxSurge | string | `"25%"` | Max surge pods during update. |
 | deployment.reloadOnChange | bool | `true` | Reload deployment if attached Secret/ConfigMap changes. |
 | deployment.nodeSelector | object | `nil` | Select the node where the pods should be scheduled. |
 | deployment.hostAliases | list | `nil` | Add host aliases to the pods. |

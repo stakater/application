@@ -41,6 +41,11 @@ cronJob:
     #     requests:
     #         memory: 5Gi
     #         cpu: 1
+    #   dnsConfig:
+    #     options:
+    #     - name: ndots
+    #       value: '1'
+    #   dnsPolicy: ClusterFirst
 
 
 job:
@@ -71,6 +76,11 @@ job:
     #     requests:
     #         memory: 5Gi
     #         cpu: 1
+    #   dnsConfig:
+    #     options:
+    #     - name: ndots
+    #       value: '1'
+    #   dnsPolicy: ClusterFirst
 
 deployment:
   # -- (bool) Enable Deployment.
@@ -251,6 +261,9 @@ deployment:
     # options:
     # - name: ndots
     #   value: '1'
+  # -- (string) DNS Policy.
+  # @section -- Deployment Parameters
+  dnsPolicy: ""
   # -- (object) Startup probe.
   # @default -- See below
   # Must specify either one of the following field when enabled: httpGet, exec, tcpSocket, grpc

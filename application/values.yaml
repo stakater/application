@@ -907,11 +907,11 @@ certificate:
   #    - Stockholm
   #  provinces:
   #    - Stockholm
-  # -- (string) Common name as specified on the DER encoded CSR.
+  # -- (string) Common name as specified on the DER encoded CSR. This field is not recommended in cases when this certificate is an end-entity certificate. More information can be found [here](https://cert-manager.io/docs/usage/certificate/#:~:text=%23%20Avoid%20using%20commonName,%3A%20example.com)
   # @section -- cert-manager Certificate Parameters
   commonName:
   # admin-app
-  # -- (string) Private key algorithm of the corresponding private key for this certificate. This field is not recommended in cases when this certificate is an end-entity certificate. More information can be found [here](https://cert-manager.io/docs/usage/certificate/#:~:text=%23%20Avoid%20using%20commonName,%3A%20example.com)
+  # -- (string) Private key algorithm of the corresponding private key for this certificate.
   # @section -- cert-manager Certificate Parameters
   keyAlgorithm: rsa
   # -- (string) Private key cryptography standards (PKCS) for this certificate's private key to be encoded in.

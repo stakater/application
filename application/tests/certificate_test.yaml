@@ -38,7 +38,7 @@ tests:
           count: 1
       - isKind:
           of: Certificate
-      - notExists:
+      - isNullOrEmpty:
           path: spec.commonName
 
   - it: yields Certificate resource if enabled and API version is available

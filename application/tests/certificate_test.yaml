@@ -23,6 +23,24 @@ tests:
       - hasDocuments:
           count: 0
 
+  - it: does not set Certificate cname if commonName is set to null
+    set:
+      certificate:
+        enabled: true
+        dnsNames:
+          - a.com
+        commonName: null
+    capabilities:
+      apiVersions:
+        - cert-manager.io/v1
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Certificate
+      - notExists:
+          path: spec.commonName
+
   - it: yields Certificate resource if enabled and API version is available
     set:
       certificate:

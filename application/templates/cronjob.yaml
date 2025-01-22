@@ -54,7 +54,7 @@ spec:
           annotations: {{ toYaml . | nindent 12 }}
           {{- end }}
         spec:
-          serviceAccountName: {{ template "application.service-account-name" $ }}
+          serviceAccountName: {{ include "application.serviceAccountName" $ }}
           containers:
           - name: {{ $name }}
             {{- $image := required (print "Undefined image repo for container '" $name "'") $job.image.repository }}

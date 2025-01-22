@@ -37,7 +37,7 @@ spec:
       annotations: {{ toYaml . | nindent 8 }}
       {{- end }}
     spec:
-      serviceAccountName: {{ template "application.service-account-name" $ }}
+      serviceAccountName: {{ include "application.serviceAccountName" $ }}
       containers:
       - name: {{ $name }}
 
@@ -98,7 +98,7 @@ spec:
       restartPolicy: OnFailure
       {{ end }}
       {{- with $job.imagePullSecrets}}
-      imagePullSecrets: 
+      imagePullSecrets:
 {{ toYaml . | indent 8 }}
       {{ end }}
       {{- if $job.dnsConfig }}

@@ -74,7 +74,7 @@ spec:
           ]
 {{- end }}
     spec:
-      serviceAccountName: {{ template "application.service-account-name" $ }}
+      serviceAccountName: {{ include "application.serviceAccountName" $ }}
       {{- if .Values.deployment.hostAliases }}
       hostAliases:
 {{ toYaml .Values.deployment.hostAliases | indent 6 }}

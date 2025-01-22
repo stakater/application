@@ -104,10 +104,11 @@ tests:
           example:
             image:
               repository: example-image
-      rbac.serviceAccount.enabled: false
+      rbac.serviceAccount.create: false
     asserts:
-      - isNullOrEmpty:
+      - equal:
           path: spec.template.spec.serviceAccountName
+          value: default
 
   - it: uses service account name override when present
     set:
@@ -117,7 +118,7 @@ tests:
           example:
             image:
               repository: example-image
-      rbac.serviceAccount.enabled: true
+      rbac.serviceAccount.create: true
       rbac.serviceAccount.name: example-sa
     asserts:
       - equal:
@@ -133,7 +134,7 @@ tests:
             image:
               repository: example-image
       applicationName: example-app
-      rbac.serviceAccount.enabled: true
+      rbac.serviceAccount.create: true
       rbac.serviceAccount.name: ""
     asserts:
       - equal:

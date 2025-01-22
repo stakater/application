@@ -213,12 +213,13 @@ helm delete --namespace test my-application
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | rbac.enabled | bool | `true` | Enable RBAC. |
-| rbac.existingServiceAccountName | string | `""` | Existing Service Account Name. |
-| rbac.serviceAccount.enabled | bool | `false` | Deploy Service Account. |
-| rbac.serviceAccount.name | string | `{{ include "application.name" $ }}` | Service Account Name. |
-| rbac.serviceAccount.additionalLabels | object | `nil` | Additional labels for Service Account. |
-| rbac.serviceAccount.annotations | object | `nil` | Annotations for Service Account. |
+| rbac.serviceAccount.create | bool | `false` | Specifies whether to create a dedicated service account. If set to `true`, a new service account will be created. |
+| rbac.serviceAccount.name | string | `""` | The name of the service account. Behavior based on its value and `rbac.serviceAccount.create`: If `rbac.serviceAccount.create` is `false` and `name` is empty, the default service account ("default") is used. If `rbac.serviceAccount.create` is `false` and `name` is set, the provided name is used. If `rbac.serviceAccount.create` is `true` and `name` is empty, a name is auto-generated using the fullname template. If `rbac.serviceAccount.create` is `true` and `name` is set, the provided name is used for creation. |
+| rbac.serviceAccount.additionalLabels | object | `nil` | Additional labels for Service Account. If `rbac.serviceAccount.create` is set to true, these labels are appended to the service account. |
+| rbac.serviceAccount.annotations | object | `nil` | Annotations for Service Account. If `rbac.serviceAccount.create` is set to true, these annotations are appended to the service account. |
 | rbac.roles | list | `nil` | Namespaced Roles. |
+| rbac.additionalLabels | object | `nil` | Additional labels for the Role and RoleBinding resources. |
+| rbac.annotations | object | `nil` | Annotations for the Role and RoleBinding resources. |
 
 ### ConfigMap Parameters
 

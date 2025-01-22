@@ -87,16 +87,17 @@ tests:
           path: spec.template.spec.containers[0].image
           value: example-image:example-tag@sha256:example-digest
 
-  - it: yields empty service account name when disabled
+  - it: yields default service account name when create is disabled and no existing service account name is given
     set:
-      rbac.serviceAccount.enabled: false
+      rbac.serviceAccount.create: false
     asserts:
-      - isNullOrEmpty:
+      - equal:
           path: spec.template.spec.serviceAccountName
+          value: default
 
   - it: uses service account name override when present
     set:
-      rbac.serviceAccount.enabled: true
+      rbac.serviceAccount.create: true
       rbac.serviceAccount.name: example-sa
     asserts:
       - equal:
@@ -106,7 +107,7 @@ tests:
   - it: uses a generated service account name when not given
     set:
       applicationName: example-app
-      rbac.serviceAccount.enabled: true
+      rbac.serviceAccount.create: true
       rbac.serviceAccount.name: ""
     asserts:
       - equal:

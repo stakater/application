@@ -69,17 +69,16 @@ reference:
   name: {{ include "application.name" . }}
 {{- end }}
 
-{{- define "application.service-account-name" }}
-{{- if .Values.rbac.enabled }}
-  {{- if and .Values.rbac.serviceAccount.enabled .Values.rbac.existingServiceAccountName }}
-    {{- fail "Conflict: 'rbac.existingServiceAccountName' is set, but a new service account is being created. Please disable 'rbac.serviceAccount.enabled' or unset 'rbac.existingServiceAccountName'." }}
-  {{- end }}
-  {{- if .Values.rbac.serviceAccount.enabled }}
+{{/*
+Get the name of the service account to use.
+If the service account is set to be created, return the service account name or a default name.
+If the service account is not set to be created and a name is provided, return the provided name;
+otherwise, return the default namespace service account.
+*/}}
+{{- define "application.serviceAccountName" }}
+  {{- if .Values.rbac.serviceAccount.create }}
     {{- default (include "application.name" .) .Values.rbac.serviceAccount.name }}
   {{- else }}
-    {{- default "null" .Values.rbac.existingServiceAccountName }}
+    {{- default "default" .Values.rbac.serviceAccount.name }}
   {{- end }}
-{{- else }}
-  null
-{{- end }}
 {{- end }}

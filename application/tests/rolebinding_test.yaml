@@ -121,6 +121,7 @@ tests:
         roles:
           - name: example
         serviceAccount:
+          create: true
           name: ""
     asserts:
       - equal:

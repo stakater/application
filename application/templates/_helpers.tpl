@@ -68,3 +68,17 @@ reference:
   kind: Route
   name: {{ include "application.name" . }}
 {{- end }}
+
+{{/*
+Get the name of the service account to use.
+If the service account is set to be created, return the service account name or a default name.
+If the service account is not set to be created and a name is provided, return the provided name;
+otherwise, return the default namespace service account.
+*/}}
+{{- define "application.serviceAccountName" }}
+  {{- if .Values.rbac.serviceAccount.create }}
+    {{- default (include "application.name" .) .Values.rbac.serviceAccount.name }}
+  {{- else }}
+    {{- default "default" .Values.rbac.serviceAccount.name }}
+  {{- end }}
+{{- end }}

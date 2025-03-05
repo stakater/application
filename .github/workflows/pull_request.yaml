@@ -82,7 +82,7 @@ jobs:
         with:
           ref: ${{github.event.pull_request.head.sha}}
       - name: Run helm-docs
-        uses: losisin/helm-docs-github-action@0a82321d03b78ba94b4cc75e4efe7547f9379072 # v1.3.6
+        uses: losisin/helm-docs-github-action@0ad5e25e0c45c6c9e32a99776f64eb410b4a5657 # v1.4.0
         with:
           # Keep args in sync with /.pre-commit-config.yaml
           output-file: ./../README.md

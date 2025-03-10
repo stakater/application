@@ -77,3 +77,48 @@ tests:
       - equal:
           path: spec.jobTemplate.spec.template.spec.containers[0].image
           value: example-image:example-tag@sha256:example-digest
+
+  - it: yields default service account name when create is disabled and no existing service account name is given
+    set:
+      cronJob:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+      rbac.serviceAccount.create: false
+    asserts:
+      - equal:
+          path: spec.jobTemplate.spec.template.spec.serviceAccountName
+          value: default
+
+  - it: uses service account name override when present
+    set:
+      cronJob:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+      rbac.serviceAccount.create: true
+      rbac.serviceAccount.name: example-sa
+    asserts:
+      - equal:
+          path: spec.jobTemplate.spec.template.spec.serviceAccountName
+          value: example-sa
+
+  - it: uses a generated service account name when not given
+    set:
+      cronJob:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+      applicationName: example-app
+      rbac.serviceAccount.create: true
+      rbac.serviceAccount.name: ""
+    asserts:
+      - equal:
+          path: spec.jobTemplate.spec.template.spec.serviceAccountName
+          value: example-app

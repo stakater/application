@@ -32,7 +32,7 @@ spec:
             service:
               name: {{ default $applicationNameTpl (.serviceName) }}
               port:
-                name: {{ default "http" (.servicePort) }}
+                number: {{ default "80" (.servicePort) }}
         {{- end }}
         {{- else }}
         {{ fail "Specify paths for ingress host, check values.yaml" }}

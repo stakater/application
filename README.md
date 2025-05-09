@@ -38,7 +38,7 @@ helm delete --namespace test my-application
 | componentOverride | string | `""` | Override the component label for all resources. |
 | partOfOverride | string | `""` | Override the partOf label for all resources. |
 | applicationName | string | `{{ .Chart.Name }}` | Application name. |
-| extraObjects | tpl/list | `[]` | List of extra K8s manifests to deploy |
+| extraObjects | tpl/list | `[]` | List of extra K8s manifests to deploy. Can be of type dict or list. If dict, keys are ignored and only values are used. Items contained within extraObjects can be defined as dict or string and are passed through tpl. |
 
 ### CronJob Parameters
 

@@ -21,6 +21,7 @@ tests:
             namespace: test-namespace
           data:
             key1: value1
+            key2: '{{ print "value2" }}'
     asserts:
       - hasDocuments:
           count: 1
@@ -32,6 +33,12 @@ tests:
       - equal:
           path: metadata.namespace
           value: test-namespace
+      - equal:
+          path: data.key1
+          value: value1
+      - equal:
+          path: data.key2
+          value: value2
 
   - it: yields one ConfigMap (string)
     set:
@@ -44,6 +51,7 @@ tests:
             namespace: test-namespace
           data:
             key1: value1
+            key2: '{{ print "value2" }}'
     asserts:
       - hasDocuments:
           count: 1
@@ -55,6 +63,12 @@ tests:
       - equal:
           path: metadata.namespace
           value: test-namespace
+      - equal:
+          path: data.key1
+          value: value1
+      - equal:
+          path: data.key2
+          value: value2
 
   - it: yields multiple resources
     set:

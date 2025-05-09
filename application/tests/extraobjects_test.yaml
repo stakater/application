@@ -11,10 +11,41 @@ tests:
       - hasDocuments:
           count: 0
 
+  - it: does not yield objects if extraObjects is [] (string)
+    set:
+      extraObjects: |
+        []
+    asserts:
+      - hasDocuments:
+          count: 0
+
   - it: yields one ConfigMap
     set:
       extraObjects:
         - apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: test-config
+            namespace: test-namespace
+          data:
+            key1: value1
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: ConfigMap
+      - equal:
+          path: metadata.name
+          value: test-config
+      - equal:
+          path: metadata.namespace
+          value: test-namespace
+
+  - it: yields one ConfigMap (string)
+    set:
+      extraObjects:
+        - |
+          apiVersion: v1
           kind: ConfigMap
           metadata:
             name: test-config
@@ -44,6 +75,28 @@ tests:
           data:
             key1: value1
         - apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: test-config2
+            namespace: test-namespace
+          data:
+            key1: value1
+    asserts:
+      - hasDocuments:
+          count: 2
+
+  - it: yields multiple resources (string)
+    set:
+      extraObjects:
+        - apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: test-config
+            namespace: test-namespace
+          data:
+            key1: value1
+        - |
+          apiVersion: v1
           kind: ConfigMap
           metadata:
             name: test-config2

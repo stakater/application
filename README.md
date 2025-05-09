@@ -38,6 +38,7 @@ helm delete --namespace test my-application
 | componentOverride | string | `""` | Override the component label for all resources. |
 | partOfOverride | string | `""` | Override the partOf label for all resources. |
 | applicationName | string | `{{ .Chart.Name }}` | Application name. |
+| extraObjects | tpl/list | `[]` | List of extra K8s manifests to deploy |
 
 ### CronJob Parameters
 

@@ -1,4 +1,4 @@
-suite: ConfigMap
+suite: ExtraObjects
 
 templates:
   - extraobjects.yaml

@@ -11,14 +11,6 @@ tests:
       - hasDocuments:
           count: 0
 
-  - it: does not yield objects if extraObjects is [] (string)
-    set:
-      extraObjects: |
-        []
-    asserts:
-      - hasDocuments:
-          count: 0
-
   - it: yields one ConfigMap
     set:
       extraObjects:

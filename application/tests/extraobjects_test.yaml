@@ -73,7 +73,7 @@ tests:
   - it: yields one ConfigMap (object, string)
     set:
       extraObjects:
-        - |
+        cm_a: |
           apiVersion: v1
           kind: ConfigMap
           metadata:

@@ -4,6 +4,13 @@ templates:
   - extraobjects.yaml
 
 tests:
+  - it: does not yield objects if extraObjects is null
+    set:
+      extraObjects: null
+    asserts:
+      - hasDocuments:
+          count: 0
+
   - it: does not yield objects if extraObjects is []
     set:
       extraObjects: []

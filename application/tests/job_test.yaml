@@ -78,6 +78,26 @@ tests:
           path: spec.template.spec.containers[0].image
           value: example-image:example-tag@sha256:example-digest
 
+  - it: applies the annotations correctly on the job
+    set:
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: example-tag
+              digest: sha256:example-digest
+            annotations:
+              foo: "bar"
+              bar: "baz"
+    asserts:
+      - equal:
+          path: metadata.annotations
+          value:
+            foo: "bar"
+            bar: "baz"
+
   - it: applies the additionalPodAnnotations correctly on the pods
     set:
       job:

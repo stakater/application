@@ -1,0 +1,204 @@
+suite: ExtraObjects
+
+templates:
+  - extraobjects.yaml
+
+tests:
+  - it: does not yield objects if extraObjects is null
+    set:
+      extraObjects: null
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: does not yield objects if extraObjects is []
+    set:
+      extraObjects: []
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: does not yield objects if extraObjects is {}
+    set:
+      extraObjects: {}
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: yields one ConfigMap (list, object)
+    set:
+      extraObjects:
+        - apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: test-config
+            namespace: test-namespace
+          data:
+            key1: value1
+            key2: '{{ print "value2" }}'
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: ConfigMap
+      - equal:
+          path: metadata.name
+          value: test-config
+      - equal:
+          path: metadata.namespace
+          value: test-namespace
+      - equal:
+          path: data.key1
+          value: value1
+      - equal:
+          path: data.key2
+          value: value2
+
+  - it: yields one ConfigMap (list, string)
+    set:
+      extraObjects:
+        - |
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: test-config
+            namespace: test-namespace
+          data:
+            key1: value1
+            key2: '{{ print "value2" }}'
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: ConfigMap
+      - equal:
+          path: metadata.name
+          value: test-config
+      - equal:
+          path: metadata.namespace
+          value: test-namespace
+      - equal:
+          path: data.key1
+          value: value1
+      - equal:
+          path: data.key2
+          value: value2
+
+  - it: yields one ConfigMap (object, string)
+    set:
+      extraObjects:
+        cm_a: |
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: test-config
+            namespace: test-namespace
+          data:
+            key1: value1
+            key2: '{{ print "value2" }}'
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: ConfigMap
+      - equal:
+          path: metadata.name
+          value: test-config
+      - equal:
+          path: metadata.namespace
+          value: test-namespace
+      - equal:
+          path: data.key1
+          value: value1
+      - equal:
+          path: data.key2
+          value: value2
+
+  - it: yields multiple resources (list, object)
+    set:
+      extraObjects:
+        - apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: test-config
+            namespace: test-namespace
+          data:
+            key1: value1
+        - apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: test-config2
+            namespace: test-namespace
+          data:
+            key1: value1
+    asserts:
+      - hasDocuments:
+          count: 2
+
+  - it: yields multiple resources (list, object and string)
+    set:
+      extraObjects:
+        - apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: test-config
+            namespace: test-namespace
+          data:
+            key1: value1
+        - |
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: test-config2
+            namespace: test-namespace
+          data:
+            key1: value1
+    asserts:
+      - hasDocuments:
+          count: 2
+
+  - it: yields multiple resources (object, object)
+    set:
+      extraObjects:
+        cm_a:
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: test-config
+            namespace: test-namespace
+          data:
+            key1: value1
+        cm_b:
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: test-config2
+            namespace: test-namespace
+          data:
+            key1: value1
+    asserts:
+      - hasDocuments:
+          count: 2
+
+  - it: yields multiple resources (object, object and string)
+    set:
+      extraObjects:
+        cm_a:
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: test-config
+            namespace: test-namespace
+          data:
+            key1: value1
+        cm_b: |
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: test-config2
+            namespace: test-namespace
+          data:
+            key1: value1
+    asserts:
+      - hasDocuments:
+          count: 2

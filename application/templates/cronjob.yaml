@@ -10,12 +10,11 @@ kind: CronJob
 metadata:
   labels:
   {{- include "application.labels" $ | nindent 4 }}
-{{- if $job.additionalLabels }}
-{{ $job.additionalLabels | indent 4 }}
+{{- with $job.additionalLabels }}
+{{ toYaml . | indent 4 }}
 {{- end }}
-{{- if $job.annotations }}
-  annotations:
-{{ $job.annotations | indent 4 }}
+{{- with $job.annotations }}
+  annotations: {{ toYaml . | nindent 4 }}
 {{- end }}
   name: {{ $name }}
   namespace: {{ template "application.namespace" $ }}

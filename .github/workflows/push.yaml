@@ -1,16 +1,13 @@
 name: Push
 
 concurrency:
- group: push_on_master
+ group: push_on_main
  cancel-in-progress: false
 
 on:
   push:
     branches:
-      - master
-    paths-ignore:
-    - 'README.md'
-    - 'LICENSE'
+      - main
 
 env:
   CHART_NAME: "application"

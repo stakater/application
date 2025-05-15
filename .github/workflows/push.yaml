@@ -41,7 +41,7 @@ jobs:
        minor_pattern: "/(^feat(\\(.+\\))?[: ](?!.*!)|#minor)/"
        # PATCH: conventional "fix" commits without a bang, or ones containing "#patch"
        #   Examples matched: "fix: crash", "fix(core): null ref", "chore: minor typo #patch"
-       patch_pattern: "/(^fix(\\(.+\\))?[: ](?!.*!)|#patch)/"
+       bump_each_commit_patch_pattern: "/(^fix(\\(.+\\))?[: ](?!.*!)|#patch)/"
     
     - run: |
        cat <<EOF

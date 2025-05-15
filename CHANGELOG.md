@@ -1,13 +1,7 @@
 
-# Changelog
+# Changelog archive
 
-All notable changes to this project will be documented here.
-
-### Unreleased
-
-#### Feature
-
-- Feature: Add Job template
+All changes newer than 4.1.3 will now be described in the [GitHub release descriptions](https://github.com/stakater/application/releases).
 
 ### v4.1.3
 - BugFix: Only add application name label to Backup Template 

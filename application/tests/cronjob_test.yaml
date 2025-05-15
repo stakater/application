@@ -122,3 +122,35 @@ tests:
       - equal:
           path: spec.jobTemplate.spec.template.spec.serviceAccountName
           value: example-app
+
+  - it: enables automountServiceAccountToken when RBAC is enabled
+    set:
+      cronJob:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+      applicationName: example-app
+      rbac:
+        enabled: true
+    asserts:
+      - equal:
+          path: spec.jobTemplate.spec.template.spec.automountServiceAccountToken
+          value: true
+
+  - it: disables automountServiceAccountToken when RBAC is disabled
+    set:
+      cronJob:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+      applicationName: example-app
+      rbac:
+        enabled: false
+    asserts:
+      - equal:
+          path: spec.jobTemplate.spec.template.spec.automountServiceAccountToken
+          value: false

@@ -114,6 +114,24 @@ tests:
           path: spec.template.spec.serviceAccountName
           value: example-app
 
+  - it: enables automountServiceAccountToken when RBAC is enabled
+    set:
+      applicationName: example-app
+      rbac.enabled: true
+    asserts:
+      - equal:
+          path: spec.template.spec.automountServiceAccountToken
+          value: true
+
+  - it: disables automountServiceAccountToken when RBAC is disabled
+    set:
+      applicationName: example-app
+      rbac.enabled: false
+    asserts:
+      - equal:
+          path: spec.template.spec.automountServiceAccountToken
+          value: false
+
   - it: uses grpc probing when set
     set:
       applicationName: example-app

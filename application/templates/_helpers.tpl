@@ -78,8 +78,8 @@ otherwise, return the default namespace service account.
 {{- define "application.serviceAccountName" }}
   {{- $saName := .Values.rbac.serviceAccount.name }}
   {{- if .Values.rbac.serviceAccount.create }}
-    {{- empty $saName | ternary (quote $saName) (include "application.name" .) }}
+    {{- empty $saName | ternary (include "application.name" .) (quote $saName) }}
   {{- else }}
-    {{- empty $saName | ternary (quote $saName) "default" }}
+    {{- empty $saName | ternary "default" (quote $saName) }}
   {{- end }}
 {{- end }}

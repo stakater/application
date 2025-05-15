@@ -74,6 +74,7 @@ spec:
           ]
 {{- end }}
     spec:
+      automountServiceAccountToken: {{ $.Values.rbac.enabled }}
       serviceAccountName: {{ include "application.serviceAccountName" $ }}
       {{- if .Values.deployment.hostAliases }}
       hostAliases:

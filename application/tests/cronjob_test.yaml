@@ -77,3 +77,41 @@ tests:
       - equal:
           path: spec.jobTemplate.spec.template.spec.containers[0].image
           value: example-image:example-tag@sha256:example-digest
+
+  - it: applies the annotations correctly to the cronjob
+    set:
+      cronJob:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: example-tag
+              digest: sha256:example-digest
+            annotations:
+              foo: "bar"
+              bar: "baz"
+    asserts:
+      - equal:
+          path: metadata.annotations
+          value:
+            foo: "bar"
+            bar: "baz"
+
+  - it: applies the additionalPodAnnotations correctly on the pods
+    set:
+      cronJob:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: example-tag
+              digest: sha256:example-digest
+            additionalPodAnnotations:
+              helm.sh/hook: "pre-install,pre-upgrade"
+    asserts:
+      - equal:
+          path: spec.jobTemplate.spec.template.metadata.annotations
+          value:
+            helm.sh/hook: "pre-install,pre-upgrade"

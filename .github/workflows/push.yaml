@@ -32,7 +32,6 @@ jobs:
       with:
        debug: true
        tag_prefix: ""
-       bump_each_commit: true
        # MAJOR: any commit whose first line has a bang (!) indicator or explicitly contains "#major"
        #   Examples matched: "feat!: breaking change", "refactor(scope)!: rewrite", "chore!: bump deps", "anything #major"
        major_pattern: "/(^[a-zA-Z]+(\\(.+\\))?![: ]|#major)/"

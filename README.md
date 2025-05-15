@@ -212,7 +212,7 @@ helm delete --namespace test my-application
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| rbac.enabled | bool | `true` | Enable RBAC. |
+| rbac.enabled | bool | `true` | Enable RBAC. This fields also controls the `automountServiceAccountToken` field in the pod spec. |
 | rbac.serviceAccount.create | bool | `false` | Specifies whether to create a dedicated service account. If set to `true`, a new service account will be created. |
 | rbac.serviceAccount.name | string | `""` | The name of the service account. Behavior based on its value and `rbac.serviceAccount.create`: If `rbac.serviceAccount.create` is `false` and `name` is empty, the default service account ("default") is used. If `rbac.serviceAccount.create` is `false` and `name` is set, the provided name is used. If `rbac.serviceAccount.create` is `true` and `name` is empty, a name is auto-generated using the fullname template. If `rbac.serviceAccount.create` is `true` and `name` is set, the provided name is used for creation. |
 | rbac.serviceAccount.additionalLabels | object | `nil` | Additional labels for Service Account. If `rbac.serviceAccount.create` is set to true, these labels are appended to the service account. |

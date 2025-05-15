@@ -9,25 +9,27 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4
         with:
           fetch-depth: 0 # See: https://goreleaser.com/ci/actions/
 
       - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@da05d552573ad5aba039eaac05058a918a7bf631  # v2
         with:
+          name: ${{ github.ref }}
           tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
+          generate_release_notes: true
           draft: false
           prerelease: false
+          make_latest: true
 
       - name: Notify Slack
-        uses: 8398a7/action-slack@v3
+        uses: 8398a7/action-slack@1750b5085f3ec60384090fb7c52965ef822e869e  # v3
         if: always()
         with:
           status: ${{ job.status }}

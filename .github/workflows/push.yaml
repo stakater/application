@@ -112,9 +112,8 @@ jobs:
         github_token: ${{ secrets.PUBLISH_TOKEN }}
     - name: Create tag
       uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7
-      env:
-        GITHUB_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
       with:
+        github-token: ${{ secrets.PUBLISH_TOKEN }}
         script: |
           github.rest.git.createRef({
             owner: context.repo.owner,

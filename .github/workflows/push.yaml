@@ -104,7 +104,7 @@ jobs:
         git config --local user.name "stakater-user"
         git status
         git add application/Chart.yaml
-        git commit -m "chore: Update artifacts [skip-ci]"
+        git commit -m "chore: Update artifacts [skip-ci]" --allow-empty
         echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
     - name: Push updated artifacts
       uses: ad-m/github-push-action@77c5b412c50b723d2a4fbc6d71fb5723bcd439aa # 77c5b412c50b723d2a4fbc6d71fb5723bcd439aa

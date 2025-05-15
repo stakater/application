@@ -20,53 +20,26 @@ jobs:
     name: helm-dry-run
     if: "! contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
     runs-on: stakater-nonprod
-
     steps:
-    - name: Check out code
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       with:
         persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
         fetch-depth: 0 # otherwise, you will fail to push refs to dest repo
-
-    # Set Up Helm
     - name: Set up Helm
       uses: azure/setup-helm@b9e51907a09c216f16ebe8536097933489208112 # v4
-      with:
-        version: v3.8.2
-
-    # Lint
-    - name: Helm Lint
-      run: |
-        helm lint ${CHART_NAME}
-        helm lint ${CHART_NAME} -f ${CHART_NAME}/values-test.yaml
-
-    - name: Install kubectl
-      uses: azure/setup-kubectl@3e0aec4d80787158d308d7b364cb1b702e7feb7f # v4
-      with:
-        version: v1.26.0
-
     - name: Install OpenShift CLI
       uses: redhat-actions/oc-installer@35b60c3f9757ae4301521556e1b75ff6f59f8d7c # v1
       with:
         oc_version: "https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable-4.7/openshift-client-linux.tar.gz"
-
-    # This is used to setup kubeconfig, required by Tilt
     - name: Login to cluster
       run: oc login --token=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token) --server=https://kubernetes.default.svc --insecure-skip-tls-verify=true
-
-    # This is required for adding ghcr helm registry
-    - name: Login to Container Registry
-      uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3
-      with:
-        registry: ghcr.io/stakater
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-
-    # Dry run to ensure that manifests are generated successfully
+    - name: Helm Lint
+      run: |
+        helm lint ${CHART_NAME}
+        helm lint ${CHART_NAME} -f ${CHART_NAME}/values-test.yaml
     - name: Dry Run Chart
       run: |
         helm install ${CHART_NAME} ${CHART_NAME} -f ${CHART_NAME}/values-test.yaml -n stakater-chart-pipeline-test --dry-run --debug
-
     - name: Notify Slack
       uses: 8398a7/action-slack@1750b5085f3ec60384090fb7c52965ef822e869e # v3
       if: failure() # Pick up events only if the job fails
@@ -78,42 +51,39 @@ jobs:
 
   bump-version:
     runs-on: ubuntu-latest
-
     outputs:
       next_version: ${{ steps.get_next_version.outputs.version }}
       has_next_version: ${{ steps.get_next_version.outputs.hasNextVersion }}
-
     steps:
     - name: Check out code
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       with:
         fetch-depth: 0
-
     - name: Get next version
       id: get_next_version
       uses: thenativeweb/get-next-version@29245d291b9f64a41d76f9b41683610bb4ffeccc # 2.6.3
+    - name: Show the next version
+      run: |
+        echo ${{ steps.get_next_version.outputs.version }}
+        echo ${{ steps.get_next_version.outputs.hasNextVersion }}
 
   push-changes:
     runs-on: ubuntu-latest
     needs:
     - helm-dry-run
     - bump-version
-
     if: needs.bump-version.outputs.has_next_version
-
     steps:
     - name: Check out code
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       with:
         persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
         fetch-depth: 0 # otherwise, you will fail to push refs to dest repo
-
     - name: Update Chart Version
       env:
-        VERSION: ${{ needs.bump-version.outputs.version }}
+        VERSION: ${{ needs.bump-version.outputs.next_version }}
       run: |
         make bump-chart
-
     - name: Publish Helm chart
       uses: stefanprodan/helm-gh-pages@89c6698c192e70ed0e495bee7d3d1ca5b477fe82 # 89c6698c192e70ed0e495bee7d3d1ca5b477fe82
       with:
@@ -127,7 +97,6 @@ jobs:
         linting: off
         commit_username: stakater-user
         commit_email: stakater@gmail.com
-
     - name: Commit updated artifacts
       id: commit
       run: |
@@ -137,12 +106,10 @@ jobs:
         git add application/Chart.yaml
         git commit -m "chore: Update artifacts [skip-ci]"
         echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
-
     - name: Push updated artifacts
       uses: ad-m/github-push-action@77c5b412c50b723d2a4fbc6d71fb5723bcd439aa # 77c5b412c50b723d2a4fbc6d71fb5723bcd439aa
       with:
         github_token: ${{ secrets.PUBLISH_TOKEN }}
-
     - name: Create tag
       uses: actions/github-script@211cb3fefb35a799baa5156f9321bb774fe56294 # v5
       env:
@@ -152,10 +119,9 @@ jobs:
           github.rest.git.createRef({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            ref: 'refs/tags/v${{ needs.bump-version.outputs.version }}',
+            ref: 'refs/tags/v${{ needs.bump-version.outputs.next_version }}',
             sha: '${{ steps.commit.outputs.sha }}'
           })
-
     - name: Notify Slack
       uses: 8398a7/action-slack@1750b5085f3ec60384090fb7c52965ef822e869e # v3
       if: always() # Pick up events even if the job fails or is canceled.

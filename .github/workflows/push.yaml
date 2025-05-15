@@ -27,23 +27,10 @@ jobs:
         fetch-depth: 0 # otherwise, you will fail to push refs to dest repo
 
     # Generate tag for chart without "v" prefix
-    - uses: paulhatch/semantic-version@v5.4.0
-      id: bump_version
-      with:
-       debug: true
-       tag_prefix: "v"
-       bump_each_commit: true
-       # MAJOR: any commit whose first line has a bang (!) indicator or explicitly contains "#major"
-       #   Examples matched: "feat!: breaking change", "refactor(scope)!: rewrite", "chore!: bump deps", "anything #major"
-       major_pattern: "/(^[a-zA-Z]+(\\(.+\\))?![: ]|#major)/"
-       # MINOR: conventional "feat" commits without a bang, or ones containing "#minor"
-       #   Examples matched: "feat: add option", "feat(ui): improve", "docs: update #minor"
-       minor_pattern: "/(^feat(\\(.+\\))?[: ](?!.*!)|#minor)/"
-       # PATCH: conventional "fix" commits without a bang, or ones containing "#patch"
-       #   Examples matched: "fix: crash", "fix(core): null ref", "chore: minor typo #patch"
-       bump_each_commit_patch_pattern: "/(^fix(\\(.+\\))?[: ](?!.*!)|#patch)/"
-    
-    - run: |
-       cat <<EOF
-       ${{ toJSON(steps.bump_version) }}
-       EOF
+    - name: Get next version
+      id: get_next_version
+      uses: thenativeweb/get-next-version@2.6.3
+    - name: Show the next version
+      run: |
+        echo ${{ steps.get_next_version.outputs.version }}
+        echo ${{ steps.get_next_version.outputs.hasNextVersion }}

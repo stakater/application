@@ -660,7 +660,7 @@ forecastle:
   networkRestricted: false
 
 rbac:
-  # -- (bool) Enable RBAC.
+  # -- (bool) Enable RBAC. This fields also controls the `automountServiceAccountToken` field in the pod spec.
   # @section -- RBAC Parameters
   enabled: true
   serviceAccount:

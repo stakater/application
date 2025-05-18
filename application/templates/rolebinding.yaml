@@ -21,11 +21,7 @@ roleRef:
   name: {{ template "application.name" $ }}-role-{{ .name }}
 subjects:
   - kind: ServiceAccount
-  {{- if $.Values.rbac.serviceAccount.name }}
-    name: {{ $.Values.rbac.serviceAccount.name }}
-  {{- else }}
-    name: {{ template "application.name" $ }}
-  {{- end }}
+    name: {{ include "application.serviceAccountName" $ }}
     namespace: {{ $.Release.Namespace }}
 {{- end }}
 {{- end }}

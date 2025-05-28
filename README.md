@@ -461,6 +461,7 @@ In order to use environment variable in deployment or cronjob, you will have to 
   ```
 
   You can either provide `nameSuffix` which means name added after prefix `<applicationName>-` or static name with `name` of configmap.
+
   You can specify whether the configmap is mandatory or optional for the pod to start with the `optional: true/false` value.
 
   **Note:** first key after `envFrom` is just used to uniquely identify different objects in `envFrom` block. Make sure to keep it unique and relevant.
@@ -500,7 +501,8 @@ In order to use environment variable in deployment or cronjob, you will have to 
   ```
 
   You can either provide `nameSuffix` which means name added after prefix `<applicationName>-` or static name with `name` of secret.
-  You can specify whether the configmap is mandatory or optional for the pod to start with the `optional: true/false` value.
+
+  You can specify whether the secret is mandatory or optional for the pod to start with the `optional: true/false` value.
 
   **Note:** first key after `envFrom` is just used to uniquely identify different objects in `envFrom` block. Make sure to keep it unique and relevant.
 

@@ -141,10 +141,10 @@ tests:
           name: foo
     asserts:
       - equal:
-          path: spec.template.spec.containers[0].envFrom[0].name
+          path: spec.template.spec.containers[0].envFrom[0].secretRef.name
           value: foo
       - equal:
-          path: spec.template.spec.containers[0].envFrom[0].optional
+          path: spec.template.spec.containers[0].envFrom[0].secretRef.optional
           value: false
 
   - it: configures envFrom as optional when configured
@@ -156,8 +156,8 @@ tests:
           optional: true
     asserts:
       - equal:
-          path: spec.template.spec.containers[0].envFrom[0].name
+          path: spec.template.spec.containers[0].envFrom[0].secretRef.name
           value: foo
       - equal:
-          path: spec.template.spec.containers[0].envFrom[0].optional
+          path: spec.template.spec.containers[0].envFrom[0].secretRef.optional
           value: true

@@ -61,15 +61,15 @@ jobs:
       uses: thenativeweb/get-next-version@29245d291b9f64a41d76f9b41683610bb4ffeccc # 2.6.3
     - name: Show the next version
       run: |
-        echo ${{ steps.get_next_version.outputs.version }}
-        echo ${{ steps.get_next_version.outputs.hasNextVersion }}
+        echo Has next version: ${{ steps.get_next_version.outputs.hasNextVersion }}
+        echo Next version: ${{ steps.get_next_version.outputs.version }}
 
   push-changes:
     runs-on: ubuntu-latest
     needs:
     - helm-dry-run
     - bump-version
-    if: needs.bump-version.outputs.has_next_version
+    if: needs.bump-version.outputs.has_next_version == 'true'
     steps:
     - name: Check out code
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4

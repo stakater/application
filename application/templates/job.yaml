@@ -111,6 +111,9 @@ spec:
       {{- if $job.dnsPolicy }}
       dnsPolicy: {{ $job.dnsPolicy }}
       {{- end }}
+      {{- with $job.hostAliases }}
+      hostAliases: {{ toYaml . | nindent 8 }}
+      {{- end }}
       {{- with $job.volumes }}
       volumes:
 {{ toYaml . | indent 8 }}

@@ -5,6 +5,7 @@ templates:
 
 set:
   deployment.image.repository: example-image
+  deployment.image.tag: example-tag
 
 tests:
   - it: does not include OAuth proxy container if disabled

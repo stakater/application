@@ -286,6 +286,9 @@ spec:
       {{- if .Values.deployment.dnsPolicy }}
       dnsPolicy: {{ .Values.deployment.dnsPolicy }}
       {{- end }}
+      {{- with .Values.deployment.hostAliases }}
+      hostAliases: {{- toYaml . | nindent 8 }}
+      {{- end }}
       {{- if or (.Values.deployment.openshiftOAuthProxy.enabled) (.Values.deployment.volumes) (and (eq .Values.persistence.enabled true) (eq .Values.persistence.mountPVC true) )}}
       volumes:
         {{- if .Values.deployment.openshiftOAuthProxy.enabled }}

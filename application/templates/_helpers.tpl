@@ -39,12 +39,21 @@ Create chart name and version as used by the chart label.
 Common labels
 */}}
 {{- define "application.labels" -}}
+app.kubernetes.io/name: {{ include "application.name" . }}
 helm.sh/chart: {{ include "application.chart" . }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+app.kubernetes.io/instance: {{ .Release.Name }}
 {{- with include "application.version" . }}
 app.kubernetes.io/version: {{ quote . }}
 {{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- if .Values.componentOverride }}
+app.kubernetes.io/component: {{ .Values.componentOverride }}
+{{- end }}
+{{- if .Values.partOfOverride }}
+app.kubernetes.io/part-of: {{ .Values.partOfOverride }}
+{{- else }}
 app.kubernetes.io/part-of: {{ include "application.name" . }}
+{{- end }}
 {{- end }}
 
 {{/*

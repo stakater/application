@@ -114,7 +114,7 @@ spec:
       dnsPolicy: {{ $job.dnsPolicy }}
       {{- end }}
       {{- with $job.hostAliases }}
-      hostAliases: {{ toYaml . | nindent 8 }}
+      hostAliases: {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with $job.volumes }}
       volumes:

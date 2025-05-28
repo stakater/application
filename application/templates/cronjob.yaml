@@ -127,7 +127,7 @@ spec:
           {{- if $job.dnsConfig }}
           dnsConfig:
 {{ toYaml $job.dnsConfig | indent 12 }}
-              {{- end }}
+          {{- end }}
           {{- if $job.dnsPolicy }}
           dnsPolicy: {{ $job.dnsPolicy }}
           {{- end }}

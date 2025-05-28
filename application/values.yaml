@@ -155,7 +155,6 @@ deployment:
   #  production-cm:
   #    type: configmap
   #    nameSuffix: my-configmap
-  #    optional: false
   #  postgres-config:
   #    type: secret
   #    nameSuffix: postgres

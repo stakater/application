@@ -46,7 +46,15 @@ cronJob:
     #     - name: ndots
     #       value: '1'
     #   dnsPolicy: ClusterFirst
-
+    #   hostAliases:
+    #   - ip: "127.0.0.1"
+    #     hostnames:
+    #     - "foo.local"
+    #     - "bar.local"
+    #   - ip: "10.1.2.3"
+    #     hostnames:
+    #     - "foo.remote"
+    #     - "bar.remote"
 
 job:
   # -- (bool) Deploy Job resources.
@@ -81,6 +89,15 @@ job:
     #     - name: ndots
     #       value: '1'
     #   dnsPolicy: ClusterFirst
+    #   hostAliases:
+    #   - ip: "127.0.0.1"
+    #     hostnames:
+    #     - "foo.local"
+    #     - "bar.local"
+    #   - ip: "10.1.2.3"
+    #     hostnames:
+    #     - "foo.remote"
+    #     - "bar.remote"
 
 deployment:
   # -- (bool) Enable Deployment.
@@ -111,7 +128,7 @@ deployment:
   # -- (object) Select the node where the pods should be scheduled.
   # @section -- Deployment Parameters
   nodeSelector:
-  # -- (list) Add host aliases to the pods.
+  # -- (list) Mapping between IP and hostnames that will be injected as entries in the pod's hosts files.
   # @section -- Deployment Parameters
   hostAliases:
   # - ip: "127.0.0.1"

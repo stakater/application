@@ -74,9 +74,8 @@ spec:
           ]
 {{- end }}
     spec:
-      {{- if .Values.deployment.hostAliases }}
-      hostAliases:
-{{ toYaml .Values.deployment.hostAliases | indent 6 }}
+      {{- with .Values.deployment.hostAliases }}
+      hostAliases: {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- if .Values.deployment.initContainers }}
       initContainers:
@@ -285,9 +284,6 @@ spec:
           {{- end }}
       {{- if .Values.deployment.dnsPolicy }}
       dnsPolicy: {{ .Values.deployment.dnsPolicy }}
-      {{- end }}
-      {{- with .Values.deployment.hostAliases }}
-      hostAliases: {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- if or (.Values.deployment.openshiftOAuthProxy.enabled) (.Values.deployment.volumes) (and (eq .Values.persistence.enabled true) (eq .Values.persistence.mountPVC true) )}}
       volumes:

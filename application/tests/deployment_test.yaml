@@ -165,6 +165,10 @@ tests:
       componentOverride: example-component
       partOfOverride: example-part-of
       applicationName: example-app-name
+      additionalCommonLabels:
+        example.com/organization: example-organization
+        example.com/team: example-team
+        example.com/owner: example-owner
     asserts:
       - equal:
           path: metadata.name
@@ -178,3 +182,12 @@ tests:
       - equal:
           path: metadata.labels["app.kubernetes.io/part-of"]
           value: example-part-of
+      - equal:
+          path: metadata.labels["example.com/organization"]
+          value: example-organization
+      - equal:
+          path: metadata.labels["example.com/team"]
+          value: example-team
+      - equal:
+          path: metadata.labels["example.com/owner"]
+          value: example-owner

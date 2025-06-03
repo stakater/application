@@ -66,7 +66,7 @@ helm delete --namespace test my-application
 | deployment.strategy.type | string | `"RollingUpdate"` | Type of deployment strategy. |
 | deployment.reloadOnChange | bool | `true` | Reload deployment if attached Secret/ConfigMap changes. |
 | deployment.nodeSelector | object | `nil` | Select the node where the pods should be scheduled. |
-| deployment.hostAliases | list | `nil` | Add host aliases to the pods. |
+| deployment.hostAliases | list | `nil` | Mapping between IP and hostnames that will be injected as entries in the pod's hosts files. |
 | deployment.initContainers | object | `nil` | Add init containers to the pods. |
 | deployment.fluentdConfigAnnotations | object | `nil` | Configuration details for fluentdConfigurations. Only works for specific setup, see <https://medium.com/stakater/dynamic-log-processing-with-fluentd-konfigurator-and-slack-935a5de4eddb>. |
 | deployment.replicas | int | `nil` | Number of replicas. |

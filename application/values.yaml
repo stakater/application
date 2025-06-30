@@ -360,13 +360,14 @@ deployment:
     grpc: {}
   # -- (object) Resource limits and requests for the pod.
   # @section -- Deployment Parameters
-  resources:
-    limits:
-      memory: 256Mi
-      cpu: 0.5
-    requests:
-      memory: 128Mi
-      cpu: 0.1
+  resources: {}
+  # limits:
+  #   memory: 256Mi
+  #   cpu: 0.5
+  # requests:
+  #   memory: 128Mi
+  #   cpu: 0.1
+  
   # -- (object) Security Context at Container Level.
   # @section -- Deployment Parameters
   containerSecurityContext:

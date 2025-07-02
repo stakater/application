@@ -137,12 +137,10 @@ spec:
           name: proxy-tls
         {{- end }}
       - name: {{ template "application.name" . }}
-
         {{- $image := required "Undefined image for application container" .Values.deployment.image.repository }}
         {{- with .Values.deployment.image.tag    }} {{- $image = print $image ":" . }} {{- end }}
         {{- with .Values.deployment.image.digest }} {{- $image = print $image "@" . }} {{- end }}
         image: {{ $image }}
-
         imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
         {{- with .Values.deployment.lifecycle }}
         lifecycle:

@@ -35,7 +35,7 @@ jobs:
           helm lint ${CHART_NAME}
           helm lint ${CHART_NAME} -f ${CHART_NAME}/values-test.yaml
       - name: Run Checkov
-        uses: bridgecrewio/checkov-action@16c078443ac4b4b1f694817dff28944de3d2a1ca # v12.3025.0
+        uses: bridgecrewio/checkov-action@d1ecbbd991738bb77267c875eff09fe1f2c6e044 # v12.3036.0
         with:
           quiet: true
           soft_fail: false
@@ -65,7 +65,7 @@ jobs:
         with:
           ref: ${{github.event.pull_request.head.sha}}
       - name: Run helm-docs
-        uses: losisin/helm-docs-github-action@7b7955b018c87e10abf75fec0e8fe459556aec68 # v1.5.1
+        uses: losisin/helm-docs-github-action@8dc2304e986afbbb0b7db0a9980b6bf68c1307cf # v1.5.2
         with:
           # Keep args in sync with /.pre-commit-config.yaml
           output-file: ./../README.md

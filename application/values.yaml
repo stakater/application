@@ -149,19 +149,21 @@ deployment:
   # @section -- Deployment Parameters
   imagePullSecrets: []
   #  - name: docker-pull
-  # -- (object) Mount environment variables from ConfigMap or Secret to the pod.
+  # -- (object) Mount environment variables from ConfigMap or Secret to the pod. See the README "Consuming environment variable in application chart" section for more details.
   # @section -- Deployment Parameters
   envFrom:
   #  production-cm:
   #    type: configmap
   #    nameSuffix: my-configmap
-  #  logging-config:
-  #    type: configmap
-  #    nameSuffix: your-configmap
   #  postgres-config:
   #    type: secret
   #    nameSuffix: postgres
-  # -- (object) Environment variables to be added to the pod.
+  #    optional: false
+  #  optional-config:
+  #    type: secret
+  #    nameSuffix: extra
+  #    optional: true
+  # -- (object) Environment variables to be added to the pod. See the README "Consuming environment variable in application chart" section for more details.
   # @section -- Deployment Parameters
   env:
   #  ENVIRONMENT:

@@ -116,7 +116,7 @@ helm delete --namespace test my-application
 | deployment.livenessProbe.exec | object | `{}` | Exec probe. |
 | deployment.livenessProbe.tcpSocket | object | `{}` | TCP Socket probe. |
 | deployment.livenessProbe.grpc | object | `{}` | gRPC probe. |
-| deployment.resources | object | `{"limits":{"cpu":0.5,"memory":"256Mi"},"requests":{"cpu":0.1,"memory":"128Mi"}}` | Resource limits and requests for the pod. |
+| deployment.resources | object | `{}` | Resource limits and requests for the pod. |
 | deployment.containerSecurityContext | object | `{"readOnlyRootFilesystem":true,"runAsNonRoot":true}` | Security Context at Container Level. |
 | deployment.openshiftOAuthProxy.enabled | bool | `false` | Enable [OpenShift OAuth Proxy](https://github.com/openshift/oauth-proxy). |
 | deployment.openshiftOAuthProxy.port | int | `8080` | Port on which application is running inside container. |

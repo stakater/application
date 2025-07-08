@@ -26,6 +26,7 @@ cronJob:
   jobs:
     # db-migration:
     #   schedule: "* * * 8 *"
+    #   suspend: false
     #   priorityClassName: high-priority
     #   env:
     #     KEY:

@@ -168,6 +168,7 @@ spec:
             {{- else }}
             name: {{ template "application.name" $ }}
             {{- end }}
+            optional: {{ default false $value.optional }}
         {{- end }}
         {{- if (eq .type "secret") }}
         - secretRef:
@@ -178,6 +179,7 @@ spec:
             {{- else }}
             name: {{ template "application.name" $ }}
             {{- end }}
+            optional: {{ default false $value.optional }}
         {{- end }}
         {{- end }}
         {{- end }}

@@ -35,7 +35,7 @@ jobs:
           helm lint ${CHART_NAME}
           helm lint ${CHART_NAME} -f ${CHART_NAME}/values-test.yaml
       - name: Run Checkov
-        uses: bridgecrewio/checkov-action@d1ecbbd991738bb77267c875eff09fe1f2c6e044 # v12.3036.0
+        uses: bridgecrewio/checkov-action@414cfde474003891d5ee9821d766348e5b94399b # v12.3038.0
         with:
           quiet: true
           soft_fail: false

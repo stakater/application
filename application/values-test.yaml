@@ -1371,8 +1371,17 @@ extraObjects:
     apiVersion: v1
     kind: ConfigMap
     metadata:
-      name: '{{ .Release.Name }}-extra-object-configmap'
+      name: '{{ .Release.Name }}-extra-object-configmap-1'
       namespace: "{{ .Release.Namespace }}"
     data:
+      key1: value1-{{ .Release.Name }}
+      key2: value2
+  b:
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: '{{ .Release.Name }}-extra-object-secret-1'
+      namespace: "{{ .Release.Namespace }}"
+    stringData:
       key1: value1-{{ .Release.Name }}
       key2: value2

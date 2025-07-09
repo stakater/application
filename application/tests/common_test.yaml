@@ -8,12 +8,38 @@ templates:
   - service.yaml
   - extraobjects.yaml
 
-values:
-  - ../values-test.yaml
-
+# TODO: use values from values-test.yaml
+# values:
+#   - ../values-test.yaml
 set:
-  deployment.image.repository: example-image
-  deployment.image.tag: example-tag
+  additionalLabels:
+    group: com.stakater.platform
+    team: stakater
+  deployment:
+    image:
+      repository: example-image
+      tag: example-tag
+  ingress:
+    enabled: true
+  extraObjects:
+    a:
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: '{{ .Release.Name }}-extra-object-configmap-1'
+        namespace: "{{ .Release.Namespace }}"
+      data:
+        key1: value1-{{ .Release.Name }}
+        key2: value2
+    b:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: '{{ .Release.Name }}-extra-object-secret-1'
+        namespace: "{{ .Release.Namespace }}"
+      stringData:
+        key1: value1-{{ .Release.Name }}
+        key2: value2
 
 capabilities:
   apiVersions:

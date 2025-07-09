@@ -70,9 +70,6 @@ app.kubernetes.io/part-of: {{ include "application.name" . }}
 {{- end }}
 
 {{/*
-{{- end }}
-
-{{/*
 Selector labels
 */}}
 {{- define "application.selectorLabels" -}}

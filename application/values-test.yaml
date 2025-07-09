@@ -78,12 +78,14 @@ deployment:
     production-cm:
       type: configmap
       nameSuffix: my-configmap
-    logging-config:
-      type: configmap
-      name: your-configmap
     postgres-config:
       type: secret
       nameSuffix: postgres
+      optional: false
+    nonexisting-config:
+      type: secret
+      nameSuffix: nonexisting
+      optional: true
 
   # Environment variables to be passed to the app container
   env:
@@ -1293,6 +1295,7 @@ cronJob:
   jobs:
     db-migration:
       schedule: "* * * 8 *"
+      suspend: false
       priorityClassName: high-priority
       imagePullSecrets:
        - name: nexus-secret

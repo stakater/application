@@ -33,6 +33,7 @@ cronJob:
   jobs:
     # db-migration:
     #   schedule: "* * * 8 *"
+    #   suspend: false
     #   priorityClassName: high-priority
     #   env:
     #     KEY:
@@ -53,7 +54,15 @@ cronJob:
     #     - name: ndots
     #       value: '1'
     #   dnsPolicy: ClusterFirst
-
+    #   hostAliases:
+    #   - ip: "127.0.0.1"
+    #     hostnames:
+    #     - "foo.local"
+    #     - "bar.local"
+    #   - ip: "10.1.2.3"
+    #     hostnames:
+    #     - "foo.remote"
+    #     - "bar.remote"
 
 job:
   # -- (bool) Deploy Job resources.
@@ -88,6 +97,15 @@ job:
     #     - name: ndots
     #       value: '1'
     #   dnsPolicy: ClusterFirst
+    #   hostAliases:
+    #   - ip: "127.0.0.1"
+    #     hostnames:
+    #     - "foo.local"
+    #     - "bar.local"
+    #   - ip: "10.1.2.3"
+    #     hostnames:
+    #     - "foo.remote"
+    #     - "bar.remote"
 
 deployment:
   # -- (bool) Enable Deployment.
@@ -118,7 +136,7 @@ deployment:
   # -- (object) Select the node where the pods should be scheduled.
   # @section -- Deployment Parameters
   nodeSelector:
-  # -- (list) Add host aliases to the pods.
+  # -- (list) Mapping between IP and hostnames that will be injected as entries in the pod's hosts files.
   # @section -- Deployment Parameters
   hostAliases:
   # - ip: "127.0.0.1"
@@ -156,19 +174,21 @@ deployment:
   # @section -- Deployment Parameters
   imagePullSecrets: []
   #  - name: docker-pull
-  # -- (object) Mount environment variables from ConfigMap or Secret to the pod.
+  # -- (object) Mount environment variables from ConfigMap or Secret to the pod. See the README "Consuming environment variable in application chart" section for more details.
   # @section -- Deployment Parameters
   envFrom:
   #  production-cm:
   #    type: configmap
   #    nameSuffix: my-configmap
-  #  logging-config:
-  #    type: configmap
-  #    nameSuffix: your-configmap
   #  postgres-config:
   #    type: secret
   #    nameSuffix: postgres
-  # -- (object) Environment variables to be added to the pod.
+  #    optional: false
+  #  optional-config:
+  #    type: secret
+  #    nameSuffix: extra
+  #    optional: true
+  # -- (object) Environment variables to be added to the pod. See the README "Consuming environment variable in application chart" section for more details.
   # @section -- Deployment Parameters
   env:
   #  ENVIRONMENT:

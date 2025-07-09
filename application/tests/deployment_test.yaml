@@ -191,3 +191,33 @@ tests:
       - equal:
           path: metadata.labels["example.com/owner"]
           value: example-owner
+
+  - it: configures envFrom as mandatory by default
+    set:
+      deployment.envFrom:
+        foo-secret:
+          type: secret
+          name: foo
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].envFrom[0].secretRef.name
+          value: foo
+      - equal:
+          path: spec.template.spec.containers[0].envFrom[0].secretRef.optional
+          value: false
+
+  - it: configures envFrom as optional when configured
+    set:
+      deployment.envFrom:
+        foo-secret:
+          type: secret
+          name: foo
+          optional: true
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].envFrom[0].secretRef.name
+          value: foo
+      - equal:
+          path: spec.template.spec.containers[0].envFrom[0].secretRef.optional
+          value: true
+

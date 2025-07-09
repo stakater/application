@@ -38,7 +38,7 @@ helm delete --namespace test my-application
 | componentOverride | string | `""` | Override the component label for all resources. |
 | partOfOverride | string | `""` | Override the partOf label for all resources. |
 | applicationName | string | `{{ .Chart.Name }}` | Application name. |
-| additionalCommonLabels | object | `nil` | Additional labels for all resources. |
+| additionalLabels | tpl/object | `nil` | Additional labels for all resources. |
 | extraObjects | [list or object] of [tpl/object or tpl/string] | `nil` | Extra K8s manifests to deploy. Can be of type list or object. If object, keys are ignored and only values are used. The used values can be defined as object or string and are passed through tpl to render. |
 
 ### CronJob Parameters

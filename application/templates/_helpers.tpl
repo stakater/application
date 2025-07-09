@@ -36,6 +36,17 @@ Create chart name and version as used by the chart label.
 {{- end }}
 
 {{/*
+Additional common labels
+*/}}
+{{- define "application.additionalLabels" -}}
+{{- if .Values.additionalLabels }}
+{{- range $key, $value := .Values.additionalLabels }}
+{{ $key }}: {{ $value }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{/*
 Common labels
 */}}
 {{- define "application.labels" -}}
@@ -55,11 +66,10 @@ app.kubernetes.io/part-of: {{ .Values.partOfOverride }}
 {{- else }}
 app.kubernetes.io/part-of: {{ include "application.name" . }}
 {{- end }}
-{{- if .Values.additionalCommonLabels }}
-{{- range $key, $value := .Values.additionalCommonLabels }}
-{{ $key }}: {{ $value }}
+{{- include "application.additionalLabels" . }}
 {{- end }}
-{{- end }}
+
+{{/*
 {{- end }}
 
 {{/*

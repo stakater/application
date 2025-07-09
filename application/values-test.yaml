@@ -4,9 +4,10 @@ applicationName: "application"
 namespaceOverride: ""
 
 # These labels will be added on all resources, and you can add additional labels from below on individual resource
-labels:
+additionalLabels:
   group: com.stakater.platform
   team: stakater
+
 deployment:
   dnsConfig:
     options:
@@ -1364,3 +1365,14 @@ job:
         options:
           - name: ndots
             value: '1'
+
+extraObjects:
+  a:
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: '{{ .Release.Name }}-extra-object-configmap'
+      namespace: "{{ .Release.Namespace }}"
+    data:
+      key1: value1-{{ .Release.Name }}
+      key2: value2

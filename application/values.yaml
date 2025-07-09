@@ -15,9 +15,9 @@ partOfOverride: ""
 # @section -- Parameters
 applicationName: ""
 
-# -- (object) Additional labels for all resources.
+# -- (tpl/object) Additional labels for all resources.
 # @section -- Parameters
-additionalCommonLabels:
+additionalLabels:
   # example.com/organization: organization-name
   # example.com/team: team-name
   # example.com/owner: owner-name

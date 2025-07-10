@@ -66,13 +66,13 @@ helm delete --namespace test my-application
 | deployment.strategy.type | string | `"RollingUpdate"` | Type of deployment strategy. |
 | deployment.reloadOnChange | bool | `true` | Reload deployment if attached Secret/ConfigMap changes. |
 | deployment.nodeSelector | object | `nil` | Select the node where the pods should be scheduled. |
-| deployment.hostAliases | list | `nil` | Add host aliases to the pods. |
+| deployment.hostAliases | list | `nil` | Mapping between IP and hostnames that will be injected as entries in the pod's hosts files. |
 | deployment.initContainers | object | `nil` | Add init containers to the pods. |
 | deployment.fluentdConfigAnnotations | object | `nil` | Configuration details for fluentdConfigurations. Only works for specific setup, see <https://medium.com/stakater/dynamic-log-processing-with-fluentd-konfigurator-and-slack-935a5de4eddb>. |
 | deployment.replicas | int | `nil` | Number of replicas. |
 | deployment.imagePullSecrets | list | `[]` | List of secrets to be used for pulling the images. |
-| deployment.envFrom | object | `nil` | Mount environment variables from ConfigMap or Secret to the pod. |
-| deployment.env | object | `nil` | Environment variables to be added to the pod. |
+| deployment.envFrom | object | `nil` | Mount environment variables from ConfigMap or Secret to the pod. See the README "Consuming environment variable in application chart" section for more details. |
+| deployment.env | object | `nil` | Environment variables to be added to the pod. See the README "Consuming environment variable in application chart" section for more details. |
 | deployment.volumes | object | `nil` | Volumes to be added to the pod. Key is the name of the volume. Value is the volume definition. |
 | deployment.volumeMounts | object | `nil` | Mount path for Volumes. Key is the name of the volume. Value is the volume mount definition. |
 | deployment.priorityClassName | string | `""` | Define the priority class for the pod. |
@@ -116,7 +116,7 @@ helm delete --namespace test my-application
 | deployment.livenessProbe.exec | object | `{}` | Exec probe. |
 | deployment.livenessProbe.tcpSocket | object | `{}` | TCP Socket probe. |
 | deployment.livenessProbe.grpc | object | `{}` | gRPC probe. |
-| deployment.resources | object | `{"limits":{"cpu":0.5,"memory":"256Mi"},"requests":{"cpu":0.1,"memory":"128Mi"}}` | Resource limits and requests for the pod. |
+| deployment.resources | object | `{}` | Resource limits and requests for the pod. |
 | deployment.containerSecurityContext | object | `{"readOnlyRootFilesystem":true,"runAsNonRoot":true}` | Security Context at Container Level. |
 | deployment.openshiftOAuthProxy.enabled | bool | `false` | Enable [OpenShift OAuth Proxy](https://github.com/openshift/oauth-proxy). |
 | deployment.openshiftOAuthProxy.port | int | `8080` | Port on which application is running inside container. |
@@ -428,78 +428,85 @@ In order to use environment variable in deployment or cronjob, you will have to 
       value: MY_VALUE
   ```
 
- - To get environement variable value from **ConfigMap**
+- To get environement variable value from **ConfigMap**
 
-   Suppose we have a configmap created from application chart
+  Suppose we have a configmap created from application chart
 
-   ```yaml
-   applicationName: my-application
-   configMap:
-     enabled: true
-     files:
-       application-config:
-         LOG: DEBUG
-         VERBOSE: v1
-   ```
+  ```yaml
+  applicationName: my-application
+  configMap:
+    enabled: true
+    files:
+      application-config:
+        LOG: DEBUG
+        VERBOSE: v1
+  ```
 
-   To get environment variable value from above created configmap, we will need to add following
+  To get environment variable value from above created configmap, we will need to add following
 
-   ```yaml
-   env:
-    APP_LOG_LEVEL:
-     valueFrom:
-       configMapKeyRef:
-         name: my-application-application-config
-         key: LOG
-   ```
+  ```yaml
+  env:
+   APP_LOG_LEVEL:
+    valueFrom:
+      configMapKeyRef:
+        name: my-application-application-config
+        key: LOG
+  ```
 
-   To get all environment variables key/values from **ConfigMap**, where configmap key being key of environment variable and value being value
+  To get all environment variables key/values from **ConfigMap**, where configmap key being key of environment variable and value being value
 
-   ```yaml
-   envFrom:
-     application-config-env:
-       type: configmap
-       nameSuffix: application-config
-   ```
+  ```yaml
+  envFrom:
+    application-config-env:
+      type: configmap
+      nameSuffix: application-config
+  ```
 
-   You can either provide `nameSuffix` which means name added after prefix `<applicationName>-` or static name with `name` of configmap.
+  You can either provide `nameSuffix` which means name added after prefix `<applicationName>-` or static name with `name` of configmap.
+
+  You can specify whether the configmap is mandatory or optional for the pod to start with the `optional: true/false` value.
+
+  **Note:** first key after `envFrom` is just used to uniquely identify different objects in `envFrom` block. Make sure to keep it unique and relevant.
 
 - To get environment variable value from **Secret**
 
-   Suppose we have secret created from application chart
+  Suppose we have secret created from application chart
 
-   ```yaml
-   applicationName: my-application
-   secret:
-     enabled: true
-     files:
-        db-credentials:
-          PASSWORD: skljd#2Qer!!
-          USER: postgres
-   ```
+  ```yaml
+  applicationName: my-application
+  secret:
+   enabled: true
+   files:
+      db-credentials:
+        PASSWORD: skljd#2Qer!!
+        USER: postgres
+  ```
 
-   To get environment variable value from above created secret, we will need to add following
+  To get environment variable value from above created secret, we will need to add following
 
-   ```yaml
-   env:
-     KEY:
-       valueFrom:
-       secretKeyRef:
-         name: my-application-db-credentials
-         key: USER
-   ```
+  ```yaml
+  env:
+   KEY:
+     valueFrom:
+     secretKeyRef:
+       name: my-application-db-credentials
+       key: USER
+  ```
 
-   To get environement variable value from **Secret**, where secret key being key of environment variable and value being value
+  To get environement variable value from **Secret**, where secret key being key of environment variable and value being value
 
-   ```yaml
-   envFrom:
-     database-credentials:
-        type: secret
-        nameSuffix: db-credentials
-   ```
-   you can either provide `nameSuffix` which means name added after prefix `<applicationName>-` or static name with `name` of secret
+  ```yaml
+  envFrom:
+   database-credentials:
+      type: secret
+      nameSuffix: db-credentials
+  ```
 
-   **Note:** first key after `envFrom` is just used to uniquely identify different objects in `envFrom` block. Make sure to keep it unique and relevant
+  You can either provide `nameSuffix` which means name added after prefix `<applicationName>-` or static name with `name` of secret.
+
+  You can specify whether the secret is mandatory or optional for the pod to start with the `optional: true/false` value.
+
+  **Note:** first key after `envFrom` is just used to uniquely identify different objects in `envFrom` block. Make sure to keep it unique and relevant.
 
 ## Configuring probes
 

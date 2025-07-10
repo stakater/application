@@ -16,7 +16,7 @@ jobs:
         with:
           fetch-depth: 0 # See: https://goreleaser.com/ci/actions/
       - name: Create Release
-        uses: softprops/action-gh-release@da05d552573ad5aba039eaac05058a918a7bf631  # v2
+        uses: softprops/action-gh-release@72f2c25fcb47643c292f7107632f7a47c1df5cd8  # v2
         with:
           name: ${{ github.ref_name }}
           tag_name: ${{ github.ref_name }}
@@ -25,7 +25,7 @@ jobs:
           prerelease: false
           make_latest: true
       - name: Notify Slack
-        uses: 8398a7/action-slack@1750b5085f3ec60384090fb7c52965ef822e869e  # v3
+        uses: 8398a7/action-slack@1750b5085f3ec60384090fb7c52965ef822e869e  # v3.18.0
         if: always()
         with:
           status: ${{ job.status }}

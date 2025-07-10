@@ -20,6 +20,9 @@ metadata:
   namespace: {{ template "application.namespace" $ }}
 spec:
   schedule: {{ $job.schedule | quote }}
+{{- if $job.suspend }}
+  suspend: {{ $job.suspend | default "false" }}
+{{ end }}
 {{- if ge (int $.Capabilities.KubeVersion.Minor) 27  }}
 {{- if $job.timeZone }}
   timeZone: {{ $job.timeZone }}
@@ -122,9 +125,12 @@ spec:
           {{- if $job.dnsConfig }}
           dnsConfig:
 {{ toYaml $job.dnsConfig | indent 12 }}
-              {{- end }}
+          {{- end }}
           {{- if $job.dnsPolicy }}
           dnsPolicy: {{ $job.dnsPolicy }}
+          {{- end }}
+          {{- with $job.hostAliases }}
+          hostAliases: {{- toYaml . | nindent 10 }}
           {{- end }}
           {{- with $job.volumes }}
           volumes:

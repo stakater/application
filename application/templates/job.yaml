@@ -40,12 +40,10 @@ spec:
       serviceAccountName: {{ include "application.serviceAccountName" $ }}
       containers:
       - name: {{ $name }}
-
         {{- $image := required (print "Undefined image repo for container '" $name "'") $job.image.repository }}
         {{- with $job.image.tag    }} {{- $image = print $image ":" . }} {{- end }}
         {{- with $job.image.digest }} {{- $image = print $image "@" . }} {{- end }}
         image: {{ $image }}
-
         {{- if $job.image.imagePullPolicy }}
         imagePullPolicy: {{ $job.image.imagePullPolicy }}
         {{ end }}
@@ -104,9 +102,12 @@ spec:
       {{- if $job.dnsConfig }}
       dnsConfig:
 {{ toYaml $job.dnsConfig | indent 8 }}
-          {{- end }}
+      {{- end }}
       {{- if $job.dnsPolicy }}
       dnsPolicy: {{ $job.dnsPolicy }}
+      {{- end }}
+      {{- with $job.hostAliases }}
+      hostAliases: {{- toYaml . | nindent 6 }}
       {{- end }}
       {{- with $job.volumes }}
       volumes:

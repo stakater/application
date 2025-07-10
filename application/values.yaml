@@ -600,6 +600,38 @@ ingress:
     #   hosts:
     #     - chart-example.local
 
+httpRoute:
+  # -- (bool) Enable HTTPRoute (Gateway API).
+  # @section -- HTTPRoute Parameters
+  enabled: false
+  # -- (string) Name of the Gateway to attach this HTTPRoute to.
+  # @section -- HTTPRoute Parameters
+  gatewayName: my-gateway
+  # -- (string) Namespace of the Gateway to attach this HTTPRoute to.
+  # If not set, the HTTPRoute will be attached to the Gateway in the same namespace as the HTTPRoute.
+  # @section -- HTTPRoute Parameters
+  gatewayNamespace: ""
+  # -- (list) Hostnames for the HTTPRoute.
+  # @section -- HTTPRoute Parameters
+  hostnames:
+    - "chart-example.local"
+  # -- (object) Additional labels for HTTPRoute.
+  # @section -- HTTPRoute Parameters
+  additionalLabels: {}
+  # -- (object) Annotations for HTTPRoute.
+  # @section -- HTTPRoute Parameters
+  annotations: {}
+  # -- (list) Rules for HTTPRoute.
+  # @section -- HTTPRoute Parameters
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: http
+          port: 8080
+
 route:
   # -- (bool) Deploy a Route (OpenShift) resource.
   # @section -- Route Parameters

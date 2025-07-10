@@ -1,0 +1,30 @@
+{{- if and (.Values.httpRoute).enabled -}}
+{{- if not (.Capabilities.APIVersions.Has "gateway.networking.k8s.io/v1") }}
+  {{- fail "There is no APIGateway resource definition in the target cluster!" }}
+{{- end }}
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: {{ template "application.name" . }}
+  namespace: {{ include "application.namespace" . }}
+  labels:
+  {{- include "application.labels" $ | nindent 4 }}
+{{- if .Values.httpRoute.additionalLabels }}
+{{ toYaml .Values.httpRoute.additionalLabels | nindent 4 }}
+{{- end }}
+{{- if .Values.httpRoute.annotations }}
+  annotations:
+{{- toYaml .Values.httpRoute.annotations | nindent 4 }}
+{{- end }}
+spec:
+  parentRefs:
+    - name: {{ .Values.httpRoute.gatewayName | default "my-gateway" }}
+      {{- if .Values.httpRoute.gatewayNamespace }}
+      namespace: {{ .Values.httpRoute.gatewayNamespace }}
+      {{- end }}
+  hostnames:
+    {{- toYaml .Values.httpRoute.hostnames | nindent 4 }}
+  rules:
+    {{- toYaml .Values.httpRoute.rules | nindent 4 }}
+{{- end }}

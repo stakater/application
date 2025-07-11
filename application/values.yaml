@@ -604,9 +604,11 @@ httpRoute:
   # -- (bool) Enable HTTPRoute (Gateway API).
   # @section -- HTTPRoute Parameters
   enabled: false
-  # -- (string) Name of the Gateway to attach this HTTPRoute to.
+  # -- (list) Parent references for the HTTPRoute.
   # @section -- HTTPRoute Parameters
-  gatewayName: my-gateway
+  parentRefs:
+    # - name: my-gateway
+    #   sectionName: bar
   # -- (string) Namespace of the Gateway to attach this HTTPRoute to.
   # If not set, the HTTPRoute will be attached to the Gateway in the same namespace as the HTTPRoute.
   # @section -- HTTPRoute Parameters

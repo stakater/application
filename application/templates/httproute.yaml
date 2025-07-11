@@ -19,10 +19,7 @@ metadata:
 {{- end }}
 spec:
   parentRefs:
-    - name: {{ .Values.httpRoute.gatewayName | default "my-gateway" }}
-      {{- if .Values.httpRoute.gatewayNamespace }}
-      namespace: {{ .Values.httpRoute.gatewayNamespace }}
-      {{- end }}
+    {{- toYaml .Values.httpRoute.parentRefs | nindent 4 }}
   hostnames:
     {{- toYaml .Values.httpRoute.hostnames | nindent 4 }}
   rules:

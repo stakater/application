@@ -178,7 +178,7 @@ helm delete --namespace test my-application
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | httpRoute.enabled | bool | `false` | Enable HTTPRoute (Gateway API). |
-| httpRoute.gatewayName | string | `"my-gateway"` | Name of the Gateway to attach this HTTPRoute to. |
+| httpRoute.parentRefs | list | `nil` | Parent references for the HTTPRoute. |
 | httpRoute.gatewayNamespace | string | `""` | Namespace of the Gateway to attach this HTTPRoute to. If not set, the HTTPRoute will be attached to the Gateway in the same namespace as the HTTPRoute. |
 | httpRoute.hostnames | list | `["chart-example.local"]` | Hostnames for the HTTPRoute. |
 | httpRoute.additionalLabels | object | `{}` | Additional labels for HTTPRoute. |

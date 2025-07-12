@@ -8,7 +8,7 @@ templates:
   - service.yaml
   - extraobjects.yaml
 
-# TODO: use values from values-test.yaml
+# TODO: use values from values-test.yaml (using below breaks CI; uncomment to test thoroughly locally)
 # values:
 #   - ../values-test.yaml
 set:
@@ -43,6 +43,7 @@ set:
 
 capabilities:
   apiVersions:
+    # TODO: auto add all/used apiVersions
     - autoscaling.k8s.io/v1/VerticalPodAutoscaler
     - autoscaling/v2/HorizontalPodAutoscaler
     - batch/v1/CronJob
@@ -60,8 +61,10 @@ capabilities:
 
 x-keys:
   documentSelector: &x-documentSelector
-    # TODO: selecting documents non-strictly doesn't work https://github.com/helm-unittest/helm-unittest/issues/320
-    # isNotEmpty: metadata.name
+    # TODO: remove "hack" - selecting documents non-strictly doesn't work yet https://github.com/helm-unittest/helm-unittest/issues/320#issuecomment-3053765178
+    # exists: metadata.name
+    path: $.metadata.name~
+    value: name
     matchMany: true
     skipEmptyTemplates: true
 

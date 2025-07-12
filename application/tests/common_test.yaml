@@ -108,6 +108,7 @@ tests:
         example.com/organization: example-organization
         example.com/team: example-team
         example.com/owner: example-owner
+        '{{ print "tpl-key" }}': '{{ print "tpl-value" }}'
     asserts:
       - matchRegex:
           path: metadata.name
@@ -136,3 +137,6 @@ tests:
       - equal:
           path: metadata.labels["team"]
           value: stakater
+      - equal:
+          path: metadata.labels["tpl-key"]
+          value: tpl-value

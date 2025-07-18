@@ -55,7 +55,7 @@ jobs:
       - uses: d3adb5/helm-unittest-action@8709649a396d66a09b9dc3965129da14ac881ade # v2
         with:
           charts: application
-          unittest-version: v0.5.x
+          unittest-version: v0.8.x
 
   helm-docs:
     name: Helm Docs

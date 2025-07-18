@@ -1,3 +1,10 @@
+{{- /* `application.defaultExtraObject` will be merged with each item in `.Values.extraObjects` */ -}}
+{{- define "application.defaultExtraObject" -}}
+metadata:
+  labels: {{- include "application.labels" $ | nindent 4 }}
+{{- end }}
+{{- $defaultExtraObject := fromYaml (include "application.defaultExtraObject" .) -}}
+
 {{- /* Normalize extraObjects to a list, easier to loop over */ -}}
 {{- $extraObjects := .Values.extraObjects | default (list) -}}
 
@@ -5,11 +12,13 @@
   {{- $extraObjects = values $extraObjects -}}
 {{- end -}}
 
+{{- $extraObject := dict -}}
 {{- range $extraObjects }}
 ---
   {{- if kindIs "map" . }}
-    {{- tpl (toYaml .) $ | nindent 0 }}
+    {{- $extraObject = tpl (toYaml .) $ | nindent 0 }}
   {{- else if kindIs "string" . }}
-    {{- tpl . $ | nindent 0 }}
+    {{- $extraObject = tpl . $ | nindent 0 }}
   {{- end }}
+{{- toYaml (merge (fromYaml $extraObject) $defaultExtraObject) | nindent 0 -}}
 {{- end }}

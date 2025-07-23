@@ -1,0 +1,30 @@
+{{- if and .Values.rbac.enabled .Values.rbac.clusterRoles }}
+{{- range .Values.rbac.clusterRoles }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+  {{- include "application.labels" $ | nindent 4 }}
+{{- if $.Values.rbac.additionalLabels }}
+{{ toYaml $.Values.rbac.additionalLabels | indent 4 }}
+{{- end }}
+{{- if $.Values.rbac.annotations }}
+  annotations:
+{{ toYaml $.Values.rbac.annotations | indent 4 }}
+{{- end }}
+  name: {{ template "application.name" $ }}-clusterrolebinding-{{ .name }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ template "application.name" $ }}-clusterrole-{{ .name }}
+subjects:
+  - kind: ServiceAccount
+  {{- if $.Values.rbac.serviceAccount.name }}
+    name: {{ $.Values.rbac.serviceAccount.name }}
+  {{- else }}
+    name: {{ template "application.name" $ }}
+  {{- end }}
+    namespace: {{ $.Release.Namespace }}
+---
+{{- end }}
+{{- end }}

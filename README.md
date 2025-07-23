@@ -220,6 +220,7 @@ helm delete --namespace test my-application
 | rbac.serviceAccount.additionalLabels | object | `nil` | Additional labels for Service Account. |
 | rbac.serviceAccount.annotations | object | `nil` | Annotations for Service Account. |
 | rbac.roles | list | `nil` | Namespaced Roles. |
+| rbac.clusterRoles | list | `nil` | ClusterRoles (Clusterwide) |
 
 ### ConfigMap Parameters
 

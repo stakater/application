@@ -19,6 +19,9 @@ metadata:
   name: {{ $name }}
   namespace: {{ template "application.namespace" $ }}
 spec:
+  {{- with $job.startingDeadlineSeconds }}
+  startingDeadlineSeconds: {{ . }}
+  {{- end }}
   {{- with $job.activeDeadlineSeconds }}
   activeDeadlineSeconds: {{ . }}
   {{- end }}
@@ -101,7 +104,7 @@ spec:
       restartPolicy: OnFailure
       {{ end }}
       {{- with $job.imagePullSecrets}}
-      imagePullSecrets: 
+      imagePullSecrets:
 {{ toYaml . | indent 8 }}
       {{ end }}
       {{- if $job.dnsConfig }}

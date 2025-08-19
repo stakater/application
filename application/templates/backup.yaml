@@ -28,7 +28,6 @@ spec:
 {{- if not (kindIs "invalid" .Values.backup.snapshotMoveData) }}
   snapshotMoveData: {{ .Values.backup.snapshotMoveData }}
 {{- end }}
-
 {{- if .Values.backup.csiSnapshotTimeout }}
   csiSnapshotTimeout: {{ .Values.backup.csiSnapshotTimeout | quote }}
 {{- end }}
@@ -52,8 +51,6 @@ spec:
   excludedResources:
 {{ toYaml .Values.backup.excludedResources | indent 4 }}
 {{- end -}}
-
-
 {{- if .Values.backup.includedNamespaceScopedResources }}
   includedNamespaceScopedResources:
 {{ toYaml .Values.backup.includedNamespaceScopedResources | indent 4 }}
@@ -62,7 +59,6 @@ spec:
   excludedNamespaceScopedResources:
 {{ toYaml .Values.backup.excludedNamespaceScopedResources | indent 4 }}
 {{- end -}}
-
 {{- if .Values.backup.orderedResources }}
   orderedResources:
 {{ toYaml .Values.backup.orderedResources | indent 4 }}

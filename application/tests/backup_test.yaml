@@ -55,6 +55,9 @@ tests:
         storageLocation: my-storage-location
     asserts:
       - equal:
+          path: spec.defaultVolumesToRestic
+          value: true
+      - equal:
           path: spec.defaultVolumesToFsBackup
           value: true
       - equal:

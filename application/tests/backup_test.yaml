@@ -55,7 +55,7 @@ tests:
         storageLocation: my-storage-location
     asserts:
       - equal:
-          path: spec.defaultVolumesToRestic
+          path: spec.defaultVolumesToFsBackup
           value: true
       - equal:
           path: spec.snapshotVolumes
@@ -115,3 +115,21 @@ tests:
           value:
             - secrets
             - configmaps
+
+  - it: includes snapshotMoveData when defined
+    set:
+      backup:
+        enabled: true
+        snapshotMoveData: true
+    asserts:
+      - equal:
+          path: spec.snapshotMoveData
+          value: true
+
+  - it: does not include snapshotMoveData when not defined
+    set:
+      backup:
+        enabled: true
+    asserts:
+      - notExists:
+          path: spec.snapshotMoveData

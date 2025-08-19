@@ -1233,12 +1233,15 @@ backup:
   # @section -- Backup Parameters
   annotations:
     # key: value
-  # -- (bool) Whether to use Restic to take snapshots of all pod volumes by default.
+  # -- (bool) Whether to use filesystem backup to take snapshots of all pod volumes by default.
   # @section -- Backup Parameters
-  defaultVolumesToRestic: true
+  defaultVolumesToFsBackup: true
   # -- (bool) Whether to take snapshots of persistent volumes as part of the backup.
   # @section -- Backup Parameters
   snapshotVolumes: true
+  # -- (bool) Whether to move the data of the snapshot after it's taken.
+  # @section -- Backup Parameters
+  snapshotMoveData:
   # -- (string) Name of the backup storage location where the backup should be stored.
   # @section -- Backup Parameters
   storageLocation:

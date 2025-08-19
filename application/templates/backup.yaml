@@ -21,8 +21,11 @@ spec:
   includedNamespaces:
   - {{ include "application.tplvalues.render" ( dict "value" $namespace "context" $ ) }}
   {{- end }}
-  defaultVolumesToRestic: {{  .Values.backup.defaultVolumesToRestic }}
+  defaultVolumesToFsBackup: {{  .Values.backup.defaultVolumesToFsBackup }}
   snapshotVolumes: {{ .Values.backup.snapshotVolumes }}
+{{- if .Values.backup.snapshotMoveData }}
+  snapshotMoveData: {{ .Values.backup.snapshotMoveData }}
+{{- end }}
   storageLocation: {{ .Values.backup.storageLocation | quote }}
   ttl: {{ .Values.backup.ttl }}
 {{- if .Values.backup.includedResources }}

@@ -1233,6 +1233,17 @@ backup:
   # @section -- Backup Parameters
   annotations:
     # key: value
+  # -- (object) Label selector to filter resources to include in the backup. If not set, uses default app.kubernetes.io/part-of selector.
+  # @section -- Backup Parameters
+  labelSelector:
+    # matchLabels:
+    #   app: my-app
+    # matchExpressions:
+    #   - key: environment
+    #     operator: In
+    #     values:
+    #       - production
+    #       - staging
   # -- (bool) Whether to use filesystem backup to take snapshots of all pod volumes by default.
   # @section -- Backup Parameters
   defaultVolumesToFsBackup: true
@@ -1242,23 +1253,74 @@ backup:
   # -- (bool) Whether to move the data of the snapshot after it's taken.
   # @section -- Backup Parameters
   snapshotMoveData:
+  # -- (bool) Whether to include cluster-scoped resources in the backup.
+  # @section -- Backup Parameters
+  includeClusterResources:
+  # -- (string) Time to wait for CSI VolumeSnapshot status to turn ReadyToUse during creation (e.g., "10m").
+  # @section -- Backup Parameters
+  csiSnapshotTimeout:
+  # -- (string) Data mover to be used by the backup. If empty or "velero", the built-in data mover will be used.
+  # @section -- Backup Parameters
+  datamover:
+  # -- (string) Time to wait for asynchronous BackupItemAction operations (e.g., "1h").
+  # @section -- Backup Parameters
+  itemOperationTimeout:
   # -- (string) Name of the backup storage location where the backup should be stored.
   # @section -- Backup Parameters
   storageLocation:
   # -- (string) How long the Backup should be retained for.
   # @section -- Backup Parameters
   ttl: "1h0m0s"
+  # -- (list) Names of VolumeSnapshotLocations associated with this backup.
+  # @section -- Backup Parameters
+  volumeSnapshotLocations:
+    # - my-volume-snapshot-location
   # -- (tpl/list) List of namespaces to include objects from.
   # @default -- `[ {{ include "application.namespace" $ }} ]`
   # @section -- Backup Parameters
   includedNamespaces:
   - '{{ include "application.namespace" $ }}'
+  # -- (list) List of namespaces to exclude from the backup.
+  # @section -- Backup Parameters
+  excludedNamespaces:
+    # - kube-system
+    # - kube-public
   # -- (list) List of resource types to include in the backup.
   # @section -- Backup Parameters
   includedResources:
+    # - deployments
+    # - services
   # -- (list) List of resource types to exclude from the backup.
   # @section -- Backup Parameters
   excludedResources:
+    # - secrets
+    # - configmaps
+  # -- (list) List of cluster-scoped resource types to include in the backup.
+  # @section -- Backup Parameters
+  includedClusterScopedResources:
+    # - clusterroles
+    # - clusterrolebindings
+  # -- (list) List of cluster-scoped resource types to exclude from the backup.
+  # @section -- Backup Parameters
+  excludedClusterScopedResources:
+    # - storageclasses
+    # - volumesnapshotclasses
+  # -- (list) List of namespace-scoped resource types to include in the backup.
+  # @section -- Backup Parameters
+  includedNamespaceScopedResources:
+    # - deployments
+    # - services
+  # -- (list) List of namespace-scoped resource types to exclude from the backup.
+  # @section -- Backup Parameters
+  excludedNamespaceScopedResources:
+    # - secrets
+    # - configmaps
+  # -- (object) Specifies the backup order of resources of specific Kind. The map key is the resource name and the value is a list of object names in the order they should be backed up.
+  # @section -- Backup Parameters
+  orderedResources:
+    # deployments: 
+    #   - my-deployment-1
+    #   - my-deployment-2
 
 # -- ([list or object] of [tpl/object or tpl/string]) Extra K8s manifests to deploy.
 # Can be of type list or object. If object, keys are ignored and only values are used. The used values can be defined as object or string and are passed through tpl to render.

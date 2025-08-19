@@ -14,9 +14,14 @@ metadata:
 {{ toYaml .Values.backup.annotations | indent 4 }}
 {{- end }}
 spec:
+{{- if .Values.backup.labelSelector }}
+  labelSelector:
+{{ toYaml .Values.backup.labelSelector | indent 4 }}
+{{- else }}
   labelSelector:
     matchLabels:
        app.kubernetes.io/part-of: {{ include "application.name" . }}
+{{- end }}
   {{- range $namespace := .Values.backup.includedNamespaces }}
   includedNamespaces:
   - {{ include "application.tplvalues.render" ( dict "value" $namespace "context" $ ) }}
@@ -26,8 +31,24 @@ spec:
 {{- if .Values.backup.snapshotMoveData }}
   snapshotMoveData: {{ .Values.backup.snapshotMoveData }}
 {{- end }}
+{{- if .Values.backup.includeClusterResources }}
+  includeClusterResources: {{ .Values.backup.includeClusterResources }}
+{{- end }}
+{{- if .Values.backup.csiSnapshotTimeout }}
+  csiSnapshotTimeout: {{ .Values.backup.csiSnapshotTimeout | quote }}
+{{- end }}
+{{- if .Values.backup.datamover }}
+  datamover: {{ .Values.backup.datamover | quote }}
+{{- end }}
+{{- if .Values.backup.itemOperationTimeout }}
+  itemOperationTimeout: {{ .Values.backup.itemOperationTimeout | quote }}
+{{- end }}
   storageLocation: {{ .Values.backup.storageLocation | quote }}
   ttl: {{ .Values.backup.ttl }}
+{{- if .Values.backup.volumeSnapshotLocations }}
+  volumeSnapshotLocations:
+{{ toYaml .Values.backup.volumeSnapshotLocations | indent 4 }}
+{{- end }}
 {{- if .Values.backup.includedResources }}
   includedResources:
 {{ toYaml .Values.backup.includedResources | indent 4 }}
@@ -35,5 +56,29 @@ spec:
 {{- if .Values.backup.excludedResources }}
   excludedResources:
 {{ toYaml .Values.backup.excludedResources | indent 4 }}
+{{- end -}}
+{{- if .Values.backup.includedClusterScopedResources }}
+  includedClusterScopedResources:
+{{ toYaml .Values.backup.includedClusterScopedResources | indent 4 }}
+{{- end -}}
+{{- if .Values.backup.excludedClusterScopedResources }}
+  excludedClusterScopedResources:
+{{ toYaml .Values.backup.excludedClusterScopedResources | indent 4 }}
+{{- end -}}
+{{- if .Values.backup.includedNamespaceScopedResources }}
+  includedNamespaceScopedResources:
+{{ toYaml .Values.backup.includedNamespaceScopedResources | indent 4 }}
+{{- end -}}
+{{- if .Values.backup.excludedNamespaceScopedResources }}
+  excludedNamespaceScopedResources:
+{{ toYaml .Values.backup.excludedNamespaceScopedResources | indent 4 }}
+{{- end -}}
+{{- if .Values.backup.excludedNamespaces }}
+  excludedNamespaces:
+{{ toYaml .Values.backup.excludedNamespaces | indent 4 }}
+{{- end -}}
+{{- if .Values.backup.orderedResources }}
+  orderedResources:
+{{ toYaml .Values.backup.orderedResources | indent 4 }}
 {{- end -}}
 {{- end }}

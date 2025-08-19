@@ -1233,17 +1233,6 @@ backup:
   # @section -- Backup Parameters
   annotations:
     # key: value
-  # -- (object) Label selector to filter resources to include in the backup. If not set, uses default app.kubernetes.io/part-of selector.
-  # @section -- Backup Parameters
-  labelSelector:
-    # matchLabels:
-    #   app: my-app
-    # matchExpressions:
-    #   - key: environment
-    #     operator: In
-    #     values:
-    #       - production
-    #       - staging
   # -- (bool) Whether to use filesystem backup to take snapshots of all pod volumes by default.
   # @section -- Backup Parameters
   defaultVolumesToFsBackup: true

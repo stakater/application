@@ -14,24 +14,19 @@ metadata:
 {{ toYaml .Values.backup.annotations | indent 4 }}
 {{- end }}
 spec:
-{{- if .Values.backup.labelSelector }}
-  labelSelector:
-{{ toYaml .Values.backup.labelSelector | indent 4 }}
-{{- else }}
   labelSelector:
     matchLabels:
-       app.kubernetes.io/part-of: {{ include "application.name" . }}
-{{- end }}
+{{ include "application.selectorLabels" . | indent 6 }}
   {{- range $namespace := .Values.backup.includedNamespaces }}
   includedNamespaces:
   - {{ include "application.tplvalues.render" ( dict "value" $namespace "context" $ ) }}
   {{- end }}
   defaultVolumesToFsBackup: {{  .Values.backup.defaultVolumesToFsBackup }}
   snapshotVolumes: {{ .Values.backup.snapshotVolumes }}
-{{- if .Values.backup.snapshotMoveData }}
+{{- if not (kindIs "invalid" .Values.backup.snapshotMoveData) }}
   snapshotMoveData: {{ .Values.backup.snapshotMoveData }}
 {{- end }}
-{{- if .Values.backup.includeClusterResources }}
+{{- if not (kindIs "invalid" .Values.backup.includeClusterResources) }}
   includeClusterResources: {{ .Values.backup.includeClusterResources }}
 {{- end }}
 {{- if .Values.backup.csiSnapshotTimeout }}

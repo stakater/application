@@ -389,11 +389,22 @@ helm delete --namespace test my-application
 | backup.defaultVolumesToFsBackup | bool | `true` | Whether to use filesystem backup to take snapshots of all pod volumes by default. |
 | backup.snapshotVolumes | bool | `true` | Whether to take snapshots of persistent volumes as part of the backup. |
 | backup.snapshotMoveData | bool | `nil` | Whether to move the data of the snapshot after it's taken. |
+| backup.includeClusterResources | bool | `nil` | Whether to include cluster-scoped resources in the backup. |
+| backup.csiSnapshotTimeout | string | `nil` | Time to wait for CSI VolumeSnapshot status to turn ReadyToUse during creation (e.g., "10m"). |
+| backup.datamover | string | `nil` | Data mover to be used by the backup. If empty or "velero", the built-in data mover will be used. |
+| backup.itemOperationTimeout | string | `nil` | Time to wait for asynchronous BackupItemAction operations (e.g., "1h"). |
 | backup.storageLocation | string | `nil` | Name of the backup storage location where the backup should be stored. |
 | backup.ttl | string | `"1h0m0s"` | How long the Backup should be retained for. |
+| backup.volumeSnapshotLocations | list | `nil` | Names of VolumeSnapshotLocations associated with this backup. |
 | backup.includedNamespaces | tpl/list | `[ {{ include "application.namespace" $ }} ]` | List of namespaces to include objects from. |
+| backup.excludedNamespaces | list | `nil` | List of namespaces to exclude from the backup. |
 | backup.includedResources | list | `nil` | List of resource types to include in the backup. |
 | backup.excludedResources | list | `nil` | List of resource types to exclude from the backup. |
+| backup.includedClusterScopedResources | list | `nil` | List of cluster-scoped resource types to include in the backup. |
+| backup.excludedClusterScopedResources | list | `nil` | List of cluster-scoped resource types to exclude from the backup. |
+| backup.includedNamespaceScopedResources | list | `nil` | List of namespace-scoped resource types to include in the backup. |
+| backup.excludedNamespaceScopedResources | list | `nil` | List of namespace-scoped resource types to exclude from the backup. |
+| backup.orderedResources | object | `nil` | Specifies the backup order of resources of specific Kind. The map key is the resource name and the value is a list of object names in the order they should be backed up. |
 
 ## Naming convention for ConfigMap, Secret, SealedSecret and ExternalSecret
 

@@ -1242,7 +1242,6 @@ backup:
   # -- (bool) Whether to move the data of the snapshot after it's taken.
   # @section -- Backup Parameters
   snapshotMoveData:
-
   # -- (string) Time to wait for CSI VolumeSnapshot status to turn ReadyToUse during creation (e.g., "10m").
   # @section -- Backup Parameters
   csiSnapshotTimeout:
@@ -1267,7 +1266,6 @@ backup:
   # @section -- Backup Parameters
   includedNamespaces:
   - '{{ include "application.namespace" $ }}'
-
   # -- (list) List of resource types to include in the backup.
   # @section -- Backup Parameters
   includedResources:
@@ -1278,8 +1276,6 @@ backup:
   excludedResources:
     # - secrets
     # - configmaps
-
-
   # -- (list) List of namespace-scoped resource types to include in the backup.
   # @section -- Backup Parameters
   includedNamespaceScopedResources:

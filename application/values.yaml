@@ -1233,6 +1233,10 @@ backup:
   # @section -- Backup Parameters
   annotations:
     # key: value
+  # -- (bool) Whether to use Restic to take snapshots of all pod volumes by default.
+  # Deprecated: Use `defaultVolumesToFsBackup` instead.
+  # @section -- Backup Parameters
+  defaultVolumesToRestic: true
   # -- (bool) Whether to use filesystem backup to take snapshots of all pod volumes by default.
   # @section -- Backup Parameters
   defaultVolumesToFsBackup: true

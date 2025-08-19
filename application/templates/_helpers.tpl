@@ -41,7 +41,7 @@ Additional common labels
 {{- define "application.additionalLabels" -}}
 {{- if .Values.additionalLabels }}
 {{- range $key, $value := .Values.additionalLabels }}
-{{ tpl $key . }}: {{ tpl $value . }}
+{{ include "application.tplvalues.render" ( dict "value" $key "context" $ ) }}: {{ include "application.tplvalues.render" ( dict "value" $value "context" $ ) }}
 {{- end }}
 {{- end }}
 {{- end }}

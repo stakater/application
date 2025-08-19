@@ -54,9 +54,8 @@ tests:
         namespace: my-namespace
         storageLocation: my-storage-location
     asserts:
-      - equal:
+      - isNullOrEmpty:
           path: spec.defaultVolumesToRestic
-          value: true
       - equal:
           path: spec.defaultVolumesToFsBackup
           value: true

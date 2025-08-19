@@ -19,7 +19,7 @@ jobs:
     env:
       KUBECONFIG: "${{ github.workspace }}/.kubeconfig.yaml"
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4
         with:
           ref: ${{github.event.pull_request.head.sha}}
       - name: Set up Helm
@@ -49,7 +49,7 @@ jobs:
     name: Unit Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4
         with:
           ref: ${{github.event.pull_request.head.sha}}
       - uses: d3adb5/helm-unittest-action@8709649a396d66a09b9dc3965129da14ac881ade # v2
@@ -60,7 +60,7 @@ jobs:
     name: Helm Docs
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4
         with:
           ref: ${{github.event.pull_request.head.sha}}
       - name: Run helm-docs

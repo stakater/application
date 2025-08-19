@@ -19,11 +19,11 @@ metadata:
   name: {{ $name }}
   namespace: {{ template "application.namespace" $ }}
 spec:
-  {{- with $job.startingDeadlineSeconds }}
-  startingDeadlineSeconds: {{ . }}
+  {{- if not (kindIs "invalid" $job.startingDeadlineSeconds) }}
+  startingDeadlineSeconds: {{ $job.startingDeadlineSeconds }}
   {{- end }}
-  {{- with $job.activeDeadlineSeconds }}
-  activeDeadlineSeconds: {{ . }}
+  {{- if not (kindIs "invalid" $job.activeDeadlineSeconds) }}
+  activeDeadlineSeconds: {{ $job.activeDeadlineSeconds }}
   {{- end }}
   {{- if not (kindIs "invalid" $job.backoffLimit) }}
   backoffLimit: {{ $job.backoffLimit }}

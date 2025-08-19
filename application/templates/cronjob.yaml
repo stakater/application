@@ -59,13 +59,8 @@ spec:
           annotations: {{ toYaml . | nindent 12 }}
           {{- end }}
         spec:
-          {{- if $.Values.rbac.enabled }}
-          {{- if $.Values.rbac.serviceAccount.name }}
-          serviceAccountName: {{ $.Values.rbac.serviceAccount.name }}
-            {{- else }}
-          serviceAccountName: {{ template "application.name" $ }}
-          {{- end }}
-          {{- end }}
+          automountServiceAccountToken: {{ $.Values.rbac.enabled }}
+          serviceAccountName: {{ include "application.serviceAccountName" $ }}
           containers:
           - name: {{ $name }}
             {{- $image := required (print "Undefined image repo for container '" $name "'") $job.image.repository }}

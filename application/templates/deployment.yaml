@@ -74,6 +74,8 @@ spec:
           ]
 {{- end }}
     spec:
+      automountServiceAccountToken: {{ $.Values.rbac.enabled }}
+      serviceAccountName: {{ include "application.serviceAccountName" $ }}
       {{- with .Values.deployment.hostAliases }}
       hostAliases: {{- toYaml . | nindent 6 }}
       {{- end }}
@@ -309,13 +311,6 @@ spec:
 {{ include "application.tplvalues.render" ( dict "value" $value "context" $ ) | indent 8 }}
         {{- end }}
         {{- end }}
-      {{- end }}
-      {{- if .Values.rbac.serviceAccount.enabled }}
-      {{- if .Values.rbac.serviceAccount.name }}
-      serviceAccountName: {{ .Values.rbac.serviceAccount.name }}
-      {{- else }}
-      serviceAccountName: {{ template "application.name" $ }}
-      {{- end }}
       {{- end }}
       {{- if .Values.deployment.hostNetwork }}
       hostNetwork: {{ .Values.deployment.hostNetwork }}

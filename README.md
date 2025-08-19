@@ -386,6 +386,7 @@ helm delete --namespace test my-application
 | backup.namespace | string | `{{ .Release.Namespace }}` | Namespace for Backup. |
 | backup.additionalLabels | object | `nil` | Additional labels for Backup. |
 | backup.annotations | object | `nil` | Annotations for Backup. |
+| backup.defaultVolumesToRestic | bool | `nil` | Whether to use Restic to take snapshots of all pod volumes by default. Deprecated: Use `defaultVolumesToFsBackup` instead. |
 | backup.defaultVolumesToFsBackup | bool | `true` | Whether to use filesystem backup to take snapshots of all pod volumes by default. |
 | backup.snapshotVolumes | bool | `true` | Whether to take snapshots of persistent volumes as part of the backup. |
 | backup.snapshotMoveData | bool | `nil` | Whether to move the data of the snapshot after it's taken. |

@@ -145,7 +145,6 @@ tests:
           value:
             app.kubernetes.io/name: my-app
 
-
   - it: includes csiSnapshotTimeout when defined
     set:
       backup:
@@ -189,12 +188,6 @@ tests:
           value:
             - default
             - gp2
-
-
-
-
-
-
 
   - it: includes includedNamespaceScopedResources when defined
     set:

@@ -17,18 +17,18 @@ spec:
   labelSelector:
     matchLabels:
 {{ include "application.selectorLabels" . | indent 6 }}
-  {{- range $namespace := .Values.backup.includedNamespaces }}
+{{- if .Values.backup.includedNamespaces }}
   includedNamespaces:
+  {{- range $namespace := .Values.backup.includedNamespaces }}
   - {{ include "application.tplvalues.render" ( dict "value" $namespace "context" $ ) }}
   {{- end }}
+{{- end }}
   defaultVolumesToFsBackup: {{  .Values.backup.defaultVolumesToFsBackup }}
   snapshotVolumes: {{ .Values.backup.snapshotVolumes }}
 {{- if not (kindIs "invalid" .Values.backup.snapshotMoveData) }}
   snapshotMoveData: {{ .Values.backup.snapshotMoveData }}
 {{- end }}
-{{- if not (kindIs "invalid" .Values.backup.includeClusterResources) }}
-  includeClusterResources: {{ .Values.backup.includeClusterResources }}
-{{- end }}
+
 {{- if .Values.backup.csiSnapshotTimeout }}
   csiSnapshotTimeout: {{ .Values.backup.csiSnapshotTimeout | quote }}
 {{- end }}
@@ -52,14 +52,8 @@ spec:
   excludedResources:
 {{ toYaml .Values.backup.excludedResources | indent 4 }}
 {{- end -}}
-{{- if .Values.backup.includedClusterScopedResources }}
-  includedClusterScopedResources:
-{{ toYaml .Values.backup.includedClusterScopedResources | indent 4 }}
-{{- end -}}
-{{- if .Values.backup.excludedClusterScopedResources }}
-  excludedClusterScopedResources:
-{{ toYaml .Values.backup.excludedClusterScopedResources | indent 4 }}
-{{- end -}}
+
+
 {{- if .Values.backup.includedNamespaceScopedResources }}
   includedNamespaceScopedResources:
 {{ toYaml .Values.backup.includedNamespaceScopedResources | indent 4 }}
@@ -68,10 +62,7 @@ spec:
   excludedNamespaceScopedResources:
 {{ toYaml .Values.backup.excludedNamespaceScopedResources | indent 4 }}
 {{- end -}}
-{{- if .Values.backup.excludedNamespaces }}
-  excludedNamespaces:
-{{ toYaml .Values.backup.excludedNamespaces | indent 4 }}
-{{- end -}}
+
 {{- if .Values.backup.orderedResources }}
   orderedResources:
 {{ toYaml .Values.backup.orderedResources | indent 4 }}

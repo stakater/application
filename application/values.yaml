@@ -1242,9 +1242,7 @@ backup:
   # -- (bool) Whether to move the data of the snapshot after it's taken.
   # @section -- Backup Parameters
   snapshotMoveData:
-  # -- (bool) Whether to include cluster-scoped resources in the backup.
-  # @section -- Backup Parameters
-  includeClusterResources:
+
   # -- (string) Time to wait for CSI VolumeSnapshot status to turn ReadyToUse during creation (e.g., "10m").
   # @section -- Backup Parameters
   csiSnapshotTimeout:
@@ -1269,11 +1267,7 @@ backup:
   # @section -- Backup Parameters
   includedNamespaces:
   - '{{ include "application.namespace" $ }}'
-  # -- (list) List of namespaces to exclude from the backup.
-  # @section -- Backup Parameters
-  excludedNamespaces:
-    # - kube-system
-    # - kube-public
+
   # -- (list) List of resource types to include in the backup.
   # @section -- Backup Parameters
   includedResources:
@@ -1284,16 +1278,8 @@ backup:
   excludedResources:
     # - secrets
     # - configmaps
-  # -- (list) List of cluster-scoped resource types to include in the backup.
-  # @section -- Backup Parameters
-  includedClusterScopedResources:
-    # - clusterroles
-    # - clusterrolebindings
-  # -- (list) List of cluster-scoped resource types to exclude from the backup.
-  # @section -- Backup Parameters
-  excludedClusterScopedResources:
-    # - storageclasses
-    # - volumesnapshotclasses
+
+
   # -- (list) List of namespace-scoped resource types to include in the backup.
   # @section -- Backup Parameters
   includedNamespaceScopedResources:

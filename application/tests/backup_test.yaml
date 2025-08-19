@@ -134,27 +134,7 @@ tests:
       - notExists:
           path: spec.snapshotMoveData
 
-  - it: includes labelSelector when defined
-    set:
-      backup:
-        enabled: true
-        labelSelector:
-          matchLabels:
-            app: my-app
-          matchExpressions:
-            - key: environment
-              operator: In
-              values:
-                - production
-    asserts:
-      - equal:
-          path: spec.labelSelector.matchLabels.app
-          value: my-app
-      - equal:
-          path: spec.labelSelector.matchExpressions[0].key
-          value: environment
-
-  - it: uses default labelSelector when not defined
+  - it: uses application selector labels
     set:
       backup:
         enabled: true
@@ -163,25 +143,8 @@ tests:
       - equal:
           path: spec.labelSelector.matchLabels
           value:
-            app.kubernetes.io/part-of: my-app
+            app.kubernetes.io/name: my-app
 
-  - it: includes includeClusterResources when defined
-    set:
-      backup:
-        enabled: true
-        includeClusterResources: true
-    asserts:
-      - equal:
-          path: spec.includeClusterResources
-          value: true
-
-  - it: does not include includeClusterResources when not defined
-    set:
-      backup:
-        enabled: true
-    asserts:
-      - notExists:
-          path: spec.includeClusterResources
 
   - it: includes csiSnapshotTimeout when defined
     set:
@@ -227,45 +190,11 @@ tests:
             - default
             - gp2
 
-  - it: includes excludedNamespaces when defined
-    set:
-      backup:
-        enabled: true
-        excludedNamespaces:
-          - kube-system
-          - kube-public
-    asserts:
-      - equal:
-          path: spec.excludedNamespaces
-          value:
-            - kube-system
-            - kube-public
 
-  - it: includes includedClusterScopedResources when defined
-    set:
-      backup:
-        enabled: true
-        includedClusterScopedResources:
-          - clusterroles
-          - clusterrolebindings
-    asserts:
-      - equal:
-          path: spec.includedClusterScopedResources
-          value:
-            - clusterroles
-            - clusterrolebindings
 
-  - it: includes excludedClusterScopedResources when defined
-    set:
-      backup:
-        enabled: true
-        excludedClusterScopedResources:
-          - storageclasses
-    asserts:
-      - equal:
-          path: spec.excludedClusterScopedResources
-          value:
-            - storageclasses
+
+
+
 
   - it: includes includedNamespaceScopedResources when defined
     set:

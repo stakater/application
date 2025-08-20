@@ -153,6 +153,7 @@ helm delete --namespace test my-application
 | service.ports | list | `[{"name":"http","port":8080,"protocol":"TCP","targetPort":8080}]` | Ports for applications service. |
 | service.type | string | `"ClusterIP"` | Type of service. |
 | service.clusterIP | string | `nil` | Fixed IP for a ClusterIP service. Set to `None` for an headless service |
+| service.loadBalancerClass | string | `nil` | LoadBalancer class name for LoadBalancer type services. |
 
 ### Ingress Parameters
 

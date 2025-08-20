@@ -5,6 +5,7 @@ templates:
 
 set:
   deployment.image.repository: example-image
+  deployment.image.tag: example-tag
 
 tests:
   - it: does not include OAuth proxy container if disabled
@@ -161,3 +162,4 @@ tests:
       - equal:
           path: spec.template.spec.containers[0].envFrom[0].secretRef.optional
           value: true
+

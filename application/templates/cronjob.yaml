@@ -39,8 +39,11 @@ spec:
 {{ end }}
   jobTemplate:
     spec:
-      {{- with $job.activeDeadlineSeconds }}
-      activeDeadlineSeconds: {{ . }}
+      {{- if not (kindIs "invalid" $job.startingDeadlineSeconds) }}
+      startingDeadlineSeconds: {{ $job.startingDeadlineSeconds }}
+      {{- end }}
+      {{- if not (kindIs "invalid" $job.activeDeadlineSeconds) }}
+      activeDeadlineSeconds: {{ $job.activeDeadlineSeconds }}
       {{- end }}
       {{- if not (kindIs "invalid" $job.backoffLimit) }}
       backoffLimit: {{ $job.backoffLimit }}

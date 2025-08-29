@@ -115,3 +115,77 @@ tests:
           path: spec.jobTemplate.spec.template.metadata.annotations
           value:
             helm.sh/hook: "pre-install,pre-upgrade"
+
+  - it: includes activeDeadlineSeconds when set to 0
+    set:
+      cronJob:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: example-tag
+            activeDeadlineSeconds: 0
+    asserts:
+      - isNotNull:
+          path: spec.jobTemplate.spec.activeDeadlineSeconds
+      - equal:
+          path: spec.jobTemplate.spec.activeDeadlineSeconds
+          value: 0
+
+  - it: includes startingDeadlineSeconds when set to 0
+    set:
+      cronJob:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: example-tag
+            startingDeadlineSeconds: 0
+    asserts:
+      - isNotNull:
+          path: spec.jobTemplate.spec.startingDeadlineSeconds
+      - equal:
+          path: spec.jobTemplate.spec.startingDeadlineSeconds
+          value: 0
+
+  - it: includes both activeDeadlineSeconds and startingDeadlineSeconds when set to 0
+    set:
+      cronJob:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: example-tag
+            activeDeadlineSeconds: 0
+            startingDeadlineSeconds: 0
+    asserts:
+      - isNotNull:
+          path: spec.jobTemplate.spec.activeDeadlineSeconds
+      - equal:
+          path: spec.jobTemplate.spec.activeDeadlineSeconds
+          value: 0
+      - isNotNull:
+          path: spec.jobTemplate.spec.startingDeadlineSeconds
+      - equal:
+          path: spec.jobTemplate.spec.startingDeadlineSeconds
+          value: 0
+
+  - it: includes activeDeadlineSeconds when set to positive integer
+    set:
+      cronJob:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: example-tag
+            activeDeadlineSeconds: 300
+    asserts:
+      - isNotNull:
+          path: spec.jobTemplate.spec.activeDeadlineSeconds
+      - equal:
+          path: spec.jobTemplate.spec.activeDeadlineSeconds
+          value: 300

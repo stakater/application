@@ -19,7 +19,7 @@ jobs:
     env:
       KUBECONFIG: "${{ github.workspace }}/.kubeconfig.yaml"
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
         with:
           ref: ${{github.event.pull_request.head.sha}}
       - name: Set up Helm
@@ -35,7 +35,7 @@ jobs:
           helm lint ${CHART_NAME}
           helm lint ${CHART_NAME} -f ${CHART_NAME}/values-test.yaml
       - name: Run Checkov
-        uses: bridgecrewio/checkov-action@6375fb7a379f76cc615af7b954f0ef630037c351 # v12.3039.0
+        uses: bridgecrewio/checkov-action@3d6f50764327724508da94449e67225a2a24e51e # v12.3050.0
         with:
           quiet: true
           soft_fail: false
@@ -49,23 +49,22 @@ jobs:
     name: Unit Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
         with:
           ref: ${{github.event.pull_request.head.sha}}
-      - uses: d3adb5/helm-unittest-action@8709649a396d66a09b9dc3965129da14ac881ade # v2
+      - uses: d3adb5/helm-unittest-action@850bc76597579183998069830d5fa8c3ef0ea34a # v2
         with:
           charts: application
-          unittest-version: v0.5.x
 
   helm-docs:
     name: Helm Docs
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
         with:
           ref: ${{github.event.pull_request.head.sha}}
       - name: Run helm-docs
-        uses: losisin/helm-docs-github-action@178c1a8927bcd668d487395beda342ba270895b3 # v1.6.1
+        uses: losisin/helm-docs-github-action@a57fae5676e4c55a228ea654a1bcaec8dd3cf5b5 # v1.6.2
         with:
           # Keep args in sync with /.pre-commit-config.yaml
           output-file: ./../README.md

@@ -19,8 +19,11 @@ metadata:
   name: {{ $name }}
   namespace: {{ template "application.namespace" $ }}
 spec:
-  {{- with $job.activeDeadlineSeconds }}
-  activeDeadlineSeconds: {{ . }}
+  {{- if not (kindIs "invalid" $job.startingDeadlineSeconds) }}
+  startingDeadlineSeconds: {{ $job.startingDeadlineSeconds }}
+  {{- end }}
+  {{- if not (kindIs "invalid" $job.activeDeadlineSeconds) }}
+  activeDeadlineSeconds: {{ $job.activeDeadlineSeconds }}
   {{- end }}
   {{- if not (kindIs "invalid" $job.backoffLimit) }}
   backoffLimit: {{ $job.backoffLimit }}
@@ -108,7 +111,7 @@ spec:
       restartPolicy: OnFailure
       {{ end }}
       {{- with $job.imagePullSecrets}}
-      imagePullSecrets: 
+      imagePullSecrets:
 {{ toYaml . | indent 8 }}
       {{ end }}
       {{- if $job.dnsConfig }}

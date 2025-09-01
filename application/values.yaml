@@ -28,6 +28,8 @@ cronJob:
     #   schedule: "* * * 8 *"
     #   suspend: false
     #   priorityClassName: high-priority
+    #   startingDeadlineSeconds: 0
+    #   activeDeadlineSeconds: 0
     #   env:
     #     KEY:
     #       value: VALUE
@@ -71,6 +73,8 @@ job:
     #     helm.sh/hook: "pre-install,pre-upgrade"
     #     helm.sh/hook-weight: "-1"
     #     helm.sh/hook-delete-policy: "before-hook-creation"
+    #   startingDeadlineSeconds: 0
+    #   activeDeadlineSeconds: 0
     #   env:
     #     KEY:
     #       value: VALUE
@@ -529,6 +533,9 @@ service:
   # Set to `None` for an headless service
   # @section -- Service Parameters
   clusterIP:
+  # -- (string) LoadBalancer class name for LoadBalancer type services.
+  # @section -- Service Parameters
+  loadBalancerClass:
 
 ingress:
   # -- (bool) Enable Ingress.

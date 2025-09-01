@@ -44,6 +44,11 @@ cronJob:
     #     requests:
     #         memory: 5Gi
     #         cpu: 1
+    #   initContainers:
+    #     init-something:
+    #       image: busybox
+    #       imagePullPolicy: IfNotPresent
+    #       command: ['/bin/sh']
     #   dnsConfig:
     #     options:
     #     - name: ndots

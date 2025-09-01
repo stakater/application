@@ -66,6 +66,13 @@ spec:
           serviceAccountName: {{ template "application.name" $ }}
           {{- end }}
           {{- end }}
+          {{- if $job.initContainers }}
+          initContainers:
+          {{- range $key, $value := $job.initContainers }}
+          - name: {{ $key }}
+{{ include "application.tplvalues.render" ( dict "value" $value "context" $ ) | indent 12 }}
+          {{- end }}
+          {{- end }}
           containers:
           - name: {{ $name }}
             {{- $image := required (print "Undefined image repo for container '" $name "'") $job.image.repository }}

@@ -535,6 +535,9 @@ service:
   # Set to `None` for an headless service
   # @section -- Service Parameters
   clusterIP:
+  # -- (string) LoadBalancer class name for LoadBalancer type services.
+  # @section -- Service Parameters
+  loadBalancerClass:
 
 ingress:
   # -- (bool) Enable Ingress.

@@ -16,6 +16,16 @@ sed -i 's/^version: [0-9]\\{1,\\}\\.[0-9]\\{1,\\}\\.[0-9]\\{1,\\}/version: {{arg
 description = "Install Git pre-commit hooks"
 run = "prek install --install-hooks"
 
+[tasks.build-docs]
+description = "Build the documentation"
+run = """
+# Keep args in sync with /.github/workflows/pull_request.yaml
+helm-docs \\
+  --output-file=./../README.md \\
+  --template-files=./README.md.gotmpl \\
+  --sort-values-order=file
+"""
+
 [tasks.helm-lint]
 description = "Lint the Helm chart"
 run = "helm lint application"

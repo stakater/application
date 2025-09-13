@@ -5,62 +5,72 @@ metadata:
   name: {{ printf "%s-backup" .Values.applicationName | trunc 63 | quote }}
   namespace: {{ .Values.backup.namespace | default ( include "application.namespace" . ) | quote }}
   labels:
-  {{- include "application.labels" $ | nindent 4 }}
-{{- if .Values.backup.additionalLabels }}
-{{ toYaml .Values.backup.additionalLabels | indent 4 }}
-{{- end }}
-{{- if .Values.backup.annotations }}
+    {{- include "application.labels" $ | nindent 4 }}
+    {{- if .Values.backup.additionalLabels }}
+    {{- toYaml .Values.backup.additionalLabels | nindent 4 }}
+    {{- end }}
+  {{- if .Values.backup.annotations }}
   annotations:
-{{ toYaml .Values.backup.annotations | indent 4 }}
-{{- end }}
+    {{- toYaml .Values.backup.annotations | nindent 4 }}
+  {{- end }}
 spec:
   labelSelector:
     matchLabels:
-{{ include "application.selectorLabels" . | indent 6 }}
-{{- if .Values.backup.includedNamespaces }}
+      {{- include "application.selectorLabels" . | nindent 6 }}
+  {{- if not (kindIs "invalid" .Values.backup.includedNamespaces) }}
   includedNamespaces:
-  {{- range $namespace := .Values.backup.includedNamespaces }}
-  - {{ include "application.tplvalues.render" ( dict "value" $namespace "context" $ ) }}
+    {{- range $namespace := .Values.backup.includedNamespaces }}
+    - {{ include "application.tplvalues.render" ( dict "value" $namespace "context" $ ) }}
+    {{- end }}
   {{- end }}
-{{- end }}
-  defaultVolumesToFsBackup: {{  .Values.backup.defaultVolumesToFsBackup }}
+  {{- if not (kindIs "invalid" .Values.backup.defaultVolumesToFsBackup) }}
+  defaultVolumesToFsBackup: {{ .Values.backup.defaultVolumesToFsBackup }}
+  {{- else if not (kindIs "invalid" .Values.backup.defaultVolumesToRestic) }}
+  defaultVolumesToRestic: {{ .Values.backup.defaultVolumesToRestic }}
+  {{- end }}
+  {{- if not (kindIs "invalid" .Values.backup.snapshotVolumes) }}
   snapshotVolumes: {{ .Values.backup.snapshotVolumes }}
-{{- if not (kindIs "invalid" .Values.backup.snapshotMoveData) }}
+  {{- end }}
+  {{- if not (kindIs "invalid" .Values.backup.snapshotMoveData) }}
   snapshotMoveData: {{ .Values.backup.snapshotMoveData }}
-{{- end }}
-{{- if .Values.backup.csiSnapshotTimeout }}
+  {{- end }}
+  {{- if not (kindIs "invalid" .Values.backup.csiSnapshotTimeout) }}
   csiSnapshotTimeout: {{ .Values.backup.csiSnapshotTimeout | quote }}
-{{- end }}
-{{- if .Values.backup.datamover }}
+  {{- end }}
+  {{- if not (kindIs "invalid" .Values.backup.datamover) }}
   datamover: {{ .Values.backup.datamover | quote }}
-{{- end }}
-{{- if .Values.backup.itemOperationTimeout }}
+  {{- end }}
+  {{- if not (kindIs "invalid" .Values.backup.itemOperationTimeout) }}
   itemOperationTimeout: {{ .Values.backup.itemOperationTimeout | quote }}
-{{- end }}
+  {{- end }}
+  {{- if not (kindIs "invalid" .Values.backup.storageLocation) }}
   storageLocation: {{ .Values.backup.storageLocation | quote }}
-  ttl: {{ .Values.backup.ttl }}
-{{- if .Values.backup.volumeSnapshotLocations }}
+  {{- end }}
+  {{- if not (kindIs "invalid" .Values.backup.ttl) }}
+  ttl: {{ .Values.backup.ttl | quote }}
+  {{- end }}
+  {{- if not (kindIs "invalid" .Values.backup.volumeSnapshotLocations) }}
   volumeSnapshotLocations:
-{{ toYaml .Values.backup.volumeSnapshotLocations | indent 4 }}
-{{- end }}
-{{- if .Values.backup.includedResources }}
+    {{- toYaml .Values.backup.volumeSnapshotLocations | nindent 4 }}
+  {{- end }}
+  {{- if not (kindIs "invalid" .Values.backup.includedResources) }}
   includedResources:
-{{ toYaml .Values.backup.includedResources | indent 4 }}
-{{- end -}}
-{{- if .Values.backup.excludedResources }}
+    {{- toYaml .Values.backup.includedResources | nindent 4 }}
+  {{- end }}
+  {{- if not (kindIs "invalid" .Values.backup.excludedResources) }}
   excludedResources:
-{{ toYaml .Values.backup.excludedResources | indent 4 }}
-{{- end -}}
-{{- if .Values.backup.includedNamespaceScopedResources }}
+    {{- toYaml .Values.backup.excludedResources | nindent 4 }}
+  {{- end }}
+  {{- if not (kindIs "invalid" .Values.backup.includedNamespaceScopedResources) }}
   includedNamespaceScopedResources:
-{{ toYaml .Values.backup.includedNamespaceScopedResources | indent 4 }}
-{{- end -}}
-{{- if .Values.backup.excludedNamespaceScopedResources }}
+    {{- toYaml .Values.backup.includedNamespaceScopedResources | nindent 4 }}
+  {{- end }}
+  {{- if not (kindIs "invalid" .Values.backup.excludedNamespaceScopedResources) }}
   excludedNamespaceScopedResources:
-{{ toYaml .Values.backup.excludedNamespaceScopedResources | indent 4 }}
-{{- end -}}
-{{- if .Values.backup.orderedResources }}
+    {{- toYaml .Values.backup.excludedNamespaceScopedResources | nindent 4 }}
+  {{- end }}
+  {{- if not (kindIs "invalid" .Values.backup.orderedResources) }}
   orderedResources:
-{{ toYaml .Values.backup.orderedResources | indent 4 }}
-{{- end -}}
+    {{- toYaml .Values.backup.orderedResources | nindent 4 }}
+  {{- end }}
 {{- end }}

@@ -23,7 +23,7 @@ jobs:
         with:
           ref: ${{github.event.pull_request.head.sha}}
       - name: Set up Helm
-        uses: azure/setup-helm@b9e51907a09c216f16ebe8536097933489208112 # v4
+        uses: azure/setup-helm@1a275c3b69536ee54be43f2070a358922e12c8d4 # v4
       - name: Install OpenShift CLI
         uses: redhat-actions/oc-installer@35b60c3f9757ae4301521556e1b75ff6f59f8d7c # v1
         with:

@@ -23,10 +23,10 @@ spec:
     - {{ include "application.tplvalues.render" ( dict "value" $namespace "context" $ ) }}
     {{- end }}
   {{- end }}
-  {{- if not (kindIs "invalid" .Values.backup.defaultVolumesToFsBackup) }}
-  defaultVolumesToFsBackup: {{ .Values.backup.defaultVolumesToFsBackup }}
-  {{- else if not (kindIs "invalid" .Values.backup.defaultVolumesToRestic) }}
+  {{- if not (kindIs "invalid" .Values.backup.defaultVolumesToRestic) }}
   defaultVolumesToRestic: {{ .Values.backup.defaultVolumesToRestic }}
+  {{- else if not (kindIs "invalid" .Values.backup.defaultVolumesToFsBackup) }}
+  defaultVolumesToFsBackup: {{ .Values.backup.defaultVolumesToFsBackup }}
   {{- end }}
   {{- if not (kindIs "invalid" .Values.backup.snapshotVolumes) }}
   snapshotVolumes: {{ .Values.backup.snapshotVolumes }}

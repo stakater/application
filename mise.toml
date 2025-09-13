@@ -1,0 +1,27 @@
+[tools]
+prek = "0.1.6"
+helm = "3.19.0"
+helm-docs = "1.14.2"
+"ubi:helm-unittest/helm-unittest" = { version = "1.0.1", exe = "untt", rename_exe = "helm-unittest" }
+
+[tasks.set-version]
+description = "Bump the version of the Helm chart"
+run = "./hack/set-version.sh"
+
+[tasks.install-hooks]
+description = "Install Git pre-commit hooks"
+run = "prek install --install-hooks"
+
+[tasks.build-docs]
+description = "Build the documentation"
+run = """
+# Keep args in sync with /.github/workflows/ci.yaml
+helm-docs \\
+  --output-file=./../README.md \\
+  --template-files=./README.md.gotmpl \\
+  --sort-values-order=file
+"""
+
+[tasks.helm-lint]
+description = "Lint the Helm chart"
+run = "helm lint application"

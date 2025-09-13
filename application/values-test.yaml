@@ -4,7 +4,7 @@ applicationName: "application"
 namespaceOverride: ""
 
 # These labels will be added on all resources, and you can add additional labels from below on individual resource
-labels:
+additionalLabels:
   group: com.stakater.platform
   team: stakater
 

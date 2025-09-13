@@ -321,5 +321,7 @@ spec:
       hostNetwork: {{ .Values.deployment.hostNetwork }}
       {{- end }}
       terminationGracePeriodSeconds: {{ .Values.deployment.terminationGracePeriodSeconds }}
+      {{- if not (kindIs "invalid" .Values.deployment.minReadySeconds) }}
       minReadySeconds: {{ .Values.deployment.minReadySeconds }}
+      {{- end }}
 {{- end }}

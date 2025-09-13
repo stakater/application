@@ -129,7 +129,7 @@ helm delete --namespace test my-application
 | deployment.ports | list | `nil` | List of ports for the app container. |
 | deployment.hostNetwork | bool | `nil` | Host network connectivity. |
 | deployment.terminationGracePeriodSeconds | int | `nil` | Gracefull termination period. |
-| deployment.minReadySeconds | int | `0` | minimum number of seconds for which a newly created Pod should be ready without any of its containers crashing. |
+| deployment.minReadySeconds | int | `nil` | Minimum number of seconds for which a newly created Pod should be ready without any of its containers crashing. |
 | deployment.lifecycle | object | `{}` | Lifecycle configuration for the pod. |
 | deployment.additionalContainers | list | `nil` | Additional containers besides init and app containers (without templating). |
 | persistence.enabled | bool | `false` | Enable persistence. |

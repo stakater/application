@@ -3,6 +3,11 @@ suite: Backup
 templates:
   - backup.yaml
 
+capabilities:
+  apiVersions:
+    - velero.io/v1
+    - velero.io/v1/Backup
+
 tests:
   - it: does not yield Backup resource if backup.enabled is false
     set:

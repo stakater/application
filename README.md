@@ -219,8 +219,8 @@ helm delete --namespace test my-application
 | rbac.serviceAccount.name | string | `{{ include "application.name" $ }}` | Service Account Name. |
 | rbac.serviceAccount.additionalLabels | object | `nil` | Additional labels for Service Account. |
 | rbac.serviceAccount.annotations | object | `nil` | Annotations for Service Account. |
-| rbac.roles | list | `nil` | Namespaced Roles. |
-| rbac.clusterRoles | list | `nil` | ClusterRoles (Clusterwide) |
+| rbac.roles | list | `nil` | Role definitions scoped to a single namespace. |
+| rbac.clusterRoles | list | `nil` | ClusterRole definitions with cluster-wide permissions. |
 
 ### ConfigMap Parameters
 

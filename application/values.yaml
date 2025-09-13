@@ -706,7 +706,7 @@ rbac:
     # @section -- RBAC Parameters
     annotations:
       # key: value
-  # -- (list) Namespaced Roles.
+  # -- (list) Role definitions scoped to a single namespace.
   # @section -- RBAC Parameters
   roles:
   # - name: configmaps
@@ -725,8 +725,7 @@ rbac:
   #     - secrets
   #     verbs:
   #     - get
-
-  # -- (list) ClusterRoles (Clusterwide)
+  # -- (list) ClusterRole definitions with cluster-wide permissions.
   # @section -- RBAC Parameters
   clusterRoles:
   # - name: configmaps

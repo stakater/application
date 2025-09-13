@@ -66,6 +66,20 @@ tests:
           path: spec.ttl
           value: "1h0m0s"
 
+  - it: uses restic integration is explicitly enabled
+    set:
+      backup:
+        enabled: true
+        namespace: my-namespace
+        storageLocation: my-storage-location
+        defaultVolumesToRestic: true
+    asserts:
+      - notExists:
+          path: spec.defaultVolumesToFsBackup
+      - equal:
+          path: spec.defaultVolumesToRestic
+          value: true
+
   - it: includes correct includedNamespaces by default
     set:
       namespaceOverride: base-namespace

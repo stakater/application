@@ -3,3 +3,6 @@
 .idea
 .vscode
 .project
+
+# helm-unittest
+.debug/

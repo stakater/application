@@ -6,7 +6,7 @@ type: application
 
 # Helm chart Version
 
-version: 6.7.0
+version: 6.8.0
 
 
 keywords:

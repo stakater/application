@@ -139,7 +139,7 @@ deployment:
   # Image of the app container
   image:
     repository: repository/image-name
-    tag: v1.0.0
+    tag: image-tag
     pullPolicy: IfNotPresent
 
   # Startup, Readiness and Liveness probes

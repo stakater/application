@@ -3,38 +3,8 @@ suite: Common
 templates:
   - '*.yaml'
 
-# TODO: use values from values-test.yaml (using below breaks CI; uncomment to test thoroughly locally)
-# values:
-#   - ../values-test.yaml
-set:
-  additionalLabels:
-    group: com.stakater.platform
-    team: stakater
-  deployment:
-    image:
-      repository: example-image
-      tag: example-tag
-  ingress:
-    enabled: true
-  extraObjects:
-    a:
-      apiVersion: v1
-      kind: ConfigMap
-      metadata:
-        name: '{{ .Release.Name }}-extra-object-configmap-1'
-        namespace: "{{ .Release.Namespace }}"
-      data:
-        key1: value1-{{ .Release.Name }}
-        key2: value2
-    b:
-      apiVersion: v1
-      kind: Secret
-      metadata:
-        name: '{{ .Release.Name }}-extra-object-secret-1'
-        namespace: "{{ .Release.Namespace }}"
-      stringData:
-        key1: value1-{{ .Release.Name }}
-        key2: value2
+values:
+  - ../values-test.yaml
 
 capabilities:
   apiVersions:
@@ -99,7 +69,7 @@ tests:
           value: RELEASE-NAME
       - equal:
           path: metadata.labels["app.kubernetes.io/version"]
-          value: example-tag
+          value: image-tag
       - notExists:
           path: metadata.labels["app.kubernetes.io/component"]
       - equal:

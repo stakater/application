@@ -445,6 +445,9 @@ deployment:
   # -- (int) Gracefull termination period.
   # @section -- Deployment Parameters
   terminationGracePeriodSeconds:
+  # -- (int) Minimum number of seconds for which a newly created Pod should be ready without any of its containers crashing.
+  # @section -- Deployment Parameters
+  minReadySeconds:
   # -- (object) Lifecycle configuration for the pod.
   # @section -- Deployment Parameters
   lifecycle: {}

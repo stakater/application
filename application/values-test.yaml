@@ -274,7 +274,7 @@ service:
       kubernetes.io/ingress.class: external-ingress
       ingress.kubernetes.io/rewrite-target: /
       ingress.kubernetes.io/force-ssl-redirect: "true"
-  
+
   ports:
     - port: 8080
       name: http
@@ -389,7 +389,7 @@ forecastle:
 
   # URL of the icon for the custom app
   icon: https://raw.githubusercontent.com/stakater/ForecastleIcons/master/stakater-big.png
-  
+
   # Name of the application to be displayed on the Forecastle Dashboard
   displayName: "application"
 
@@ -479,27 +479,16 @@ secret:
   annotations:
     # key: value
   files:
-#  nameSuffix of Secret
-#   credentials:
-#     data:
-#       secretKey1: secretValue1
-#       secretKey2: secretValue2
-#     encodedData:
-#       secretKey3: c2VjcmV0VmFsdWUx
-#       secretKey4: c2VjcmV0VmFsdWUy
-#     stringData:
-#       secretKey5: secretValue1
-#       secretKey6: secretValue2
-#   password:
-#     data:
-#       secretKey1: secretValue1
-#       secretKey2: secretValue2
-#     encodedData:
-#       secretKey3: c2VjcmV0VmFsdWUx
-#       secretKey4: c2VjcmV0VmFsdWUy
-#     stringData:
-#       secretKey5: secretValue1
-#       secretKey6: secretValue2
+    secret1:
+      data:
+        secretKey1: secretValue1
+        secretKey2: secretValue2
+      encodedData:
+        secretKey3: c2VjcmV0VmFsdWUx
+        secretKey4: c2VjcmV0VmFsdWUy
+      stringData:
+        secretKey5: secretValue5
+        secretKey6: secretValue6
 
 # Service Monitor to collect Prometheus metrices
 serviceMonitor:
@@ -583,7 +572,7 @@ endpointMonitor:
 
 # Certficate CRD to generate the certificate
 certificate:
-  enabled: false
+  enabled: true
 
   # Additional labels
   additionalLabels:
@@ -706,13 +695,13 @@ externalSecret:
   #SecretStore defines which SecretStore to use when fetching the secret data
   secretStore:
     name: example-secret-store
-    #kind: SecretStore # or ClusterSecretStore  
+    #kind: SecretStore # or ClusterSecretStore
 
   # RefreshInterval is the amount of time before the values reading again from the SecretStore provider
   refreshInterval: "1m"
   files:
     secret-1-name:
-      #Data defines the connection between the Kubernetes Secret keys and the Provider data 
+      #Data defines the connection between the Kubernetes Secret keys and the Provider data
       data:
         example-secret-key:
           remoteRef:
@@ -733,7 +722,7 @@ externalSecret:
 # Network Policy
 ##########################################################
 networkPolicy:
-  enabled: false
+  enabled: true
   # Additional labels
   additionalLabels:
     key: value
@@ -1324,7 +1313,7 @@ backup:
   snapshotVolumes: true
   storageLocation: "dpa-1"
   ttl: "1h0m0s"
-  includedResources: 
+  includedResources:
     - deployments
     - services
     - persistentvolumeclaims
@@ -1339,7 +1328,7 @@ backup:
     - resourcequotas
     - controllerrevisions.apps
 
-job: 
+job:
   enabled: true
   jobs:
     db-migration:
@@ -1349,15 +1338,15 @@ job:
         helm.sh/hook-delete-policy: "before-hook-creation"
       imagePullSecrets:
        - name: nexus-secret
-      image: 
+      image:
         repository: docker.io/nginx
         tag: v1.0.0
-      env: 
+      env:
         KEY:
           value: VALUE
       command: ["/bin/bash"]
       args: ["-c","sleep 5000"]
-      resources:  
+      resources:
         requests:
             memory: 5Gi
             cpu: 1

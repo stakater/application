@@ -44,20 +44,37 @@ set:
 capabilities:
   apiVersions:
     # TODO: auto add all/used apiVersions
-    - autoscaling.k8s.io/v1/VerticalPodAutoscaler
-    - autoscaling/v2/HorizontalPodAutoscaler
+    - batch/v1
     - batch/v1/CronJob
+    - policy/v1
+    - policy/v1/PodDisruptionBudget
+    - autoscaling.k8s.io/v1
+    - autoscaling.k8s.io/v1/VerticalPodAutoscaler
+    - autoscaling/v2
+    - autoscaling/v2/HorizontalPodAutoscaler
     - bitnami.com/v1alpha1
+    - bitnami.com/v1alpha1/SealedSecret
     - cert-manager.io/v1
+    - cert-manager.io/v1/Certificate
     - endpointmonitor.stakater.com/v1alpha1
+    - endpointmonitor.stakater.com/v1alpha1/EndpointMonitor
+    - external-secrets.io/v1
     - external-secrets.io/v1/ExternalSecret
     - forecastle.stakater.com/v1alpha1
+    - forecastle.stakater.com/v1alpha1/ForecastleApp
     - grafana.integreatly.org/v1beta1
+    - grafana.integreatly.org/v1beta1/GrafanaDashboard
     - monitoring.coreos.com/v1
+    - monitoring.coreos.com/v1/ServiceMonitor
+    - monitoring.coreos.com/v1/PrometheusRule
     - monitoring.coreos.com/v1alpha1
-    - policy/v1/PodDisruptionBudget
+    - monitoring.coreos.com/v1alpha1/AlertManagerConfig
     - route.openshift.io/v1
+    - route.openshift.io/v1/Route
     - secrets-store.csi.x-k8s.io/v1alpha1
+    - secrets-store.csi.x-k8s.io/v1alpha1/SecretProviderClass
+    - velero.io/v1
+    - velero.io/v1/Backup
 
 x-keys:
   documentSelector: &x-documentSelector

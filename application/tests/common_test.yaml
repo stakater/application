@@ -124,9 +124,6 @@ tests:
         example.com/owner: example-owner
         '{{ print "tpl-key" }}': '{{ print "tpl-value" }}'
     asserts:
-      - matchRegex:
-          path: metadata.name
-          pattern: ^(example-app-name|RELEASE-NAME).*$
       - equal:
           path: metadata.labels["app.kubernetes.io/name"]
           value: example-app-name

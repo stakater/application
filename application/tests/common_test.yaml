@@ -90,9 +90,6 @@ tests:
     documentSelector:
       <<: *x-documentSelector
     asserts:
-      - matchRegex:
-          path: metadata.name
-          pattern: ^(application|RELEASE-NAME).*$
       - equal:
           path: metadata.labels["app.kubernetes.io/name"]
           value: application

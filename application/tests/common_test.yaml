@@ -1,12 +1,7 @@
 suite: Common
 
 templates:
-  # TODO: test all templates
-  # - '*.yaml'
-  - deployment.yaml
-  - ingress.yaml
-  - service.yaml
-  - extraobjects.yaml
+  - '*.yaml'
 
 # TODO: use values from values-test.yaml (using below breaks CI; uncomment to test thoroughly locally)
 # values:

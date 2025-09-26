@@ -162,4 +162,3 @@ tests:
       - equal:
           path: spec.template.spec.containers[0].envFrom[0].secretRef.optional
           value: true
-

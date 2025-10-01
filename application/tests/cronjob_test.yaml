@@ -189,3 +189,37 @@ tests:
       - equal:
           path: spec.jobTemplate.spec.activeDeadlineSeconds
           value: 300
+
+  - it: includes declared init jobs without duplicate names
+    set:
+      cronJob:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: example-tag
+            initContainers:
+              example1:
+                name: shouldnotmatter
+                image: example-image:example-tag
+              example2:
+                image: example-image:example-tag
+    asserts:
+      - isNotNull:
+          path: spec.jobTemplate.spec.template.spec.initContainers
+      - contains:
+          path: spec.jobTemplate.spec.template.spec.initContainers
+          content:
+            name: example1
+            image: example-image:example-tag
+      - contains:
+          path: spec.jobTemplate.spec.template.spec.initContainers
+          content:
+            name: example2
+            image: example-image:example-tag
+      - notContains:
+          path: spec.jobTemplate.spec.template.spec.initContainers
+          content:
+            name: shouldnotmatter
+            image: example-image:example-tag

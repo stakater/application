@@ -91,6 +91,9 @@ spec:
       {{- with .Values.deployment.priorityClassName }}
       priorityClassName: {{ . }}
       {{- end }}
+      {{- if .Values.deployment.runtimeClassName }}
+      runtimeClassName: {{ .Values.deployment.runtimeClassName }}
+      {{- end }}
       {{- if .Values.deployment.tolerations }}
       tolerations:
 {{ toYaml .Values.deployment.tolerations | indent 8 -}}

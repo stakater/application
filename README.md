@@ -77,6 +77,7 @@ helm delete --namespace test my-application
 | deployment.volumes | object | `nil` | Volumes to be added to the pod. Key is the name of the volume. Value is the volume definition. |
 | deployment.volumeMounts | object | `nil` | Mount path for Volumes. Key is the name of the volume. Value is the volume mount definition. |
 | deployment.priorityClassName | string | `""` | Define the priority class for the pod. |
+| deployment.runtimeClassName | string | `""` | Set the runtimeClassName for the deployment's pods. |
 | deployment.tolerations | list | `nil` | Taint tolerations for the pods. |
 | deployment.affinity | object | `nil` | Affinity for the pods. |
 | deployment.topologySpreadConstraints | list | `nil` | Topology spread constraints for the pods. |

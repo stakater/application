@@ -36,15 +36,35 @@ Create chart name and version as used by the chart label.
 {{- end }}
 
 {{/*
+Additional common labels
+*/}}
+{{- define "application.additionalLabels" -}}
+{{- if .Values.additionalLabels }}
+{{ include "application.tplvalues.render" ( dict "value" .Values.additionalLabels "context" $ ) }}
+{{- end }}
+{{- end }}
+
+{{/*
 Common labels
 */}}
 {{- define "application.labels" -}}
+app.kubernetes.io/name: {{ include "application.name" . }}
 helm.sh/chart: {{ include "application.chart" . }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+app.kubernetes.io/instance: {{ .Release.Name }}
 {{- with include "application.version" . }}
 app.kubernetes.io/version: {{ quote . }}
 {{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- if .Values.componentOverride }}
+app.kubernetes.io/component: {{ .Values.componentOverride }}
+{{- end }}
+{{- if .Values.partOfOverride }}
+app.kubernetes.io/part-of: {{ .Values.partOfOverride }}
+{{- /* TODO: obsolete else case on major bump (?) */}}
+{{- else }}
 app.kubernetes.io/part-of: {{ include "application.name" . }}
+{{- end }}
+{{- include "application.additionalLabels" . }}
 {{- end }}
 
 {{/*

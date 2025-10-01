@@ -15,6 +15,13 @@ partOfOverride: ""
 # @section -- Parameters
 applicationName: ""
 
+# -- (tpl/object) Additional labels for all resources.
+# @section -- Parameters
+additionalLabels:
+  # example.com/organization: organization-name
+  # example.com/team: team-name
+  # example.com/owner: owner-name
+
 cronJob:
   # -- (bool) Deploy CronJob resources.
   # @section -- CronJob Parameters

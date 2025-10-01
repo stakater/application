@@ -1,0 +1,118 @@
+suite: Common
+
+templates:
+  - '*.yaml'
+
+values:
+  - ../values-test.yaml
+
+capabilities:
+  apiVersions:
+    # TODO: auto add all/used apiVersions
+    - batch/v1
+    - batch/v1/CronJob
+    - policy/v1
+    - policy/v1/PodDisruptionBudget
+    - autoscaling.k8s.io/v1
+    - autoscaling.k8s.io/v1/VerticalPodAutoscaler
+    - autoscaling/v2
+    - autoscaling/v2/HorizontalPodAutoscaler
+    - bitnami.com/v1alpha1
+    - bitnami.com/v1alpha1/SealedSecret
+    - cert-manager.io/v1
+    - cert-manager.io/v1/Certificate
+    - endpointmonitor.stakater.com/v1alpha1
+    - endpointmonitor.stakater.com/v1alpha1/EndpointMonitor
+    - external-secrets.io/v1
+    - external-secrets.io/v1/ExternalSecret
+    - forecastle.stakater.com/v1alpha1
+    - forecastle.stakater.com/v1alpha1/ForecastleApp
+    - grafana.integreatly.org/v1beta1
+    - grafana.integreatly.org/v1beta1/GrafanaDashboard
+    - monitoring.coreos.com/v1
+    - monitoring.coreos.com/v1/ServiceMonitor
+    - monitoring.coreos.com/v1/PrometheusRule
+    - monitoring.coreos.com/v1alpha1
+    - monitoring.coreos.com/v1alpha1/AlertManagerConfig
+    - route.openshift.io/v1
+    - route.openshift.io/v1/Route
+    - secrets-store.csi.x-k8s.io/v1alpha1
+    - secrets-store.csi.x-k8s.io/v1alpha1/SecretProviderClass
+    - velero.io/v1
+    - velero.io/v1/Backup
+
+x-keys:
+  documentSelector: &x-documentSelector
+    # TODO: remove "hack" - selecting documents non-strictly doesn't work yet https://github.com/helm-unittest/helm-unittest/issues/320#issuecomment-3053765178
+    # exists: metadata.name
+    path: $.metadata.name~
+    value: name
+    matchMany: true
+    skipEmptyTemplates: true
+
+tests:
+  - it: Default common labels
+    documentSelector:
+      <<: *x-documentSelector
+    asserts:
+      - equal:
+          path: metadata.labels["app.kubernetes.io/name"]
+          value: application
+      - matchRegex:
+          path: metadata.labels["helm.sh/chart"]
+          pattern: ^application-\d+\.\d+\.\d+.*$
+      - equal:
+          path: metadata.labels["app.kubernetes.io/managed-by"]
+          value: Helm
+      - equal:
+          path: metadata.labels["app.kubernetes.io/instance"]
+          value: RELEASE-NAME
+      - equal:
+          path: metadata.labels["app.kubernetes.io/version"]
+          value: image-tag
+      - notExists:
+          path: metadata.labels["app.kubernetes.io/component"]
+      - equal:
+          path: metadata.labels["app.kubernetes.io/part-of"]
+          value: application
+
+  - it: Common labels
+    documentSelector:
+      <<: *x-documentSelector
+    set:
+      componentOverride: example-component
+      partOfOverride: example-part-of
+      applicationName: example-app-name
+      additionalLabels:
+        example.com/organization: example-organization
+        example.com/team: example-team
+        example.com/owner: example-owner
+        '{{ print "tpl-key" }}': '{{ print "tpl-value" }}'
+    asserts:
+      - equal:
+          path: metadata.labels["app.kubernetes.io/name"]
+          value: example-app-name
+      - equal:
+          path: metadata.labels["app.kubernetes.io/component"]
+          value: example-component
+      - equal:
+          path: metadata.labels["app.kubernetes.io/part-of"]
+          value: example-part-of
+      - equal:
+          path: metadata.labels["example.com/organization"]
+          value: example-organization
+      - equal:
+          path: metadata.labels["example.com/team"]
+          value: example-team
+      - equal:
+          path: metadata.labels["example.com/owner"]
+          value: example-owner
+      - equal:
+          path: metadata.labels["group"]
+          value: com.stakater.platform
+      - equal:
+          path: metadata.labels["team"]
+          value: stakater
+      - equal:
+          path: metadata.labels["tpl-key"]
+          value: tpl-value

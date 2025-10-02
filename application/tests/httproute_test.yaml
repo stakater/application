@@ -16,6 +16,9 @@ tests:
     set:
       httpRoute:
         enabled: true
+    capabilities:
+      majorVersion: 1
+      minorVersion: 34
     asserts:
       - failedTemplate:
           errorMessage: "There is no APIGateway resource definition in the target cluster!"

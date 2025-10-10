@@ -14,11 +14,14 @@ metadata:
 
 {{- $extraObject := dict -}}
 {{- range $extraObjects }}
----
   {{- if kindIs "map" . }}
     {{- $extraObject = tpl (toYaml .) $ | nindent 0 }}
   {{- else if kindIs "string" . }}
     {{- $extraObject = tpl . $ | nindent 0 }}
   {{- end }}
-{{- toYaml (merge (fromYaml $extraObject) $defaultExtraObject) | nindent 0 -}}
+  {{- $parsedObject := fromYaml $extraObject }}
+  {{- if and $parsedObject (hasKey $parsedObject "kind") }}
+---
+{{- toYaml (merge $parsedObject $defaultExtraObject) | nindent 0 -}}
+  {{- end }}
 {{- end }}

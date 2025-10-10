@@ -202,3 +202,50 @@ tests:
     asserts:
       - hasDocuments:
           count: 2
+
+  - it: does not yield objects if conditional evaluates to false (empty string)
+    set:
+      ingress:
+        custom:
+          enabled: false
+      extraObjects:
+        - |
+          {{- if (.Values.ingress.custom).enabled -}}
+          apiVersion: networking.k8s.io/v1
+          kind: Ingress
+          metadata:
+            name: test-ingress
+            namespace: test-namespace
+          spec:
+            rules:
+              - host: example.com
+          {{- end -}}
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: yields object if conditional evaluates to true
+    set:
+      ingress:
+        custom:
+          enabled: true
+      extraObjects:
+        - |
+          {{- if (.Values.ingress.custom).enabled -}}
+          apiVersion: networking.k8s.io/v1
+          kind: Ingress
+          metadata:
+            name: test-ingress
+            namespace: test-namespace
+          spec:
+            rules:
+              - host: example.com
+          {{- end -}}
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Ingress
+      - equal:
+          path: metadata.name
+          value: test-ingress

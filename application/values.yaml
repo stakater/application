@@ -237,6 +237,9 @@ deployment:
   # -- (string) Define the priority class for the pod.
   # @section -- Deployment Parameters
   priorityClassName: ""
+  # -- (string) Set the runtimeClassName for the deployment's pods.
+  # @section -- Deployment Parameters
+  runtimeClassName: ""
   # -- (list) Taint tolerations for the pods.
   # @section -- Deployment Parameters
   tolerations:

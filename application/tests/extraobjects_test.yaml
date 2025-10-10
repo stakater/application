@@ -25,6 +25,43 @@ tests:
       - hasDocuments:
           count: 0
 
+  - it: does not yield objects if extraObjects has an empty resource
+    set:
+      extraObjects:
+        - ""
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: does not yield objects if extraObjects has an empty resource (with spaces)
+    set:
+      extraObjects:
+        - "  "
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: does not yield objects if extraObjects has an evaluated empty resource
+    set:
+      ingress:
+        custom:
+          enabled: false
+      extraObjects:
+        - |
+          {{- if (.Values.ingress.custom).enabled -}}
+          apiVersion: networking.k8s.io/v1
+          kind: Ingress
+          metadata:
+            name: test-ingress
+            namespace: test-namespace
+          spec:
+            rules:
+              - host: example.com
+          {{- end -}}
+    asserts:
+      - hasDocuments:
+          count: 0
+
   - it: yields one ConfigMap (list, object)
     set:
       extraObjects:

@@ -17,7 +17,7 @@ metadata:
   {{- else if kindIs "string" . }}
     {{- $extraObject = tpl . $ | nindent 0 }}
   {{- end }}
-  {{- $documents := splitList "\n---\n" $extraObject }}
+  {{- $documents := regexSplit "(?m)^---[ \t]*\r?\n" $extraObject -1 }}
   {{- range $documents }}
     {{- $parsedObject := fromYaml . }}
     {{- if and $parsedObject (hasKey $parsedObject "kind") }}

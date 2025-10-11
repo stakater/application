@@ -333,3 +333,119 @@ tests:
         equal:
           path: data.key
           value: value2
+
+  - it: handles separator with leading document separator
+    set:
+      extraObjects:
+        - |
+          ---
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: leading-separator
+            namespace: test-namespace
+          data:
+            key: value
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: ConfigMap
+      - equal:
+          path: metadata.name
+          value: leading-separator
+
+  - it: handles separator with trailing spaces and tabs
+    set:
+      extraObjects:
+        - |
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: spaces-config1
+            namespace: test-namespace
+          data:
+            key: value1
+          ---   
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: spaces-config2
+            namespace: test-namespace
+          data:
+            key: value2
+    asserts:
+      - hasDocuments:
+          count: 2
+      - documentIndex: 0
+        equal:
+          path: metadata.name
+          value: spaces-config1
+      - documentIndex: 1
+        equal:
+          path: metadata.name
+          value: spaces-config2
+
+  - it: handles separator with trailing document separator
+    set:
+      extraObjects:
+        - |
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: trailing-separator
+            namespace: test-namespace
+          data:
+            key: value
+          ---
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: ConfigMap
+      - equal:
+          path: metadata.name
+          value: trailing-separator
+
+  - it: handles mixed separators with various whitespace
+    set:
+      extraObjects:
+        - |
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: mixed1
+            namespace: test-namespace
+          data:
+            key: value1
+          ---
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: mixed2
+            namespace: test-namespace
+          data:
+            key: value2
+          --- 
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: mixed3
+            namespace: test-namespace
+          data:
+            key: value3
+    asserts:
+      - hasDocuments:
+          count: 3
+      - documentIndex: 0
+        equal:
+          path: metadata.name
+          value: mixed1
+      - documentIndex: 1
+        equal:
+          path: metadata.name
+          value: mixed2
+      - documentIndex: 2
+        equal:
+          path: metadata.name
+          value: mixed3

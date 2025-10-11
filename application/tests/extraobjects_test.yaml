@@ -239,3 +239,52 @@ tests:
     asserts:
       - hasDocuments:
           count: 2
+
+  - it: yields multiple resources from range function
+    set:
+      configs:
+        - name: config1
+          data:
+            key: value1
+        - name: config2
+          data:
+            key: value2
+      extraObjects:
+        - |
+          {{- range .Values.configs }}
+          ---
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: {{ .name }}
+            namespace: test-namespace
+          data:
+            {{- range $k, $v := .data }}
+            {{ $k }}: {{ $v }}
+            {{- end }}
+          {{- end }}
+    asserts:
+      - hasDocuments:
+          count: 2
+      - documentIndex: 0
+        isKind:
+          of: ConfigMap
+      - documentIndex: 0
+        equal:
+          path: metadata.name
+          value: config1
+      - documentIndex: 0
+        equal:
+          path: data.key
+          value: value1
+      - documentIndex: 1
+        isKind:
+          of: ConfigMap
+      - documentIndex: 1
+        equal:
+          path: metadata.name
+          value: config2
+      - documentIndex: 1
+        equal:
+          path: data.key
+          value: value2

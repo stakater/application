@@ -19,9 +19,13 @@ metadata:
   {{- else if kindIs "string" . }}
     {{- $extraObject = tpl . $ | nindent 0 }}
   {{- end }}
-  {{- $parsedObject := fromYaml $extraObject }}
-  {{- if and $parsedObject (hasKey $parsedObject "kind") }}
+  {{- /* Split the rendered template by YAML document separator to handle multiple documents */ -}}
+  {{- $documents := splitList "\n---\n" $extraObject }}
+  {{- range $documents }}
+    {{- $parsedObject := fromYaml . }}
+    {{- if and $parsedObject (hasKey $parsedObject "kind") }}
 ---
 {{- toYaml (merge $parsedObject $defaultExtraObject) | nindent 0 -}}
+    {{- end }}
   {{- end }}
 {{- end }}

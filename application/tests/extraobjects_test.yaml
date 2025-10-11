@@ -240,6 +240,51 @@ tests:
       - hasDocuments:
           count: 2
 
+  - it: yields multiple resources from plaintext yaml documents
+    set:
+      extraObjects:
+        - |
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: plaintext-config1
+            namespace: test-namespace
+          data:
+            key: value1
+          ---
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: plaintext-config2
+            namespace: test-namespace
+          data:
+            key: value2
+    asserts:
+      - hasDocuments:
+          count: 2
+      - documentIndex: 0
+        isKind:
+          of: ConfigMap
+      - documentIndex: 0
+        equal:
+          path: metadata.name
+          value: plaintext-config1
+      - documentIndex: 0
+        equal:
+          path: data.key
+          value: value1
+      - documentIndex: 1
+        isKind:
+          of: ConfigMap
+      - documentIndex: 1
+        equal:
+          path: metadata.name
+          value: plaintext-config2
+      - documentIndex: 1
+        equal:
+          path: data.key
+          value: value2
+
   - it: yields multiple resources from range function
     set:
       configs:

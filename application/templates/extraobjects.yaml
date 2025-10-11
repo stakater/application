@@ -1,11 +1,9 @@
-{{- /* `application.defaultExtraObject` will be merged with each item in `.Values.extraObjects` */ -}}
 {{- define "application.defaultExtraObject" -}}
 metadata:
   labels: {{- include "application.labels" $ | nindent 4 }}
 {{- end }}
 {{- $defaultExtraObject := fromYaml (include "application.defaultExtraObject" .) -}}
 
-{{- /* Normalize extraObjects to a list, easier to loop over */ -}}
 {{- $extraObjects := .Values.extraObjects | default (list) -}}
 
 {{- if kindIs "map" $extraObjects -}}
@@ -19,7 +17,6 @@ metadata:
   {{- else if kindIs "string" . }}
     {{- $extraObject = tpl . $ | nindent 0 }}
   {{- end }}
-  {{- /* Split the rendered template by YAML document separator to handle multiple documents */ -}}
   {{- $documents := splitList "\n---\n" $extraObject }}
   {{- range $documents }}
     {{- $parsedObject := fromYaml . }}

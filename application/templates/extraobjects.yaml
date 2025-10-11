@@ -1,11 +1,9 @@
-{{- /* `application.defaultExtraObject` will be merged with each item in `.Values.extraObjects` */ -}}
 {{- define "application.defaultExtraObject" -}}
 metadata:
   labels: {{- include "application.labels" $ | nindent 4 }}
 {{- end }}
 {{- $defaultExtraObject := fromYaml (include "application.defaultExtraObject" .) -}}
 
-{{- /* Normalize extraObjects to a list, easier to loop over */ -}}
 {{- $extraObjects := .Values.extraObjects | default (list) -}}
 
 {{- if kindIs "map" $extraObjects -}}
@@ -19,9 +17,12 @@ metadata:
   {{- else if kindIs "string" . }}
     {{- $extraObject = tpl . $ | nindent 0 }}
   {{- end }}
-  {{- $parsedObject := fromYaml $extraObject }}
-  {{- if and $parsedObject (hasKey $parsedObject "kind") }}
+  {{- $documents := regexSplit "(?m)^---[ \t]*\r?\n" $extraObject -1 }}
+  {{- range $documents }}
+    {{- $parsedObject := fromYaml . }}
+    {{- if and $parsedObject (hasKey $parsedObject "kind") }}
 ---
 {{- toYaml (merge $parsedObject $defaultExtraObject) | nindent 0 -}}
+    {{- end }}
   {{- end }}
 {{- end }}

@@ -75,10 +75,14 @@ spec:
           {{- end }}
           containers:
           - name: {{ $name }}
-            {{- $image := required (print "Undefined image repo for container '" $name "'") $job.image.repository }}
-            {{- with $job.image.tag    }} {{- $image = print $image ":" . }} {{- end }}
-            {{- with $job.image.digest }} {{- $image = print $image "@" . }} {{- end }}
-            image: {{ tpl $image $ }}
+            {{- $image := required (print "Undefined image repo for container '" $name "'") (tpl $job.image.repository $)}}
+            {{- if and $job.image.tag (tpl $job.image.tag $) }}
+              {{- $image = print $image ":" (tpl $job.image.tag $) }}
+            {{- end }}
+            {{- if and $job.image.digest (tpl $job.image.digest $) }}
+              {{- $image = print $image "@" (tpl $job.image.digest $) }}
+            {{- end }}
+            image: {{ $image }}
             {{- if $job.image.imagePullPolicy }}
             imagePullPolicy: {{ $job.image.imagePullPolicy }}
             {{- end }}

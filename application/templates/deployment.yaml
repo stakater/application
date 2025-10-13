@@ -139,10 +139,14 @@ spec:
           name: proxy-tls
         {{- end }}
       - name: {{ template "application.name" . }}
-        {{- $image := required "Undefined image for application container" .Values.deployment.image.repository }}
-        {{- with .Values.deployment.image.tag    }} {{- $image = print $image ":" . }} {{- end }}
-        {{- with .Values.deployment.image.digest }} {{- $image = print $image "@" . }} {{- end }}
-        image: {{ tpl $image $ }}
+        {{- $image := required "Undefined image for application container" (tpl .Values.deployment.image.repository $) }}
+        {{- if and .Values.deployment.image.tag (tpl .Values.deployment.image.tag $) }}
+          {{- $image = print $image ":" (tpl .Values.deployment.image.tag $) }}
+        {{- end }}
+        {{- if and .Values.deployment.image.digest (tpl .Values.deployment.image.digest $) }}
+          {{- $image = print $image "@" (tpl .Values.deployment.image.digest $) }}
+        {{- end }}
+        image: {{ $image }}
         imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
         {{- with .Values.deployment.lifecycle }}
         lifecycle:

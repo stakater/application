@@ -139,12 +139,12 @@ spec:
           name: proxy-tls
         {{- end }}
       - name: {{ template "application.name" . }}
-        {{- $image := required "Undefined image for application container" (tpl .Values.deployment.image.repository $) }}
-        {{- if and .Values.deployment.image.tag (tpl .Values.deployment.image.tag $) }}
-          {{- $image = print $image ":" (tpl .Values.deployment.image.tag $) }}
+        {{- $image := required "Undefined image for application container" (include "application.tplvalues.render" ( dict "value" .Values.deployment.image.repository "context" $ )) }}
+        {{- if and .Values.deployment.image.tag (include "application.tplvalues.render" ( dict "value" .Values.deployment.image.tag "context" $ )) }}
+          {{- $image = print $image ":" (include "application.tplvalues.render" ( dict "value" .Values.deployment.image.tag "context" $ )) }}
         {{- end }}
-        {{- if and .Values.deployment.image.digest (tpl .Values.deployment.image.digest $) }}
-          {{- $image = print $image "@" (tpl .Values.deployment.image.digest $) }}
+        {{- if and .Values.deployment.image.digest (include "application.tplvalues.render" ( dict "value" .Values.deployment.image.digest "context" $ )) }}
+          {{- $image = print $image "@" (include "application.tplvalues.render" ( dict "value" .Values.deployment.image.digest "context" $ )) }}
         {{- end }}
         image: {{ $image }}
         imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}

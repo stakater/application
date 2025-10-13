@@ -75,12 +75,12 @@ spec:
           {{- end }}
           containers:
           - name: {{ $name }}
-            {{- $image := required (print "Undefined image repo for container '" $name "'") (tpl $job.image.repository $)}}
-            {{- if and $job.image.tag (tpl $job.image.tag $) }}
-              {{- $image = print $image ":" (tpl $job.image.tag $) }}
+            {{- $image := required (print "Undefined image repo for container '" $name "'") (include "application.tplvalues.render" ( dict "value" $job.image.repository "context" $ ))}}
+            {{- if and $job.image.tag (include "application.tplvalues.render" ( dict "value" $job.image.tag "context" $ )) }}
+              {{- $image = print $image ":" (include "application.tplvalues.render" ( dict "value" $job.image.tag "context" $ )) }}
             {{- end }}
-            {{- if and $job.image.digest (tpl $job.image.digest $) }}
-              {{- $image = print $image "@" (tpl $job.image.digest $) }}
+            {{- if and $job.image.digest (include "application.tplvalues.render" ( dict "value" $job.image.digest "context" $ )) }}
+              {{- $image = print $image "@" (include "application.tplvalues.render" ( dict "value" $job.image.digest "context" $ )) }}
             {{- end }}
             image: {{ $image }}
             {{- if $job.image.imagePullPolicy }}

@@ -243,7 +243,6 @@ tests:
       - equal:
           path: spec.template.spec.containers[0].image
           value: custom-image:custom-tag@sha256:custom-digest
-
   - it: uses image templating (without tag)
     set:
       custom:

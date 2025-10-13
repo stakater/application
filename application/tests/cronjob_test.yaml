@@ -299,4 +299,3 @@ tests:
       - equal:
           path: spec.jobTemplate.spec.template.spec.containers[0].image
           value: custom-image
-

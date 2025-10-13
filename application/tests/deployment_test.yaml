@@ -162,3 +162,20 @@ tests:
       - equal:
           path: spec.template.spec.containers[0].envFrom[0].secretRef.optional
           value: true
+
+  - it: uses image templating
+    set:
+      custom:
+        image:
+          repository: custom-image
+          tag: custom-tag
+          digest: sha256:custom-digest
+      deployment:
+        image:
+          repository: "{{ .Values.custom.image.repository }}"
+          tag:  "{{ .Values.custom.image.tag }}"
+          digest: "{{ .Values.custom.image.digest }}"
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: custom-image:custom-tag@sha256:custom-digest

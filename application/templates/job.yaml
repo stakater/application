@@ -58,10 +58,10 @@ spec:
         {{- $image := required (print "Undefined image repo for container '" $name "'") $job.image.repository }}
         {{- with $job.image.tag    }} {{- $image = print $image ":" . }} {{- end }}
         {{- with $job.image.digest }} {{- $image = print $image "@" . }} {{- end }}
-        image: {{ $image }}
+        image: {{ tpl $image $ }}
         {{- if $job.image.imagePullPolicy }}
         imagePullPolicy: {{ $job.image.imagePullPolicy }}
-        {{ end }}
+        {{- end }}
         {{- with $job.env }}
         env:
         {{- range $key, $value := $job.env }}

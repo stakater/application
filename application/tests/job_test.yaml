@@ -223,3 +223,24 @@ tests:
           content:
             name: shouldnotmatter
             image: example-image:example-tag
+
+  - it: uses image templating
+    set:
+      custom:
+        image:
+          repository: custom-image
+          tag: custom-tag
+          digest: sha256:custom-digest
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: "{{ .Values.custom.image.repository }}"
+              tag:  "{{ .Values.custom.image.tag }}"
+              digest: "{{ .Values.custom.image.digest }}"
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: custom-image:custom-tag@sha256:custom-digest
+

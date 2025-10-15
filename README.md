@@ -84,7 +84,7 @@ helm delete --namespace test my-application
 | deployment.revisionHistoryLimit | int | `2` | Number of ReplicaSet revisions to retain. |
 | deployment.image.repository | tpl/string | `""` | Repository. |
 | deployment.image.tag | tpl/string | `""` | Tag. |
-| deployment.image.digest | tpl/string | `""` | Image digest. If set to a non-empty value, digest takes precedence on the tag. |
+| deployment.image.digest | tpl/string | `""` | Image digest. If resolved to a non-empty value, digest takes precedence on the tag. |
 | deployment.image.pullPolicy | string | `"IfNotPresent"` | Image pull policy. |
 | deployment.dnsConfig | object | `nil` | DNS config for the pods. |
 | deployment.dnsPolicy | string | `""` | DNS Policy. |

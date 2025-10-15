@@ -283,13 +283,13 @@ deployment:
   # @section -- Deployment Parameters
   revisionHistoryLimit: 2
   image:
-    # -- (string) Repository.
+    # -- (tpl/string) Repository.
     # @section -- Deployment Parameters
     repository: ""
-    # -- (string) Tag.
+    # -- (tpl/string) Tag.
     # @section -- Deployment Parameters
     tag: ""
-    # -- (string) Image digest. If set to a non-empty value, digest takes precedence on the tag.
+    # -- (tpl/string) Image digest. If resolved to a non-empty value, digest takes precedence on the tag.
     # @section -- Deployment Parameters
     digest: ""
     # -- (string) Image pull policy.

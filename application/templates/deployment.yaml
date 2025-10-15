@@ -139,13 +139,15 @@ spec:
           name: proxy-tls
         {{- end }}
       - name: {{ template "application.name" . }}
-        {{- $image := required "Undefined image for application container" (include "application.tplvalues.render" ( dict "value" .Values.deployment.image.repository "context" $ )) }}
-        {{- if and .Values.deployment.image.tag (include "application.tplvalues.render" ( dict "value" .Values.deployment.image.tag "context" $ )) }}
-          {{- $image = print $image ":" (include "application.tplvalues.render" ( dict "value" .Values.deployment.image.tag "context" $ )) }}
-        {{- end }}
-        {{- if and .Values.deployment.image.digest (include "application.tplvalues.render" ( dict "value" .Values.deployment.image.digest "context" $ )) }}
-          {{- $image = print $image "@" (include "application.tplvalues.render" ( dict "value" .Values.deployment.image.digest "context" $ )) }}
-        {{- end }}
+        {{- $repo := include "application.tplvalues.render" (dict "value" .Values.deployment.image.repository "context" $) -}}
+        {{- $repo = required "Undefined image for application container" $repo -}}
+
+        {{- $tag    := include "application.tplvalues.render" (dict "value" .Values.deployment.image.tag "context" $) -}}
+        {{- $digest := include "application.tplvalues.render" (dict "value" .Values.deployment.image.digest "context" $) -}}
+
+        {{- $image := $repo -}}
+        {{- with $tag    }} {{- $image  = print $image  ":" . }} {{- end }}
+        {{- with $digest }} {{- $image  = print $image  "@" . }} {{- end }}
         image: {{ $image }}
         imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
         {{- with .Values.deployment.lifecycle }}

@@ -75,13 +75,15 @@ spec:
           {{- end }}
           containers:
           - name: {{ $name }}
-            {{- $image := required (print "Undefined image repo for container '" $name "'") (include "application.tplvalues.render" ( dict "value" $job.image.repository "context" $ ))}}
-            {{- if and $job.image.tag (include "application.tplvalues.render" ( dict "value" $job.image.tag "context" $ )) }}
-              {{- $image = print $image ":" (include "application.tplvalues.render" ( dict "value" $job.image.tag "context" $ )) }}
-            {{- end }}
-            {{- if and $job.image.digest (include "application.tplvalues.render" ( dict "value" $job.image.digest "context" $ )) }}
-              {{- $image = print $image "@" (include "application.tplvalues.render" ( dict "value" $job.image.digest "context" $ )) }}
-            {{- end }}
+            {{- $repo := include "application.tplvalues.render" (dict "value" $job.image.repository "context" $) -}}
+            {{- $repo = required (printf "Undefined image repo for container '%s'" $name) $repo -}}
+
+            {{- $tag    := include "application.tplvalues.render" (dict "value" $job.image.tag "context" $) -}}
+            {{- $digest := include "application.tplvalues.render" (dict "value" $job.image.digest "context" $) -}}
+
+            {{- $image := $repo -}}
+            {{- with $tag    }} {{- $image = print $image ":" . }} {{- end }}
+            {{- with $digest }} {{- $image = print $image "@" . }} {{- end }}
             image: {{ $image }}
             {{- if $job.image.imagePullPolicy }}
             imagePullPolicy: {{ $job.image.imagePullPolicy }}

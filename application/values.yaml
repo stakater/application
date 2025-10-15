@@ -289,7 +289,7 @@ deployment:
     # -- (tpl/string) Tag.
     # @section -- Deployment Parameters
     tag: ""
-    # -- (tpl/string) Image digest. If set to a non-empty value, digest takes precedence on the tag.
+    # -- (tpl/string) Image digest. If resolved to a non-empty value, digest takes precedence on the tag.
     # @section -- Deployment Parameters
     digest: ""
     # -- (string) Image pull policy.

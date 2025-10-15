@@ -292,7 +292,7 @@ deployment:
     # -- (tpl/string) Image digest. If set to a non-empty value, digest takes precedence on the tag.
     # @section -- Deployment Parameters
     digest: ""
-    # -- (tpl/string) Image pull policy.
+    # -- (string) Image pull policy.
     # @section -- Deployment Parameters
     pullPolicy: IfNotPresent
   # -- (object) DNS config for the pods.

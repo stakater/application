@@ -223,3 +223,89 @@ tests:
           content:
             name: shouldnotmatter
             image: example-image:example-tag
+
+  - it: configures envFrom as mandatory by default (as secret)
+    set:
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: example-tag
+            envFrom:
+              foo-secret:
+                type: secret
+                name: foo
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].envFrom[0].secretRef.name
+          value: foo
+      - equal:
+          path: spec.template.spec.containers[0].envFrom[0].secretRef.optional
+          value: false
+
+  - it: configures envFrom as optional when configured (as secret)
+    set:
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: example-tag
+            envFrom:
+              foo-secret:
+                type: secret
+                name: foo
+                optional: true
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].envFrom[0].secretRef.name
+          value: foo
+      - equal:
+          path: spec.template.spec.containers[0].envFrom[0].secretRef.optional
+          value: true
+
+  - it: configures envFrom as mandatory by default (as configmap)
+    set:
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: example-tag
+            envFrom:
+              foo-configmap:
+                type: configmap
+                name: foo
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].envFrom[0].configMapRef.name
+          value: foo
+      - equal:
+          path: spec.template.spec.containers[0].envFrom[0].configMapRef.optional
+          value: false
+
+  - it: configures envFrom as optional when configured (as configmap)
+    set:
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: example-tag
+            envFrom:
+              foo-configmap:
+                type: configmap
+                name: foo
+                optional: true
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].envFrom[0].configMapRef.name
+          value: foo
+      - equal:
+          path: spec.template.spec.containers[0].envFrom[0].configMapRef.optional
+          value: true

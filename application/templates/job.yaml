@@ -32,6 +32,7 @@ spec:
     metadata:
       labels:
       {{- include "application.labels" $ | nindent 8 }}
+        application.stakater.com/workload-class: batch
       {{- with $job.additionalPodLabels }}
       {{- toYaml . | nindent 8 }}
       {{- end }}

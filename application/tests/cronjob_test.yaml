@@ -239,7 +239,7 @@ tests:
           path: spec.jobTemplate.spec.template.metadata.labels["app.kubernetes.io/name"]
           value: my-app
 
-  - it: does not include app.kubernetes.io/component label in pod template to avoid service selector match
+  - it: does not include application.stakater.com/kind label in pod template to avoid service selector match
     set:
       cronJob:
         enabled: true
@@ -251,4 +251,4 @@ tests:
       applicationName: my-app
     asserts:
       - notExists:
-          path: spec.jobTemplate.spec.template.metadata.labels["app.kubernetes.io/component"]
+          path: spec.jobTemplate.spec.template.metadata.labels["application.stakater.com/kind"]

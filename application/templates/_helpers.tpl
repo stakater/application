@@ -68,11 +68,11 @@ app.kubernetes.io/part-of: {{ include "application.name" . }}
 {{- end }}
 
 {{/*
-Selector labels - includes component label to prevent job/cronjob pods from being selected
+Selector labels - includes kind label to prevent job/cronjob pods from being selected
 */}}
 {{- define "application.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "application.name" . }}
-app.kubernetes.io/component: server
+application.stakater.com/kind: deployment
 {{- end }}
 
 {{/*

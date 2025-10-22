@@ -163,7 +163,7 @@ tests:
           path: spec.template.spec.containers[0].envFrom[0].secretRef.optional
           value: true
 
-  - it: includes app.kubernetes.io/component label in pod template for service selector
+  - it: includes application.stakater.com/kind label in pod template for service selector
     set:
       deployment:
         image:
@@ -172,5 +172,5 @@ tests:
       applicationName: my-app
     asserts:
       - equal:
-          path: spec.template.metadata.labels["app.kubernetes.io/component"]
-          value: server
+          path: spec.template.metadata.labels["application.stakater.com/kind"]
+          value: deployment

@@ -37,7 +37,7 @@ spec:
     metadata:
       labels:
 {{ include "application.labels" . | indent 8 }}
-        application.stakater.com/kind: deployment
+        application.stakater.com/workload-class: serving
 {{- if .Values.deployment.podLabels }}
 {{ toYaml .Values.deployment.podLabels | indent 8 }}
 {{- end }}

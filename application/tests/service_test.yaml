@@ -205,7 +205,7 @@ tests:
       - notExists:
           path: spec.loadBalancerClass
 
-  - it: uses app.kubernetes.io/name and application.stakater.com/kind as selector labels
+  - it: uses app.kubernetes.io/name and application.stakater.com/workload-class as selector labels
     set:
       service:
         enabled: true
@@ -215,5 +215,5 @@ tests:
           path: spec.selector["app.kubernetes.io/name"]
           value: my-app
       - equal:
-          path: spec.selector["application.stakater.com/kind"]
-          value: deployment
+          path: spec.selector["application.stakater.com/workload-class"]
+          value: serving

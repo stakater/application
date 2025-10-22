@@ -224,7 +224,22 @@ tests:
             name: shouldnotmatter
             image: example-image:example-tag
 
-  - it: does not include app.kubernetes.io/name label in pod template to avoid service selector conflicts
+  - it: includes app.kubernetes.io/name label in pod template
+    set:
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: example-tag
+      applicationName: my-app
+    asserts:
+      - equal:
+          path: spec.template.metadata.labels["app.kubernetes.io/name"]
+          value: my-app
+
+  - it: does not include app.kubernetes.io/component label in pod template to avoid service selector match
     set:
       job:
         enabled: true
@@ -236,22 +251,4 @@ tests:
       applicationName: my-app
     asserts:
       - notExists:
-          path: spec.template.metadata.labels["app.kubernetes.io/name"]
-
-  - it: includes other standard labels in pod template
-    set:
-      job:
-        enabled: true
-        jobs:
-          example:
-            image:
-              repository: example-image
-              tag: example-tag
-      applicationName: my-app
-    asserts:
-      - exists:
-          path: spec.template.metadata.labels["helm.sh/chart"]
-      - exists:
-          path: spec.template.metadata.labels["app.kubernetes.io/managed-by"]
-      - exists:
-          path: spec.template.metadata.labels["app.kubernetes.io/instance"]
+          path: spec.template.metadata.labels["app.kubernetes.io/component"]

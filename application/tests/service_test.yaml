@@ -205,7 +205,7 @@ tests:
       - notExists:
           path: spec.loadBalancerClass
 
-  - it: uses app.kubernetes.io/name as selector label
+  - it: uses app.kubernetes.io/name and app.kubernetes.io/component as selector labels
     set:
       service:
         enabled: true
@@ -214,3 +214,6 @@ tests:
       - equal:
           path: spec.selector["app.kubernetes.io/name"]
           value: my-app
+      - equal:
+          path: spec.selector["app.kubernetes.io/component"]
+          value: server

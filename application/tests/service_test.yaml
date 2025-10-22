@@ -204,3 +204,13 @@ tests:
     asserts:
       - notExists:
           path: spec.loadBalancerClass
+
+  - it: uses app.kubernetes.io/name as selector label
+    set:
+      service:
+        enabled: true
+      applicationName: my-app
+    asserts:
+      - equal:
+          path: spec.selector["app.kubernetes.io/name"]
+          value: my-app

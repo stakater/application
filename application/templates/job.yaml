@@ -31,7 +31,7 @@ spec:
   template:
     metadata:
       labels:
-      {{- include "application.labels" $ | nindent 8 }}
+      {{- include "application.jobPodLabels" $ | nindent 8 }}
       {{- with $job.additionalPodLabels }}
       {{- toYaml . | nindent 8 }}
       {{- end }}

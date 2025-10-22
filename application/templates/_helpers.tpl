@@ -68,7 +68,7 @@ app.kubernetes.io/part-of: {{ include "application.name" . }}
 {{- end }}
 
 {{/*
-Selector labels - includes workload-class label to prevent job/cronjob pods from being selected
+Selector labels
 */}}
 {{- define "application.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "application.name" . }}

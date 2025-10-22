@@ -217,3 +217,19 @@ tests:
       - equal:
           path: spec.selector["application.stakater.com/workload-class"]
           value: serving
+
+  - it: service selector specifically requires workload-class serving to exclude batch and scheduled workloads
+    set:
+      service:
+        enabled: true
+      applicationName: my-app
+    asserts:
+      - equal:
+          path: spec.selector["application.stakater.com/workload-class"]
+          value: serving
+      - notEqual:
+          path: spec.selector["application.stakater.com/workload-class"]
+          value: batch
+      - notEqual:
+          path: spec.selector["application.stakater.com/workload-class"]
+          value: scheduled

@@ -162,3 +162,15 @@ tests:
       - equal:
           path: spec.template.spec.containers[0].envFrom[0].secretRef.optional
           value: true
+
+  - it: includes application.stakater.com/workload-class label in pod template for service selector
+    set:
+      deployment:
+        image:
+          repository: nginx
+          tag: latest
+      applicationName: my-app
+    asserts:
+      - equal:
+          path: spec.template.metadata.labels["application.stakater.com/workload-class"]
+          value: serving

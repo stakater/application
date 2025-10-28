@@ -52,6 +52,7 @@ spec:
         metadata:
           labels:
           {{- include "application.labels" $ | nindent 12 }}
+            application.stakater.com/workload-class: scheduled
           {{- with $job.additionalPodLabels }}
           {{- toYaml . | nindent 12 }}
           {{- end }}

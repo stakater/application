@@ -609,6 +609,13 @@ httpRoute:
   parentRefs:
     # - name: my-gateway
     #   sectionName: bar
+  # -- (string) The default Gateway scope to use for this Route.
+  # If unset (the default) or set to None, the Route will not be attached
+  # to any default Gateway; if set, it will be attached to any
+  # default Gateway supporting the named scope, subject to the usual rules
+  # about which Routes a Gateway is allowed to claim.
+  # @section -- HTTPRoute Parameters
+  useDefaultGateways: 
   # -- (string) Namespace of the Gateway to attach this HTTPRoute to.
   # If not set, the HTTPRoute will be attached to the Gateway in the same namespace as the HTTPRoute.
   # @section -- HTTPRoute Parameters

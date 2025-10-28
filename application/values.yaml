@@ -604,7 +604,7 @@ httpRoute:
   # -- (bool) Enable HTTPRoute (Gateway API).
   # @section -- HTTPRoute Parameters
   enabled: false
-  # -- (list) Parent references for the HTTPRoute.
+  # -- (tpl/list) Parent references for the HTTPRoute.
   # @section -- HTTPRoute Parameters
   parentRefs:
     # - name: my-gateway
@@ -620,17 +620,16 @@ httpRoute:
   # If not set, the HTTPRoute will be attached to the Gateway in the same namespace as the HTTPRoute.
   # @section -- HTTPRoute Parameters
   gatewayNamespace: ""
-  # -- (list) Hostnames for the HTTPRoute.
+  # -- (tpl/list) Hostnames for the HTTPRoute.
   # @section -- HTTPRoute Parameters
   hostnames:
-    - "chart-example.local"
   # -- (object) Additional labels for HTTPRoute.
   # @section -- HTTPRoute Parameters
   additionalLabels: {}
   # -- (object) Annotations for HTTPRoute.
   # @section -- HTTPRoute Parameters
   annotations: {}
-  # -- (list) Rules for HTTPRoute.
+  # -- (tpl/list) Rules for HTTPRoute.
   # @section -- HTTPRoute Parameters
   rules:
     - matches:
@@ -638,8 +637,8 @@ httpRoute:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: http
-          port: 8080
+        - name: '{{ include "application.name" $ }}'
+          port: {{ (first $.Values.service.ports).port | int }}
 
 route:
   # -- (bool) Deploy a Route (OpenShift) resource.

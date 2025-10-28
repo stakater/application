@@ -51,6 +51,7 @@ jobs:
     outputs:
       next_version: ${{ steps.get_next_version.outputs.version }}
       has_next_version: ${{ steps.get_next_version.outputs.hasNextVersion }}
+    if: ${{ variables.RELEASE_CIRCUIT_BREAKER == 'false' }}
     steps:
     - name: Check out code
       uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5

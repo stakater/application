@@ -72,6 +72,7 @@ Selector labels
 */}}
 {{- define "application.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "application.name" . }}
+application.stakater.com/workload-class: serving
 {{- end }}
 
 {{/*

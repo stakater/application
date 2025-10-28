@@ -173,6 +173,19 @@ helm delete --namespace test my-application
 | ingress.annotations | object | `nil` | Annotations for ingress. |
 | ingress.tls | list | `nil` | TLS configuration for ingress. Secrets must exist in the namespace. You may also configure Certificate resource to generate the secret. |
 
+### HTTPRoute Parameters
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| httpRoute.enabled | bool | `false` | Enable HTTPRoute (Gateway API). |
+| httpRoute.parentRefs | tpl/list | `nil` | Parent references for the HTTPRoute. |
+| httpRoute.useDefaultGateways | string | `nil` | The default Gateway scope to use for this Route. If unset (the default) or set to None, the Route will not be attached to any default Gateway; if set, it will be attached to any default Gateway supporting the named scope, subject to the usual rules about which Routes a Gateway is allowed to claim. |
+| httpRoute.gatewayNamespace | string | `""` | Namespace of the Gateway to attach this HTTPRoute to. If not set, the HTTPRoute will be attached to the Gateway in the same namespace as the HTTPRoute. |
+| httpRoute.hostnames | tpl/list | `nil` | Hostnames for the HTTPRoute. |
+| httpRoute.additionalLabels | object | `{}` | Additional labels for HTTPRoute. |
+| httpRoute.annotations | object | `{}` | Annotations for HTTPRoute. |
+| httpRoute.rules | tpl/list | `[{"backendRefs":[{"name":"{{ include \"application.name\" $ }}","port":"{{ (first $.Values.service.ports).port | int }}"}],"matches":[{"path":{"type":"PathPrefix","value":"/"}}]}]` | Rules for HTTPRoute. |
+
 ### Route Parameters
 
 | Key | Type | Default | Description |

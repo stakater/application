@@ -224,6 +224,36 @@ tests:
             name: shouldnotmatter
             image: example-image:example-tag
 
+  - it: includes app.kubernetes.io/name label in pod template
+    set:
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: example-tag
+      applicationName: my-app
+    asserts:
+      - equal:
+          path: spec.template.metadata.labels["app.kubernetes.io/name"]
+          value: my-app
+
+  - it: includes application.stakater.com/workload-class label with value batch in pod template
+    set:
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: example-tag
+      applicationName: my-app
+    asserts:
+      - equal:
+          path: spec.template.metadata.labels["application.stakater.com/workload-class"]
+          value: batch
+
   - it: uses image templating
     set:
       custom:

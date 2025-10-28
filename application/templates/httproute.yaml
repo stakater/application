@@ -17,10 +17,10 @@ metadata:
   annotations: {{- toYaml .Values.httpRoute.annotations | nindent 4 }}
   {{- end }}
 spec:
-  parentRefs: {{- toYaml .Values.httpRoute.parentRefs | nindent 4 }}
+  parentRefs: {{- include "application.tplvalues.render" ( dict "value" .Values.httpRoute.parentRefs "context" $ ) | nindent 4 }}
   {{- if .Values.httpRoute.useDefaultGateways }}
   useDefaultGateways: {{ .Values.httpRoute.useDefaultGateways }}
   {{- end }}
-  hostnames: {{- toYaml .Values.httpRoute.hostnames | nindent 4 }}
-  rules: {{- toYaml .Values.httpRoute.rules | nindent 4 }}
+  hostnames: {{- include "application.tplvalues.render" ( dict "value" .Values.httpRoute.hostnames "context" $ ) | nindent 4 }}
+  rules: {{- include "application.tplvalues.render" ( dict "value" .Values.httpRoute.rules "context" $ ) | nindent 4 }}
 {{- end }}

@@ -600,6 +600,46 @@ ingress:
     #   hosts:
     #     - chart-example.local
 
+httpRoute:
+  # -- (bool) Enable HTTPRoute (Gateway API).
+  # @section -- HTTPRoute Parameters
+  enabled: false
+  # -- (tpl/list) Parent references for the HTTPRoute.
+  # @section -- HTTPRoute Parameters
+  parentRefs:
+    # - name: my-gateway
+    #   sectionName: bar
+  # -- (string) The default Gateway scope to use for this Route.
+  # If unset (the default) or set to None, the Route will not be attached
+  # to any default Gateway; if set, it will be attached to any
+  # default Gateway supporting the named scope, subject to the usual rules
+  # about which Routes a Gateway is allowed to claim.
+  # @section -- HTTPRoute Parameters
+  useDefaultGateways: 
+  # -- (string) Namespace of the Gateway to attach this HTTPRoute to.
+  # If not set, the HTTPRoute will be attached to the Gateway in the same namespace as the HTTPRoute.
+  # @section -- HTTPRoute Parameters
+  gatewayNamespace: ""
+  # -- (tpl/list) Hostnames for the HTTPRoute.
+  # @section -- HTTPRoute Parameters
+  hostnames:
+  # -- (object) Additional labels for HTTPRoute.
+  # @section -- HTTPRoute Parameters
+  additionalLabels: {}
+  # -- (object) Annotations for HTTPRoute.
+  # @section -- HTTPRoute Parameters
+  annotations: {}
+  # -- (tpl/list) Rules for HTTPRoute.
+  # @section -- HTTPRoute Parameters
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: '{{ include "application.name" $ }}'
+          port: '{{ (first $.Values.service.ports).port | int }}'
+
 route:
   # -- (bool) Deploy a Route (OpenShift) resource.
   # @section -- Route Parameters

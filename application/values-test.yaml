@@ -1374,3 +1374,11 @@ extraObjects:
     stringData:
       key1: value1-{{ .Release.Name }}
       key2: value2
+
+httpRoute:
+  # FIXME: There is no Gateway API CRDs in the test clusters. Enable this once it's deployed.
+  enabled: false
+  parentRefs:
+  - name: example-gateway
+  hostnames:
+  - "www.example.com"

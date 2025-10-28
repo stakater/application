@@ -14,16 +14,13 @@ metadata:
       {{ toYaml .Values.httpRoute.additionalLabels | nindent 4 }}
     {{- end }}
   {{- if .Values.httpRoute.annotations }}
-  annotations:
-    {{- toYaml .Values.httpRoute.annotations | nindent 4 }}
+  annotations: {{- toYaml .Values.httpRoute.annotations | nindent 4 }}
   {{- end }}
 spec:
-  {{- if .Values.httpRoute.parentRefs }}
-  parentRefs:
-    {{- toYaml .Values.httpRoute.parentRefs | nindent 4 }}
+  parentRefs: {{- toYaml .Values.httpRoute.parentRefs | nindent 4 }}
+  {{- if .Values.httpRoute.useDefaultGateways }}
+  useDefaultGateways: {{ .Values.httpRoute.useDefaultGateways }}
   {{- end }}
-  hostnames:
-    {{- toYaml .Values.httpRoute.hostnames | nindent 4 }}
-  rules:
-    {{- toYaml .Values.httpRoute.rules | nindent 4 }}
+  hostnames: {{- toYaml .Values.httpRoute.hostnames | nindent 4 }}
+  rules: {{- toYaml .Values.httpRoute.rules | nindent 4 }}
 {{- end }}

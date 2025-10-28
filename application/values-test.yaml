@@ -1376,7 +1376,8 @@ extraObjects:
       key2: value2
 
 httpRoute:
-  enabled: true
+  # FIXME: There is no Gateway API CRDs in the test clusters. Enable this once it's deployed.
+  enabled: false
   parentRefs:
   - name: example-gateway
   hostnames:

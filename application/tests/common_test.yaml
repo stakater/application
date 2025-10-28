@@ -40,6 +40,7 @@ capabilities:
     - secrets-store.csi.x-k8s.io/v1alpha1/SecretProviderClass
     - velero.io/v1
     - velero.io/v1/Backup
+    - gateway.networking.k8s.io/v1
 
 x-keys:
   documentSelector: &x-documentSelector

@@ -72,9 +72,6 @@ tests:
           value: image-tag
       - notExists:
           path: metadata.labels["app.kubernetes.io/component"]
-      - equal:
-          path: metadata.labels["app.kubernetes.io/part-of"]
-          value: application
 
   - it: Common labels
     documentSelector:

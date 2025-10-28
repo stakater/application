@@ -1374,3 +1374,10 @@ extraObjects:
     stringData:
       key1: value1-{{ .Release.Name }}
       key2: value2
+
+httpRoute:
+  enabled: true
+  parentRefs:
+  - name: example-gateway
+  hostnames:
+  - "www.example.com"

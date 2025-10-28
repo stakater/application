@@ -52,6 +52,14 @@ x-keys:
     skipEmptyTemplates: true
 
 tests:
+  - it: Resource names
+    documentSelector:
+      <<: *x-documentSelector
+    asserts:
+      - matchRegex:
+          path: metadata.name
+          pattern: ^RELEASE-NAME(?:-.+)?$
+
   - it: Default common labels
     documentSelector:
       <<: *x-documentSelector

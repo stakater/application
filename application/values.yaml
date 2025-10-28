@@ -638,7 +638,7 @@ httpRoute:
             value: /
       backendRefs:
         - name: '{{ include "application.name" $ }}'
-          port: {{ (first $.Values.service.ports).port | int }}
+          port: '{{ (first $.Values.service.ports).port | int }}'
 
 route:
   # -- (bool) Deploy a Route (OpenShift) resource.

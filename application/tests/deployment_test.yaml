@@ -203,3 +203,67 @@ tests:
       - equal:
           path: spec.template.metadata.labels["application.stakater.com/workload-class"]
           value: serving
+
+  - it: uses image templating
+    set:
+      custom:
+        image:
+          repository: custom-image
+          tag: custom-tag
+          digest: sha256:custom-digest
+      deployment:
+        image:
+          repository: "{{ .Values.custom.image.repository }}"
+          tag:  "{{ .Values.custom.image.tag }}"
+          digest: "{{ .Values.custom.image.digest }}"
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: custom-image:custom-tag@sha256:custom-digest
+
+  - it: uses image templating (without tag)
+    set:
+      custom:
+        image:
+          repository: custom-image
+          digest: sha256:custom-digest
+      deployment:
+        image:
+          repository: "{{ .Values.custom.image.repository }}"
+          tag:  "{{ .Values.custom.image.tag }}"
+          digest: "{{ .Values.custom.image.digest }}"
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: custom-image@sha256:custom-digest
+
+  - it: uses image templating (without digest)
+    set:
+      custom:
+        image:
+          repository: custom-image
+          tag: custom-tag
+      deployment:
+        image:
+          repository: "{{ .Values.custom.image.repository }}"
+          tag:  "{{ .Values.custom.image.tag }}"
+          digest: "{{ .Values.custom.image.digest }}"
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: custom-image:custom-tag
+
+  - it: uses image templating (without tag and digest)
+    set:
+      custom:
+        image:
+          repository: custom-image
+      deployment:
+        image:
+          repository: "{{ .Values.custom.image.repository }}"
+          tag:  "{{ .Values.custom.image.tag }}"
+          digest: "{{ .Values.custom.image.digest }}"
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: custom-image

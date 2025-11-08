@@ -52,6 +52,34 @@ x-keys:
     skipEmptyTemplates: true
 
 tests:
+  - it: should render valid resource names using default release name
+    set:
+      applicationName: ""
+    asserts:
+      - matchRegex:
+          path: metadata.name
+          pattern: ^RELEASE-NAME(?:-.+)?$
+
+  - it: should render valid resource names using actual release name
+    set:
+      applicationName: ""
+    release:
+      name: myapp
+    asserts:
+      - matchRegex:
+          path: metadata.name
+          pattern: ^myapp(?:-.+)?$
+
+  - it: should render valid resource names when applicationName is set
+    set:
+      applicationName: myapp
+    release:
+      name: whatever
+    asserts:
+      - matchRegex:
+          path: metadata.name
+          pattern: ^myapp(?:-.+)?$
+
   - it: Default common labels
     documentSelector:
       <<: *x-documentSelector

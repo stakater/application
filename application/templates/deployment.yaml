@@ -327,6 +327,7 @@ spec:
       serviceAccountName: {{ template "application.name" $ }}
       {{- end }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.deployment.automountServiceAccountToken }}
       {{- if .Values.deployment.hostNetwork }}
       hostNetwork: {{ .Values.deployment.hostNetwork }}
       {{- end }}

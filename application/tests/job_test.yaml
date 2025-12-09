@@ -328,3 +328,47 @@ tests:
       - equal:
           path: spec.template.spec.containers[0].image
           value: custom-image
+
+  - it: configures automount service account token by default
+    set:
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: example-tag
+    asserts:
+      - equal:
+          path: spec.template.spec.automountServiceAccountToken
+          value: true
+
+  - it: enable automount service account token when configured
+    set:
+      job:
+        enabled: true
+        jobs:
+          example:
+            automountServiceAccountToken: true
+            image:
+              repository: example-image
+              tag: example-tag
+    asserts:
+      - equal:
+          path: spec.template.spec.automountServiceAccountToken
+          value: true
+
+  - it: disable automount service account token when configured
+    set:
+      job:
+        enabled: true
+        jobs:
+          example:
+            automountServiceAccountToken: false
+            image:
+              repository: example-image
+              tag: example-tag
+    asserts:
+      - equal:
+          path: spec.template.spec.automountServiceAccountToken
+          value: false

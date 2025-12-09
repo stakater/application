@@ -443,6 +443,9 @@ deployment:
   # -- (list) Args for the app container.
   # @section -- Deployment Parameters
   args: []
+  # -- (bool) Mount Service Account token.
+  # @section -- Deployment Parameters
+  automountServiceAccountToken: true
   # -- (list) List of ports for the app container.
   # @section -- Deployment Parameters
   ports:

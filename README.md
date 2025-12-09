@@ -128,6 +128,7 @@ helm delete --namespace test my-application
 | deployment.securityContext | object | `nil` | Security Context for the pod. |
 | deployment.command | list | `[]` | Command for the app container. |
 | deployment.args | list | `[]` | Args for the app container. |
+| deployment.automountServiceAccountToken | bool | `true` | Mount Service Account token. |
 | deployment.ports | list | `nil` | List of ports for the app container. |
 | deployment.hostNetwork | bool | `nil` | Host network connectivity. |
 | deployment.terminationGracePeriodSeconds | int | `nil` | Gracefull termination period. |

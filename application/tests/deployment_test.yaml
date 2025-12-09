@@ -114,6 +114,20 @@ tests:
           path: spec.template.spec.serviceAccountName
           value: example-app
 
+  - it: configures automount service account token by default
+    asserts:
+      - equal:
+          path: spec.template.spec.automountServiceAccountToken
+          value: true
+
+  - it: disable automount service account token when configured
+    set:
+      deployment.automountServiceAccountToken: false
+    asserts:
+      - equal:
+          path: spec.template.spec.automountServiceAccountToken
+          value: false
+
   - it: uses grpc probing when set
     set:
       applicationName: example-app

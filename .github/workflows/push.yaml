@@ -36,7 +36,7 @@ jobs:
         helm lint ${CHART_NAME} -f ${CHART_NAME}/values-test.yaml
     - name: Dry Run Chart
       run: |
-        helm install ${CHART_NAME} ${CHART_NAME} -f ${CHART_NAME}/values-test.yaml -n stakater-chart-pipeline-test --dry-run --debug
+        helm install ${CHART_NAME} ${CHART_NAME} -f ${CHART_NAME}/values-test.yaml -n stakater-chart-pipeline-test --dry-run=server --debug
     - name: Notify Slack
       uses: 8398a7/action-slack@77eaa4f1c608a7d68b38af4e3f739dcd8cba273e # v3.19.0
       if: failure() # Pick up events only if the job fails

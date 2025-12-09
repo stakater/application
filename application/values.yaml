@@ -304,6 +304,9 @@ deployment:
   # -- (string) DNS Policy.
   # @section -- Deployment Parameters
   dnsPolicy: ""
+  # -- (bool) Enable Kubernetes service links.
+  # @section -- Deployment Parameters
+  enableServiceLinks: true
   # -- (object) Startup probe.
   # @default -- See below
   # Must specify either one of the following field when enabled: httpGet, exec, tcpSocket, grpc

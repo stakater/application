@@ -60,9 +60,6 @@ app.kubernetes.io/component: {{ .Values.componentOverride }}
 {{- end }}
 {{- if .Values.partOfOverride }}
 app.kubernetes.io/part-of: {{ .Values.partOfOverride }}
-{{- /* TODO: obsolete else case on major bump (?) */}}
-{{- else }}
-app.kubernetes.io/part-of: {{ include "application.name" . }}
 {{- end }}
 {{- include "application.additionalLabels" . }}
 {{- end }}

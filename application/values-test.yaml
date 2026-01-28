@@ -597,8 +597,8 @@ certificate:
   #  provinces:
   #    - Stockholm
   commonName: admin-app
-  keyAlgorithm: rsa
-  keyEncoding: pkcs1
+  keyAlgorithm: RSA
+  keyEncoding: PKCS1
   keySize: 2048
   isCA: false
   usages:

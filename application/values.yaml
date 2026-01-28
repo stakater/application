@@ -1006,10 +1006,10 @@ certificate:
   # commonName: admin-app
   # -- (string) Private key algorithm of the corresponding private key for this certificate.
   # @section -- cert-manager Certificate Parameters
-  keyAlgorithm: rsa
+  keyAlgorithm: RSA
   # -- (string) Private key cryptography standards (PKCS) for this certificate's private key to be encoded in.
   # @section -- cert-manager Certificate Parameters
-  keyEncoding: pkcs1
+  keyEncoding: PKCS1
   # -- (int) Key bit size of the corresponding private key for this certificate.
   # @section -- cert-manager Certificate Parameters
   keySize: 2048

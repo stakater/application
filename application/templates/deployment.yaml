@@ -75,6 +75,7 @@ spec:
           ]
 {{- end }}
     spec:
+      enableServiceLinks: {{ .Values.deployment.enableServiceLinks }}
       {{- with .Values.deployment.hostAliases }}
       hostAliases: {{- toYaml . | nindent 6 }}
       {{- end }}

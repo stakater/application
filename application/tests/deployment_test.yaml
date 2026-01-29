@@ -148,6 +148,20 @@ tests:
           path: spec.template.spec.containers[0].livenessProbe.grpc.port
           value: 5000
 
+  - it: configures enable service links by default
+    asserts:
+      - equal:
+          path: spec.template.spec.enableServiceLinks
+          value: true
+
+  - it: disable enable service links when configured
+    set:
+      deployment.enableServiceLinks: false
+    asserts:
+      - equal:
+          path: spec.template.spec.enableServiceLinks
+          value: false
+
   - it: configures envFrom as mandatory by default
     set:
       deployment.envFrom:

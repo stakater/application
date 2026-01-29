@@ -18,7 +18,7 @@ jobs:
     if: "! contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
     runs-on: stakater-nonprod
     steps:
-    - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+    - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
       with:
         persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
         fetch-depth: 0 # otherwise, you will fail to push refs to dest repo
@@ -54,7 +54,7 @@ jobs:
     if: ${{ vars.RELEASE_CIRCUIT_BREAKER == 'false' }}
     steps:
     - name: Check out code
-      uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+      uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
       with:
         fetch-depth: 0
     - name: Get next version
@@ -73,7 +73,7 @@ jobs:
     if: needs.bump-version.outputs.has_next_version == 'true'
     steps:
     - name: Check out code
-      uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+      uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
       with:
         persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
         fetch-depth: 0 # otherwise, you will fail to push refs to dest repo

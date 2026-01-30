@@ -772,7 +772,7 @@ rbac:
     # @section -- RBAC Parameters
     annotations:
       # key: value
-  # -- (list) Namespaced Roles.
+  # -- (list) Role definitions scoped to a single namespace.
   # @section -- RBAC Parameters
   roles:
   # - name: configmaps
@@ -791,6 +791,27 @@ rbac:
   #     - secrets
   #     verbs:
   #     - get
+  # -- (list) ClusterRole definitions with cluster-wide permissions.
+  # @section -- RBAC Parameters
+  clusterRoles:
+  # - name: configmaps
+  #   rules:
+  #   - apiGroups:
+  #     - ""
+  #     resources:
+  #     - configmaps
+  #     verbs:
+  #     - get
+  # - name: pods
+  #   rules:
+  #   - apiGroups:
+  #     - ""
+  #     resources:
+  #     - pods
+  #     verbs:
+  #     - get
+  #     - list
+  #     - watch
 
 configMap:
   # -- (bool) Deploy additional ConfigMaps.

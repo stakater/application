@@ -1,0 +1,42 @@
+[tools]
+prek = "0.1.6"
+helm = "3.19.0"
+helm-docs = "1.14.2"
+"ubi:helm-unittest/helm-unittest" = { version = "1.0.1", exe = "untt", rename_exe = "helm-unittest" }
+yamlfmt = "0.17.2"
+
+[tasks.set-version]
+description = "Bump the version of the Helm chart"
+usage = "mise run set-version <new_version>"
+run = """
+sed -i 's/^version: [0-9]\\{1,\\}\\.[0-9]\\{1,\\}\\.[0-9]\\{1,\\}/version: {{arg(name="version")}}/' application/Chart.yaml
+"""
+
+[tasks.install-hooks]
+description = "Install Git pre-commit hooks"
+run = "prek install --install-hooks"
+
+[tasks.build-docs]
+description = "Build the documentation"
+run = """
+# Keep args in sync with /.github/workflows/pull_request.yaml
+helm-docs \\
+  --output-file=./../README.md \\
+  --template-files=./README.md.gotmpl \\
+  --sort-values-order=file
+"""
+
+[tasks.helm-lint]
+description = "Lint the Helm chart"
+run = "helm lint application"
+
+# [tasks.yaml-fmt]
+# description = "Format YAML files"
+# run = """
+# yamlfmt -formatter eof_newline=true,retain_line_breaks_single=true,pad_line_comments=2 \\
+#   pre-commit-config.yaml \\
+#   application/values.yaml \\
+#   application/values-test.yaml \\
+#   application/Chart.yaml \\
+#   application/tests/*.yaml
+# """

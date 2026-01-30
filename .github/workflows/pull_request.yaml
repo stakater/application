@@ -72,4 +72,4 @@ jobs:
           sort-values-order: file
       - name: Check diff
         run: |
-          git diff --exit-code README.md || { echo; echo "error: README.md is out of date. Please run `make build-docs` and commit the resulting file."; exit 1; }
+          git diff --exit-code README.md || { echo; echo "error: README.md is out of date. Please run `mise run build-docs` and commit the resulting file."; exit 1; }

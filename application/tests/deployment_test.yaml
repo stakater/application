@@ -148,7 +148,7 @@ tests:
           path: spec.template.spec.containers[0].livenessProbe.grpc.port
           value: 5000
 
-  - it: configures envFrom as mandatory by default
+  - it: configures envFrom as mandatory by default (as secret)
     set:
       deployment.envFrom:
         foo-secret:
@@ -162,7 +162,7 @@ tests:
           path: spec.template.spec.containers[0].envFrom[0].secretRef.optional
           value: false
 
-  - it: configures envFrom as optional when configured
+  - it: configures envFrom as optional when configured (as secret)
     set:
       deployment.envFrom:
         foo-secret:
@@ -175,6 +175,35 @@ tests:
           value: foo
       - equal:
           path: spec.template.spec.containers[0].envFrom[0].secretRef.optional
+          value: true
+
+  - it: configures envFrom as mandatory by default (as configmap)
+    set:
+      deployment.envFrom:
+        foo-configmap:
+          type: configmap
+          name: foo
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].envFrom[0].configMapRef.name
+          value: foo
+      - equal:
+          path: spec.template.spec.containers[0].envFrom[0].configMapRef.optional
+          value: false
+
+  - it: configures envFrom as optional when configured (as configmap)
+    set:
+      deployment.envFrom:
+        foo-configmap:
+          type: configmap
+          name: foo
+          optional: true
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].envFrom[0].configMapRef.name
+          value: foo
+      - equal:
+          path: spec.template.spec.containers[0].envFrom[0].configMapRef.optional
           value: true
 
   - it: includes application.stakater.com/workload-class label in pod template for service selector

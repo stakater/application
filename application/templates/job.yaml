@@ -77,9 +77,30 @@ spec:
 {{ include "application.tplvalues.render" ( dict "value" $value "context" $ ) | indent 10 }}
         {{- end }}
         {{- end }}
-        {{- with $job.envFrom }}
         envFrom:
-{{ toYaml . | indent 8 }}
+        {{- range $value := $job.envFrom }}
+        {{- if (eq .type "configmap") }}
+          - configMapRef:
+            {{- if .name }}
+              name: {{ include "application.tplvalues.render" ( dict "value" $value.name "context" $ ) }}
+            {{- else if .nameSuffix }}
+              name: {{ template "application.name" $ }}-{{ include "application.tplvalues.render" ( dict "value" $value.nameSuffix "context" $ ) }}
+            {{- else }}
+              name: {{ template "application.name" $ }}
+            {{- end }}
+              optional: {{ default false $value.optional }}
+        {{- end }}
+        {{- if (eq .type "secret") }}
+          - secretRef:
+            {{- if .name }}
+              name: {{ include "application.tplvalues.render" ( dict "value" $value.name "context" $ ) }}
+            {{- else if .nameSuffix }}
+              name: {{ template "application.name" $ }}-{{ include "application.tplvalues.render" ( dict "value" $value.nameSuffix "context" $ ) }}
+            {{- else }}
+              name: {{ template "application.name" $ }}
+            {{- end }}
+              optional: {{ default false $value.optional }}
+        {{- end }}
         {{- end }}
         {{- if $job.command }}
         command: {{ $job.command }}

@@ -1292,6 +1292,19 @@ cronJob:
       image:
         repository: docker.io/nginx
         tag: v1.0.0
+      # If want to mount Envs from configmap or secret
+      envFrom:
+        production-cm:
+          type: configmap
+          nameSuffix: my-configmap
+        postgres-config:
+          type: secret
+          nameSuffix: postgres
+          optional: false
+        nonexisting-config:
+          type: secret
+          nameSuffix: nonexisting
+          optional: true
       env:
         KEY:
           value: VALUE
@@ -1341,6 +1354,19 @@ job:
       image:
         repository: docker.io/nginx
         tag: v1.0.0
+      # If want to mount Envs from configmap or secret
+      envFrom:
+        production-cm:
+          type: configmap
+          nameSuffix: my-configmap
+        postgres-config:
+          type: secret
+          nameSuffix: postgres
+          optional: false
+        nonexisting-config:
+          type: secret
+          nameSuffix: nonexisting
+          optional: true
       env:
         KEY:
           value: VALUE

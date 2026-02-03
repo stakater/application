@@ -147,8 +147,8 @@ spec:
         {{- $digest := include "application.tplvalues.render" (dict "value" .Values.deployment.image.digest "context" $) -}}
 
         {{- $image := $repo -}}
-        {{- with $tag    }} {{- if ne . "null" }} {{- $image = print $image ":" . }} {{- end }} {{- end }}
-        {{- with $digest }} {{- if ne . "null" }} {{- $image = print $image "@" . }} {{- end }} {{- end }}
+        {{- with $tag    }} {{- $image  = print $image  ":" . }} {{- end }}
+        {{- with $digest }} {{- $image  = print $image  "@" . }} {{- end }}
         image: {{ $image }}
         imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
         {{- with .Values.deployment.lifecycle }}

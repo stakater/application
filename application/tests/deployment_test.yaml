@@ -88,6 +88,18 @@ tests:
           path: spec.template.spec.containers[0].image
           value: example-image:example-tag@sha256:example-digest
 
+  - it: does not render @null when digest field is omitted
+    set:
+      deployment.image.repository: example-image
+      deployment.image.tag: example-tag
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: example-image:example-tag
+      - notMatchRegex:
+          path: spec.template.spec.containers[0].image
+          pattern: "@null"
+
   - it: yields empty service account name when disabled
     set:
       rbac.serviceAccount.enabled: false

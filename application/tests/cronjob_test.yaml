@@ -330,6 +330,23 @@ tests:
           path: spec.jobTemplate.spec.template.spec.containers[0].image
           value: custom-image
 
+  - it: does not render @null when digest field is omitted
+    set:
+      cronJob:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: example-tag
+    asserts:
+      - equal:
+          path: spec.jobTemplate.spec.template.spec.containers[0].image
+          value: example-image:example-tag
+      - notMatchRegex:
+          path: spec.jobTemplate.spec.template.spec.containers[0].image
+          pattern: "@null"
+
   - it: configures automount service account token by default
     set:
       cronJob:

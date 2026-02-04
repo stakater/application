@@ -21,11 +21,14 @@ Usage:
 {{ include "application.tplvalues.render" ( dict "value" .Values.path.to.the.Value "context" $) }}
 */}}
 {{- define "application.tplvalues.render" -}}
-    {{- if typeIs "string" .value }}
-        {{- tpl .value .context }}
-    {{- else }}
-        {{- tpl (.value | toYaml) .context }}
-    {{- end }}
+    {{- $value := .value -}}
+    {{- if or (not $value) (kindIs "invalid" $value) -}}
+        {{- "" -}}
+    {{- else if typeIs "string" $value -}}
+        {{- tpl $value .context -}}
+    {{- else -}}
+        {{- tpl ($value | toYaml) .context -}}
+    {{- end -}}
 {{- end -}}
 
 {{/*

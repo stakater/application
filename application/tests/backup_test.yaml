@@ -3,6 +3,11 @@ suite: Backup
 templates:
   - backup.yaml
 
+capabilities:
+  apiVersions:
+    - velero.io/v1
+    - velero.io/v1/Backup
+
 tests:
   - it: does not yield Backup resource if backup.enabled is false
     set:
@@ -54,8 +59,10 @@ tests:
         namespace: my-namespace
         storageLocation: my-storage-location
     asserts:
-      - equal:
+      - notExists:
           path: spec.defaultVolumesToRestic
+      - equal:
+          path: spec.defaultVolumesToFsBackup
           value: true
       - equal:
           path: spec.snapshotVolumes
@@ -63,6 +70,20 @@ tests:
       - equal:
           path: spec.ttl
           value: "1h0m0s"
+
+  - it: uses restic integration is explicitly enabled
+    set:
+      backup:
+        enabled: true
+        namespace: my-namespace
+        storageLocation: my-storage-location
+        defaultVolumesToRestic: true
+    asserts:
+      - notExists:
+          path: spec.defaultVolumesToFsBackup
+      - equal:
+          path: spec.defaultVolumesToRestic
+          value: true
 
   - it: includes correct includedNamespaces by default
     set:
@@ -115,3 +136,119 @@ tests:
           value:
             - secrets
             - configmaps
+
+  - it: includes snapshotMoveData when defined
+    set:
+      backup:
+        enabled: true
+        snapshotMoveData: true
+    asserts:
+      - equal:
+          path: spec.snapshotMoveData
+          value: true
+
+  - it: does not include snapshotMoveData when not defined
+    set:
+      backup:
+        enabled: true
+    asserts:
+      - notExists:
+          path: spec.snapshotMoveData
+
+  - it: uses application selector labels
+    set:
+      backup:
+        enabled: true
+      applicationName: my-app
+    asserts:
+      - equal:
+          path: spec.labelSelector.matchLabels
+          value:
+            app.kubernetes.io/name: my-app
+
+  - it: includes csiSnapshotTimeout when defined
+    set:
+      backup:
+        enabled: true
+        csiSnapshotTimeout: "10m"
+    asserts:
+      - equal:
+          path: spec.csiSnapshotTimeout
+          value: "10m"
+
+  - it: includes datamover when defined
+    set:
+      backup:
+        enabled: true
+        datamover: "kopia"
+    asserts:
+      - equal:
+          path: spec.datamover
+          value: "kopia"
+
+  - it: includes itemOperationTimeout when defined
+    set:
+      backup:
+        enabled: true
+        itemOperationTimeout: "1h"
+    asserts:
+      - equal:
+          path: spec.itemOperationTimeout
+          value: "1h"
+
+  - it: includes volumeSnapshotLocations when defined
+    set:
+      backup:
+        enabled: true
+        volumeSnapshotLocations:
+          - default
+          - gp2
+    asserts:
+      - equal:
+          path: spec.volumeSnapshotLocations
+          value:
+            - default
+            - gp2
+
+  - it: includes includedNamespaceScopedResources when defined
+    set:
+      backup:
+        enabled: true
+        includedNamespaceScopedResources:
+          - deployments
+          - services
+    asserts:
+      - equal:
+          path: spec.includedNamespaceScopedResources
+          value:
+            - deployments
+            - services
+
+  - it: includes excludedNamespaceScopedResources when defined
+    set:
+      backup:
+        enabled: true
+        excludedNamespaceScopedResources:
+          - secrets
+          - configmaps
+    asserts:
+      - equal:
+          path: spec.excludedNamespaceScopedResources
+          value:
+            - secrets
+            - configmaps
+
+  - it: includes orderedResources when defined
+    set:
+      backup:
+        enabled: true
+        orderedResources:
+          deployments:
+            - my-deployment-1
+            - my-deployment-2
+    asserts:
+      - equal:
+          path: spec.orderedResources.deployments
+          value:
+            - my-deployment-1
+            - my-deployment-2

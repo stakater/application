@@ -297,7 +297,7 @@ tests:
                   value: /
             backendRefs:
               - name: '{{ include "application.name" $ }}'
-                port: 8080
+                port: '{{ (first $.Values.service.ports).port }}'
       service:
         enabled: true
         ports:

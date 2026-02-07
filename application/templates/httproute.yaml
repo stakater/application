@@ -22,5 +22,5 @@ spec:
   useDefaultGateways: {{ .Values.httpRoute.useDefaultGateways }}
   {{- end }}
   hostnames: {{- include "application.tplvalues.render" ( dict "value" .Values.httpRoute.hostnames "context" $ ) | nindent 4 }}
-  rules: {{- include "application.tplvalues.render" ( dict "value" .Values.httpRoute.rules "context" $ ) | nindent 4 }}
+  rules: {{- include "application.httpRoute.rules" . | nindent 4 }}
 {{- end }}

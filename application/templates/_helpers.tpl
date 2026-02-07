@@ -92,3 +92,37 @@ reference:
   kind: Route
   name: {{ include "application.name" . }}
 {{- end }}
+
+{{/*
+Renders httpRoute rules with proper integer type for port fields.
+Usage:
+{{ include "application.httpRoute.rules" . }}
+*/}}
+{{- define "application.httpRoute.rules" -}}
+{{- $rulesYaml := include "application.tplvalues.render" ( dict "value" .Values.httpRoute.rules "context" $ ) -}}
+{{- $wrappedYaml := printf "rules:\n%s" $rulesYaml -}}
+{{- $parsed := $wrappedYaml | fromYaml -}}
+{{- range $ruleIndex, $rule := $parsed.rules -}}
+{{- if $ruleIndex }}
+{{ end -}}
+- {{- if $rule.matches }}
+  matches: {{ $rule.matches | toYaml | nindent 4 }}
+  {{- end }}
+  {{- if $rule.filters }}
+  filters: {{ $rule.filters | toYaml | nindent 4 }}
+  {{- end }}
+  {{- if $rule.backendRefs }}
+  backendRefs:
+  {{- range $rule.backendRefs }}
+  - name: {{ .name }}
+    port: {{ .port | int }}
+    {{- if .weight }}
+    weight: {{ .weight | int }}
+    {{- end }}
+    {{- if .namespace }}
+    namespace: {{ .namespace }}
+    {{- end }}
+  {{- end }}
+  {{- end }}
+{{- end -}}
+{{- end -}}

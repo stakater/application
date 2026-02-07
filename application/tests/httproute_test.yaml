@@ -280,3 +280,40 @@ tests:
       - equal:
           path: spec.rules[0].filters[0].requestRedirect.port
           value: 443
+
+  - it: renders HTTPRoute with default service port when using template expression
+    set:
+      applicationName: "test-app"
+      httpRoute:
+        enabled: true
+        parentRefs:
+          - name: my-gateway
+        hostnames:
+          - example.com
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - name: '{{ include "application.name" $ }}'
+                port: 8080
+      service:
+        enabled: true
+        ports:
+          - port: 8080
+            name: http
+            protocol: TCP
+            targetPort: 8080
+    capabilities:
+      apiVersions:
+        - gateway.networking.k8s.io/v1
+    asserts:
+      - equal:
+          path: spec.rules[0].backendRefs[0].name
+          value: test-app
+      - equal:
+          path: spec.rules[0].backendRefs[0].port
+          value: 8080
+      - isKind:
+          of: HTTPRoute

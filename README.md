@@ -185,7 +185,7 @@ helm delete --namespace test my-application
 | httpRoute.hostnames | tpl/list | `nil` | Hostnames for the HTTPRoute. |
 | httpRoute.additionalLabels | object | `{}` | Additional labels for HTTPRoute. |
 | httpRoute.annotations | object | `{}` | Annotations for HTTPRoute. |
-| httpRoute.rules | tpl/list | `[{"backendRefs":[{"name":"{{ include \"application.name\" $ }}","port":"{{ (first $.Values.service.ports).port | int }}"}],"matches":[{"path":{"type":"PathPrefix","value":"/"}}]}]` | Rules for HTTPRoute. |
+| httpRoute.rules | tpl/list | `[{"backendRefs":[{"name":"{{ include \"application.name\" $ }}","port":"{{ (first $.Values.service.ports).port }}"}],"matches":[{"path":{"type":"PathPrefix","value":"/"}}]}]` | Rules for HTTPRoute. |
 
 ### Route Parameters
 

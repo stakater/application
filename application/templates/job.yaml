@@ -129,6 +129,9 @@ spec:
       {{- if $job.dnsPolicy }}
       dnsPolicy: {{ $job.dnsPolicy }}
       {{- end }}
+      {{- if not (kindIs "invalid" $job.enableServiceLinks) }}
+      enableServiceLinks: {{ $job.enableServiceLinks }}
+      {{- end }}
       {{- with $job.hostAliases }}
       hostAliases: {{- toYaml . | nindent 6 }}
       {{- end }}

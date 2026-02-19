@@ -389,3 +389,46 @@ tests:
       - equal:
           path: spec.template.spec.automountServiceAccountToken
           value: false
+
+  - it: does not include enable service links by default
+    set:
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: example-tag
+    asserts:
+      - notExists:
+          path: spec.template.spec.enableServiceLinks
+
+  - it: enable service links by when configured
+    set:
+      job:
+        enabled: true
+        jobs:
+          example:
+            enableServiceLinks: true
+            image:
+              repository: example-image
+              tag: example-tag
+    asserts:
+      - equal:
+          path: spec.template.spec.enableServiceLinks
+          value: true
+
+  - it: disable service links when configured
+    set:
+      job:
+        enabled: true
+        jobs:
+          example:
+            enableServiceLinks: false
+            image:
+              repository: example-image
+              tag: example-tag
+    asserts:
+      - equal:
+          path: spec.template.spec.enableServiceLinks
+          value: false

@@ -61,6 +61,7 @@ cronJob:
     #     - name: ndots
     #       value: '1'
     #   dnsPolicy: ClusterFirst
+    #   enableServiceLinks: false
     #   hostAliases:
     #   - ip: "127.0.0.1"
     #     hostnames:

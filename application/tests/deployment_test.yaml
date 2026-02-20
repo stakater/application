@@ -203,6 +203,34 @@ tests:
           path: spec.template.spec.containers[0].envFrom[0].secretRef.optional
           value: true
 
+  - it: configures envFrom with external secret not managed by chart
+    set:
+      deployment.envFrom:
+        external-secret:
+          type: secret
+          name: my-existing-secret
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].envFrom[0].secretRef.name
+          value: my-existing-secret
+      - equal:
+          path: spec.template.spec.containers[0].envFrom[0].secretRef.optional
+          value: false
+
+  - it: configures envFrom with external configmap not managed by chart
+    set:
+      deployment.envFrom:
+        external-configmap:
+          type: configmap
+          name: my-existing-configmap
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].envFrom[0].configMapRef.name
+          value: my-existing-configmap
+      - equal:
+          path: spec.template.spec.containers[0].envFrom[0].configMapRef.optional
+          value: false
+
   - it: includes application.stakater.com/workload-class label in pod template for service selector
     set:
       deployment:

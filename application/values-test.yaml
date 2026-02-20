@@ -87,6 +87,12 @@ deployment:
       type: secret
       nameSuffix: nonexisting
       optional: true
+    external-secret:
+      type: secret
+      name: my-existing-secret
+    external-configmap:
+      type: configmap
+      name: my-existing-configmap
 
   # Environment variables to be passed to the app container
   env:

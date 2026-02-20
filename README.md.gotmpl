@@ -102,6 +102,15 @@ In order to use environment variable in deployment or cronjob, you will have to 
 
   **Note:** first key after `envFrom` is just used to uniquely identify different objects in `envFrom` block. Make sure to keep it unique and relevant.
 
+  To reference an **existing external ConfigMap** not managed by this chart, use `name` instead of `nameSuffix`:
+
+  ```yaml
+  envFrom:
+    external-configmap:
+      type: configmap
+      name: my-existing-configmap
+  ```
+
 - To get environment variable value from **Secret**
 
   Suppose we have secret created from application chart
@@ -141,6 +150,15 @@ In order to use environment variable in deployment or cronjob, you will have to 
   You can specify whether the secret is mandatory or optional for the pod to start with the `optional: true/false` value.
 
   **Note:** first key after `envFrom` is just used to uniquely identify different objects in `envFrom` block. Make sure to keep it unique and relevant.
+
+  To reference an **existing external Secret** not managed by this chart, use `name` instead of `nameSuffix`:
+
+  ```yaml
+  envFrom:
+    external-secret:
+      type: secret
+      name: my-existing-secret
+  ```
 
 ## Configuring probes
 

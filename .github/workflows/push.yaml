@@ -105,7 +105,7 @@ jobs:
         git commit -m "chore: Update artifacts [skip-ci]" --allow-empty
         echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
     - name: Push updated artifacts
-      uses: ad-m/github-push-action@57116acb309081ee57864270b0e3c4cedbe45452
+      uses: ad-m/github-push-action@4cc74773234f74829a8c21bc4d69dd4be9cfa599
       with:
         github_token: ${{ secrets.PUBLISH_TOKEN }}
     - name: Create tag

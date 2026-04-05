@@ -135,7 +135,7 @@ spec:
             volumeMounts:
 {{ toYaml . | indent 12 }}
             {{- end }}
-            {{- with $job.securityContext }}
+            {{- with $job.containerSecurityContext }}
             securityContext:
               {{- toYaml . | nindent 14 }}
             {{- end }}
@@ -163,6 +163,10 @@ spec:
           {{- end }}
           {{- with $job.imagePullSecrets }}
           imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with $job.securityContext }}
+          securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           {{- if $job.dnsConfig }}

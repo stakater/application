@@ -111,6 +111,9 @@ spec:
         resources:
 {{ toYaml . | indent 10 }}
         {{- end }}
+        {{- with $job.containerSecurityContext }}
+        securityContext: {{ toYaml . | nindent 10 }}
+        {{- end }}
         {{- with $job.volumeMounts }}
         volumeMounts:
 {{ toYaml . | indent 8 }}

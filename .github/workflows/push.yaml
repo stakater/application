@@ -23,7 +23,7 @@ jobs:
         persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
         fetch-depth: 0 # otherwise, you will fail to push refs to dest repo
     - name: Set up Helm
-      uses: azure/setup-helm@1a275c3b69536ee54be43f2070a358922e12c8d4 # v4
+      uses: azure/setup-helm@dda3372f752e03dde6b3237bc9431cdc2f7a02a2 # v5
     - name: Install OpenShift CLI
       uses: redhat-actions/oc-installer@35b60c3f9757ae4301521556e1b75ff6f59f8d7c # v1
       with:

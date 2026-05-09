@@ -12,8 +12,12 @@ on:
       - README.md
       - LICENSE
 
+permissions: {}
+
 jobs:
   call-ci-workflow:
+    permissions:
+      contents: read
     uses: ./.github/workflows/ci.yaml
     secrets: inherit
     with:
@@ -22,6 +26,8 @@ jobs:
   bump-version:
     name: Bump Version
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       next_version: ${{ steps.get_next_version.outputs.version }}
       has_next_version: ${{ steps.get_next_version.outputs.hasNextVersion }}
@@ -42,6 +48,8 @@ jobs:
   push-changes:
     name: Publish Chart
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     needs:
       - call-ci-workflow
       - bump-version

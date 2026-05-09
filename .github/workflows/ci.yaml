@@ -57,7 +57,7 @@ jobs:
 
   dry-run:
     name: Install Dry Run
-    runs-on: stakater-nonprod
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     if: "! contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
     env:

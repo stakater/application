@@ -1,3 +1,9 @@
+deployment:
+  openshiftOAuthProxy:
+    enabled: true
+    port: 8080
+    secretName: openshift-oauth-proxy-tls
+
 route:
   enabled: true
   annotations:

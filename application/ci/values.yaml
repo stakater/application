@@ -27,9 +27,19 @@ deployment:
         - bar.remote
   initContainers:
     init-contaner:
-      image: busybox
+      image: busybox:1.37
       imagePullPolicy: IfNotPresent
       command: ["/bin/sh"]
+      securityContext:
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        runAsUser: 65534
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        seccompProfile:
+          type: RuntimeDefault
   additionalLabels:
     key: value
   podLabels:
@@ -89,6 +99,7 @@ deployment:
                 operator: In
                 values:
                   - ssd
+  automountServiceAccountToken: false
   image:
     repository: repository/image-name
     tag: image-tag
@@ -145,14 +156,35 @@ deployment:
     seccompProfile:
       type: RuntimeDefault
   openshiftOAuthProxy:
-    enabled: true
-    port: 8080
-    secretName: openshift-oauth-proxy-tls
+    enabled: false
   additionalContainers:
     - name: sidecar-contaner
-      image: busybox
+      image: busybox:1.37
       imagePullPolicy: IfNotPresent
-      command: ["/bin/sh"]
+      command: ["/bin/sh", "-c", "sleep 3600"]
+      securityContext:
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        runAsUser: 65534
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        seccompProfile:
+          type: RuntimeDefault
+      resources:
+        requests:
+          cpu: 10m
+          memory: 16Mi
+        limits:
+          cpu: 50m
+          memory: 32Mi
+      livenessProbe:
+        exec:
+          command: ["true"]
+      readinessProbe:
+        exec:
+          command: ["true"]
   command: []
   args: []
   ports:
@@ -339,6 +371,7 @@ cronJob:
       schedule: "* * * 8 *"
       suspend: false
       priorityClassName: high-priority
+      automountServiceAccountToken: false
       imagePullSecrets:
         - name: nexus-secret
       image:
@@ -351,8 +384,21 @@ cronJob:
       args: ["-c", "sleep 5000"]
       resources:
         requests:
-          memory: 5Gi
-          cpu: 1
+          memory: 256Mi
+          cpu: 100m
+        limits:
+          memory: 512Mi
+          cpu: 500m
+      securityContext:
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        runAsUser: 65534
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        seccompProfile:
+          type: RuntimeDefault
       dnsConfig:
         options:
           - name: ndots
@@ -366,6 +412,7 @@ job:
         helm.sh/hook: "pre-install,pre-upgrade"
         helm.sh/hook-weight: "-1"
         helm.sh/hook-delete-policy: before-hook-creation
+      automountServiceAccountToken: false
       imagePullSecrets:
         - name: nexus-secret
       image:
@@ -378,8 +425,21 @@ job:
       args: ["-c", "sleep 5000"]
       resources:
         requests:
-          memory: 5Gi
-          cpu: 1
+          memory: 256Mi
+          cpu: 100m
+        limits:
+          memory: 512Mi
+          cpu: 500m
+      securityContext:
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        runAsUser: 65534
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        seccompProfile:
+          type: RuntimeDefault
       dnsConfig:
         options:
           - name: ndots

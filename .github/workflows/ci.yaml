@@ -207,11 +207,23 @@ jobs:
           node_image: kindest/node:${{ matrix.kubernetes }}
 
       - name: Render Kubernetes-compatible chart
+        shell: bash
         run: |
+          set -euo pipefail
+
           args=()
+          # group/version entries (e.g. batch/v1)
           for v in $(kubectl api-versions); do
             args+=("--api-versions" "$v")
           done
+          # group/version/Kind entries (e.g. batch/v1/CronJob)
+          while IFS= read -r gvk; do
+            args+=("--api-versions" "$gvk")
+          done < <(
+            kubectl api-resources --no-headers \
+              | awk '{ print $(NF-2) "/" $NF }' \
+              | sort -u
+          )
 
           set -x
           helm template "$RELEASE_NAME" "$CHART_PATH" \

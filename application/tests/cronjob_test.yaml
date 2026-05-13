@@ -421,8 +421,8 @@ tests:
               readOnlyRootFilesystem: true
               runAsNonRoot: true
               capabilities:
-              drop:
-                - ALL
+                drop:
+                  - ALL
             image:
               repository: example-image
               tag: example-tag
@@ -433,8 +433,8 @@ tests:
             readOnlyRootFilesystem: true
             runAsNonRoot: true
             capabilities:
-            drop:
-              - ALL
+              drop:
+                - ALL
 
   - it: configures automount service account token by default
     set:

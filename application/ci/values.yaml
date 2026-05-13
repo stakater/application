@@ -397,13 +397,8 @@ cronJob:
           memory: 512Mi
           cpu: 500m
       securityContext:
-        readOnlyRootFilesystem: true
         runAsNonRoot: true
         runAsUser: 65534
-        allowPrivilegeEscalation: false
-        capabilities:
-          drop:
-            - ALL
         seccompProfile:
           type: RuntimeDefault
       dnsConfig:
@@ -438,13 +433,8 @@ job:
           memory: 512Mi
           cpu: 500m
       securityContext:
-        readOnlyRootFilesystem: true
         runAsNonRoot: true
         runAsUser: 65534
-        allowPrivilegeEscalation: false
-        capabilities:
-          drop:
-            - ALL
         seccompProfile:
           type: RuntimeDefault
       dnsConfig:

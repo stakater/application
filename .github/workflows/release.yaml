@@ -65,9 +65,7 @@ jobs:
         if: ${{ steps.get-next-version.outputs.hasNextVersion == 'true' }}
         env:
           VERSION: ${{ steps.get-next-version.outputs.version }}
-        run: |
-          set -euo pipefail
-          make bump-chart
+        run: ./hack/set-version.sh "$VERSION"
 
       - name: Upload bumped chart metadata
         if: ${{ steps.get-next-version.outputs.hasNextVersion == 'true' }}

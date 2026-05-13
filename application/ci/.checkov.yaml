@@ -1,3 +1,6 @@
+# Checkov skip list for the ci/values.yaml file in this directory.
+# These checks are either unfixable due to Helm template limitations
+# or represent intentional CI test configurations.
 skip-check:
   # Helm renders to the 'default' namespace when no --namespace is passed.
   # Checkov's built-in helm renderer does not support --namespace.

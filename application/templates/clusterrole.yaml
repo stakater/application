@@ -4,7 +4,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ template "application.name" $ }}-clusterrole-{{ .name }}
+  name: {{ template "application.name" $ }}-cr-{{ .name }}
   labels:
   {{- include "application.labels" $ | nindent 4 }}
 {{- if $.Values.rbac.additionalLabels }}

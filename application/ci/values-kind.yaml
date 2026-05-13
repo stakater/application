@@ -5,6 +5,39 @@ deployment:
     pullPolicy: IfNotPresent
   openshiftOAuthProxy:
     enabled: false
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 128Mi
+  containerSecurityContext:
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsUser: 65534
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    seccompProfile:
+      type: RuntimeDefault
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 65534
+    seccompProfile:
+      type: RuntimeDefault
+  automountServiceAccountToken: false
+  readinessProbe:
+    enabled: true
+    httpGet:
+      path: /
+      port: 8080
+  livenessProbe:
+    enabled: true
+    httpGet:
+      path: /
+      port: 8080
 
 route:
   enabled: false

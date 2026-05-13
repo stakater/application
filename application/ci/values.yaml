@@ -71,6 +71,12 @@ deployment:
       type: secret
       nameSuffix: nonexisting
       optional: true
+    external-secret:
+      type: secret
+      name: my-existing-secret
+    external-configmap:
+      type: configmap
+      name: my-existing-configmap
   env:
     ENVIRONMENT:
       value: dev
@@ -387,6 +393,13 @@ cronJob:
       env:
         KEY:
           value: VALUE
+      envFrom:
+        external-secret:
+          type: secret
+          name: my-existing-secret
+        external-configmap:
+          type: configmap
+          name: my-existing-configmap
       command: ["/bin/bash"]
       args: ["-c", "sleep 5000"]
       resources:
@@ -423,6 +436,13 @@ job:
       env:
         KEY:
           value: VALUE
+      envFrom:
+        external-secret:
+          type: secret
+          name: my-existing-secret
+        external-configmap:
+          type: configmap
+          name: my-existing-configmap
       command: ["/bin/bash"]
       args: ["-c", "sleep 5000"]
       resources:

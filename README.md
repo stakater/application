@@ -80,7 +80,7 @@ helm delete --namespace test my-application
 | deployment.fluentdConfigAnnotations | object | `nil` | Configuration details for fluentdConfigurations. Only works for specific setup, see <https://medium.com/stakater/dynamic-log-processing-with-fluentd-konfigurator-and-slack-935a5de4eddb>. |
 | deployment.replicas | int | `nil` | Number of replicas. |
 | deployment.imagePullSecrets | list | `[]` | List of secrets to be used for pulling the images. |
-| deployment.envFrom | object | `nil` | Mount environment variables from ConfigMap or Secret to the pod. See the README "Consuming environment variable in application chart" section for more details. |
+| deployment.envFrom | object | `nil` | Mount environment variables from ConfigMap or Secret to the pod. Use `nameSuffix` for resources managed by this chart (name will be prefixed with application name), or `name` to reference an existing external ConfigMap or Secret not managed by this chart. See the README "Consuming environment variable in application chart" section for more details. |
 | deployment.env | object | `nil` | Environment variables to be added to the pod. See the README "Consuming environment variable in application chart" section for more details. |
 | deployment.volumes | object | `nil` | Volumes to be added to the pod. Key is the name of the volume. Value is the volume definition. |
 | deployment.volumeMounts | object | `nil` | Mount path for Volumes. Key is the name of the volume. Value is the volume mount definition. |
@@ -493,6 +493,15 @@ In order to use environment variable in deployment or cronjob, you will have to 
 
   **Note:** first key after `envFrom` is just used to uniquely identify different objects in `envFrom` block. Make sure to keep it unique and relevant.
 
+  To reference an **existing external ConfigMap** not managed by this chart, use `name` instead of `nameSuffix`:
+
+  ```yaml
+  envFrom:
+    external-configmap:
+      type: configmap
+      name: my-existing-configmap
+  ```
+
 - To get environment variable value from **Secret**
 
   Suppose we have secret created from application chart
@@ -532,6 +541,15 @@ In order to use environment variable in deployment or cronjob, you will have to 
   You can specify whether the secret is mandatory or optional for the pod to start with the `optional: true/false` value.
 
   **Note:** first key after `envFrom` is just used to uniquely identify different objects in `envFrom` block. Make sure to keep it unique and relevant.
+
+  To reference an **existing external Secret** not managed by this chart, use `name` instead of `nameSuffix`:
+
+  ```yaml
+  envFrom:
+    external-secret:
+      type: secret
+      name: my-existing-secret
+  ```
 
 ## Configuring probes
 

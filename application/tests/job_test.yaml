@@ -432,3 +432,133 @@ tests:
       - equal:
           path: spec.template.spec.enableServiceLinks
           value: false
+
+  - it: configures envFrom with chart-managed secret via nameSuffix
+    set:
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: example-tag
+            envFrom:
+              chart-secret:
+                type: secret
+                nameSuffix: db-credentials
+      applicationName: my-app
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].envFrom[0].secretRef.name
+          value: my-app-db-credentials
+      - equal:
+          path: spec.template.spec.containers[0].envFrom[0].secretRef.optional
+          value: false
+
+  - it: configures envFrom with chart-managed configmap via nameSuffix
+    set:
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: example-tag
+            envFrom:
+              chart-configmap:
+                type: configmap
+                nameSuffix: app-config
+      applicationName: my-app
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].envFrom[0].configMapRef.name
+          value: my-app-app-config
+      - equal:
+          path: spec.template.spec.containers[0].envFrom[0].configMapRef.optional
+          value: false
+
+  - it: configures envFrom with external secret not managed by chart
+    set:
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: example-tag
+            envFrom:
+              external-secret:
+                type: secret
+                name: my-existing-secret
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].envFrom[0].secretRef.name
+          value: my-existing-secret
+      - equal:
+          path: spec.template.spec.containers[0].envFrom[0].secretRef.optional
+          value: false
+
+  - it: configures envFrom with external configmap not managed by chart
+    set:
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: example-tag
+            envFrom:
+              external-configmap:
+                type: configmap
+                name: my-existing-configmap
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].envFrom[0].configMapRef.name
+          value: my-existing-configmap
+      - equal:
+          path: spec.template.spec.containers[0].envFrom[0].configMapRef.optional
+          value: false
+
+  - it: configures envFrom as optional when configured
+    set:
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: example-tag
+            envFrom:
+              optional-secret:
+                type: secret
+                name: my-secret
+                optional: true
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].envFrom[0].secretRef.name
+          value: my-secret
+      - equal:
+          path: spec.template.spec.containers[0].envFrom[0].secretRef.optional
+          value: true
+
+  - it: supports legacy list-based envFrom (vanilla form, backward compatibility)
+    set:
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: example-tag
+            envFrom:
+              - secretRef:
+                  name: my-legacy-secret
+              - configMapRef:
+                  name: my-legacy-configmap
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].envFrom[0].secretRef.name
+          value: my-legacy-secret
+      - equal:
+          path: spec.template.spec.containers[0].envFrom[1].configMapRef.name
+          value: my-legacy-configmap

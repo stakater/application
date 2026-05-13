@@ -583,25 +583,3 @@ tests:
           path: spec.jobTemplate.spec.template.spec.containers[0].envFrom[0].secretRef.optional
           value: true
 
-  - it: supports legacy list-based envFrom (vanilla form, backward compatibility)
-    set:
-      cronJob:
-        enabled: true
-        jobs:
-          example:
-            schedule: "0 * * * *"
-            image:
-              repository: example-image
-              tag: example-tag
-            envFrom:
-              - secretRef:
-                  name: my-legacy-secret
-              - configMapRef:
-                  name: my-legacy-configmap
-    asserts:
-      - equal:
-          path: spec.jobTemplate.spec.template.spec.containers[0].envFrom[0].secretRef.name
-          value: my-legacy-secret
-      - equal:
-          path: spec.jobTemplate.spec.template.spec.containers[0].envFrom[1].configMapRef.name
-          value: my-legacy-configmap

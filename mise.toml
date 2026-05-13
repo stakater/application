@@ -25,3 +25,7 @@ helm-docs \\
 [tasks.helm-lint]
 description = "Lint the Helm chart"
 run = "helm lint application"
+
+[tasks.unit-test]
+description = "Run Helm unit tests"
+run = "helm-unittest application"

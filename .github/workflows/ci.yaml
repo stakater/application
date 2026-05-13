@@ -151,7 +151,11 @@ jobs:
           cat rendered.yaml
 
       - name: Validate YAML syntax
-        run: python3 -c "import yaml, sys; list(yaml.safe_load_all(open('rendered.yaml')))"
+        uses: frenck/action-yamllint@34b4bbcaeabedcfefad6adea8c5bbc42af0e2d47 # v1.5.0
+        with:
+          path: rendered.yaml
+          strict: true
+          warnings: false
 
   checkov:
     name: Checkov security scan

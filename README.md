@@ -2,13 +2,7 @@
 
 # Application
 
-Generic helm chart for applications which:
-
-- are stateless
-- creates only namespace scoped resources (e.g. it doesn't need CRB - Cluster Role Bindings)
-- don't need privileged containers
-- don't call the underlying Kubernetes API or use the underlying etcd as a database by defining custom resources
-- run either as deployment, job or cronjob
+Generic Helm chart for deploying stateless applications on Kubernetes. Supports Deployments, Jobs, and CronJobs along with common companion resources (Services, Ingress, RBAC, autoscaling, monitoring, certificates, and more).
 
 ## Installing the Chart
 

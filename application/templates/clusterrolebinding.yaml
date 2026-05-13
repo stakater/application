@@ -4,7 +4,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: {{ template "application.name" $ }}-clusterrolebinding-{{ .name }}
+  name: {{ template "application.name" $ }}-crb-{{ .name }}
   labels:
   {{- include "application.labels" $ | nindent 4 }}
 {{- if $.Values.rbac.additionalLabels }}
@@ -17,7 +17,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ template "application.name" $ }}-clusterrole-{{ .name }}
+  name: {{ template "application.name" $ }}-cr-{{ .name }}
 subjects:
   - kind: ServiceAccount
   {{- if $.Values.rbac.serviceAccount.name }}

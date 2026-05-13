@@ -20,32 +20,115 @@ deployment:
     - ip: "127.0.0.1"
       hostnames:
         - foo.local
+        - bar.local
+    - ip: "10.1.2.3"
+      hostnames:
+        - foo.remote
+        - bar.remote
   initContainers:
-    init-container:
+    init-contaner:
       image: busybox
       imagePullPolicy: IfNotPresent
       command: ["/bin/sh"]
-      args: ["-c", "echo init"]
-  additionalContainers:
-    - name: sidecar
-      image: busybox
-      imagePullPolicy: IfNotPresent
-      command: ["/bin/sh"]
-      args: ["-c", "sleep 3600"]
+  additionalLabels:
+    key: value
+  podLabels:
+    env: prod
+  additionalPodAnnotations:
+    key: value
+  fluentdConfigAnnotations:
+    fluentd:
+      regex: hello
+      timeFormat: world
+  replicas: 2
+  imagePullSecrets: []
+  envFrom:
+    production-cm:
+      type: configmap
+      nameSuffix: my-configmap
+    postgres-config:
+      type: secret
+      nameSuffix: postgres
+      optional: false
+    nonexisting-config:
+      type: secret
+      nameSuffix: nonexisting
+      optional: true
+  env:
+    ENVIRONMENT:
+      value: dev
+  volumes:
+    config-volume:
+      configMap:
+        name: configmap-name
+    configmap-volume:
+      configMap:
+        name: '{{ template "application.name" . }}-configmap-nameSuffix'
+    secret-volume:
+      secret:
+        secretName: secret-name
+    volume-name:
+      emptyDir: {}
+    persistent-volume-name:
+      persistentVolumeClaim:
+        claimName: claim-name
+  volumeMounts:
+    volume-name:
+      mountPath: /path1
+  tolerations:
+    - key: dedicated
+      operator: Equal
+      value: app
+      effect: NoSchedule
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: disktype
+                operator: In
+                values:
+                  - ssd
   image:
     repository: repository/image-name
     tag: image-tag
     pullPolicy: IfNotPresent
-  replicas: 2
-  openshiftOAuthProxy:
-    enabled: false
+  startupProbe:
+    enabled: true
+    failureThreshold: 30
+    periodSeconds: 10
+    httpGet:
+      path: /path
+      port: 8080
+    exec: {}
+  readinessProbe:
+    enabled: true
+    failureThreshold: 3
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+    initialDelaySeconds: 10
+    exec:
+      command:
+        - cat
+        - tmp/healthy
+  livenessProbe:
+    enabled: true
+    failureThreshold: 3
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+    initialDelaySeconds: 10
+    httpGet:
+      path: /path
+      port: 8080
   resources:
-    requests:
-      cpu: 50m
-      memory: 64Mi
     limits:
-      cpu: 200m
+      memory: 256Mi
+      cpu: 0.5
+    requests:
       memory: 128Mi
+      cpu: 0.1
   containerSecurityContext:
     readOnlyRootFilesystem: true
     runAsNonRoot: true
@@ -61,83 +144,60 @@ deployment:
     runAsUser: 65534
     seccompProfile:
       type: RuntimeDefault
-  automountServiceAccountToken: false
-  startupProbe:
+  openshiftOAuthProxy:
     enabled: true
-    failureThreshold: 30
-    periodSeconds: 10
-    httpGet:
-      path: /
-      port: 8080
-  readinessProbe:
-    enabled: true
-    failureThreshold: 3
-    periodSeconds: 10
-    successThreshold: 1
-    timeoutSeconds: 1
-    initialDelaySeconds: 10
-    httpGet:
-      path: /
-      port: 8080
-  livenessProbe:
-    enabled: true
-    failureThreshold: 3
-    periodSeconds: 10
-    successThreshold: 1
-    timeoutSeconds: 1
-    initialDelaySeconds: 10
-    httpGet:
-      path: /
-      port: 8080
+    port: 8080
+    secretName: openshift-oauth-proxy-tls
+  additionalContainers:
+    - name: sidecar-contaner
+      image: busybox
+      imagePullPolicy: IfNotPresent
+      command: ["/bin/sh"]
+  command: []
+  args: []
   ports:
     - containerPort: 8080
       name: http
       protocol: TCP
-  env:
-    ENVIRONMENT:
-      value: ci
-  envFrom:
-    app-config:
-      type: configmap
-      nameSuffix: app-config
-  volumes:
-    config-volume:
-      configMap:
-        name: configmap-name
-    empty-volume:
-      emptyDir: {}
-  volumeMounts:
-    empty-volume:
-      mountPath: /tmp
-  tolerations:
-    - key: dedicated
-      operator: Equal
-      value: app
-      effect: NoSchedule
-  affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-          - matchExpressions:
-              - key: kubernetes.io/os
-                operator: In
-                values:
-                  - linux
-  terminationGracePeriodSeconds: 30
+    - containerPort: 8778
+      name: jolokia
+      protocol: TCP
+    - containerPort: 8443
+      name: https
+      protocol: TCP
+  hostNetwork: true
+  terminationGracePeriodSeconds: 120
   lifecycle:
     preStop:
       exec:
-        command: ["/bin/sh", "-c", "sleep 5"]
+        command: ["/bin/sh", "-c", "sleep 20"]
+
+persistence:
+  enabled: true
+  mountPVC: false
+  mountPath: /
+  accessMode: ReadWriteOnce
+  storageClass: "-"
   additionalLabels:
     key: value
-  podLabels:
-    env: ci
-  additionalPodAnnotations:
-    ci: "true"
+  storageSize: 8Gi
+  volumeMode: Filesystem
 
 service:
   additionalLabels:
+    key: value
     expose: "true"
+  annotations:
+    config.xposer.stakater.com/Domain: stakater.com
+    config.xposer.stakater.com/IngressNameTemplate: '{{ "{{.Service}}-{{.Namespace}}" }}'
+    config.xposer.stakater.com/IngressURLPath: /
+    config.xposer.stakater.com/IngressURLTemplate: '{{ "{{.Service}}.{{.Namespace}}.{{.Domain}}" }}'
+    service.alpha.openshift.io/serving-cert-secret-name: |
+      '{{ template "application.name" . }}-tls'
+    xposer.stakater.com/annotations: |-
+      kubernetes.io/ingress.class: external-ingress
+      ingress.kubernetes.io/rewrite-target: /
+      ingress.kubernetes.io/force-ssl-redirect: "true"
   ports:
     - port: 8080
       name: http
@@ -148,39 +208,53 @@ service:
 ingress:
   enabled: true
   ingressClassName: nginx
-  additionalLabels:
-    tier: frontend
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
   hosts:
-    - host: app.example.local
+    - host: chart-example.local
       paths:
         - path: /
-        - path: /api
+        - path: /subpath
+    - host: '{{ .Release.Name }}.stakater.com'
+      paths:
+        - path: /
+  additionalLabels:
+    key: value
+  annotations:
+    kubernetes.io/ingress.class: external-ingress
+    ingress.kubernetes.io/rewrite-target: /
+    ingress.kubernetes.io/force-ssl-redirect: "true"
   tls:
-    - secretName: app-tls
+    - secretName: chart-example-tls
       hosts:
-        - app.example.local
+        - chart-example.local
+        - '{{ .Release.Name }}.stakater.com'
 
 configMap:
   enabled: true
   additionalLabels:
-    config: "true"
+    key: value
   files:
-    app-config:
+    code-config:
+      key1: value1
+      key2: value2
+    dev-config:
       key1: value1
       key2: value2
 
 secret:
   enabled: true
   additionalLabels:
-    secret: "true"
+    key: value
   files:
-    app-secret:
-      stringData:
-        key1: value1
+    secret1:
       data:
-        key2: dmFsdWUy
+        secretKey1: secretValue1
+        secretKey2: secretValue2
+      encodedData:
+        secretKey3: c2VjcmV0VmFsdWUx
+        secretKey4: c2VjcmV0VmFsdWUy
+      stringData:
+        secretKey5: secretValue5
+        secretKey6: secretValue6
 
 rbac:
   enabled: true
@@ -188,7 +262,7 @@ rbac:
     enabled: true
     name: application
     additionalLabels:
-      rbac: "true"
+      key: value
   roles:
     - name: configmaps
       rules:
@@ -207,68 +281,79 @@ rbac:
           verbs:
             - get
 
-pdb:
-  enabled: true
-  minAvailable: 1
-
 autoscaling:
   enabled: true
   additionalLabels:
-    scaling: "true"
+    key: value
   minReplicas: 1
-  maxReplicas: 3
+  maxReplicas: 10
   metrics:
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: 80
+          averageUtilization: 60
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 60
 
 networkPolicy:
   enabled: true
   additionalLabels:
-    network: "true"
+    key: value
   ingress:
     - from:
+        - ipBlock:
+            cidr: 172.17.0.0/16
+            except:
+              - 172.17.1.0/24
+        - namespaceSelector:
+            matchLabels:
+              project: myproject
         - podSelector:
             matchLabels:
               role: frontend
       ports:
         - protocol: TCP
-          port: 8080
+          port: 6379
   egress:
     - to:
         - ipBlock:
             cidr: 10.0.0.0/24
       ports:
         - protocol: TCP
-          port: 443
+          port: 5978
 
-persistence:
+pdb:
   enabled: true
-  mountPVC: false
-  mountPath: /data
-  accessMode: ReadWriteOnce
-  storageClass: standard
-  storageSize: 1Gi
-  additionalLabels:
-    storage: "true"
+  minAvailable: 1
+  maxUnavailable: 2
 
 cronJob:
   enabled: true
   jobs:
-    example:
-      schedule: "0 0 * * *"
+    db-migration:
+      schedule: "* * * 8 *"
+      suspend: false
+      priorityClassName: high-priority
+      imagePullSecrets:
+        - name: nexus-secret
       image:
-        repository: busybox
-        tag: "1.36"
-      command: ["/bin/sh"]
-      args: ["-c", "echo hello"]
+        repository: docker.io/nginx
+        tag: v1.0.0
+      env:
+        KEY:
+          value: VALUE
+      command: ["/bin/bash"]
+      args: ["-c", "sleep 5000"]
       resources:
         requests:
-          cpu: 50m
-          memory: 32Mi
+          memory: 5Gi
+          cpu: 1
       dnsConfig:
         options:
           - name: ndots
@@ -277,34 +362,49 @@ cronJob:
 job:
   enabled: true
   jobs:
-    example:
+    db-migration:
+      additionalPodAnnotations:
+        helm.sh/hook: "pre-install,pre-upgrade"
+        helm.sh/hook-weight: "-1"
+        helm.sh/hook-delete-policy: before-hook-creation
+      imagePullSecrets:
+        - name: nexus-secret
       image:
-        repository: busybox
-        tag: "1.36"
-      command: ["/bin/sh"]
-      args: ["-c", "echo hello"]
+        repository: docker.io/nginx
+        tag: v1.0.0
+      env:
+        KEY:
+          value: VALUE
+      command: ["/bin/bash"]
+      args: ["-c", "sleep 5000"]
       resources:
         requests:
-          cpu: 50m
-          memory: 32Mi
+          memory: 5Gi
+          cpu: 1
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
 
 extraObjects:
-  ci-configmap:
+  a:
     apiVersion: v1
     kind: ConfigMap
     metadata:
-      name: '{{ .Release.Name }}-extra'
+      name: '{{ .Release.Name }}-extra-object-configmap-1'
       namespace: "{{ .Release.Namespace }}"
     data:
-      key: value
-  ci-secret:
+      key1: value1-{{ .Release.Name }}
+      key2: value2
+  b:
     apiVersion: v1
     kind: Secret
     metadata:
-      name: '{{ .Release.Name }}-extra-secret'
+      name: '{{ .Release.Name }}-extra-object-secret-1'
       namespace: "{{ .Release.Namespace }}"
     stringData:
-      key: value
+      key1: value1-{{ .Release.Name }}
+      key2: value2
 
 route:
   enabled: false

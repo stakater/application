@@ -5,6 +5,7 @@ templates:
 
 values:
   - ../ci/values.yaml
+  - ../ci/values-crds.yaml
 
 capabilities:
   apiVersions:

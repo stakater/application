@@ -62,10 +62,28 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        values:
-          - ""
-          - ci/values-full.yaml
-          - ci/values-kind.yaml
+        include:
+          - name: defaults
+            values: ""
+            api-versions: ""
+          - name: kind
+            values: ci/values.yaml
+            api-versions: ""
+          - name: kind+crds
+            values: ci/values.yaml ci/values-crds.yaml
+            api-versions: >-
+              autoscaling.k8s.io/v1/VerticalPodAutoscaler
+              gateway.networking.k8s.io/v1
+              external-secrets.io/v1/ExternalSecret
+              cert-manager.io/v1
+              bitnami.com/v1alpha1
+              monitoring.coreos.com/v1
+              monitoring.coreos.com/v1alpha1
+              secrets-store.csi.x-k8s.io/v1alpha1
+              forecastle.stakater.com/v1alpha1
+              endpointmonitor.stakater.com/v1alpha1
+              route.openshift.io/v1
+              velero.io/v1
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
@@ -74,42 +92,26 @@ jobs:
       - name: Render chart
         shell: bash
         env:
-          VALUES_FILE: ${{ matrix.values }}
+          VALUES: ${{ matrix.values }}
+          API_VERSIONS: ${{ matrix.api-versions }}
         run: |
           set -euo pipefail
 
           args=()
-          case "$VALUES_FILE" in
-            "")
-              args+=(
-                "--set" "deployment.image.repository=nginx"
-                "--set" "deployment.image.tag=1.25"
-              )
-              ;;
-            "ci/values-full.yaml")
-              args+=("-f" "$CHART_PATH/$VALUES_FILE")
-              api_versions=(
-                "autoscaling.k8s.io/v1/VerticalPodAutoscaler"
-                "gateway.networking.k8s.io/v1"
-                "external-secrets.io/v1/ExternalSecret"
-                "cert-manager.io/v1"
-                "bitnami.com/v1alpha1"
-                "monitoring.coreos.com/v1"
-                "monitoring.coreos.com/v1alpha1"
-                "secrets-store.csi.x-k8s.io/v1alpha1"
-                "forecastle.stakater.com/v1alpha1"
-                "endpointmonitor.stakater.com/v1alpha1"
-                "route.openshift.io/v1"
-                "velero.io/v1"
-              )
-              for api_version in "${api_versions[@]}"; do
-                args+=("--api-versions" "$api_version")
-              done
-              ;;
-            *)
-              args+=("-f" "$CHART_PATH/$VALUES_FILE")
-              ;;
-          esac
+          if [ -z "$VALUES" ]; then
+            args+=(
+              "--set" "deployment.image.repository=nginx"
+              "--set" "deployment.image.tag=1.25"
+            )
+          else
+            for f in $VALUES; do
+              args+=("-f" "$CHART_PATH/$f")
+            done
+          fi
+
+          for v in $API_VERSIONS; do
+            args+=("--api-versions" "$v")
+          done
 
           helm template "$RELEASE_NAME" "$CHART_PATH" \
             "${args[@]}" \
@@ -135,7 +137,7 @@ jobs:
           quiet: true
           soft_fail: false
           file: ${{ env.CHART_PATH }}/Chart.yaml
-          var_file: ${{ env.CHART_PATH }}/ci/values-kind.yaml
+          var_file: ${{ env.CHART_PATH }}/ci/values.yaml
           config_file: .checkov.yaml
 
   helm-docs:
@@ -179,7 +181,7 @@ jobs:
       - name: Render Kubernetes-compatible chart
         run: |
           helm template "$RELEASE_NAME" "$CHART_PATH" \
-            -f "$CHART_PATH/ci/values-kind.yaml" \
+            -f "$CHART_PATH/ci/values.yaml" \
             --namespace "$TEST_NAMESPACE" \
             --debug > rendered.yaml
 

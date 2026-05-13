@@ -1,0 +1,349 @@
+applicationName: application
+
+additionalLabels:
+  group: com.stakater.platform
+  team: stakater
+
+deployment:
+  dnsConfig:
+    options:
+      - name: ndots
+        value: "1"
+  dnsPolicy: ClusterFirst
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  reloadOnChange: true
+  hostAliases:
+    - ip: "127.0.0.1"
+      hostnames:
+        - foo.local
+  initContainers:
+    init-container:
+      image: busybox
+      imagePullPolicy: IfNotPresent
+      command: ["/bin/sh"]
+      args: ["-c", "echo init"]
+  additionalContainers:
+    - name: sidecar
+      image: busybox
+      imagePullPolicy: IfNotPresent
+      command: ["/bin/sh"]
+      args: ["-c", "sleep 3600"]
+  image:
+    repository: repository/image-name
+    tag: image-tag
+    pullPolicy: IfNotPresent
+  replicas: 2
+  openshiftOAuthProxy:
+    enabled: false
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 128Mi
+  containerSecurityContext:
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsUser: 65534
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    seccompProfile:
+      type: RuntimeDefault
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 65534
+    seccompProfile:
+      type: RuntimeDefault
+  automountServiceAccountToken: false
+  startupProbe:
+    enabled: true
+    failureThreshold: 30
+    periodSeconds: 10
+    httpGet:
+      path: /
+      port: 8080
+  readinessProbe:
+    enabled: true
+    failureThreshold: 3
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+    initialDelaySeconds: 10
+    httpGet:
+      path: /
+      port: 8080
+  livenessProbe:
+    enabled: true
+    failureThreshold: 3
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+    initialDelaySeconds: 10
+    httpGet:
+      path: /
+      port: 8080
+  ports:
+    - containerPort: 8080
+      name: http
+      protocol: TCP
+  env:
+    ENVIRONMENT:
+      value: ci
+  envFrom:
+    app-config:
+      type: configmap
+      nameSuffix: app-config
+  volumes:
+    config-volume:
+      configMap:
+        name: configmap-name
+    empty-volume:
+      emptyDir: {}
+  volumeMounts:
+    empty-volume:
+      mountPath: /tmp
+  tolerations:
+    - key: dedicated
+      operator: Equal
+      value: app
+      effect: NoSchedule
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: kubernetes.io/os
+                operator: In
+                values:
+                  - linux
+  terminationGracePeriodSeconds: 30
+  lifecycle:
+    preStop:
+      exec:
+        command: ["/bin/sh", "-c", "sleep 5"]
+  additionalLabels:
+    key: value
+  podLabels:
+    env: ci
+  additionalPodAnnotations:
+    ci: "true"
+
+service:
+  additionalLabels:
+    expose: "true"
+  ports:
+    - port: 8080
+      name: http
+      protocol: TCP
+      targetPort: 8080
+  type: ClusterIP
+
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  additionalLabels:
+    tier: frontend
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  hosts:
+    - host: app.example.local
+      paths:
+        - path: /
+        - path: /api
+  tls:
+    - secretName: app-tls
+      hosts:
+        - app.example.local
+
+configMap:
+  enabled: true
+  additionalLabels:
+    config: "true"
+  files:
+    app-config:
+      key1: value1
+      key2: value2
+
+secret:
+  enabled: true
+  additionalLabels:
+    secret: "true"
+  files:
+    app-secret:
+      stringData:
+        key1: value1
+      data:
+        key2: dmFsdWUy
+
+rbac:
+  enabled: true
+  serviceAccount:
+    enabled: true
+    name: application
+    additionalLabels:
+      rbac: "true"
+  roles:
+    - name: configmaps
+      rules:
+        - apiGroups:
+            - ""
+          resources:
+            - configmaps
+          verbs:
+            - get
+    - name: secrets
+      rules:
+        - apiGroups:
+            - ""
+          resources:
+            - secrets
+          verbs:
+            - get
+
+pdb:
+  enabled: true
+  minAvailable: 1
+
+autoscaling:
+  enabled: true
+  additionalLabels:
+    scaling: "true"
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+
+networkPolicy:
+  enabled: true
+  additionalLabels:
+    network: "true"
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              role: frontend
+      ports:
+        - protocol: TCP
+          port: 8080
+  egress:
+    - to:
+        - ipBlock:
+            cidr: 10.0.0.0/24
+      ports:
+        - protocol: TCP
+          port: 443
+
+persistence:
+  enabled: true
+  mountPVC: false
+  mountPath: /data
+  accessMode: ReadWriteOnce
+  storageClass: standard
+  storageSize: 1Gi
+  additionalLabels:
+    storage: "true"
+
+cronJob:
+  enabled: true
+  jobs:
+    example:
+      schedule: "0 0 * * *"
+      image:
+        repository: busybox
+        tag: "1.36"
+      command: ["/bin/sh"]
+      args: ["-c", "echo hello"]
+      resources:
+        requests:
+          cpu: 50m
+          memory: 32Mi
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
+
+job:
+  enabled: true
+  jobs:
+    example:
+      image:
+        repository: busybox
+        tag: "1.36"
+      command: ["/bin/sh"]
+      args: ["-c", "echo hello"]
+      resources:
+        requests:
+          cpu: 50m
+          memory: 32Mi
+
+extraObjects:
+  ci-configmap:
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: '{{ .Release.Name }}-extra'
+      namespace: "{{ .Release.Namespace }}"
+    data:
+      key: value
+  ci-secret:
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: '{{ .Release.Name }}-extra-secret'
+      namespace: "{{ .Release.Namespace }}"
+    stringData:
+      key: value
+
+route:
+  enabled: false
+
+sealedSecret:
+  enabled: false
+
+externalSecret:
+  enabled: false
+
+grafanaDashboard:
+  enabled: false
+
+endpointMonitor:
+  enabled: false
+
+forecastle:
+  enabled: false
+
+serviceMonitor:
+  enabled: false
+
+alertmanagerConfig:
+  enabled: false
+
+prometheusRule:
+  enabled: false
+
+certificate:
+  enabled: false
+
+secretProviderClass:
+  enabled: false
+
+vpa:
+  enabled: false
+
+backup:
+  enabled: false
+
+httpRoute:
+  enabled: false

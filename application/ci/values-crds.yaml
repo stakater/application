@@ -1,0 +1,144 @@
+route:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: external-ingress
+  additionalLabels:
+    route: "true"
+  path: /
+  port:
+    targetPort: http
+  to:
+    weight: 100
+  wildcardPolicy: None
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+
+sealedSecret:
+  enabled: true
+  files:
+    example:
+      encryptedData:
+        name: AgBghrdepGMKmp/rdtJrkBv/CWpJbtmoMsbKQ7QiZZ2kUoLeeTbrDnhmJY03kWKkNW4kN/sQRf6r1vvBEaR4nkHt5f/ayAeaH3NveI3bdb0xv/svvWjyjehwqwr/kNEAVWxRoUij0Y7MyIEAr4hnV2UnrhgvcjPJLNA8bK6spA+kuT328Vpyceyvnm6yArNn1aYlEckaFHrnculHWRpG73iRYxS5GWAY7EdkLXx7OLLWoopHtLcupklYyPfraJzPvBNZ5/PsyjlUBvoQbGV3cZlrdEj1WHj2S1RQ13ddf2WGtMHmY83t9B3LFZAZuA7BBt4rjludbwQm3/tJ5Kas1dDsSIRIIF7MTeum9YfRB8XUz8IxVKQ/JDskeynrWe3VzN/3HFVnv9GGFy+BCVXZKVU/roIRancz+nXkyoOHS722ZpBi53dfLItoS5dG+0EzArMTQzK/KXHz3b1rxp5oWWDNt3WggTiSg2zwy5ZR8VV2ToTDof6UrFmbCZv/kKriyxbVSxIo3KFnvuRiUZ5MwC0TNut4mW3LKyJfHqkUuLa1mYV6tKF58qBnoj/+JaibAIBEudT9hms5U52p7/jKmgHuop7XPEsz4OVwER//Vbv7X6ctoXtyPu6mZyOfOyJHM8Qj/H7/gwMBYhZHQ96DWrVmZOsWSRpZGJni4Xm7rgt2cFj6UtWv6lvl8aOi/HSZVC3TwWZ9mQrk
+      type: Opaque
+
+externalSecret:
+  enabled: true
+  secretStore:
+    name: example-secret-store
+  refreshInterval: "1m"
+  files:
+    secret-1-name:
+      data:
+        example-secret-key:
+          remoteRef:
+            key: example-provider-key
+            property: example-provider-key-property
+
+grafanaDashboard:
+  enabled: true
+  additionalLabels:
+    grafana: "true"
+  contents:
+    dashboard-test:
+      json: |-
+        {"title": "CI Test Dashboard"}
+
+endpointMonitor:
+  enabled: true
+  additionalLabels:
+    monitor: "true"
+
+forecastle:
+  enabled: true
+  additionalLabels:
+    forecastle: "true"
+  icon: https://example.com/icon.png
+  displayName: application
+
+serviceMonitor:
+  enabled: true
+  additionalLabels:
+    prometheus: "true"
+  endpoints:
+    - interval: 5s
+      path: /metrics
+      port: http
+
+alertmanagerConfig:
+  enabled: true
+  selectionLabels:
+    alertmanagerConfig: workload
+  spec:
+    route:
+      receiver: "null"
+      groupBy:
+        - job
+    receivers:
+      - name: "null"
+
+prometheusRule:
+  enabled: true
+  additionalLabels:
+    prometheus: stakater-workload-monitoring
+    role: alert-rules
+  groups:
+    - name: example-app-uptime
+      rules:
+        - alert: ExampleAppDown
+          annotations:
+            message: The Example App is Down
+          expr: up{namespace="test-app"} == 0
+          for: 1m
+          labels:
+            severity: critical
+
+certificate:
+  enabled: true
+  additionalLabels:
+    cert: "true"
+  secretName: tls-cert
+  duration: 8760h0m0s
+  renewBefore: 720h0m0s
+  commonName: app.example.com
+  keyAlgorithm: RSA
+  keyEncoding: PKCS1
+  keySize: 2048
+  isCA: false
+  issuerRef:
+    name: ca-issuer
+    kind: ClusterIssuer
+
+secretProviderClass:
+  enabled: true
+  name: vault-secrets
+  provider: vault
+  vaultAddress: "http://vault:8200"
+  roleName: '{{ .Release.Name }}'
+  objects: |
+    - objectName: "SECRET_KEY"
+      secretPath: "secret/data/app"
+      secretKey: "SECRET_KEY"
+
+vpa:
+  enabled: true
+  containerPolicies:
+    - containerName: "*"
+      minAllowed:
+        cpu: 50m
+        memory: 64Mi
+      maxAllowed:
+        cpu: "1"
+        memory: 1Gi
+
+backup:
+  namespace: velero
+  enabled: true
+  snapshotVolumes: false
+  storageLocation: default
+  ttl: 1h0m0s
+  includedResources:
+    - deployments
+    - services
+    - configmaps
+    - secrets

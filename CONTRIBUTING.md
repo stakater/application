@@ -1,0 +1,83 @@
+# Contributing
+
+Thank you for your interest in contributing to the Application Helm chart.
+
+## Prerequisites
+
+You need the following tools installed:
+
+| Tool | Version | Purpose |
+|------|---------|---------|
+| [Helm](https://helm.sh/) | 4.x | Chart linting and rendering |
+| [helm-docs](https://github.com/norwoodj/helm-docs) | 1.14.x | README generation |
+| [helm-unittest](https://github.com/helm-unittest/helm-unittest) | 1.1.x | Unit tests |
+| [prek](https://github.com/Unleash/prek) | 0.3.x | Pre-commit hooks |
+
+The recommended way to install everything is with [Mise](https://mise.jdx.dev/):
+
+```shell
+mise install
+```
+
+This installs all the tools above at the versions pinned in `mise.toml`.
+
+## Getting started
+
+1. Fork and clone the repository.
+2. Install dependencies:
+
+   ```shell
+   mise install
+   ```
+
+3. Set up pre-commit hooks:
+
+   ```shell
+   mise run install-hooks
+   ```
+
+## Local development workflow
+
+| Task | Command |
+|------|---------|
+| Lint the chart | `mise run helm-lint` |
+| Run unit tests | `mise run unit-test` |
+| Build documentation | `mise run build-docs` |
+
+`README.md` is generated from `README.md.gotmpl` by helm-docs. Do not edit `README.md` directly. Instead, edit the template and run `mise run build-docs`, then commit both files.
+
+## Contribution process
+
+1. Create a feature branch from `main`.
+2. Make your changes and verify them locally (lint, test, build docs).
+3. Open a pull request against `main`.
+
+PR titles must follow the [Conventional Commits](https://www.conventionalcommits.org/) format. This is enforced by CI.
+
+### What CI checks
+
+When you open a pull request, the following checks run automatically:
+
+- Helm lint
+- Helm unit tests
+- Template rendering (default values, base profile, CRD profile)
+- Checkov security scan
+- helm-docs freshness (README.md must match the template output)
+- Kind API validation against Kubernetes v1.31, v1.33, and v1.35
+
+## Commit conventions
+
+Use [Conventional Commits](https://www.conventionalcommits.org/) with a mandatory scope:
+
+```
+type(scope): description
+```
+
+Common examples from this repository:
+
+- `feat(chart): add support for X`
+- `fix(chart): correct Y behavior`
+- `docs(chart): update Z section`
+- `chore(chart): clean up formatting`
+
+Breaking changes use the `feat!:` prefix.

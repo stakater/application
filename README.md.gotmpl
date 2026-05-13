@@ -42,6 +42,10 @@ Server-side API validation runs against Kubernetes v1.31, v1.33, and v1.35. The 
 
 Kind validation uses a Kubernetes-compatible values profile that excludes non-standard resources (CRDs, OpenShift routes, etc.). Resources that depend on CRDs or platform-specific APIs are only validated as template rendering (no server-side check).
 
+## Contributing
+
+Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to set up your local environment and submit changes.
+
 {{ template "chart.valuesSection" . }}
 
 ## Naming convention for ConfigMap, Secret, SealedSecret and ExternalSecret

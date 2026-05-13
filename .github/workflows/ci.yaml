@@ -64,8 +64,8 @@ jobs:
       matrix:
         values:
           - ""
-          - application/ci/values-full.yaml
-          - application/ci/values-kind.yaml
+          - ci/values-full.yaml
+          - ci/values-kind.yaml
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
@@ -86,8 +86,8 @@ jobs:
                 "--set" "deployment.image.tag=1.25"
               )
               ;;
-            "application/ci/values-full.yaml")
-              args+=("-f" "$VALUES_FILE")
+            "ci/values-full.yaml")
+              args+=("-f" "$CHART_PATH/$VALUES_FILE")
               api_versions=(
                 "autoscaling.k8s.io/v1/VerticalPodAutoscaler"
                 "gateway.networking.k8s.io/v1"
@@ -107,7 +107,7 @@ jobs:
               done
               ;;
             *)
-              args+=("-f" "$VALUES_FILE")
+              args+=("-f" "$CHART_PATH/$VALUES_FILE")
               ;;
           esac
 
@@ -175,7 +175,7 @@ jobs:
       - name: Render Kubernetes-compatible chart
         run: |
           helm template "$RELEASE_NAME" "$CHART_PATH" \
-            -f application/ci/values-kind.yaml \
+            -f "$CHART_PATH/ci/values-kind.yaml" \
             --namespace "$TEST_NAMESPACE" \
             --debug > rendered.yaml
 

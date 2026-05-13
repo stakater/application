@@ -394,6 +394,44 @@ tests:
           path: spec.template.spec.serviceAccountName
           value: example-app
 
+  - it: does not include container security context by default
+    set:
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: example-tag
+    asserts:
+      - notExists:
+          path: spec.template.spec.containers[0].securityContext
+
+  - it: enable container security context when configured
+    set:
+      job:
+        enabled: true
+        jobs:
+          example:
+            containerSecurityContext:
+              readOnlyRootFilesystem: true
+              runAsNonRoot: true
+              capabilities:
+                drop:
+                  - ALL
+            image:
+              repository: example-image
+              tag: example-tag
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].securityContext
+          value:
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            capabilities:
+              drop:
+                - ALL
+
   - it: configures automount service account token by default
     set:
       job:
@@ -422,6 +460,40 @@ tests:
       - equal:
           path: spec.template.spec.automountServiceAccountToken
           value: true
+
+  - it: does not include pod security context by default
+    set:
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: example-tag
+    asserts:
+      - notExists:
+          path: spec.template.spec.securityContext
+
+  - it: enable pod security context when configured
+    set:
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-image
+              tag: example-tag
+            securityContext:
+              fsGroup: 20000
+              seccompProfile:
+                type: RuntimeDefault
+    asserts:
+      - equal:
+          path: spec.template.spec.securityContext
+          value:
+            fsGroup: 20000
+            seccompProfile:
+              type: RuntimeDefault
 
   - it: does not include enable service links by default
     set:
@@ -573,4 +645,3 @@ tests:
       - equal:
           path: spec.template.spec.containers[0].envFrom[0].secretRef.optional
           value: true
-

@@ -30,6 +30,13 @@ deployment:
       image: busybox:1.37
       imagePullPolicy: IfNotPresent
       command: ["/bin/sh"]
+      resources:
+        requests:
+          cpu: 10m
+          memory: 16Mi
+        limits:
+          cpu: 50m
+          memory: 32Mi
       securityContext:
         readOnlyRootFilesystem: true
         runAsNonRoot: true

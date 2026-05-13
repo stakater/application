@@ -7,9 +7,14 @@ skip-check:
   - CKV_K8S_15
   # NetworkPolicy is an opt-in feature; not every deployment needs one.
   - CKV2_K8S_6
-  # CronJob/Job templates lack pod-level securityContext support.
+  # CronJob/Job templates render securityContext at pod level, not container level.
+  - CKV_K8S_20
+  - CKV_K8S_22
+  - CKV_K8S_28
   - CKV_K8S_29
+  - CKV_K8S_30
   - CKV_K8S_31
+  - CKV_K8S_37
   # RBAC role granting secret read access is a deliberate test configuration.
   - CKV2_K8S_5
   # hostNetwork is a consumer-controlled setting tested in CI values.

@@ -26,7 +26,7 @@ deployment:
         - foo.remote
         - bar.remote
   initContainers:
-    init-contaner:
+    init-container:
       image: busybox:1.37
       imagePullPolicy: IfNotPresent
       command: ["/bin/sh"]
@@ -165,7 +165,7 @@ deployment:
   openshiftOAuthProxy:
     enabled: false
   additionalContainers:
-    - name: sidecar-contaner
+    - name: sidecar-container
       image: busybox:1.37
       imagePullPolicy: IfNotPresent
       command: ["/bin/sh", "-c", "sleep 3600"]

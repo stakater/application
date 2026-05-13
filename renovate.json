@@ -10,7 +10,7 @@
     {
       "customType": "regex",
       "fileMatch": [
-        ".+"
+        "^\\.github/workflows/.+\\.ya?ml$"
       ],
       "matchStrings": [
         "#\\s*renovate:\\s*datasource=(?<datasource>\\S+)\\s+depName=(?<depName>\\S+)\\n\\s*\\w+[=:]\\s*[\"']?(?<currentValue>v?\\d+[^\"'\\s]+)"

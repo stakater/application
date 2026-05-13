@@ -31,7 +31,7 @@ env:
 jobs:
   ci:
     name: CI
-    if: ${{ !contains(github.event.head_commit.message, '[skip-ci]') }}
+    if: ${{ github.event_name != 'workflow_dispatch' && !contains(github.event.head_commit.message, '[skip-ci]') }}
     uses: ./.github/workflows/ci.yaml
     secrets: inherit
 
@@ -41,7 +41,7 @@ jobs:
     timeout-minutes: 5
     needs:
       - ci
-    if: ${{ !contains(github.event.head_commit.message, '[skip-ci]') && vars.RELEASE_CIRCUIT_BREAKER == 'false' }}
+    if: ${{ github.event_name != 'workflow_dispatch' && !contains(github.event.head_commit.message, '[skip-ci]') && vars.RELEASE_CIRCUIT_BREAKER == 'false' }}
     outputs:
       version: ${{ steps.get-next-version.outputs.version }}
       has-next-version: ${{ steps.get-next-version.outputs.hasNextVersion }}
@@ -217,7 +217,7 @@ jobs:
       - publish
       - push-version
       - create-release
-    if: ${{ always() && !contains(github.event.head_commit.message, '[skip-ci]') }}
+    if: ${{ always() && (github.event_name == 'workflow_dispatch' || !contains(github.event.head_commit.message, '[skip-ci]')) }}
     steps:
       - id: workflow
         name: Compute workflow status

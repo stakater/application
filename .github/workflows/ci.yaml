@@ -45,7 +45,12 @@ jobs:
       - uses: azure/setup-helm@dda3372f752e03dde6b3237bc9431cdc2f7a02a2 # v5
 
       - name: Install helm-unittest
-        run: helm plugin install --verify=false https://github.com/helm-unittest/helm-unittest.git --version v1.1.0
+        # TODO: Remove --verify=false once helm-unittest publishes signed releases
+        # Tracking: https://github.com/helm-unittest/helm-unittest/issues/362
+        env:
+          # renovate: datasource=github-releases depName=helm-unittest/helm-unittest
+          HELM_UNITTEST_VERSION: v1.1.0
+        run: helm plugin install --verify=false https://github.com/helm-unittest/helm-unittest.git --version "$HELM_UNITTEST_VERSION"
 
       - name: Run helm-unittest
         run: helm unittest "$CHART_PATH"

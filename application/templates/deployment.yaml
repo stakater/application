@@ -75,6 +75,8 @@ spec:
           ]
 {{- end }}
     spec:
+      automountServiceAccountToken: {{ .Values.deployment.automountServiceAccountToken }}
+      serviceAccountName: {{ include "application.serviceAccountName" $ }}
       enableServiceLinks: {{ .Values.deployment.enableServiceLinks }}
       {{- with .Values.deployment.hostAliases }}
       hostAliases: {{- toYaml . | nindent 6 }}
@@ -327,14 +329,6 @@ spec:
         {{- end }}
         {{- end }}
       {{- end }}
-      {{- if .Values.rbac.serviceAccount.enabled }}
-      {{- if .Values.rbac.serviceAccount.name }}
-      serviceAccountName: {{ .Values.rbac.serviceAccount.name }}
-      {{- else }}
-      serviceAccountName: {{ template "application.name" $ }}
-      {{- end }}
-      {{- end }}
-      automountServiceAccountToken: {{ .Values.deployment.automountServiceAccountToken }}
       {{- if .Values.deployment.hostNetwork }}
       hostNetwork: {{ .Values.deployment.hostNetwork }}
       {{- end }}

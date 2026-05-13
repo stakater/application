@@ -94,6 +94,21 @@ reference:
 {{- end }}
 
 {{/*
+Get the name of the service account to use.
+If the service account is set to be created, return the service account name or a default name.
+If the service account is not set to be created and a name is provided, return the provided name;
+otherwise, return the default namespace service account.
+*/}}
+{{- define "application.serviceAccountName" }}
+  {{- $saName := .Values.rbac.serviceAccount.name }}
+  {{- if .Values.rbac.serviceAccount.create }}
+    {{- empty $saName | ternary (include "application.name" .) (quote $saName) }}
+  {{- else }}
+    {{- empty $saName | ternary "default" (quote $saName) }}
+  {{- end }}
+{{- end }}
+
+{{/*
 Renders httpRoute rules with proper integer type for port fields.
 Usage:
 {{ include "application.httpRoute.rules" . }}

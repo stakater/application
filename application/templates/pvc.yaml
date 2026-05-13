@@ -6,7 +6,7 @@ metadata:
 {{- if .Values.persistence.name }}
   name: "{{ .Values.persistence.name }}"
 {{- else }}
-  name: {{ template "application.name" . }}-data
+  name: {{ printf "%s-%s" (include "application.name" .) "data" | trunc 63 | trimSuffix "-" }}
 {{- end }}
   namespace: {{ include "application.namespace" . }}
   labels:

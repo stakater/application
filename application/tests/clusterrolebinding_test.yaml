@@ -46,10 +46,10 @@ tests:
           of: ClusterRoleBinding
       - equal:
           path: metadata.name
-          value: my-app-crb-example
+          value: my-app-example
       - equal:
           path: roleRef.name
-          value: my-app-cr-example
+          value: my-app-example
       - equal:
           path: roleRef.kind
           value: ClusterRole

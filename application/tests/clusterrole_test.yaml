@@ -48,7 +48,7 @@ tests:
           of: ClusterRole
       - equal:
           path: metadata.name
-          value: my-app-cr-example
+          value: my-app-example
       - equal:
           path: rules[0].apiGroups[0]
           value: "*"

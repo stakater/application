@@ -10,6 +10,14 @@ Generic helm chart for applications which:
 - don't call the underlying Kubernetes API or use the underlying etcd as a database by defining custom resources
 - run either as deployment, job or cronjob
 
+## CI scope
+
+The CI validates the chart against upstream Kubernetes using Helm and Kind. These jobs should be configured as required status checks in branch protection rules.
+
+Server-side API validation runs against Kubernetes v1.31, v1.33, and v1.35. The chart uses `Capabilities.APIVersions` fallbacks for legacy APIs (`batch/v1beta1`, `policy/v1beta1`, `autoscaling/v2beta2`), but these were removed from Kubernetes before v1.25. Only the stable API paths are exercised in CI.
+
+Kind validation uses a Kubernetes-compatible values profile that excludes non-standard resources (CRDs, OpenShift routes, etc.). Resources that depend on CRDs or platform-specific APIs are only validated as template rendering (no server-side check).
+
 ## Installing the Chart
 
 To install the chart with the release name `my-application` in namespace `test`:

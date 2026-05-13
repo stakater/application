@@ -1,0 +1,245 @@
+name: CI
+
+on:
+  workflow_call: {}
+
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - README.md
+      - LICENSE
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  CHART_PATH: application
+  RELEASE_NAME: application
+  TEST_NAMESPACE: application-test
+
+jobs:
+  lint:
+    name: Helm lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - uses: azure/setup-helm@dda3372f752e03dde6b3237bc9431cdc2f7a02a2 # v5
+
+      - name: Helm lint
+        run: helm lint "$CHART_PATH"
+
+  unittest:
+    name: Helm unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - uses: azure/setup-helm@dda3372f752e03dde6b3237bc9431cdc2f7a02a2 # v5
+
+      - name: Install helm-unittest
+        env:
+          # renovate: datasource=github-releases depName=helm-unittest/helm-unittest
+          HELM_UNITTEST_VERSION: v1.1.0
+        # TODO: Remove --verify=false once helm-unittest publishes signed releases
+        # Tracking: https://github.com/helm-unittest/helm-unittest/issues/362
+        run: helm plugin install --verify=false https://github.com/helm-unittest/helm-unittest.git --version "$HELM_UNITTEST_VERSION"
+
+      - name: Run helm-unittest
+        run: helm unittest "$CHART_PATH"
+
+  render:
+    name: Helm render
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: defaults
+            values: ""
+            api-versions: ""
+          - name: base
+            values: ci/values.yaml
+            api-versions: >-
+              batch/v1
+              batch/v1/CronJob
+              policy/v1
+              policy/v1/PodDisruptionBudget
+              autoscaling/v2
+              autoscaling/v2/HorizontalPodAutoscaler
+          - name: crds
+            values: ci/values.yaml ci/values-crds.yaml
+            api-versions: >-
+              batch/v1
+              batch/v1/CronJob
+              policy/v1
+              policy/v1/PodDisruptionBudget
+              autoscaling/v2
+              autoscaling/v2/HorizontalPodAutoscaler
+              autoscaling.k8s.io/v1
+              autoscaling.k8s.io/v1/VerticalPodAutoscaler
+              bitnami.com/v1alpha1
+              bitnami.com/v1alpha1/SealedSecret
+              cert-manager.io/v1
+              cert-manager.io/v1/Certificate
+              endpointmonitor.stakater.com/v1alpha1
+              endpointmonitor.stakater.com/v1alpha1/EndpointMonitor
+              external-secrets.io/v1
+              external-secrets.io/v1/ExternalSecret
+              forecastle.stakater.com/v1alpha1
+              forecastle.stakater.com/v1alpha1/ForecastleApp
+              grafana.integreatly.org/v1beta1
+              grafana.integreatly.org/v1beta1/GrafanaDashboard
+              monitoring.coreos.com/v1
+              monitoring.coreos.com/v1/ServiceMonitor
+              monitoring.coreos.com/v1/PrometheusRule
+              monitoring.coreos.com/v1alpha1
+              monitoring.coreos.com/v1alpha1/AlertManagerConfig
+              route.openshift.io/v1
+              route.openshift.io/v1/Route
+              secrets-store.csi.x-k8s.io/v1alpha1
+              secrets-store.csi.x-k8s.io/v1alpha1/SecretProviderClass
+              velero.io/v1
+              velero.io/v1/Backup
+              gateway.networking.k8s.io/v1
+              gateway.networking.k8s.io/v1/HTTPRoute
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - uses: azure/setup-helm@dda3372f752e03dde6b3237bc9431cdc2f7a02a2 # v5
+
+      - name: Render chart
+        shell: bash
+        env:
+          VALUES: ${{ matrix.values }}
+          API_VERSIONS: ${{ matrix.api-versions }}
+        run: |
+          set -euo pipefail
+
+          args=()
+          if [ -z "$VALUES" ]; then
+            args+=(
+              "--set" "deployment.image.repository=nginx"
+              "--set" "deployment.image.tag=1.25"
+            )
+          else
+            for f in $VALUES; do
+              args+=("-f" "$CHART_PATH/$f")
+            done
+          fi
+
+          for v in $API_VERSIONS; do
+            args+=("--api-versions" "$v")
+          done
+
+          set -x
+          helm template "$RELEASE_NAME" "$CHART_PATH" \
+            "${args[@]}" \
+            --namespace "$TEST_NAMESPACE" \
+            --debug > rendered.yaml
+          set +x
+
+          test -s rendered.yaml
+          cat rendered.yaml
+
+      - name: Validate YAML syntax
+        run: python3 -c "import yaml, sys; list(yaml.safe_load_all(open('rendered.yaml')))"
+
+  checkov:
+    name: Checkov security scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - name: Run Checkov
+        uses: bridgecrewio/checkov-action@4048c972aae68d0b983a48bb3479aab2d877b898 # v12.3102.0
+        with:
+          quiet: true
+          soft_fail: false
+          file: ${{ env.CHART_PATH }}/Chart.yaml
+          var_file: ${{ env.CHART_PATH }}/ci/values.yaml
+          config_file: ${{ env.CHART_PATH }}/ci/.checkov.yaml
+
+  helm-docs:
+    name: Helm docs
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - name: Run helm-docs
+        uses: losisin/helm-docs-github-action@3a4528e97c49a5e83de6b78c50c61c8ee5c9f944 # v2
+        with:
+          output-file: ./../README.md
+          template-files: ./README.md.gotmpl
+          sort-values-order: file
+
+      - name: Check diff
+        run: |
+          git diff --exit-code README.md || { echo; echo "error: README.md is out of date. Please run 'make build-docs' and commit the resulting file."; exit 1; }
+
+  kind-api-validation:
+    name: Kind API validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        kubernetes:
+          - v1.31.14
+          - v1.33.7
+          - v1.35.0
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - uses: azure/setup-helm@dda3372f752e03dde6b3237bc9431cdc2f7a02a2 # v5
+
+      - uses: helm/kind-action@ef37e7f390d99f746eb8b610417061a60e82a6cc # v1
+        with:
+          node_image: kindest/node:${{ matrix.kubernetes }}
+
+      - name: Render Kubernetes-compatible chart
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          args=()
+          # group/version entries (e.g. batch/v1)
+          for v in $(kubectl api-versions); do
+            args+=("--api-versions" "$v")
+          done
+          # group/version/Kind entries (e.g. batch/v1/CronJob)
+          while IFS= read -r gvk; do
+            args+=("--api-versions" "$gvk")
+          done < <(
+            kubectl api-resources --no-headers \
+              | awk '{ print $(NF-2) "/" $NF }' \
+              | sort -u
+          )
+
+          set -x
+          helm template "$RELEASE_NAME" "$CHART_PATH" \
+            -f "$CHART_PATH/ci/values.yaml" \
+            "${args[@]}" \
+            --namespace "$TEST_NAMESPACE" \
+            --debug > rendered.yaml
+          set +x
+
+          cat rendered.yaml
+
+      - name: Server-side API validation
+        run: |
+          kubectl create namespace "$TEST_NAMESPACE"
+          kubectl apply \
+            --namespace "$TEST_NAMESPACE" \
+            --dry-run=server \
+            -f rendered.yaml

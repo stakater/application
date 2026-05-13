@@ -1,34 +1,238 @@
 name: Release
+
 on:
   push:
-    tags:
-      - "v*"
+    branches:
+      - main
+    paths-ignore:
+      - README.md
+      - LICENSE
+
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing tag to create a GitHub release for (e.g. v1.2.3)"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  CHART_PATH: application
+  OCI_REGISTRY: ghcr.io/stakater/charts
+  GIT_USER_NAME: stakater-user
+  GIT_USER_EMAIL: stakater@gmail.com
 
 jobs:
-  build:
-    name: Release
+  ci:
+    name: CI
+    if: ${{ github.event_name != 'workflow_dispatch' && !contains(github.event.head_commit.message, '[skip-ci]') }}
+    uses: ./.github/workflows/ci.yaml
+    secrets: inherit
+
+  bump-version:
+    name: Bump chart version
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    timeout-minutes: 5
+    needs:
+      - ci
+    if: ${{ github.event_name != 'workflow_dispatch' && !contains(github.event.head_commit.message, '[skip-ci]') && vars.RELEASE_CIRCUIT_BREAKER == 'false' }}
+    outputs:
+      version: ${{ steps.get-next-version.outputs.version }}
+      has-next-version: ${{ steps.get-next-version.outputs.hasNextVersion }}
     steps:
       - name: Check out code
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8  # v6
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
-          fetch-depth: 0 # See: https://goreleaser.com/ci/actions/
-      - name: Create Release
-        uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b  # v2
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Generate next version
+        id: get-next-version
+        uses: thenativeweb/get-next-version@067dc4602577f4f61a51c3f4664552283a228c60 # 2.7.1
+
+      - name: Show next version
+        run: |
+          echo "Has next version: ${{ steps.get-next-version.outputs.hasNextVersion }}"
+          echo "Next version: ${{ steps.get-next-version.outputs.version }}"
+
+      - name: Update chart version
+        if: ${{ steps.get-next-version.outputs.hasNextVersion == 'true' }}
+        env:
+          VERSION: ${{ steps.get-next-version.outputs.version }}
+        run: |
+          set -euo pipefail
+          make bump-chart
+
+      - name: Upload bumped chart metadata
+        if: ${{ steps.get-next-version.outputs.hasNextVersion == 'true' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: ${{ github.ref_name }}
-          tag_name: ${{ github.ref_name }}
+          name: bumped-chart
+          path: application/Chart.yaml
+          if-no-files-found: error
+
+  publish:
+    name: Publish chart
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      packages: write
+      id-token: write
+    needs:
+      - bump-version
+    if: ${{ needs.bump-version.outputs.has-next-version == 'true' }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Download bumped chart metadata
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: bumped-chart
+          path: application
+
+      - uses: azure/setup-helm@dda3372f752e03dde6b3237bc9431cdc2f7a02a2 # v5
+
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
+
+      - name: Login to GHCR
+        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish Helm chart to OCI registry
+        run: |
+          helm package ./${{ env.CHART_PATH }} --destination ./packaged-chart
+          helm push ./packaged-chart/*.tgz oci://${{ env.OCI_REGISTRY }}
+
+      - name: Sign OCI artifact with Cosign
+        run: cosign sign --yes ${{ env.OCI_REGISTRY }}/${{ env.CHART_PATH }}:${{ needs.bump-version.outputs.version }}
+
+      - name: Publish Helm chart to GitHub Pages
+        uses: stefanprodan/helm-gh-pages@89c6698c192e70ed0e495bee7d3d1ca5b477fe82 # v1.7.0
+        with:
+          branch: master
+          repository: stakater-charts
+          target_dir: docs
+          token: ${{ secrets.PUBLISH_TOKEN }}
+          charts_dir: .
+          charts_url: https://stakater.github.io/stakater-charts
+          owner: stakater
+          linting: off
+          commit_username: ${{ env.GIT_USER_NAME }}
+          commit_email: ${{ env.GIT_USER_EMAIL }}
+
+  push-version:
+    name: Push bumped version and tag
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs:
+      - bump-version
+      - publish
+    if: ${{ needs.bump-version.outputs.has-next-version == 'true' }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Download bumped chart metadata
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: bumped-chart
+          path: application
+
+      - name: Commit bumped Chart.yaml
+        id: commit
+        run: |
+          set -euo pipefail
+          git config --local user.email "$GIT_USER_EMAIL"
+          git config --local user.name "$GIT_USER_NAME"
+          git add application/Chart.yaml
+          git commit -m "chore(chart): bump version to ${{ needs.bump-version.outputs.version }} [skip-ci]"
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Push bumped Chart.yaml
+        uses: ad-m/github-push-action@57116acb309081ee57864270b0e3c4cedbe45452 # v0.8.0
+        with:
+          github_token: ${{ secrets.PUBLISH_TOKEN }}
+          branch: main
+
+      - name: Push release tag
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9
+        with:
+          github-token: ${{ secrets.PUBLISH_TOKEN }}
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/v${{ needs.bump-version.outputs.version }}',
+              sha: '${{ steps.commit.outputs.sha }}'
+            })
+
+  create-release:
+    name: Create GitHub release
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    needs:
+      - bump-version
+      - publish
+      - push-version
+    if: ${{ always() && (needs.push-version.result == 'success' || github.event_name == 'workflow_dispatch') }}
+    steps:
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
+        with:
+          name: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || format('v{0}', needs.bump-version.outputs.version) }}
+          tag_name: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || format('v{0}', needs.bump-version.outputs.version) }}
           generate_release_notes: true
           draft: false
           prerelease: false
           make_latest: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  notify:
+    name: Notify Results
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs:
+      - ci
+      - bump-version
+      - publish
+      - push-version
+      - create-release
+    if: ${{ always() && (github.event_name == 'workflow_dispatch' || !contains(github.event.head_commit.message, '[skip-ci]')) }}
+    steps:
+      - id: workflow
+        name: Compute workflow status
+        run: |
+          if [ "${{ contains(needs.*.result, 'failure') }}" = "true" ]; then
+            echo "status=failure" >> "$GITHUB_OUTPUT"
+          else
+            echo "status=success" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Notify Slack
-        uses: 8398a7/action-slack@77eaa4f1c608a7d68b38af4e3f739dcd8cba273e  # v3.19.0
-        if: always()
+        uses: 8398a7/action-slack@77eaa4f1c608a7d68b38af4e3f739dcd8cba273e # v3.19.0
+        if: ${{ always() }}
         with:
-          status: ${{ job.status }}
+          status: ${{ steps.workflow.outputs.status }}
           fields: repo,author,action,eventName,ref,workflow
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.STAKATER_DELIVERY_SLACK_WEBHOOK }}

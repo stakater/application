@@ -4,7 +4,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "application.name" $ }}-{{ $nameSuffix }}
+  name: {{ printf "%s-%s" (include "application.name" $) $nameSuffix | trunc 63 | trimSuffix "-" }}
   namespace: {{ template "application.namespace" $ }}
   labels:
   {{- include "application.labels" $ | nindent 4 }}

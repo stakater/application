@@ -41,7 +41,7 @@ tests:
           of: ServiceMonitor
       - equal:
           path: metadata.name
-          value: my-app-svc-monitor
+          value: my-app-monitor
       - equal:
           path: spec.endpoints[0].port
           value: http

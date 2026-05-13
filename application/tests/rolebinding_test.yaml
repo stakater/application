@@ -36,10 +36,10 @@ tests:
           of: RoleBinding
       - equal:
           path: metadata.name
-          value: my-app-rolebinding-example
+          value: my-app-example
       - equal:
           path: roleRef.name
-          value: my-app-role-example
+          value: my-app-example
 
   - it: includes correct namespace
     set:

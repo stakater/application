@@ -2,7 +2,7 @@
 apiVersion: velero.io/v1
 kind: Backup
 metadata:
-  name: {{ printf "%s-backup" (include "application.name" .) | trunc 63 | quote }}
+  name: {{ printf "%s-%s" (include "application.name" .) "backup" | trunc 63 | trimSuffix "-" }}
   namespace: {{ .Values.backup.namespace | default ( include "application.namespace" . ) | quote }}
   labels:
   {{- include "application.labels" $ | nindent 4 }}

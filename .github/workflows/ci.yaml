@@ -117,6 +117,10 @@ jobs:
             --debug > rendered.yaml
 
           test -s rendered.yaml
+          cat rendered.yaml
+
+      - name: Validate YAML syntax
+        run: python3 -c "import yaml, sys; list(yaml.safe_load_all(open('rendered.yaml')))"
 
   checkov:
     name: Checkov security scan

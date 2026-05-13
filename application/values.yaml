@@ -10,8 +10,8 @@ componentOverride: ""
 # @section -- Parameters
 partOfOverride: ""
 
-# -- (string) Application name.
-# @default -- `{{ .Chart.Name }}`
+# -- (string) Application name. Used as a prefix for all resource names.
+# @default -- `{{ .Release.Name }}`
 # @section -- Parameters
 applicationName: ""
 

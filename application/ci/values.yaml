@@ -219,7 +219,6 @@ ingress:
   additionalLabels:
     key: value
   annotations:
-    kubernetes.io/ingress.class: external-ingress
     ingress.kubernetes.io/rewrite-target: /
     ingress.kubernetes.io/force-ssl-redirect: "true"
   tls:

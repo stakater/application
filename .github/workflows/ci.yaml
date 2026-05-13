@@ -66,24 +66,50 @@ jobs:
           - name: defaults
             values: ""
             api-versions: ""
-          - name: kind
+          - name: base
             values: ci/values.yaml
-            api-versions: ""
-          - name: kind+crds
+            api-versions: >-
+              batch/v1
+              batch/v1/CronJob
+              policy/v1
+              policy/v1/PodDisruptionBudget
+              autoscaling/v2
+              autoscaling/v2/HorizontalPodAutoscaler
+          - name: crds
             values: ci/values.yaml ci/values-crds.yaml
             api-versions: >-
+              batch/v1
+              batch/v1/CronJob
+              policy/v1
+              policy/v1/PodDisruptionBudget
+              autoscaling/v2
+              autoscaling/v2/HorizontalPodAutoscaler
+              autoscaling.k8s.io/v1
               autoscaling.k8s.io/v1/VerticalPodAutoscaler
-              gateway.networking.k8s.io/v1
-              external-secrets.io/v1/ExternalSecret
-              cert-manager.io/v1
               bitnami.com/v1alpha1
-              monitoring.coreos.com/v1
-              monitoring.coreos.com/v1alpha1
-              secrets-store.csi.x-k8s.io/v1alpha1
-              forecastle.stakater.com/v1alpha1
+              bitnami.com/v1alpha1/SealedSecret
+              cert-manager.io/v1
+              cert-manager.io/v1/Certificate
               endpointmonitor.stakater.com/v1alpha1
+              endpointmonitor.stakater.com/v1alpha1/EndpointMonitor
+              external-secrets.io/v1
+              external-secrets.io/v1/ExternalSecret
+              forecastle.stakater.com/v1alpha1
+              forecastle.stakater.com/v1alpha1/ForecastleApp
+              grafana.integreatly.org/v1beta1
+              grafana.integreatly.org/v1beta1/GrafanaDashboard
+              monitoring.coreos.com/v1
+              monitoring.coreos.com/v1/ServiceMonitor
+              monitoring.coreos.com/v1/PrometheusRule
+              monitoring.coreos.com/v1alpha1
+              monitoring.coreos.com/v1alpha1/AlertManagerConfig
               route.openshift.io/v1
+              route.openshift.io/v1/Route
+              secrets-store.csi.x-k8s.io/v1alpha1
+              secrets-store.csi.x-k8s.io/v1alpha1/SecretProviderClass
               velero.io/v1
+              velero.io/v1/Backup
+              gateway.networking.k8s.io/v1
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
@@ -180,10 +206,18 @@ jobs:
 
       - name: Render Kubernetes-compatible chart
         run: |
+          args=()
+          for v in $(kubectl api-versions); do
+            args+=("--api-versions" "$v")
+          done
+
           helm template "$RELEASE_NAME" "$CHART_PATH" \
             -f "$CHART_PATH/ci/values.yaml" \
+            "${args[@]}" \
             --namespace "$TEST_NAMESPACE" \
             --debug > rendered.yaml
+
+          cat rendered.yaml
 
       - name: Server-side API validation
         run: |

@@ -324,6 +324,26 @@ rbac:
             - secrets
           verbs:
             - get
+  clusterRoles:
+    - name: nodes
+      rules:
+        - apiGroups:
+            - ""
+          resources:
+            - nodes
+          verbs:
+            - get
+            - list
+            - watch
+    - name: namespaces
+      rules:
+        - apiGroups:
+            - ""
+          resources:
+            - namespaces
+          verbs:
+            - get
+            - list
 
 autoscaling:
   enabled: true

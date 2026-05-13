@@ -121,7 +121,7 @@ jobs:
         run: cosign sign --yes ${{ env.OCI_REGISTRY }}/${{ env.CHART_PATH }}:${{ needs.bump-version.outputs.version }}
 
       - name: Publish Helm chart to GitHub Pages
-        uses: stefanprodan/helm-gh-pages@89c6698c192e70ed0e495bee7d3d1ca5b477fe82 # v1.7.0
+        uses: stefanprodan/helm-gh-pages@0ad2bb377311d61ac04ad9eb6f252fb68e207260 # v1.7.0
         with:
           branch: master
           repository: stakater-charts

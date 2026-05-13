@@ -6,7 +6,7 @@ namespaceOverride: ""
 # These labels will be added on all resources, and you can add additional labels from below on individual resource
 additionalLabels:
   group: com.stakater.platform
-  team: stakater
+  team: stakatertest
 
 deployment:
   dnsConfig:

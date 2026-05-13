@@ -62,14 +62,8 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
         spec:
-          automountServiceAccountToken: {{ kindIs "invalid" $job.automountServiceAccountToken | ternary true $job.automountServiceAccountToken }}
-          {{- if $.Values.rbac.enabled }}
-          {{- if $.Values.rbac.serviceAccount.name }}
-          serviceAccountName: {{ $.Values.rbac.serviceAccount.name }}
-            {{- else }}
-          serviceAccountName: {{ template "application.name" $ }}
-          {{- end }}
-          {{- end }}
+          automountServiceAccountToken: {{ $job.automountServiceAccountToken | default false }}
+          serviceAccountName: {{ include "application.serviceAccountName" $ }}
           {{- with $job.initContainers }}
           initContainers:
           {{- range $key, $value := . }}

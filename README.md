@@ -137,7 +137,7 @@ helm delete --namespace test my-application
 | deployment.securityContext | object | `nil` | Security Context for the pod. |
 | deployment.command | list | `[]` | Command for the app container. |
 | deployment.args | list | `[]` | Args for the app container. |
-| deployment.automountServiceAccountToken | bool | `true` | Mount Service Account token. |
+| deployment.automountServiceAccountToken | bool | `false` | Mount Service Account token. |
 | deployment.ports | list | `nil` | List of ports for the app container. |
 | deployment.hostNetwork | bool | `nil` | Host network connectivity. |
 | deployment.terminationGracePeriodSeconds | int | `nil` | Gracefull termination period. |
@@ -241,12 +241,14 @@ helm delete --namespace test my-application
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | rbac.enabled | bool | `true` | Enable RBAC. |
-| rbac.serviceAccount.enabled | bool | `false` | Deploy Service Account. |
-| rbac.serviceAccount.name | string | `{{ include "application.name" $ }}` | Service Account Name. |
-| rbac.serviceAccount.additionalLabels | object | `nil` | Additional labels for Service Account. |
-| rbac.serviceAccount.annotations | object | `nil` | Annotations for Service Account. |
+| rbac.serviceAccount.create | bool | `false` | Specifies whether to create a dedicated service account. If set to `true`, a new service account will be created. |
+| rbac.serviceAccount.name | string | `""` | The name of the service account. Behavior based on its value and `rbac.serviceAccount.create`: If `rbac.serviceAccount.create` is `false` and `name` is empty, the default service account ("default") is used. If `rbac.serviceAccount.create` is `false` and `name` is set, the provided name is used. If `rbac.serviceAccount.create` is `true` and `name` is empty, a name is auto-generated using the fullname template. If `rbac.serviceAccount.create` is `true` and `name` is set, the provided name is used for creation. |
+| rbac.serviceAccount.additionalLabels | object | `nil` | Additional labels for Service Account. If `rbac.serviceAccount.create` is set to true, these labels are appended to the service account. |
+| rbac.serviceAccount.annotations | object | `nil` | Annotations for Service Account. If `rbac.serviceAccount.create` is set to true, these annotations are appended to the service account. |
 | rbac.roles | list | `nil` | Role definitions scoped to a single namespace. |
 | rbac.clusterRoles | list | `nil` | ClusterRole definitions with cluster-wide permissions. |
+| rbac.additionalLabels | object | `nil` | Additional labels for the Role, RoleBinding, ClusterRole, and ClusterRoleBinding resources. |
+| rbac.annotations | object | `nil` | Annotations for the Role, RoleBinding, ClusterRole, and ClusterRoleBinding resources. |
 
 ### ConfigMap Parameters
 

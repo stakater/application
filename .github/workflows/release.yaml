@@ -40,7 +40,7 @@ jobs:
       has-next-version: ${{ steps.get-next-version.outputs.hasNextVersion }}
     steps:
       - name: Check out code
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -64,7 +64,7 @@ jobs:
 
       - name: Upload bumped chart metadata
         if: ${{ steps.get-next-version.outputs.hasNextVersion == 'true' }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: bumped-chart
           path: application/Chart.yaml
@@ -79,18 +79,18 @@ jobs:
     if: ${{ needs.bump-version.outputs.has-next-version == 'true' }}
     steps:
       - name: Check out code
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
           fetch-depth: 0
           persist-credentials: false
 
       - name: Download bumped chart metadata
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: bumped-chart
           path: application
 
-      - uses: azure/setup-helm@1a275c3b69536ee54be43f2070a358922e12c8d4 # v4
+      - uses: azure/setup-helm@dda3372f752e03dde6b3237bc9431cdc2f7a02a2 # v5
 
       - name: Publish Helm chart
         uses: stefanprodan/helm-gh-pages@89c6698c192e70ed0e495bee7d3d1ca5b477fe82
@@ -116,13 +116,13 @@ jobs:
     if: ${{ needs.bump-version.outputs.has-next-version == 'true' }}
     steps:
       - name: Check out code
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
           fetch-depth: 0
           persist-credentials: false
 
       - name: Download bumped chart metadata
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: bumped-chart
           path: application
@@ -144,7 +144,7 @@ jobs:
           branch: main
 
       - name: Push release tag
-        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9
         with:
           github-token: ${{ secrets.PUBLISH_TOKEN }}
           script: |
@@ -169,7 +169,7 @@ jobs:
     if: ${{ always() && ((github.ref_type == 'branch' && needs.push-version.result == 'success') || github.ref_type == 'tag') }}
     steps:
       - name: Create GitHub release
-        uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
         with:
           name: ${{ github.ref_type == 'tag' && github.ref_name || format('v{0}', needs.bump-version.outputs.version) }}
           tag_name: ${{ github.ref_type == 'tag' && github.ref_name || format('v{0}', needs.bump-version.outputs.version) }}

@@ -383,7 +383,7 @@ cronJob:
         - name: nexus-secret
       image:
         repository: docker.io/nginx
-        tag: v1.0.0
+        tag: 1.30.0@sha256:55d1fb0944aafb8534b253e486c6cf57d3e0c785c4f6a7b3e9f02c5a080fb2ce
       env:
         KEY:
           value: VALUE
@@ -419,7 +419,7 @@ job:
         - name: nexus-secret
       image:
         repository: docker.io/nginx
-        tag: v1.0.0
+        tag: 1.30.0@sha256:55d1fb0944aafb8534b253e486c6cf57d3e0c785c4f6a7b3e9f02c5a080fb2ce
       env:
         KEY:
           value: VALUE

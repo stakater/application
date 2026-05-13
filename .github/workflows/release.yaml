@@ -4,12 +4,16 @@ on:
   push:
     branches:
       - main
-    tags:
-      - "v*"
     paths-ignore:
       - README.md
       - LICENSE
-      - application/Chart.yaml
+
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing tag to create a GitHub release for (e.g. v1.2.3)"
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -27,7 +31,7 @@ env:
 jobs:
   ci:
     name: CI
-    if: ${{ github.ref_type == 'branch' && !contains(github.event.head_commit.message, '[skip-ci]') }}
+    if: ${{ !contains(github.event.head_commit.message, '[skip-ci]') }}
     uses: ./.github/workflows/ci.yaml
     secrets: inherit
 
@@ -37,7 +41,7 @@ jobs:
     timeout-minutes: 5
     needs:
       - ci
-    if: ${{ github.ref_type == 'branch' && !contains(github.event.head_commit.message, '[skip-ci]') && vars.RELEASE_CIRCUIT_BREAKER != 'true' }}
+    if: ${{ !contains(github.event.head_commit.message, '[skip-ci]') && vars.RELEASE_CIRCUIT_BREAKER == 'false' }}
     outputs:
       version: ${{ steps.get-next-version.outputs.version }}
       has-next-version: ${{ steps.get-next-version.outputs.hasNextVersion }}
@@ -114,10 +118,10 @@ jobs:
           helm push ./packaged-chart/*.tgz oci://${{ env.OCI_REGISTRY }}
 
       - name: Sign OCI artifact with Cosign
-        run: cosign sign --yes ${{ env.OCI_REGISTRY }}/${{ env.CHART_PATH }}:v${{ needs.bump-version.outputs.version }}
+        run: cosign sign --yes ${{ env.OCI_REGISTRY }}/${{ env.CHART_PATH }}:${{ needs.bump-version.outputs.version }}
 
       - name: Publish Helm chart to GitHub Pages
-        uses: stefanprodan/helm-gh-pages@89c6698c192e70ed0e495bee7d3d1ca5b477fe82
+        uses: stefanprodan/helm-gh-pages@89c6698c192e70ed0e495bee7d3d1ca5b477fe82 # v1.7.0
         with:
           branch: master
           repository: stakater-charts
@@ -162,7 +166,7 @@ jobs:
           echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
       - name: Push bumped Chart.yaml
-        uses: ad-m/github-push-action@57116acb309081ee57864270b0e3c4cedbe45452
+        uses: ad-m/github-push-action@57116acb309081ee57864270b0e3c4cedbe45452 # v0.8.0
         with:
           github_token: ${{ secrets.PUBLISH_TOKEN }}
           branch: main
@@ -187,16 +191,15 @@ jobs:
       contents: write
     needs:
       - bump-version
+      - publish
       - push-version
-    # On branch push: runs after push-version succeeds (bump-version and publish ran before it).
-    # On tag push: bump-version and push-version are skipped; always() ensures this job still runs.
-    if: ${{ always() && ((github.ref_type == 'branch' && needs.push-version.result == 'success') || github.ref_type == 'tag') }}
+    if: ${{ always() && (needs.push-version.result == 'success' || github.event_name == 'workflow_dispatch') }}
     steps:
       - name: Create GitHub release
         uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
         with:
-          name: ${{ github.ref_type == 'tag' && github.ref_name || format('v{0}', needs.bump-version.outputs.version) }}
-          tag_name: ${{ github.ref_type == 'tag' && github.ref_name || format('v{0}', needs.bump-version.outputs.version) }}
+          name: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || format('v{0}', needs.bump-version.outputs.version) }}
+          tag_name: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || format('v{0}', needs.bump-version.outputs.version) }}
           generate_release_notes: true
           draft: false
           prerelease: false

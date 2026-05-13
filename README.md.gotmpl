@@ -20,12 +20,24 @@ Kind validation uses a Kubernetes-compatible values profile that excludes non-st
 
 ## Installing the Chart
 
-To install the chart with the release name `my-application` in namespace `test`:
+### From the OCI registry
+
+```shell
+helm install my-application oci://ghcr.io/stakater/charts/application --namespace test
+# or, to install a specific version
+helm install my-application oci://ghcr.io/stakater/charts/application --version <version> --namespace test
+```
+
+### From the Helm repository (deprecated)
+
+> **Note:** The Helm repository is deprecated in favor of the OCI registry above.
 
 ```shell
 helm repo add stakater https://stakater.github.io/stakater-charts
 helm repo update
 helm install my-application stakater/application --namespace test
+# or, to install a specific version
+helm install my-application stakater/application --version <version> --namespace test
 ```
 
 ## Uninstall the Chart

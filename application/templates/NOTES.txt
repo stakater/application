@@ -7,36 +7,3 @@ service.loadBalancerIP:
   Please refer to the Kubernetes documentation for more information.
 {{- end }}
 
-{{- range $name, $job := (.Values.job).jobs }}
-{{- if kindIs "slice" $job.envFrom }}
-job.jobs.{{ $name }}.envFrom:
-  Defining envFrom as a list is deprecated and will be removed in the next major version.
-  Please migrate to the dict-based format:
-
-    envFrom:
-      my-secret:
-        type: secret
-        name: my-secret-name
-      my-configmap:
-        type: configmap
-        nameSuffix: my-configmap-suffix
-
-{{- end }}
-{{- end }}
-
-{{- range $name, $job := (.Values.cronJob).jobs }}
-{{- if kindIs "slice" $job.envFrom }}
-cronJob.jobs.{{ $name }}.envFrom:
-  Defining envFrom as a list is deprecated and will be removed in the next major version.
-  Please migrate to the dict-based format:
-
-    envFrom:
-      my-secret:
-        type: secret
-        name: my-secret-name
-      my-configmap:
-        type: configmap
-        nameSuffix: my-configmap-suffix
-
-{{- end }}
-{{- end }}

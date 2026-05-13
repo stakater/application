@@ -81,9 +81,6 @@ spec:
         {{- end }}
         {{- if $job.envFrom }}
         envFrom:
-        {{- if kindIs "slice" $job.envFrom }}
-{{ toYaml $job.envFrom | indent 8 }}
-        {{- else }}
         {{- range $value := $job.envFrom }}
         {{- if (eq .type "configmap") }}
         - configMapRef:
@@ -106,7 +103,6 @@ spec:
             name: {{ template "application.name" $ }}
             {{- end }}
             optional: {{ default false $value.optional }}
-        {{- end }}
         {{- end }}
         {{- end }}
         {{- end }}

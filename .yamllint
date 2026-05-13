@@ -1,0 +1,6 @@
+extends: default
+
+rules:
+  indentation:
+    indent-sequences: whatever
+  line-length: disable

@@ -14,7 +14,8 @@ metadata:
 {{ toYaml . | indent 4 }}
 {{- end }}
 {{- with $job.annotations }}
-  annotations: {{ toYaml . | nindent 4 }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
 {{- end }}
   name: {{ $name }}
   namespace: {{ template "application.namespace" $ }}
@@ -37,7 +38,8 @@ spec:
       {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with $job.additionalPodAnnotations }}
-      annotations: {{ toYaml . | nindent 8 }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
       automountServiceAccountToken: {{ kindIs "invalid" $job.automountServiceAccountToken | ternary true $job.automountServiceAccountToken }}
@@ -111,20 +113,21 @@ spec:
       topologySpreadConstraints: {{ toYaml . | nindent 8 }}
       {{- end }}
       {{- with $job.securityContext }}
-      securityContext: {{ toYaml . | nindent 8 }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if $job.restartPolicy}}
+      {{- if $job.restartPolicy }}
       restartPolicy: {{ $job.restartPolicy }}
-      {{ else }}
+      {{- else }}
       restartPolicy: OnFailure
-      {{ end }}
-      {{- with $job.imagePullSecrets}}
+      {{- end }}
+      {{- with $job.imagePullSecrets }}
       imagePullSecrets:
-{{ toYaml . | indent 8 }}
-      {{ end }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       {{- if $job.dnsConfig }}
       dnsConfig:
-{{ toYaml $job.dnsConfig | indent 8 }}
+        {{- toYaml $job.dnsConfig | nindent 8 }}
       {{- end }}
       {{- if $job.dnsPolicy }}
       dnsPolicy: {{ $job.dnsPolicy }}

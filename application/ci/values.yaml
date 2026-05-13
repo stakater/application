@@ -1,0 +1,511 @@
+applicationName: application
+
+additionalLabels:
+  group: com.stakater.platform
+  team: stakater
+
+deployment:
+  dnsConfig:
+    options:
+      - name: ndots
+        value: "1"
+  dnsPolicy: ClusterFirst
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  reloadOnChange: true
+  hostAliases:
+    - ip: "127.0.0.1"
+      hostnames:
+        - foo.local
+        - bar.local
+    - ip: "10.1.2.3"
+      hostnames:
+        - foo.remote
+        - bar.remote
+  initContainers:
+    init-container:
+      image: busybox:1.37
+      imagePullPolicy: IfNotPresent
+      command: ["/bin/sh"]
+      resources:
+        requests:
+          cpu: 10m
+          memory: 16Mi
+        limits:
+          cpu: 50m
+          memory: 32Mi
+      securityContext:
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        runAsUser: 65534
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        seccompProfile:
+          type: RuntimeDefault
+  additionalLabels:
+    key: value
+  podLabels:
+    env: prod
+  additionalPodAnnotations:
+    key: value
+  fluentdConfigAnnotations:
+    fluentd:
+      regex: hello
+      timeFormat: world
+  replicas: 2
+  imagePullSecrets: []
+  envFrom:
+    production-cm:
+      type: configmap
+      nameSuffix: my-configmap
+    postgres-config:
+      type: secret
+      nameSuffix: postgres
+      optional: false
+    nonexisting-config:
+      type: secret
+      nameSuffix: nonexisting
+      optional: true
+    external-secret:
+      type: secret
+      name: my-existing-secret
+    external-configmap:
+      type: configmap
+      name: my-existing-configmap
+  env:
+    ENVIRONMENT:
+      value: dev
+  volumes:
+    config-volume:
+      configMap:
+        name: configmap-name
+    configmap-volume:
+      configMap:
+        name: '{{ template "application.name" . }}-configmap-nameSuffix'
+    secret-volume:
+      secret:
+        secretName: secret-name
+    volume-name:
+      emptyDir: {}
+    persistent-volume-name:
+      persistentVolumeClaim:
+        claimName: claim-name
+  volumeMounts:
+    volume-name:
+      mountPath: /path1
+  tolerations:
+    - key: dedicated
+      operator: Equal
+      value: app
+      effect: NoSchedule
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: disktype
+                operator: In
+                values:
+                  - ssd
+  automountServiceAccountToken: false
+  image:
+    repository: repository/image-name
+    tag: image-tag
+    pullPolicy: IfNotPresent
+  startupProbe:
+    enabled: true
+    failureThreshold: 30
+    periodSeconds: 10
+    httpGet:
+      path: /path
+      port: 8080
+    exec: {}
+  readinessProbe:
+    enabled: true
+    failureThreshold: 3
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+    initialDelaySeconds: 10
+    exec:
+      command:
+        - cat
+        - tmp/healthy
+  livenessProbe:
+    enabled: true
+    failureThreshold: 3
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+    initialDelaySeconds: 10
+    httpGet:
+      path: /path
+      port: 8080
+  resources:
+    limits:
+      memory: 256Mi
+      cpu: 0.5
+    requests:
+      memory: 128Mi
+      cpu: 0.1
+  containerSecurityContext:
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsUser: 65534
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    seccompProfile:
+      type: RuntimeDefault
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 65534
+    seccompProfile:
+      type: RuntimeDefault
+  openshiftOAuthProxy:
+    enabled: false
+  additionalContainers:
+    - name: sidecar-container
+      image: busybox:1.37
+      imagePullPolicy: IfNotPresent
+      command: ["/bin/sh", "-c", "sleep 3600"]
+      securityContext:
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        runAsUser: 65534
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        seccompProfile:
+          type: RuntimeDefault
+      resources:
+        requests:
+          cpu: 10m
+          memory: 16Mi
+        limits:
+          cpu: 50m
+          memory: 32Mi
+      livenessProbe:
+        exec:
+          command: ["true"]
+      readinessProbe:
+        exec:
+          command: ["true"]
+  command: []
+  args: []
+  ports:
+    - containerPort: 8080
+      name: http
+      protocol: TCP
+    - containerPort: 8778
+      name: jolokia
+      protocol: TCP
+    - containerPort: 8443
+      name: https
+      protocol: TCP
+  hostNetwork: true
+  terminationGracePeriodSeconds: 120
+  lifecycle:
+    preStop:
+      exec:
+        command: ["/bin/sh", "-c", "sleep 20"]
+
+persistence:
+  enabled: true
+  mountPVC: false
+  mountPath: /
+  accessMode: ReadWriteOnce
+  storageClass: "-"
+  additionalLabels:
+    key: value
+  storageSize: 8Gi
+  volumeMode: Filesystem
+
+service:
+  additionalLabels:
+    key: value
+    expose: "true"
+  annotations:
+    config.xposer.stakater.com/Domain: stakater.com
+    config.xposer.stakater.com/IngressNameTemplate: '{{ "{{.Service}}-{{.Namespace}}" }}'
+    config.xposer.stakater.com/IngressURLPath: /
+    config.xposer.stakater.com/IngressURLTemplate: '{{ "{{.Service}}.{{.Namespace}}.{{.Domain}}" }}'
+    service.alpha.openshift.io/serving-cert-secret-name: |
+      '{{ template "application.name" . }}-tls'
+    xposer.stakater.com/annotations: |-
+      kubernetes.io/ingress.class: external-ingress
+      ingress.kubernetes.io/rewrite-target: /
+      ingress.kubernetes.io/force-ssl-redirect: "true"
+  ports:
+    - port: 8080
+      name: http
+      protocol: TCP
+      targetPort: 8080
+  type: ClusterIP
+
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+        - path: /subpath
+    - host: '{{ .Release.Name }}.stakater.com'
+      paths:
+        - path: /
+  additionalLabels:
+    key: value
+  annotations:
+    ingress.kubernetes.io/rewrite-target: /
+    ingress.kubernetes.io/force-ssl-redirect: "true"
+  tls:
+    - secretName: chart-example-tls
+      hosts:
+        - chart-example.local
+        - '{{ .Release.Name }}.stakater.com'
+
+configMap:
+  enabled: true
+  additionalLabels:
+    key: value
+  files:
+    code-config:
+      key1: value1
+      key2: value2
+    dev-config:
+      key1: value1
+      key2: value2
+
+secret:
+  enabled: true
+  additionalLabels:
+    key: value
+  files:
+    secret1:
+      data:
+        secretKey1: secretValue1
+        secretKey2: secretValue2
+      encodedData:
+        secretKey3: c2VjcmV0VmFsdWUx
+        secretKey4: c2VjcmV0VmFsdWUy
+      stringData:
+        secretKey5: secretValue5
+        secretKey6: secretValue6
+
+rbac:
+  enabled: true
+  serviceAccount:
+    enabled: true
+    name: application
+    additionalLabels:
+      key: value
+  roles:
+    - name: configmaps
+      rules:
+        - apiGroups:
+            - ""
+          resources:
+            - configmaps
+          verbs:
+            - get
+    - name: secrets
+      rules:
+        - apiGroups:
+            - ""
+          resources:
+            - secrets
+          verbs:
+            - get
+
+autoscaling:
+  enabled: true
+  additionalLabels:
+    key: value
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 60
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 60
+
+networkPolicy:
+  enabled: true
+  additionalLabels:
+    key: value
+  ingress:
+    - from:
+        - ipBlock:
+            cidr: 172.17.0.0/16
+            except:
+              - 172.17.1.0/24
+        - namespaceSelector:
+            matchLabels:
+              project: myproject
+        - podSelector:
+            matchLabels:
+              role: frontend
+      ports:
+        - protocol: TCP
+          port: 6379
+  egress:
+    - to:
+        - ipBlock:
+            cidr: 10.0.0.0/24
+      ports:
+        - protocol: TCP
+          port: 5978
+
+pdb:
+  enabled: true
+  minAvailable: 1
+  maxUnavailable: 2
+
+cronJob:
+  enabled: true
+  jobs:
+    db-migration:
+      schedule: "* * * 8 *"
+      suspend: false
+      priorityClassName: high-priority
+      automountServiceAccountToken: false
+      imagePullSecrets:
+        - name: nexus-secret
+      image:
+        repository: docker.io/nginx
+        tag: 1.30.0@sha256:55d1fb0944aafb8534b253e486c6cf57d3e0c785c4f6a7b3e9f02c5a080fb2ce
+      env:
+        KEY:
+          value: VALUE
+      command: ["/bin/bash"]
+      args: ["-c", "sleep 5000"]
+      resources:
+        requests:
+          memory: 256Mi
+          cpu: 100m
+        limits:
+          memory: 512Mi
+          cpu: 500m
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        seccompProfile:
+          type: RuntimeDefault
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
+
+job:
+  enabled: true
+  jobs:
+    db-migration:
+      additionalPodAnnotations:
+        helm.sh/hook: "pre-install,pre-upgrade"
+        helm.sh/hook-weight: "-1"
+        helm.sh/hook-delete-policy: before-hook-creation
+      automountServiceAccountToken: false
+      imagePullSecrets:
+        - name: nexus-secret
+      image:
+        repository: docker.io/nginx
+        tag: 1.30.0@sha256:55d1fb0944aafb8534b253e486c6cf57d3e0c785c4f6a7b3e9f02c5a080fb2ce
+      env:
+        KEY:
+          value: VALUE
+      command: ["/bin/bash"]
+      args: ["-c", "sleep 5000"]
+      resources:
+        requests:
+          memory: 256Mi
+          cpu: 100m
+        limits:
+          memory: 512Mi
+          cpu: 500m
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        seccompProfile:
+          type: RuntimeDefault
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
+
+extraObjects:
+  a:
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: '{{ .Release.Name }}-extra-object-configmap-1'
+      namespace: "{{ .Release.Namespace }}"
+    data:
+      key1: value1-{{ .Release.Name }}
+      key2: value2
+  b:
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: '{{ .Release.Name }}-extra-object-secret-1'
+      namespace: "{{ .Release.Namespace }}"
+    stringData:
+      key1: value1-{{ .Release.Name }}
+      key2: value2
+
+route:
+  enabled: false
+
+sealedSecret:
+  enabled: false
+
+externalSecret:
+  enabled: false
+
+grafanaDashboard:
+  enabled: false
+
+endpointMonitor:
+  enabled: false
+
+forecastle:
+  enabled: false
+
+serviceMonitor:
+  enabled: false
+
+alertmanagerConfig:
+  enabled: false
+
+prometheusRule:
+  enabled: false
+
+certificate:
+  enabled: false
+
+secretProviderClass:
+  enabled: false
+
+vpa:
+  enabled: false
+
+backup:
+  enabled: false
+
+httpRoute:
+  enabled: false

@@ -1,0 +1,31 @@
+# Checkov skip list for the ci/values.yaml file in this directory.
+# These checks are either unfixable due to Helm template limitations
+# or represent intentional CI test configurations.
+skip-check:
+  # Helm renders to the 'default' namespace when no --namespace is passed.
+  # Checkov's built-in helm renderer does not support --namespace.
+  - CKV_K8S_21
+  # Image digest and pull policy are consumer decisions, not library defaults.
+  - CKV_K8S_43
+  - CKV_K8S_15
+  # NetworkPolicy is an opt-in feature; not every deployment needs one.
+  - CKV2_K8S_6
+  # CronJob/Job templates render securityContext at pod level, not container level.
+  - CKV_K8S_20
+  - CKV_K8S_22
+  - CKV_K8S_28
+  - CKV_K8S_29
+  - CKV_K8S_30
+  - CKV_K8S_31
+  - CKV_K8S_37
+  # RBAC role granting secret read access is a deliberate test configuration.
+  - CKV2_K8S_5
+  # hostNetwork is a consumer-controlled setting tested in CI values.
+  - CKV_K8S_19
+  # Checkov does not recognize exec-based readiness/liveness probes.
+  - CKV_K8S_8
+  - CKV_K8S_9
+  # Image tag format (image-tag) is a placeholder for consumer substitution.
+  - CKV_K8S_14
+  # Secrets as environment variables via envFrom is a consumer pattern.
+  - CKV_K8S_35

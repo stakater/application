@@ -10,6 +10,12 @@ Generic helm chart for applications which:
 - don't call the underlying Kubernetes API or use the underlying etcd as a database by defining custom resources
 - run either as deployment, job or cronjob
 
+## CI scope
+
+The CI validates the chart against upstream Kubernetes using Helm and Kind. These jobs should be configured as required status checks in branch protection rules.
+
+Kind server-side validation uses a Kubernetes-compatible values profile that excludes non-standard resources. Additional resources that require CRDs or platform-specific APIs are render-only in the required CI path.
+
 ## Installing the Chart
 
 To install the chart with the release name `my-application` in namespace `test`:

@@ -1,34 +1,211 @@
 name: Release
+
 on:
   push:
+    branches:
+      - main
     tags:
       - "v*"
+    paths-ignore:
+      - README.md
+      - LICENSE
+      - application/Chart.yaml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  CHART_PATH: application
 
 jobs:
-  build:
-    name: Release
+  ci:
+    name: CI
+    if: ${{ github.ref_type == 'branch' && !contains(github.event.head_commit.message, '[skip-ci]') }}
+    uses: ./.github/workflows/ci.yaml
+    secrets: inherit
+
+  bump-version:
+    name: Bump chart version
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    timeout-minutes: 5
+    needs:
+      - ci
+    if: ${{ github.ref_type == 'branch' && !contains(github.event.head_commit.message, '[skip-ci]') && vars.RELEASE_CIRCUIT_BREAKER != 'true' }}
+    outputs:
+      version: ${{ steps.get-next-version.outputs.version }}
+      has-next-version: ${{ steps.get-next-version.outputs.hasNextVersion }}
     steps:
       - name: Check out code
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8  # v6
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
         with:
-          fetch-depth: 0 # See: https://goreleaser.com/ci/actions/
-      - name: Create Release
-        uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b  # v2
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Generate next version
+        id: get-next-version
+        uses: thenativeweb/get-next-version@067dc4602577f4f61a51c3f4664552283a228c60 # 2.7.1
+
+      - name: Show next version
+        run: |
+          echo "Has next version: ${{ steps.get-next-version.outputs.hasNextVersion }}"
+          echo "Next version: ${{ steps.get-next-version.outputs.version }}"
+
+      - name: Update chart version
+        if: ${{ steps.get-next-version.outputs.hasNextVersion == 'true' }}
+        env:
+          VERSION: ${{ steps.get-next-version.outputs.version }}
+        run: |
+          set -euo pipefail
+          make bump-chart
+
+      - name: Upload bumped chart metadata
+        if: ${{ steps.get-next-version.outputs.hasNextVersion == 'true' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: ${{ github.ref_name }}
-          tag_name: ${{ github.ref_name }}
+          name: bumped-chart
+          path: application/Chart.yaml
+          if-no-files-found: error
+
+  publish:
+    name: Publish chart
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs:
+      - bump-version
+    if: ${{ needs.bump-version.outputs.has-next-version == 'true' }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Download bumped chart metadata
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: bumped-chart
+          path: application
+
+      - uses: azure/setup-helm@1a275c3b69536ee54be43f2070a358922e12c8d4 # v4
+
+      - name: Publish Helm chart
+        uses: stefanprodan/helm-gh-pages@89c6698c192e70ed0e495bee7d3d1ca5b477fe82
+        with:
+          branch: master
+          repository: stakater-charts
+          target_dir: docs
+          token: ${{ secrets.PUBLISH_TOKEN }}
+          charts_dir: .
+          charts_url: https://stakater.github.io/stakater-charts
+          owner: stakater
+          linting: off
+          commit_username: stakater-user
+          commit_email: stakater@gmail.com
+
+  push-version:
+    name: Push bumped version and tag
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs:
+      - bump-version
+      - publish
+    if: ${{ needs.bump-version.outputs.has-next-version == 'true' }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Download bumped chart metadata
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: bumped-chart
+          path: application
+
+      - name: Commit bumped Chart.yaml
+        id: commit
+        run: |
+          set -euo pipefail
+          git config --local user.email "stakater@gmail.com"
+          git config --local user.name "stakater-user"
+          git add application/Chart.yaml
+          git commit -m "chore: Update artifacts [skip-ci]"
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Push bumped Chart.yaml
+        uses: ad-m/github-push-action@57116acb309081ee57864270b0e3c4cedbe45452
+        with:
+          github_token: ${{ secrets.PUBLISH_TOKEN }}
+          branch: main
+
+      - name: Push release tag
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
+        with:
+          github-token: ${{ secrets.PUBLISH_TOKEN }}
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/v${{ needs.bump-version.outputs.version }}',
+              sha: '${{ steps.commit.outputs.sha }}'
+            })
+
+  create-release:
+    name: Create GitHub release
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    needs:
+      - bump-version
+      - push-version
+    # On branch push: runs after push-version succeeds (bump-version and publish ran before it).
+    # On tag push: bump-version and push-version are skipped; always() ensures this job still runs.
+    if: ${{ always() && ((github.ref_type == 'branch' && needs.push-version.result == 'success') || github.ref_type == 'tag') }}
+    steps:
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2
+        with:
+          name: ${{ github.ref_type == 'tag' && github.ref_name || format('v{0}', needs.bump-version.outputs.version) }}
+          tag_name: ${{ github.ref_type == 'tag' && github.ref_name || format('v{0}', needs.bump-version.outputs.version) }}
           generate_release_notes: true
           draft: false
           prerelease: false
           make_latest: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  notify:
+    name: Notify Results
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs:
+      - ci
+      - bump-version
+      - publish
+      - push-version
+      - create-release
+    if: ${{ always() && !contains(github.event.head_commit.message, '[skip-ci]') }}
+    steps:
+      - id: workflow
+        name: Compute workflow status
+        run: |
+          if [ "${{ contains(needs.*.result, 'failure') }}" = "true" ]; then
+            echo "status=failure" >> "$GITHUB_OUTPUT"
+          else
+            echo "status=success" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Notify Slack
-        uses: 8398a7/action-slack@77eaa4f1c608a7d68b38af4e3f739dcd8cba273e  # v3.19.0
-        if: always()
+        uses: 8398a7/action-slack@77eaa4f1c608a7d68b38af4e3f739dcd8cba273e # v3.19.0
+        if: ${{ always() }}
         with:
-          status: ${{ job.status }}
+          status: ${{ steps.workflow.outputs.status }}
           fields: repo,author,action,eventName,ref,workflow
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.STAKATER_DELIVERY_SLACK_WEBHOOK }}

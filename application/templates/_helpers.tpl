@@ -92,3 +92,53 @@ reference:
   kind: Route
   name: {{ include "application.name" . }}
 {{- end }}
+
+{{/*
+Renders httpRoute rules with proper integer type for port fields.
+Usage:
+{{ include "application.httpRoute.rules" . }}
+*/}}
+{{- define "application.httpRoute.rules" -}}
+{{- $rulesYaml := include "application.tplvalues.render" ( dict "value" .Values.httpRoute.rules "context" . ) -}}
+{{- $wrappedYaml := printf "rules:\n%s" $rulesYaml -}}
+{{- $parsed := $wrappedYaml | fromYaml -}}
+{{- range $ruleIndex, $rule := $parsed.rules -}}
+{{- if $ruleIndex }}
+{{ end -}}
+- {{- if $rule.matches }}
+  matches: {{ $rule.matches | toYaml | nindent 4 }}
+  {{- end }}
+  {{- if $rule.filters }}
+  filters: {{ $rule.filters | toYaml | nindent 4 }}
+  {{- end }}
+  {{- if $rule.sessionAffinity }}
+  sessionAffinity: {{ $rule.sessionAffinity | toYaml | nindent 4 }}
+  {{- end }}
+  {{- if $rule.timeouts }}
+  timeouts: {{ $rule.timeouts | toYaml | nindent 4 }}
+  {{- end }}
+  {{- if $rule.backendRefs }}
+  backendRefs:
+  {{- range $rule.backendRefs }}
+  {{- $portVal := .port | int }}
+  {{- if or (lt $portVal 1) (gt $portVal 65535) }}
+    {{- fail (printf "Invalid port value: %v. Port must be between 1 and 65535" .port) }}
+  {{- end }}
+  - name: {{ .name }}
+    port: {{ $portVal }}
+    {{- if .weight }}
+    weight: {{ .weight | int }}
+    {{- end }}
+    {{- if .namespace }}
+    namespace: {{ .namespace }}
+    {{- end }}
+    {{- if .kind }}
+    kind: {{ .kind }}
+    {{- end }}
+    {{- if .group }}
+    group: {{ .group }}
+    {{- end }}
+  {{- end }}
+  {{- end }}
+{{- end -}}
+{{- end -}}

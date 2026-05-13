@@ -112,7 +112,8 @@ spec:
 {{ toYaml . | indent 10 }}
         {{- end }}
         {{- with $job.containerSecurityContext }}
-        securityContext: {{ toYaml . | nindent 10 }}
+        securityContext:
+          {{- toYaml . | nindent 10 }}
         {{- end }}
         {{- with $job.volumeMounts }}
         volumeMounts:

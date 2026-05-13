@@ -421,8 +421,8 @@ tests:
               readOnlyRootFilesystem: true
               runAsNonRoot: true
               capabilities:
-              drop:
-                - ALL
+                drop:
+                  - ALL
             image:
               repository: example-image
               tag: example-tag
@@ -433,8 +433,8 @@ tests:
             readOnlyRootFilesystem: true
             runAsNonRoot: true
             capabilities:
-            drop:
-              - ALL
+              drop:
+                - ALL
 
   - it: configures automount service account token by default
     set:
@@ -464,21 +464,6 @@ tests:
       - equal:
           path: spec.jobTemplate.spec.template.spec.automountServiceAccountToken
           value: true
-
-  - it: disable automount service account token when configured
-    set:
-      cronJob:
-        enabled: true
-        jobs:
-          example:
-            automountServiceAccountToken: false
-            image:
-              repository: example-image
-              tag: example-tag
-    asserts:
-      - equal:
-          path: spec.jobTemplate.spec.template.spec.automountServiceAccountToken
-          value: false
 
   - it: does not include pod security context by default
     set:

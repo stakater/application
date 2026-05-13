@@ -111,12 +111,16 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish Helm chart to OCI registry
+        id: push-chart
         run: |
           helm package ./${{ env.CHART_PATH }} --destination ./packaged-chart
-          helm push ./packaged-chart/*.tgz oci://${{ env.OCI_REGISTRY }}
+          push_output=$(helm push ./packaged-chart/*.tgz oci://${{ env.OCI_REGISTRY }} 2>&1)
+          echo "$push_output"
+          digest=$(echo "$push_output" | awk '/Digest:/{print $2}')
+          echo "digest=$digest" >> "$GITHUB_OUTPUT"
 
       - name: Sign OCI artifact with Cosign
-        run: cosign sign --yes ${{ env.OCI_REGISTRY }}/${{ env.CHART_PATH }}:${{ needs.bump-version.outputs.version }}
+        run: cosign sign --yes ${{ env.OCI_REGISTRY }}/${{ env.CHART_PATH }}@${{ steps.push-chart.outputs.digest }}
 
       - name: Publish Helm chart to GitHub Pages
         uses: stefanprodan/helm-gh-pages@0ad2bb377311d61ac04ad9eb6f252fb68e207260 # v1.7.0

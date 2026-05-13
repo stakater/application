@@ -1,6 +1,6 @@
 apiVersion: v2
 name: application
-description: Generic helm chart for all kind of applications
+description: Generic Helm chart for deploying stateless applications on Kubernetes
 
 type: application
 
@@ -10,12 +10,16 @@ version: 8.0.0
 
 
 keywords:
-  - java
-  - node
-  - dotnet
-  - kubernetes
-  - stakater
   - application
+  - chart
+  - stakater
+  - helm
+  - kubernetes
+  - openshift
+  - cronjob
+  - deployment
+  - ingress
+  - monitoring
 
 home: https://github.com/stakater/application
 maintainers:

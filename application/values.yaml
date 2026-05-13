@@ -40,6 +40,20 @@ cronJob:
     #   env:
     #     KEY:
     #       value: VALUE
+    #   envFrom:
+    #     chart-managed-config:
+    #       type: configmap
+    #       nameSuffix: my-configmap
+    #     chart-managed-secret:
+    #       type: secret
+    #       nameSuffix: postgres
+    #       optional: false
+    #     external-secret:
+    #       type: secret
+    #       name: my-existing-secret
+    #     external-configmap:
+    #       type: configmap
+    #       name: my-existing-configmap
     #   image:
     #     repository: docker.io/nginx
     #     tag: v1.0.0
@@ -91,6 +105,20 @@ job:
     #   env:
     #     KEY:
     #       value: VALUE
+    #   envFrom:
+    #     chart-managed-config:
+    #       type: configmap
+    #       nameSuffix: my-configmap
+    #     chart-managed-secret:
+    #       type: secret
+    #       nameSuffix: postgres
+    #       optional: false
+    #     external-secret:
+    #       type: secret
+    #       name: my-existing-secret
+    #     external-configmap:
+    #       type: configmap
+    #       name: my-existing-configmap
     #   image:
     #     repository: docker.io/nginx
     #     tag: v1.0.0

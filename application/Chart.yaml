@@ -1,14 +1,8 @@
 apiVersion: v2
 name: application
 description: Generic Helm chart for deploying stateless applications on Kubernetes
-
 type: application
-
-# Helm chart Version
-
 version: 8.0.0
-
-
 keywords:
   - application
   - chart
@@ -20,10 +14,8 @@ keywords:
   - deployment
   - ingress
   - monitoring
-
 home: https://github.com/stakater/application
 maintainers:
-- name: Stakater
-  email: hello@stakater.com
-
+  - name: Stakater
+    email: hello@stakater.com
 icon: https://github.com/stakater/ForecastleIcons/blob/master/stakater.png

@@ -19,11 +19,11 @@ spec:
   urlFrom:
 {{- if and .Values.route .Values.route.enabled }}
     routeRef:
-      name:  {{ template "application.name" . }}
+      name: {{ template "application.name" . }}
 {{- end }}
 {{- if and .Values.ingress .Values.ingress.enabled }}
     ingressRef:
-      name:  {{ template "application.name" . }}
+      name: {{ template "application.name" . }}
 {{- end }}
 {{- if .Values.endpointMonitor.additionalConfig }}
 {{ toYaml .Values.endpointMonitor.additionalConfig | indent 2 }}

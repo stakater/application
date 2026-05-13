@@ -10,14 +10,15 @@ metadata:
 {{ toYaml .Values.alertmanagerConfig.selectionLabels | indent 4 }}
 spec:
 {{- if .Values.alertmanagerConfig.spec.route }}
-    route:
-{{ toYaml .Values.alertmanagerConfig.spec.route | indent 6 }}
+  route:
+    {{- toYaml .Values.alertmanagerConfig.spec.route | nindent 4 }}
 {{- end -}}
 {{- if .Values.alertmanagerConfig.spec.receivers }}
-    receivers:
-{{ toYaml .Values.alertmanagerConfig.spec.receivers | indent 6 }}
+  receivers:
+    {{- toYaml .Values.alertmanagerConfig.spec.receivers | nindent 4 }}
 {{- end -}}
 {{- if .Values.alertmanagerConfig.spec.inhibitRules }}
-    inhibitRules: {{ toYaml .Values.alertmanagerConfig.spec.inhibitRules | nindent 6 }}
+  inhibitRules:
+    {{- toYaml .Values.alertmanagerConfig.spec.inhibitRules | nindent 4 }}
 {{- end -}}
 {{- end -}}

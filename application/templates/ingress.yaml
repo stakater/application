@@ -40,6 +40,6 @@ spec:
     {{- end -}}
   {{- if .Values.ingress.tls }}
   tls:
-{{ include "application.tplvalues.render" (dict "value" .Values.ingress.tls "context" $) | indent 3 }}
+    {{- include "application.tplvalues.render" (dict "value" .Values.ingress.tls "context" $) | nindent 4 }}
   {{- end -}}
 {{- end -}}

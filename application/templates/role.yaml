@@ -16,6 +16,6 @@ metadata:
 {{ toYaml $.Values.rbac.annotations | indent 4 }}
 {{- end }}
 rules:
-{{ toYaml .rules | indent 2 }}
+  {{- toYaml .rules | nindent 2 }}
 {{- end }}
 {{- end }}

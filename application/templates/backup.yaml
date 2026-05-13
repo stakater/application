@@ -16,7 +16,7 @@ metadata:
 spec:
   labelSelector:
     matchLabels:
-       app.kubernetes.io/part-of: {{ include "application.name" . }}
+      app.kubernetes.io/part-of: {{ include "application.name" . }}
   {{- if not (kindIs "invalid" .Values.backup.includedNamespaces) }}
   includedNamespaces:
     {{- range $namespace := .Values.backup.includedNamespaces }}

@@ -139,10 +139,12 @@ jobs:
             args+=("--api-versions" "$v")
           done
 
+          set -x
           helm template "$RELEASE_NAME" "$CHART_PATH" \
             "${args[@]}" \
             --namespace "$TEST_NAMESPACE" \
             --debug > rendered.yaml
+          set +x
 
           test -s rendered.yaml
           cat rendered.yaml
@@ -211,11 +213,13 @@ jobs:
             args+=("--api-versions" "$v")
           done
 
+          set -x
           helm template "$RELEASE_NAME" "$CHART_PATH" \
             -f "$CHART_PATH/ci/values.yaml" \
             "${args[@]}" \
             --namespace "$TEST_NAMESPACE" \
             --debug > rendered.yaml
+          set +x
 
           cat rendered.yaml
 

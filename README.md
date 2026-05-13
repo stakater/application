@@ -14,7 +14,9 @@ Generic helm chart for applications which:
 
 The CI validates the chart against upstream Kubernetes using Helm and Kind. These jobs should be configured as required status checks in branch protection rules.
 
-Kind server-side validation uses a Kubernetes-compatible values profile that excludes non-standard resources. Additional resources that require CRDs or platform-specific APIs are render-only in the required CI path.
+Server-side API validation runs against Kubernetes v1.31, v1.33, and v1.35. The chart uses `Capabilities.APIVersions` fallbacks for legacy APIs (`batch/v1beta1`, `policy/v1beta1`, `autoscaling/v2beta2`), but these were removed from Kubernetes before v1.25. Only the stable API paths are exercised in CI.
+
+Kind validation uses a Kubernetes-compatible values profile that excludes non-standard resources (CRDs, OpenShift routes, etc.). Resources that depend on CRDs or platform-specific APIs are only validated as template rendering (no server-side check).
 
 ## Installing the Chart
 

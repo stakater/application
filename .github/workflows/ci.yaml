@@ -125,6 +125,7 @@ jobs:
           soft_fail: false
           file: ${{ env.CHART_PATH }}/Chart.yaml
           var_file: ${{ env.CHART_PATH }}/ci/values-kind.yaml
+          config_file: .checkov.yaml
 
   helm-docs:
     name: Helm docs

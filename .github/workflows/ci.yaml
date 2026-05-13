@@ -45,11 +45,11 @@ jobs:
       - uses: azure/setup-helm@dda3372f752e03dde6b3237bc9431cdc2f7a02a2 # v5
 
       - name: Install helm-unittest
-        # TODO: Remove --verify=false once helm-unittest publishes signed releases
-        # Tracking: https://github.com/helm-unittest/helm-unittest/issues/362
         env:
           # renovate: datasource=github-releases depName=helm-unittest/helm-unittest
           HELM_UNITTEST_VERSION: v1.1.0
+        # TODO: Remove --verify=false once helm-unittest publishes signed releases
+        # Tracking: https://github.com/helm-unittest/helm-unittest/issues/362
         run: helm plugin install --verify=false https://github.com/helm-unittest/helm-unittest.git --version "$HELM_UNITTEST_VERSION"
 
       - name: Run helm-unittest
@@ -64,7 +64,7 @@ jobs:
       matrix:
         values:
           - ""
-          - application/values-test.yaml
+          - application/ci/values-full.yaml
           - application/ci/values-kind.yaml
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
@@ -86,7 +86,7 @@ jobs:
                 "--set" "deployment.image.tag=1.25"
               )
               ;;
-            "application/values-test.yaml")
+            "application/ci/values-full.yaml")
               args+=("-f" "$VALUES_FILE")
               api_versions=(
                 "autoscaling.k8s.io/v1/VerticalPodAutoscaler"

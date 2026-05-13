@@ -4,7 +4,7 @@ templates:
   - '*.yaml'
 
 values:
-  - ../values-test.yaml
+  - ../ci/values-full.yaml
 
 capabilities:
   apiVersions:

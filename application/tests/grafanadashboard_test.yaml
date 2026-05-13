@@ -47,7 +47,7 @@ tests:
           of: GrafanaDashboard
       - equal:
           path: metadata.name
-          value: example-dashboard
+          value: RELEASE-NAME-example-dashboard
       - equal:
           path: spec.json.title
           value: "Example Dashboard"

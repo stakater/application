@@ -4,7 +4,7 @@
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
-  name: {{ $name }}
+  name: {{ printf "%s-%s" (include "application.name" $) $name | trunc 63 | trimSuffix "-" }}
   namespace: {{ template "application.namespace" $ }}
   labels:
     # this label is used as dashboard selector by grafana operator

@@ -57,6 +57,8 @@ tests:
   - it: should render valid resource names using default release name
     set:
       applicationName: ""
+    documentSelector:
+      <<: *x-documentSelector
     asserts:
       - matchRegex:
           path: metadata.name
@@ -67,6 +69,8 @@ tests:
       applicationName: ""
     release:
       name: myapp
+    documentSelector:
+      <<: *x-documentSelector
     asserts:
       - matchRegex:
           path: metadata.name
@@ -75,8 +79,11 @@ tests:
   - it: should render valid resource names when applicationName is set
     set:
       applicationName: myapp
+      extraObjects: []
     release:
       name: whatever
+    documentSelector:
+      <<: *x-documentSelector
     asserts:
       - matchRegex:
           path: metadata.name

@@ -17,7 +17,7 @@ metadata:
   annotations:
     {{- toYaml . | nindent 4 }}
 {{- end }}
-  name: {{ $name }}
+  name: {{ printf "%s-%s" (include "application.name" $) $name | trunc 63 | trimSuffix "-" }}
   namespace: {{ template "application.namespace" $ }}
 spec:
   schedule: {{ $job.schedule | quote }}

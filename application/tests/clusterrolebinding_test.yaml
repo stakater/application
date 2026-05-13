@@ -1,0 +1,180 @@
+suite: ClusterRoleBinding
+
+templates:
+  - clusterrolebinding.yaml
+
+tests:
+  - it: does not render when RBAC is not enabled
+    set:
+      rbac:
+        enabled: false
+        clusterRoles: []
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: does not render when no clusterRoles are defined
+    set:
+      rbac:
+        enabled: true
+        clusterRoles: []
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: does not render when clusterRoles is not set
+    set:
+      rbac:
+        enabled: true
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: renders a ClusterRoleBinding with minimal configuration
+    set:
+      applicationName: my-app
+      rbac:
+        enabled: true
+        serviceAccount:
+          name: ""
+        clusterRoles:
+          - name: example
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: ClusterRoleBinding
+      - equal:
+          path: metadata.name
+          value: my-app-crb-example
+      - equal:
+          path: roleRef.name
+          value: my-app-cr-example
+      - equal:
+          path: roleRef.kind
+          value: ClusterRole
+      - equal:
+          path: roleRef.apiGroup
+          value: rbac.authorization.k8s.io
+
+  - it: does not have a namespace field
+    set:
+      applicationName: my-app
+      rbac:
+        enabled: true
+        serviceAccount:
+          name: ""
+        clusterRoles:
+          - name: example
+    asserts:
+      - notExists:
+          path: metadata.namespace
+
+  - it: includes additional labels when defined
+    set:
+      applicationName: my-app
+      rbac:
+        enabled: true
+        serviceAccount:
+          name: ""
+        clusterRoles:
+          - name: example
+        additionalLabels:
+          foo: bar
+          test: ing
+    asserts:
+      - equal:
+          path: metadata.labels.foo
+          value: bar
+      - equal:
+          path: metadata.labels.test
+          value: ing
+
+  - it: includes annotations when defined
+    set:
+      applicationName: my-app
+      rbac:
+        enabled: true
+        serviceAccount:
+          name: ""
+        clusterRoles:
+          - name: example
+        annotations:
+          custom: annotation
+    asserts:
+      - equal:
+          path: metadata.annotations.custom
+          value: annotation
+
+  - it: does not include annotations if none are defined
+    set:
+      applicationName: my-app
+      rbac:
+        enabled: true
+        serviceAccount:
+          name: ""
+        clusterRoles:
+          - name: example
+        annotations: {}
+    asserts:
+      - notExists:
+          path: metadata.annotations
+
+  - it: uses specified service account name when provided
+    set:
+      applicationName: my-app
+      rbac:
+        enabled: true
+        clusterRoles:
+          - name: example
+        serviceAccount:
+          name: custom-sa
+    asserts:
+      - equal:
+          path: subjects[0].name
+          value: custom-sa
+
+  - it: uses generated service account name when not provided
+    set:
+      applicationName: my-app
+      rbac:
+        enabled: true
+        clusterRoles:
+          - name: example
+        serviceAccount:
+          create: true
+          name: ""
+    asserts:
+      - equal:
+          path: subjects[0].name
+          value: my-app
+
+  - it: includes subject namespace from release
+    set:
+      applicationName: my-app
+      rbac:
+        enabled: true
+        serviceAccount:
+          name: ""
+        clusterRoles:
+          - name: example
+    release:
+      namespace: test-namespace
+    asserts:
+      - equal:
+          path: subjects[0].namespace
+          value: test-namespace
+
+  - it: renders multiple ClusterRoleBindings when multiple clusterRoles are defined
+    set:
+      applicationName: my-app
+      rbac:
+        enabled: true
+        serviceAccount:
+          name: ""
+        clusterRoles:
+          - name: role1
+          - name: role2
+    asserts:
+      - hasDocuments:
+          count: 2

@@ -1,4 +1,5 @@
 applicationName: application
+chartVersionOverride: 0.0.0
 
 additionalLabels:
   group: com.stakater.platform

@@ -32,10 +32,18 @@ Usage:
 {{- end -}}
 
 {{/*
+Resolve chart version, allowing override for stable snapshot testing.
+See: https://github.com/helm-unittest/helm-unittest/issues/197
+*/}}
+{{- define "application.chartVersion" -}}
+{{- .Values.chartVersionOverride | default .Chart.Version -}}
+{{- end -}}
+
+{{/*
 Create chart name and version as used by the chart label.
 */}}
 {{- define "application.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-%s" .Chart.Name (include "application.chartVersion" .) | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*

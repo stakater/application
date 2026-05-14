@@ -15,6 +15,11 @@ partOfOverride: ""
 # @section -- Parameters
 applicationName: ""
 
+# -- (string) Override chart version used in helm.sh/chart label. Useful for stable snapshot testing.
+# @default -- `{{ .Chart.Version }}`
+# @ignore
+chartVersionOverride: ""
+
 # -- (object) Additional labels for all resources. Keys and values are evaluated as templates.
 # @section -- Parameters
 additionalLabels:

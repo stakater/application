@@ -629,6 +629,15 @@
       "title": "certificate",
       "type": "object"
     },
+    "chartVersionOverride": {
+      "default": "`{{ .Chart.Version }}`",
+      "description": "Override chart version used in helm.sh/chart label. Useful for stable snapshot testing. @ignore",
+      "title": "chartVersionOverride",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "componentOverride": {
       "default": "",
       "description": "Override the component label for all resources.",

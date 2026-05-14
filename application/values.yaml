@@ -1321,10 +1321,10 @@ pdb:
   # -- (bool) Enable Pod Disruption Budget.
   # @section -- PodDisruptionBudget Parameters
   enabled: false
-  # -- (int) Minimum number of pods that must be available after eviction.
+  # -- (int) Minimum number of pods that must be available after eviction. Accepts both integers and percentage strings (e.g. "25%").
   # @section -- PodDisruptionBudget Parameters
   minAvailable: 1
-  # -- (int) Maximum number of unavailable pods during voluntary disruptions.
+  # -- (int) Maximum number of unavailable pods during voluntary disruptions. Accepts both integers and percentage strings (e.g. "25%").
   # @section -- PodDisruptionBudget Parameters
   maxUnavailable:
   # maxUnavailable: 1

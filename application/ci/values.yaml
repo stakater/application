@@ -172,7 +172,7 @@ deployment:
     enabled: false
   additionalContainers:
     - name: sidecar-container
-      image: busybox:1.37@sha256:1487d0af5f52b4ba31c7e465126ee2123fe3f2305d638e7827681e7cf6c83d5e
+      image: repository/image:image-tag
       imagePullPolicy: IfNotPresent
       command: ["/bin/sh", "-c", "sleep 3600"]
       securityContext:
@@ -408,8 +408,8 @@ cronJob:
       imagePullSecrets:
         - name: nexus-secret
       image:
-        repository: docker.io/nginx
-        tag: 1.31.0@sha256:772053fe58eaa882734db7ad8d2327e982374ab3d17f302453cd850d975aba38
+        repository: repository/image
+        tag: image-tag
       env:
         KEY:
           value: VALUE

@@ -1963,18 +1963,23 @@
         },
         "maxUnavailable": {
           "default": "",
-          "description": "Maximum number of unavailable pods during voluntary disruptions.",
+          "description": "Maximum number of unavailable pods during voluntary disruptions. Accepts both integers and percentage strings (e.g. \"25%\").",
           "title": "maxUnavailable",
           "type": [
             "integer",
+            "string",
             "null"
           ]
         },
         "minAvailable": {
           "default": 1,
-          "description": "Minimum number of pods that must be available after eviction.",
+          "description": "Minimum number of pods that must be available after eviction. Accepts both integers and percentage strings (e.g. \"25%\").",
           "title": "minAvailable",
-          "type": "integer"
+          "type": [
+            "integer",
+            "string",
+            "null"
+          ]
         }
       },
       "required": [],
@@ -2562,7 +2567,8 @@
                     "title": "targetPort",
                     "type": [
                       "integer",
-                      "string"
+                      "string",
+                      "null"
                     ]
                   }
                 },

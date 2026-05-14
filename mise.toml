@@ -40,7 +40,7 @@ tmp="$(mktemp)"
 # helm-schema infers types too strictly from defaults:
 # - optional string fields need "null" added
 # - httpRoute port is templated then casted to int so it accepts both int and string
-# - service targetPort is IntOrString in Kubernetes
+# - service targetPort and pdb min/maxUnavailable are IntOrString in Kubernetes
 # - extraObjects can be list or object
 jq '
   walk(
@@ -51,7 +51,9 @@ jq '
     end
   )
   | .properties.httpRoute.properties.rules.items.anyOf[].properties.backendRefs.items.anyOf[].properties.port.type = ["integer", "string", "null"]
-  | .properties.service.properties.ports.items.anyOf[].properties.targetPort.type = ["integer", "string"]
+  | .properties.service.properties.ports.items.anyOf[].properties.targetPort.type = ["integer", "string", "null"]
+  | .properties.pdb.properties.minAvailable.type = ["integer", "string", "null"]
+  | .properties.pdb.properties.maxUnavailable.type = ["integer", "string", "null"]
   | .properties.extraObjects.type = ["object", "array", "null"]
 ' \\
   application/values.schema.json > "$tmp"

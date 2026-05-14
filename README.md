@@ -410,8 +410,8 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | pdb.enabled | bool | `false` | Enable Pod Disruption Budget. |
-| pdb.minAvailable | int | `1` | Minimum number of pods that must be available after eviction. |
-| pdb.maxUnavailable | int | `nil` | Maximum number of unavailable pods during voluntary disruptions. |
+| pdb.minAvailable | int | `1` | Minimum number of pods that must be available after eviction. Accepts both integers and percentage strings (e.g. "25%"). |
+| pdb.maxUnavailable | int | `nil` | Maximum number of unavailable pods during voluntary disruptions. Accepts both integers and percentage strings (e.g. "25%"). |
 
 ### GrafanaDashboard Parameters
 

@@ -56,8 +56,8 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | componentOverride | string | `""` | Override the component label for all resources. |
 | partOfOverride | string | `""` | Override the partOf label for all resources. |
 | applicationName | string | `{{ .Release.Name }}` | Application name. Used as a prefix for all resource names. |
-| additionalLabels | tpl/object | `nil` | Additional labels for all resources. |
-| extraObjects | [list or object] of [tpl/object or tpl/string] | `nil` | Extra K8s manifests to deploy. Can be of type list or object. If object, keys are ignored and only values are used. The used values can be defined as object or string and are passed through tpl to render. |
+| additionalLabels | object | `nil` | Additional labels for all resources. Keys and values are evaluated as templates. |
+| extraObjects | list | `nil` | Extra K8s manifests to deploy. Can be of type list or object. If object, keys are ignored and only values are used. The used values can be defined as object or string and are evaluated as templates. |
 
 ### CronJob Parameters
 
@@ -100,9 +100,9 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | deployment.affinity | object | `nil` | Affinity for the pods. |
 | deployment.topologySpreadConstraints | list | `nil` | Topology spread constraints for the pods. |
 | deployment.revisionHistoryLimit | int | `2` | Number of ReplicaSet revisions to retain. |
-| deployment.image.repository | tpl/string | `""` | Repository. |
-| deployment.image.tag | tpl/string | `""` | Tag. |
-| deployment.image.digest | tpl/string | `""` | Image digest. If resolved to a non-empty value, digest takes precedence on the tag. |
+| deployment.image.repository | tpl | `""` | Repository. |
+| deployment.image.tag | tpl | `""` | Tag. |
+| deployment.image.digest | tpl | `""` | Image digest. If resolved to a non-empty value, digest takes precedence on the tag. |
 | deployment.image.pullPolicy | string | `"IfNotPresent"` | Image pull policy. |
 | deployment.dnsConfig | object | `nil` | DNS config for the pods. |
 | deployment.dnsPolicy | string | `""` | DNS Policy. |
@@ -184,7 +184,7 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 |-----|------|---------|-------------|
 | ingress.enabled | bool | `false` | Enable Ingress. |
 | ingress.ingressClassName | string | `""` | Name of the ingress class. |
-| ingress.hosts[0].host | tpl/string | `"chart-example.local"` | Hostname. |
+| ingress.hosts[0].host | tpl | `"chart-example.local"` | Hostname. |
 | ingress.hosts[0].paths[0].path | string | `"/"` | Path. |
 | ingress.hosts[0].paths[0].pathType | string | `ImplementationSpecific` | Path type. |
 | ingress.hosts[0].paths[0].serviceName | string | `{{ include "application.name" $ }}` | Service name. |
@@ -198,13 +198,13 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | httpRoute.enabled | bool | `false` | Enable HTTPRoute (Gateway API). |
-| httpRoute.parentRefs | tpl/list | `nil` | Parent references for the HTTPRoute. |
+| httpRoute.parentRefs | list | `nil` | Parent references for the HTTPRoute. Keys and values are evaluated as templates. |
 | httpRoute.useDefaultGateways | string | `nil` | The default Gateway scope to use for this Route. If unset (the default) or set to None, the Route will not be attached to any default Gateway; if set, it will be attached to any default Gateway supporting the named scope, subject to the usual rules about which Routes a Gateway is allowed to claim. |
 | httpRoute.gatewayNamespace | string | `""` | Namespace of the Gateway to attach this HTTPRoute to. If not set, the HTTPRoute will be attached to the Gateway in the same namespace as the HTTPRoute. |
-| httpRoute.hostnames | tpl/list | `nil` | Hostnames for the HTTPRoute. |
+| httpRoute.hostnames | list | `nil` | Hostnames for the HTTPRoute. Values are evaluated as templates. |
 | httpRoute.additionalLabels | object | `{}` | Additional labels for HTTPRoute. |
 | httpRoute.annotations | object | `{}` | Annotations for HTTPRoute. |
-| httpRoute.rules | tpl/list | `[{"backendRefs":[{"name":"{{ include \"application.name\" $ }}","port":"{{ (first $.Values.service.ports).port }}"}],"matches":[{"path":{"type":"PathPrefix","value":"/"}}]}]` | Rules for HTTPRoute. |
+| httpRoute.rules | list | `[{"backendRefs":[{"name":"{{ include \"application.name\" $ }}","port":"{{ (first $.Values.service.ports).port }}"}],"matches":[{"path":{"type":"PathPrefix","value":"/"}}]}]` | Rules for HTTPRoute. Keys and values are evaluated as templates. |
 
 ### Route Parameters
 
@@ -220,7 +220,7 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | route.wildcardPolicy | string | `"None"` | Wildcard policy. |
 | route.tls.termination | string | `"edge"` | TLS termination strategy. |
 | route.tls.insecureEdgeTerminationPolicy | string | `"Redirect"` | TLS insecure termination policy. |
-| route.alternateBackends | list | `nil` | Alternate backend with it's weight. |
+| route.alternateBackends | object | `nil` | Alternate backend with it's weight. |
 
 ### SecretProviderClass Parameters
 
@@ -230,8 +230,8 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | secretProviderClass.name | string | `""` | Name of the SecretProviderClass. Required if `secretProviderClass.enabled` is set to `true`. |
 | secretProviderClass.provider | string | `""` | Name of the provider. Required if `secretProviderClass.enabled` is set to `true`. |
 | secretProviderClass.vaultAddress | string | `""` | Vault Address. Required if `secretProviderClass.provider` is set to `vault`. |
-| secretProviderClass.roleName | tpl/string | `""` | Vault Role Name. Required if `secretProviderClass.provider` is set to `vault`. |
-| secretProviderClass.objects | list | `nil` | Objects definitions. |
+| secretProviderClass.roleName | tpl | `""` | Vault Role Name. Required if `secretProviderClass.provider` is set to `vault`. |
+| secretProviderClass.objects | string | `nil` | Objects definitions. |
 | secretProviderClass.secretObjects | list | `nil` | Objects mapping. |
 
 ### ForecastleApp Parameters
@@ -332,17 +332,17 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | certificate.enabled | bool | `false` | Deploy a [cert-manager Certificate](https://cert-manager.io) resource. |
 | certificate.additionalLabels | object | `nil` | Additional labels for Certificate. |
 | certificate.annotations | object | `nil` | Annotations for Certificate. |
-| certificate.secretName | tpl/string | `"tls-cert"` | Name of the secret resource that will be automatically created and managed by this Certificate resource. |
+| certificate.secretName | tpl | `"tls-cert"` | Name of the secret resource that will be automatically created and managed by this Certificate resource. |
 | certificate.duration | string | `"8760h0m0s"` | The requested "duration" (i.e. lifetime) of the Certificate. |
 | certificate.renewBefore | string | `"720h0m0s"` | The amount of time before the currently issued certificate's notAfter time that cert-manager will begin to attempt to renew the certificate. |
-| certificate.subject | tpl/object | `nil` | Full X509 name specification for certificate. |
-| certificate.commonName | tpl/string | `nil` | Common name as specified on the DER encoded CSR. This field is not recommended in cases when this certificate is an end-entity certificate. More information can be found in the [cert-manager documentation](https://cert-manager.io/docs/usage/certificate/#:~:text=%23%20Avoid%20using%20commonName,%3A%20example.com). |
+| certificate.subject | object | `nil` | Full X509 name specification for certificate. Keys and values are evaluated as templates. |
+| certificate.commonName | tpl | `nil` | Common name as specified on the DER encoded CSR. This field is not recommended in cases when this certificate is an end-entity certificate. More information can be found in the [cert-manager documentation](https://cert-manager.io/docs/usage/certificate/#:~:text=%23%20Avoid%20using%20commonName,%3A%20example.com). |
 | certificate.keyAlgorithm | string | `"RSA"` | Private key algorithm of the corresponding private key for this certificate. |
 | certificate.keyEncoding | string | `"PKCS1"` | Private key cryptography standards (PKCS) for this certificate's private key to be encoded in. |
 | certificate.keySize | int | `2048` | Key bit size of the corresponding private key for this certificate. |
 | certificate.isCA | bool | `false` | Mark this Certificate as valid for certificate signing. |
 | certificate.usages | list | `nil` | Set of x509 usages that are requested for the certificate. |
-| certificate.dnsNames | tpl/list | `nil` | List of DNS subjectAltNames to be set on the certificate. |
+| certificate.dnsNames | list | `nil` | List of DNS subjectAltNames to be set on the certificate. Keys and values are evaluated as templates. |
 | certificate.ipAddresses | list | `nil` | List of IP address subjectAltNames to be set on the certificate. |
 | certificate.uriSANs | list | `nil` | List of URI subjectAltNames to be set on the certificate. |
 | certificate.emailSANs | list | `nil` | List of email subjectAltNames to be set on the Certificate. |
@@ -356,7 +356,7 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | certificate.keystores.pkcs12.key | string | `"test_key"` | Key of the entry in the Secret resource's data field to be used. |
 | certificate.keystores.pkcs12.name | string | `"test-creds"` | Name of the Secret resource being referred to. |
 | certificate.keystores.jks.create | bool | `false` | Enables jks keystore creation for the Certificate. JKS configures options for storing a JKS keystore in the spec.secretName Secret resource. |
-| certificate.keystores.jks.key | tpl/string | `"test_key"` | Key of the entry in the Secret resource's data field to be used. |
+| certificate.keystores.jks.key | tpl | `"test_key"` | Key of the entry in the Secret resource's data field to be used. |
 | certificate.keystores.jks.name | string | `"test-creds"` | Name of the Secret resource being referred to. |
 
 ### AlertmanagerConfig Parameters
@@ -430,7 +430,7 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | backup.snapshotVolumes | bool | `true` | Whether to take snapshots of persistent volumes as part of the backup. |
 | backup.storageLocation | string | `nil` | Name of the backup storage location where the backup should be stored. |
 | backup.ttl | string | `"1h0m0s"` | How long the Backup should be retained for. |
-| backup.includedNamespaces | tpl/list | `[ {{ include "application.namespace" $ }} ]` | List of namespaces to include objects from. |
+| backup.includedNamespaces | list | `[ {{ include "application.namespace" $ }} ]` | List of namespaces to include objects from. Keys and values are evaluated as templates. |
 | backup.includedResources | list | `nil` | List of resource types to include in the backup. |
 | backup.excludedResources | list | `nil` | List of resource types to exclude from the backup. |
 

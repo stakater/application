@@ -249,6 +249,10 @@ service:
       name: http
       protocol: TCP
       targetPort: 8080
+    - port: 9787
+      name: metrics
+      protocol: TCP
+      targetPort: metrics
   type: ClusterIP
 
 ingress:

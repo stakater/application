@@ -1,6 +1,6 @@
 [tools]
 prek = "0.3.13"
-helm = "4.1.4"
+helm = "4.2.0"
 helm-docs = "1.14.2"
 "ubi:helm-unittest/helm-unittest" = { version = "1.1.0", exe = "untt", rename_exe = "helm-unittest" }
 

@@ -12,20 +12,31 @@ run = "./hack/set-version.sh"
 description = "Install Git pre-commit hooks"
 run = "prek install --install-hooks"
 
-[tasks.build-docs]
-description = "Build the documentation"
+[tasks.gen-helm-docs]
+alias = "gen-docs"
+description = "Generate the Helm documentation"
 run = """
-# Keep args in sync with /.github/workflows/ci.yaml
+# Keep args in sync with /.github/workflows/ci.yaml and /.pre-commit-config.yaml
 helm-docs \\
   --output-file=./../README.md \\
   --template-files=./README.md.gotmpl \\
   --sort-values-order=file
 """
 
+[tasks.generate]
+alias = "gen"
+description = "Generate all files"
+depends = ["gen-docs"]
+
 [tasks.helm-lint]
 description = "Lint the Helm chart"
 run = "helm lint application"
 
+[tasks.lint]
+description = "Lint the Helm chart"
+depends = ["helm-lint"]
+
 [tasks.unit-test]
+alias = "test"
 description = "Run Helm unit tests"
 run = "helm-unittest application"

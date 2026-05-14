@@ -2560,7 +2560,10 @@
                   "targetPort": {
                     "default": 8080,
                     "title": "targetPort",
-                    "type": "integer"
+                    "type": [
+                      "integer",
+                      "string"
+                    ]
                   }
                 },
                 "required": [],

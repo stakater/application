@@ -4,7 +4,7 @@ templates:
   - deployment.yaml
 
 set:
-  deployment.image.repository: example-image
+  deployment.image.repository: registry/example-image
   deployment.image.tag: example-tag
 
 tests:
@@ -30,13 +30,13 @@ tests:
 
   - it: does not fail to render when image tag and digest are not given
     set:
-      deployment.image.repository: example-image
+      deployment.image.repository: registry/example-image
       deployment.image.tag: ""
       deployment.image.digest: ""
     asserts:
       - equal:
           path: spec.template.spec.containers[0].image
-          value: example-image
+          value: registry/example-image
 
   - it: fails to render when image repository is not present
     set:
@@ -47,13 +47,13 @@ tests:
 
   - it: uses image tag when given
     set:
-      deployment.image.repository: example-image
+      deployment.image.repository: registry/example-image
       deployment.image.tag: example-tag
       deployment.image.digest: ""
     asserts:
       - equal:
           path: spec.template.spec.containers[0].image
-          value: example-image:example-tag
+          value: registry/example-image:example-tag
       - equal:
           path: metadata.labels["app.kubernetes.io/version"]
           value: example-tag
@@ -68,34 +68,34 @@ tests:
 
   - it: uses image digest when given
     set:
-      deployment.image.repository: example-image
+      deployment.image.repository: registry/example-image
       deployment.image.tag: ""
       deployment.image.digest: sha256:example-digest
     asserts:
       - equal:
           path: spec.template.spec.containers[0].image
-          value: example-image@sha256:example-digest
+          value: registry/example-image@sha256:example-digest
       - isNull:
           path: metadata.labels["app.kubernetes.io/version"]
 
   - it: uses both image digest and tag when given both
     set:
-      deployment.image.repository: example-image
+      deployment.image.repository: registry/example-image
       deployment.image.tag: example-tag
       deployment.image.digest: sha256:example-digest
     asserts:
       - equal:
           path: spec.template.spec.containers[0].image
-          value: example-image:example-tag@sha256:example-digest
+          value: registry/example-image:example-tag@sha256:example-digest
 
   - it: does not render @null when digest field is omitted
     set:
-      deployment.image.repository: example-image
+      deployment.image.repository: registry/example-image
       deployment.image.tag: example-tag
     asserts:
       - equal:
           path: spec.template.spec.containers[0].image
-          value: example-image:example-tag
+          value: registry/example-image:example-tag
       - notMatchRegex:
           path: spec.template.spec.containers[0].image
           pattern: "@null"

@@ -11,13 +11,13 @@ tests:
         jobs:
           example:
             image:
-              repository: example-image
+              repository: registry/example-image
               tag: ""
               digest: ""
     asserts:
       - equal:
           path: spec.jobTemplate.spec.template.spec.containers[0].image
-          value: example-image
+          value: registry/example-image
 
   - it: fails rendering when job image repository is not given
     set:
@@ -40,13 +40,13 @@ tests:
         jobs:
           example:
             image:
-              repository: example-image
+              repository: registry/example-image
               tag: example-tag
               digest: ""
     asserts:
       - equal:
           path: spec.jobTemplate.spec.template.spec.containers[0].image
-          value: example-image:example-tag
+          value: registry/example-image:example-tag
 
   - it: uses digest when defined
     set:
@@ -55,13 +55,13 @@ tests:
         jobs:
           example:
             image:
-              repository: example-image
+              repository: registry/example-image
               tag: ""
               digest: sha256:example-digest
     asserts:
       - equal:
           path: spec.jobTemplate.spec.template.spec.containers[0].image
-          value: example-image@sha256:example-digest
+          value: registry/example-image@sha256:example-digest
 
   - it: uses both tag and digest when given both
     set:
@@ -70,13 +70,13 @@ tests:
         jobs:
           example:
             image:
-              repository: example-image
+              repository: registry/example-image
               tag: example-tag
               digest: sha256:example-digest
     asserts:
       - equal:
           path: spec.jobTemplate.spec.template.spec.containers[0].image
-          value: example-image:example-tag@sha256:example-digest
+          value: registry/example-image:example-tag@sha256:example-digest
 
   - it: applies the annotations correctly to the cronjob
     set:
@@ -85,7 +85,7 @@ tests:
         jobs:
           example:
             image:
-              repository: example-image
+              repository: registry/example-image
               tag: example-tag
               digest: sha256:example-digest
             annotations:
@@ -105,7 +105,7 @@ tests:
         jobs:
           example:
             image:
-              repository: example-image
+              repository: registry/example-image
               tag: example-tag
               digest: sha256:example-digest
             additionalPodAnnotations:
@@ -123,7 +123,7 @@ tests:
         jobs:
           example:
             image:
-              repository: example-image
+              repository: registry/example-image
               tag: example-tag
             activeDeadlineSeconds: 0
     asserts:
@@ -140,7 +140,7 @@ tests:
         jobs:
           example:
             image:
-              repository: example-image
+              repository: registry/example-image
               tag: example-tag
             startingDeadlineSeconds: 0
     asserts:
@@ -157,7 +157,7 @@ tests:
         jobs:
           example:
             image:
-              repository: example-image
+              repository: registry/example-image
               tag: example-tag
             activeDeadlineSeconds: 0
             startingDeadlineSeconds: 0
@@ -180,7 +180,7 @@ tests:
         jobs:
           example:
             image:
-              repository: example-image
+              repository: registry/example-image
               tag: example-tag
             activeDeadlineSeconds: 300
     asserts:
@@ -197,7 +197,7 @@ tests:
         jobs:
           example:
             image:
-              repository: example-image
+              repository: registry/example-image
               tag: example-tag
             initContainers:
               example1:
@@ -231,7 +231,7 @@ tests:
         jobs:
           example:
             image:
-              repository: example-image
+              repository: registry/example-image
               tag: example-tag
       applicationName: my-app
     asserts:
@@ -246,7 +246,7 @@ tests:
         jobs:
           example:
             image:
-              repository: example-image
+              repository: registry/example-image
               tag: example-tag
       applicationName: my-app
     asserts:
@@ -337,12 +337,12 @@ tests:
         jobs:
           example:
             image:
-              repository: example-image
+              repository: registry/example-image
               tag: example-tag
     asserts:
       - equal:
           path: spec.jobTemplate.spec.template.spec.containers[0].image
-          value: example-image:example-tag
+          value: registry/example-image:example-tag
       - notMatchRegex:
           path: spec.jobTemplate.spec.template.spec.containers[0].image
           pattern: "@null"
@@ -355,7 +355,7 @@ tests:
           example:
             schedule: "0 * * * *"
             image:
-              repository: example-image
+              repository: registry/example-image
               tag: example-tag
       rbac.serviceAccount.create: false
     asserts:
@@ -371,7 +371,7 @@ tests:
           example:
             schedule: "0 * * * *"
             image:
-              repository: example-image
+              repository: registry/example-image
               tag: example-tag
       rbac.serviceAccount.create: true
       rbac.serviceAccount.name: example-sa
@@ -389,7 +389,7 @@ tests:
           example:
             schedule: "0 * * * *"
             image:
-              repository: example-image
+              repository: registry/example-image
               tag: example-tag
       rbac.serviceAccount.create: true
       rbac.serviceAccount.name: ""
@@ -405,7 +405,7 @@ tests:
         jobs:
           example:
             image:
-              repository: example-image
+              repository: registry/example-image
               tag: example-tag
     asserts:
       - notExists:
@@ -424,7 +424,7 @@ tests:
                 drop:
                   - ALL
             image:
-              repository: example-image
+              repository: registry/example-image
               tag: example-tag
     asserts:
       - equal:
@@ -443,7 +443,7 @@ tests:
         jobs:
           example:
             image:
-              repository: example-image
+              repository: registry/example-image
               tag: example-tag
     asserts:
       - equal:
@@ -458,7 +458,7 @@ tests:
           example:
             automountServiceAccountToken: true
             image:
-              repository: example-image
+              repository: registry/example-image
               tag: example-tag
     asserts:
       - equal:
@@ -472,7 +472,7 @@ tests:
         jobs:
           example:
             image:
-              repository: example-image
+              repository: registry/example-image
               tag: example-tag
     asserts:
       - notExists:
@@ -485,7 +485,7 @@ tests:
         jobs:
           example:
             image:
-              repository: example-image
+              repository: registry/example-image
               tag: example-tag
             securityContext:
               fsGroup: 20000
@@ -506,7 +506,7 @@ tests:
         jobs:
           example:
             image:
-              repository: example-image
+              repository: registry/example-image
               tag: example-tag
     asserts:
       - notExists:
@@ -520,7 +520,7 @@ tests:
           example:
             enableServiceLinks: true
             image:
-              repository: example-image
+              repository: registry/example-image
               tag: example-tag
     asserts:
       - equal:
@@ -535,7 +535,7 @@ tests:
           example:
             enableServiceLinks: false
             image:
-              repository: example-image
+              repository: registry/example-image
               tag: example-tag
     asserts:
       - equal:
@@ -550,7 +550,7 @@ tests:
           example:
             schedule: "0 * * * *"
             image:
-              repository: example-image
+              repository: registry/example-image
               tag: example-tag
             envFrom:
               chart-secret:
@@ -573,7 +573,7 @@ tests:
           example:
             schedule: "0 * * * *"
             image:
-              repository: example-image
+              repository: registry/example-image
               tag: example-tag
             envFrom:
               chart-configmap:
@@ -596,7 +596,7 @@ tests:
           example:
             schedule: "0 * * * *"
             image:
-              repository: example-image
+              repository: registry/example-image
               tag: example-tag
             envFrom:
               external-secret:
@@ -618,7 +618,7 @@ tests:
           example:
             schedule: "0 * * * *"
             image:
-              repository: example-image
+              repository: registry/example-image
               tag: example-tag
             envFrom:
               external-configmap:
@@ -640,7 +640,7 @@ tests:
           example:
             schedule: "0 * * * *"
             image:
-              repository: example-image
+              repository: registry/example-image
               tag: example-tag
             envFrom:
               optional-secret:

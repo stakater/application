@@ -2,7 +2,7 @@ apiVersion: v2
 name: application
 description: Generic Helm chart for deploying stateless applications on Kubernetes
 type: application
-version: 8.1.0
+version: 8.1.1
 keywords:
   - application
   - chart

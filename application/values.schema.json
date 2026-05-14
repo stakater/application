@@ -1,0 +1,2713 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "additionalLabels": {
+      "default": "",
+      "description": "Additional labels for all resources. Keys and values are evaluated as templates.",
+      "required": [],
+      "title": "additionalLabels",
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "alertmanagerConfig": {
+      "properties": {
+        "enabled": {
+          "default": false,
+          "description": "Deploy an AlertmanagerConfig (Prometheus Operator) resource.",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "selectionLabels": {
+          "description": "Labels to be picked up by Alertmanager to add it to base config. Read more about it at [https://docs.openshift.com/container-platform/4.7/rest_api/monitoring_apis/alertmanager-monitoring-coreos-com-v1.html](OpenShift's AlermanagerConfig documentation) under .spec.alertmanagerConfigSelector.",
+          "properties": {
+            "alertmanagerConfig": {
+              "default": "workload",
+              "title": "alertmanagerConfig",
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [],
+          "title": "selectionLabels",
+          "type": "object"
+        },
+        "spec": {
+          "description": "AlertmanagerConfig spec. Read more about it at [https://docs.openshift.com/container-platform/4.7/rest_api/monitoring_apis/alertmanagerconfig-monitoring-coreos-com-v1alpha1.html](OpenShift's AlermanagerConfig documentation).",
+          "properties": {
+            "inhibitRules": {
+              "description": "Inhibition rules that allows to mute alerts when other alerts are already firing.",
+              "items": {
+                "required": []
+              },
+              "title": "inhibitRules",
+              "type": "array"
+            },
+            "receivers": {
+              "description": "List of receivers.",
+              "items": {
+                "required": []
+              },
+              "title": "receivers",
+              "type": "array"
+            },
+            "route": {
+              "default": "",
+              "description": "Route definition for alerts matching the resource’s namespace. It will be added to the generated Alertmanager configuration as a first-level route.",
+              "required": [],
+              "title": "route",
+              "type": [
+                "object",
+                "null"
+              ]
+            }
+          },
+          "required": [],
+          "title": "spec",
+          "type": "object"
+        }
+      },
+      "required": [],
+      "title": "alertmanagerConfig",
+      "type": "object"
+    },
+    "applicationName": {
+      "default": "`{{ .Release.Name }}`",
+      "description": "Application name. Used as a prefix for all resource names.",
+      "title": "applicationName",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "autoscaling": {
+      "properties": {
+        "additionalLabels": {
+          "default": "",
+          "description": "Additional labels for HPA.",
+          "required": [],
+          "title": "additionalLabels",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "annotations": {
+          "default": "",
+          "description": "Annotations for HPA.",
+          "required": [],
+          "title": "annotations",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "enabled": {
+          "default": false,
+          "description": "Enable Horizontal Pod Autoscaling.",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "maxReplicas": {
+          "default": 10,
+          "description": "Maximum number of replicas.",
+          "title": "maxReplicas",
+          "type": "integer"
+        },
+        "metrics": {
+          "description": "Metrics used for autoscaling.",
+          "items": {
+            "anyOf": [
+              {
+                "properties": {
+                  "resource": {
+                    "properties": {
+                      "name": {
+                        "default": "cpu",
+                        "title": "name",
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "target": {
+                        "properties": {
+                          "averageUtilization": {
+                            "default": 60,
+                            "title": "averageUtilization",
+                            "type": "integer"
+                          },
+                          "type": {
+                            "default": "Utilization",
+                            "title": "type",
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          }
+                        },
+                        "required": [],
+                        "title": "target",
+                        "type": "object"
+                      }
+                    },
+                    "required": [],
+                    "title": "resource",
+                    "type": "object"
+                  },
+                  "type": {
+                    "default": "Resource",
+                    "title": "type",
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [],
+                "type": "object"
+              },
+              {
+                "properties": {
+                  "resource": {
+                    "properties": {
+                      "name": {
+                        "default": "memory",
+                        "title": "name",
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "target": {
+                        "properties": {
+                          "averageUtilization": {
+                            "default": 60,
+                            "title": "averageUtilization",
+                            "type": "integer"
+                          },
+                          "type": {
+                            "default": "Utilization",
+                            "title": "type",
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          }
+                        },
+                        "required": [],
+                        "title": "target",
+                        "type": "object"
+                      }
+                    },
+                    "required": [],
+                    "title": "resource",
+                    "type": "object"
+                  },
+                  "type": {
+                    "default": "Resource",
+                    "title": "type",
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [],
+                "type": "object"
+              }
+            ],
+            "required": []
+          },
+          "title": "metrics",
+          "type": "array"
+        },
+        "minReplicas": {
+          "default": 1,
+          "description": "Minimum number of replicas.",
+          "title": "minReplicas",
+          "type": "integer"
+        }
+      },
+      "required": [],
+      "title": "autoscaling",
+      "type": "object"
+    },
+    "backup": {
+      "properties": {
+        "additionalLabels": {
+          "default": "",
+          "description": "Additional labels for Backup.",
+          "required": [],
+          "title": "additionalLabels",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "annotations": {
+          "default": "",
+          "description": "Annotations for Backup.",
+          "required": [],
+          "title": "annotations",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "defaultVolumesToRestic": {
+          "default": true,
+          "description": "Whether to use Restic to take snapshots of all pod volumes by default.",
+          "title": "defaultVolumesToRestic",
+          "type": "boolean"
+        },
+        "enabled": {
+          "default": false,
+          "description": "Deploy a [Velero/OADP Backup](https://velero.io/docs/main/api-types/backup/) resource.",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "excludedResources": {
+          "default": "",
+          "description": "List of resource types to exclude from the backup.",
+          "title": "excludedResources",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "includedNamespaces": {
+          "default": "`[ {{ include \"application.namespace\" $ }} ]`",
+          "description": "List of namespaces to include objects from. Keys and values are evaluated as templates.",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              }
+            ],
+            "required": []
+          },
+          "title": "includedNamespaces",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "includedResources": {
+          "default": "",
+          "description": "List of resource types to include in the backup.",
+          "title": "includedResources",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "namespace": {
+          "default": "`{{ .Release.Namespace }}`",
+          "description": "Namespace for Backup.",
+          "title": "namespace",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "snapshotVolumes": {
+          "default": true,
+          "description": "Whether to take snapshots of persistent volumes as part of the backup.",
+          "title": "snapshotVolumes",
+          "type": "boolean"
+        },
+        "storageLocation": {
+          "default": "",
+          "description": "Name of the backup storage location where the backup should be stored.",
+          "title": "storageLocation",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ttl": {
+          "default": "1h0m0s",
+          "description": "How long the Backup should be retained for.",
+          "title": "ttl",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [],
+      "title": "backup",
+      "type": "object"
+    },
+    "certificate": {
+      "properties": {
+        "additionalLabels": {
+          "default": "",
+          "description": "Additional labels for Certificate.",
+          "required": [],
+          "title": "additionalLabels",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "annotations": {
+          "default": "",
+          "description": "Annotations for Certificate.",
+          "required": [],
+          "title": "annotations",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "commonName": {
+          "default": "",
+          "description": "Common name as specified on the DER encoded CSR. This field is not recommended in cases when this certificate is an end-entity certificate. More information can be found in the [cert-manager documentation](https://cert-manager.io/docs/usage/certificate/#:~:text=%23%20Avoid%20using%20commonName,%3A%20example.com).",
+          "title": "commonName",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "dnsNames": {
+          "default": "",
+          "description": "List of DNS subjectAltNames to be set on the certificate. Keys and values are evaluated as templates.",
+          "title": "dnsNames",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "duration": {
+          "default": "8760h0m0s",
+          "description": "The requested \"duration\" (i.e. lifetime) of the Certificate.",
+          "title": "duration",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "emailSANs": {
+          "default": "",
+          "description": "List of email subjectAltNames to be set on the Certificate.",
+          "title": "emailSANs",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "enabled": {
+          "default": false,
+          "description": "Deploy a [cert-manager Certificate](https://cert-manager.io) resource.",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "ipAddresses": {
+          "default": "",
+          "description": "List of IP address subjectAltNames to be set on the certificate.",
+          "title": "ipAddresses",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "isCA": {
+          "default": false,
+          "description": "Mark this Certificate as valid for certificate signing.",
+          "title": "isCA",
+          "type": "boolean"
+        },
+        "issuerRef": {
+          "properties": {
+            "group": {
+              "default": "cert-manager.io",
+              "description": "Group of the issuer resource being refered to.",
+              "title": "group",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "kind": {
+              "default": "ClusterIssuer",
+              "description": "Kind of the issuer being referred to.",
+              "title": "kind",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "name": {
+              "default": "ca-issuer",
+              "description": "Reference to the issuer for this certificate.",
+              "title": "name",
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [],
+          "title": "issuerRef",
+          "type": "object"
+        },
+        "keyAlgorithm": {
+          "default": "RSA",
+          "description": "Private key algorithm of the corresponding private key for this certificate.",
+          "title": "keyAlgorithm",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "keyEncoding": {
+          "default": "PKCS1",
+          "description": "Private key cryptography standards (PKCS) for this certificate's private key to be encoded in.",
+          "title": "keyEncoding",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "keySize": {
+          "default": 2048,
+          "description": "Key bit size of the corresponding private key for this certificate.",
+          "title": "keySize",
+          "type": "integer"
+        },
+        "keystores": {
+          "properties": {
+            "enabled": {
+              "default": false,
+              "description": "Enables keystore configuration. Keystores configures additional keystore output formats stored in the spec.secretName Secret resource.",
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "jks": {
+              "properties": {
+                "create": {
+                  "default": false,
+                  "description": "Enables jks keystore creation for the Certificate. JKS configures options for storing a JKS keystore in the spec.secretName Secret resource.",
+                  "title": "create",
+                  "type": "boolean"
+                },
+                "key": {
+                  "default": "test_key",
+                  "description": "Key of the entry in the Secret resource's data field to be used.",
+                  "title": "key",
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "name": {
+                  "default": "test-creds",
+                  "description": "Name of the Secret resource being referred to.",
+                  "title": "name",
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [],
+              "title": "jks",
+              "type": "object"
+            },
+            "pkcs12": {
+              "properties": {
+                "create": {
+                  "default": true,
+                  "description": "Enables PKCS12 keystore creation for the Certificate. PKCS12 configures options for storing a PKCS12 keystore in the spec.secretName Secret resource.",
+                  "title": "create",
+                  "type": "boolean"
+                },
+                "key": {
+                  "default": "test_key",
+                  "description": "Key of the entry in the Secret resource's data field to be used.",
+                  "title": "key",
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "name": {
+                  "default": "test-creds",
+                  "description": "Name of the Secret resource being referred to.",
+                  "title": "name",
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [],
+              "title": "pkcs12",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "keystores",
+          "type": "object"
+        },
+        "privateKey": {
+          "description": " - foo",
+          "properties": {
+            "enabled": {
+              "default": false,
+              "description": "Enable Private Key for the certificate.",
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "rotationPolicy": {
+              "default": "Always",
+              "description": "Denotes how private keys should be generated or sourced when a certificate is being issued.",
+              "title": "rotationPolicy",
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [],
+          "title": "privateKey",
+          "type": "object"
+        },
+        "renewBefore": {
+          "default": "720h0m0s",
+          "description": "The amount of time before the currently issued certificate's notAfter time that cert-manager will begin to attempt to renew the certificate.",
+          "title": "renewBefore",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "secretName": {
+          "default": "tls-cert",
+          "description": "Name of the secret resource that will be automatically created and managed by this Certificate resource.",
+          "title": "secretName",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "subject": {
+          "default": "",
+          "description": "Full X509 name specification for certificate. Keys and values are evaluated as templates.",
+          "required": [],
+          "title": "subject",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "uriSANs": {
+          "default": "",
+          "description": "List of URI subjectAltNames to be set on the certificate.",
+          "title": "uriSANs",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "usages": {
+          "default": "",
+          "description": "Set of x509 usages that are requested for the certificate.",
+          "title": "usages",
+          "type": [
+            "array",
+            "null"
+          ]
+        }
+      },
+      "required": [],
+      "title": "certificate",
+      "type": "object"
+    },
+    "componentOverride": {
+      "default": "",
+      "description": "Override the component label for all resources.",
+      "title": "componentOverride",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "configMap": {
+      "properties": {
+        "additionalLabels": {
+          "default": "",
+          "description": "Additional labels for ConfigMaps.",
+          "required": [],
+          "title": "additionalLabels",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "annotations": {
+          "default": "",
+          "description": "Annotations for ConfigMaps.",
+          "required": [],
+          "title": "annotations",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "enabled": {
+          "default": false,
+          "description": "Deploy additional ConfigMaps.",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "files": {
+          "default": "",
+          "description": "List of ConfigMap entries. Key will be used as a name suffix for the ConfigMap. Value is the ConfigMap content.",
+          "required": [],
+          "title": "files",
+          "type": [
+            "object",
+            "null"
+          ]
+        }
+      },
+      "required": [],
+      "title": "configMap",
+      "type": "object"
+    },
+    "cronJob": {
+      "description": " example.com/team: team-name example.com/owner: owner-name",
+      "properties": {
+        "enabled": {
+          "default": false,
+          "description": "Deploy CronJob resources.",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "jobs": {
+          "default": "",
+          "description": "Map of CronJob resources. Key will be used as a name suffix for the CronJob. Value is the CronJob configuration. See values for more details.",
+          "required": [],
+          "title": "jobs",
+          "type": [
+            "object",
+            "null"
+          ]
+        }
+      },
+      "required": [],
+      "title": "cronJob"
+    },
+    "deployment": {
+      "properties": {
+        "additionalContainers": {
+          "default": "",
+          "description": "Additional containers besides init and app containers (without templating).",
+          "title": "additionalContainers",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "additionalLabels": {
+          "default": "",
+          "description": "Additional labels for Deployment.",
+          "required": [],
+          "title": "additionalLabels",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "additionalPodAnnotations": {
+          "default": "",
+          "description": "Additional pod annotations.",
+          "required": [],
+          "title": "additionalPodAnnotations",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "affinity": {
+          "default": "",
+          "description": "Affinity for the pods.",
+          "required": [],
+          "title": "affinity",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "annotations": {
+          "default": "",
+          "description": "Annotations for Deployment.",
+          "required": [],
+          "title": "annotations",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "args": {
+          "description": "Args for the app container.",
+          "items": {
+            "required": []
+          },
+          "title": "args",
+          "type": "array"
+        },
+        "automountServiceAccountToken": {
+          "default": false,
+          "description": "Mount Service Account token.",
+          "title": "automountServiceAccountToken",
+          "type": "boolean"
+        },
+        "command": {
+          "description": "Command for the app container.",
+          "items": {
+            "required": []
+          },
+          "title": "command",
+          "type": "array"
+        },
+        "containerSecurityContext": {
+          "description": "Security Context at Container Level.",
+          "properties": {
+            "readOnlyRootFilesystem": {
+              "default": true,
+              "title": "readOnlyRootFilesystem",
+              "type": "boolean"
+            },
+            "runAsNonRoot": {
+              "default": true,
+              "title": "runAsNonRoot",
+              "type": "boolean"
+            }
+          },
+          "required": [],
+          "title": "containerSecurityContext",
+          "type": "object"
+        },
+        "dnsConfig": {
+          "default": "",
+          "description": "DNS config for the pods.",
+          "required": [],
+          "title": "dnsConfig",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "dnsPolicy": {
+          "default": "",
+          "description": "DNS Policy.",
+          "title": "dnsPolicy",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "enableServiceLinks": {
+          "default": true,
+          "description": "Enable Kubernetes service links.",
+          "title": "enableServiceLinks",
+          "type": "boolean"
+        },
+        "enabled": {
+          "default": true,
+          "description": "Enable Deployment.",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "env": {
+          "default": "",
+          "description": "Environment variables to be added to the pod. See the README \"Consuming environment variable in application chart\" section for more details.",
+          "required": [],
+          "title": "env",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "envFrom": {
+          "default": "",
+          "description": "Mount environment variables from ConfigMap or Secret to the pod. Use `nameSuffix` for resources managed by this chart (name will be prefixed with application name), or `name` to reference an existing external ConfigMap or Secret not managed by this chart. See the README \"Consuming environment variable in application chart\" section for more details.",
+          "required": [],
+          "title": "envFrom",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "fluentdConfigAnnotations": {
+          "default": "",
+          "description": "Configuration details for fluentdConfigurations. Only works for specific setup, see <https://medium.com/stakater/dynamic-log-processing-with-fluentd-konfigurator-and-slack-935a5de4eddb>.",
+          "required": [],
+          "title": "fluentdConfigAnnotations",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "hostAliases": {
+          "default": "",
+          "description": "Mapping between IP and hostnames that will be injected as entries in the pod's hosts files.",
+          "title": "hostAliases",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "hostNetwork": {
+          "default": "",
+          "description": "Host network connectivity.",
+          "title": "hostNetwork",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "image": {
+          "properties": {
+            "digest": {
+              "default": "",
+              "description": "Image digest. If resolved to a non-empty value, digest takes precedence on the tag.",
+              "title": "digest",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "pullPolicy": {
+              "default": "IfNotPresent",
+              "description": "Image pull policy.",
+              "title": "pullPolicy",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "repository": {
+              "default": "",
+              "description": "Repository.",
+              "title": "repository",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "tag": {
+              "default": "",
+              "description": "Tag.",
+              "title": "tag",
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [],
+          "title": "image",
+          "type": "object"
+        },
+        "imagePullSecrets": {
+          "description": "List of secrets to be used for pulling the images.",
+          "items": {
+            "required": []
+          },
+          "title": "imagePullSecrets",
+          "type": "array"
+        },
+        "initContainers": {
+          "default": "",
+          "description": "Add init containers to the pods.",
+          "required": [],
+          "title": "initContainers",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "lifecycle": {
+          "description": "Lifecycle configuration for the pod.",
+          "required": [],
+          "title": "lifecycle",
+          "type": "object"
+        },
+        "livenessProbe": {
+          "default": "See below",
+          "description": "Liveness probe. Must specify either one of the following field when enabled: httpGet, exec, tcpSocket, grpc",
+          "properties": {
+            "enabled": {
+              "default": false,
+              "description": "Enable Liveness probe.",
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "exec": {
+              "description": "Exec probe.",
+              "required": [],
+              "title": "exec",
+              "type": "object"
+            },
+            "failureThreshold": {
+              "default": 30,
+              "description": "Number of retries before marking the pod as failed.",
+              "title": "failureThreshold",
+              "type": "integer"
+            },
+            "grpc": {
+              "description": "gRPC probe.",
+              "required": [],
+              "title": "grpc",
+              "type": "object"
+            },
+            "httpGet": {
+              "description": "HTTP Get probe.",
+              "required": [],
+              "title": "httpGet",
+              "type": "object"
+            },
+            "periodSeconds": {
+              "default": 10,
+              "description": "Time between retries.",
+              "title": "periodSeconds",
+              "type": "integer"
+            },
+            "successThreshold": {
+              "default": 1,
+              "description": "Number of successful probes before marking the pod as ready.",
+              "title": "successThreshold",
+              "type": "integer"
+            },
+            "tcpSocket": {
+              "description": "TCP Socket probe.",
+              "required": [],
+              "title": "tcpSocket",
+              "type": "object"
+            },
+            "timeoutSeconds": {
+              "default": 1,
+              "description": "Time before the probe times out.",
+              "title": "timeoutSeconds",
+              "type": "integer"
+            }
+          },
+          "required": [],
+          "title": "livenessProbe",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "minReadySeconds": {
+          "default": "",
+          "description": "Minimum number of seconds for which a newly created Pod should be ready without any of its containers crashing.",
+          "title": "minReadySeconds",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "nodeSelector": {
+          "default": "",
+          "description": "Select the node where the pods should be scheduled.",
+          "required": [],
+          "title": "nodeSelector",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "openshiftOAuthProxy": {
+          "properties": {
+            "disableTLSArg": {
+              "default": false,
+              "description": "If disabled `--http-address=:8081` will be used instead of `--https-address=:8443`. It can be useful when an ingress is enabled for the application.",
+              "title": "disableTLSArg",
+              "type": "boolean"
+            },
+            "enabled": {
+              "default": false,
+              "description": "Enable [OpenShift OAuth Proxy](https://github.com/openshift/oauth-proxy).",
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "image": {
+              "default": "openshift/oauth-proxy:latest",
+              "description": "Image for the OAuth Proxy.",
+              "title": "image",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "port": {
+              "default": 8080,
+              "description": "Port on which application is running inside container.",
+              "title": "port",
+              "type": "integer"
+            },
+            "secretName": {
+              "default": "openshift-oauth-proxy-tls",
+              "description": "Secret name for the OAuth Proxy TLS certificate.",
+              "title": "secretName",
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [],
+          "title": "openshiftOAuthProxy",
+          "type": "object"
+        },
+        "podLabels": {
+          "default": "",
+          "description": "Additional pod labels which are used in Service's Label Selector.",
+          "required": [],
+          "title": "podLabels",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "ports": {
+          "default": "",
+          "description": "List of ports for the app container.",
+          "title": "ports",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "priorityClassName": {
+          "default": "",
+          "description": "Define the priority class for the pod.",
+          "title": "priorityClassName",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "readinessProbe": {
+          "default": "See below",
+          "description": "Readiness probe. Must specify either one of the following field when enabled: httpGet, exec, tcpSocket, grpc",
+          "properties": {
+            "enabled": {
+              "default": false,
+              "description": "Enable Readiness probe.",
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "exec": {
+              "description": "Exec probe.",
+              "required": [],
+              "title": "exec",
+              "type": "object"
+            },
+            "failureThreshold": {
+              "default": 30,
+              "description": "Number of retries before marking the pod as failed.",
+              "title": "failureThreshold",
+              "type": "integer"
+            },
+            "grpc": {
+              "description": "gRPC probe.",
+              "required": [],
+              "title": "grpc",
+              "type": "object"
+            },
+            "httpGet": {
+              "description": "HTTP Get probe.",
+              "required": [],
+              "title": "httpGet",
+              "type": "object"
+            },
+            "periodSeconds": {
+              "default": 10,
+              "description": "Time between retries.",
+              "title": "periodSeconds",
+              "type": "integer"
+            },
+            "successThreshold": {
+              "default": 1,
+              "description": "Number of successful probes before marking the pod as ready.",
+              "title": "successThreshold",
+              "type": "integer"
+            },
+            "tcpSocket": {
+              "description": "TCP Socket probe.",
+              "required": [],
+              "title": "tcpSocket",
+              "type": "object"
+            },
+            "timeoutSeconds": {
+              "default": 1,
+              "description": "Time before the probe times out.",
+              "title": "timeoutSeconds",
+              "type": "integer"
+            }
+          },
+          "required": [],
+          "title": "readinessProbe",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "reloadOnChange": {
+          "default": true,
+          "description": "Reload deployment if attached Secret/ConfigMap changes.",
+          "title": "reloadOnChange",
+          "type": "boolean"
+        },
+        "replicas": {
+          "default": "",
+          "description": "Number of replicas.",
+          "title": "replicas",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "resources": {
+          "description": "Resource limits and requests for the pod.",
+          "required": [],
+          "title": "resources",
+          "type": "object"
+        },
+        "revisionHistoryLimit": {
+          "default": 2,
+          "description": "Number of ReplicaSet revisions to retain.",
+          "title": "revisionHistoryLimit",
+          "type": "integer"
+        },
+        "runtimeClassName": {
+          "default": "",
+          "description": "Set the runtimeClassName for the deployment's pods.",
+          "title": "runtimeClassName",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "securityContext": {
+          "default": "",
+          "description": "Security Context for the pod.",
+          "required": [],
+          "title": "securityContext",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "startupProbe": {
+          "default": "See below",
+          "description": "Startup probe. Must specify either one of the following field when enabled: httpGet, exec, tcpSocket, grpc",
+          "properties": {
+            "enabled": {
+              "default": false,
+              "description": "Enable Startup probe.",
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "exec": {
+              "description": "Exec probe.",
+              "required": [],
+              "title": "exec",
+              "type": "object"
+            },
+            "failureThreshold": {
+              "default": 30,
+              "description": "Number of retries before marking the pod as failed.",
+              "title": "failureThreshold",
+              "type": "integer"
+            },
+            "grpc": {
+              "description": "gRPC probe.",
+              "required": [],
+              "title": "grpc",
+              "type": "object"
+            },
+            "httpGet": {
+              "description": "HTTP Get probe.",
+              "required": [],
+              "title": "httpGet",
+              "type": "object"
+            },
+            "periodSeconds": {
+              "default": 10,
+              "description": "Time between retries.",
+              "title": "periodSeconds",
+              "type": "integer"
+            },
+            "successThreshold": {
+              "default": 1,
+              "description": "Number of successful probes before marking the pod as ready.",
+              "title": "successThreshold",
+              "type": "integer"
+            },
+            "tcpSocket": {
+              "description": "TCP Socket probe.",
+              "required": [],
+              "title": "tcpSocket",
+              "type": "object"
+            },
+            "timeoutSeconds": {
+              "default": 1,
+              "description": "Time before the probe times out.",
+              "title": "timeoutSeconds",
+              "type": "integer"
+            }
+          },
+          "required": [],
+          "title": "startupProbe",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "strategy": {
+          "properties": {
+            "type": {
+              "default": "RollingUpdate",
+              "description": "Type of deployment strategy.",
+              "title": "type",
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [],
+          "title": "strategy",
+          "type": "object"
+        },
+        "terminationGracePeriodSeconds": {
+          "default": "",
+          "description": "Gracefull termination period.",
+          "title": "terminationGracePeriodSeconds",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "tolerations": {
+          "default": "",
+          "description": "Taint tolerations for the pods.",
+          "title": "tolerations",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "topologySpreadConstraints": {
+          "default": "",
+          "description": "Topology spread constraints for the pods.",
+          "title": "topologySpreadConstraints",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "volumeMounts": {
+          "default": "",
+          "description": "Mount path for Volumes. Key is the name of the volume. Value is the volume mount definition.",
+          "required": [],
+          "title": "volumeMounts",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "volumes": {
+          "default": "",
+          "description": "Volumes to be added to the pod. Key is the name of the volume. Value is the volume definition.",
+          "required": [],
+          "title": "volumes",
+          "type": [
+            "object",
+            "null"
+          ]
+        }
+      },
+      "required": [],
+      "title": "deployment",
+      "type": "object"
+    },
+    "endpointMonitor": {
+      "properties": {
+        "additionalLabels": {
+          "default": "",
+          "description": "Additional labels for EndpointMonitor.",
+          "required": [],
+          "title": "additionalLabels",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "annotations": {
+          "default": "",
+          "description": "Annotations for EndpointMonitor.",
+          "required": [],
+          "title": "annotations",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "enabled": {
+          "default": false,
+          "description": "Deploy an [IMC EndpointMonitor](https://github.com/stakater/IngressMonitorController) resource.",
+          "title": "enabled",
+          "type": "boolean"
+        }
+      },
+      "required": [],
+      "title": "endpointMonitor",
+      "type": "object"
+    },
+    "externalSecret": {
+      "properties": {
+        "additionalLabels": {
+          "default": "",
+          "description": "Additional labels for ExternalSecret.",
+          "required": [],
+          "title": "additionalLabels",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "annotations": {
+          "default": "",
+          "description": "Annotations for ExternalSecret.",
+          "required": [],
+          "title": "annotations",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "enabled": {
+          "default": false,
+          "description": "Deploy [ExternalSecret](https://external-secrets.io/latest/) resources.",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "files": {
+          "default": "",
+          "description": "List of ExternalSecret entries. Key will be used as a name suffix for the ExternalSecret. There a two allowed modes: - `data`: Data defines the connection between the Kubernetes Secret keys and the Provider data - `dataFrom`: Used to fetch all properties from the Provider key",
+          "required": [],
+          "title": "files",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "refreshInterval": {
+          "default": "1m",
+          "description": "RefreshInterval is the amount of time before the values are read again from the SecretStore provider.",
+          "title": "refreshInterval",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "secretStore": {
+          "description": "Default values for the SecretStore. Can be overriden per ExternalSecret in the `externalSecret.files` object.",
+          "properties": {
+            "kind": {
+              "default": "SecretStore",
+              "description": "Kind of the SecretStore being refered to.",
+              "title": "kind",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "name": {
+              "default": "tenant-vault-secret-store",
+              "description": "Name of the SecretStore to use.",
+              "title": "name",
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [],
+          "title": "secretStore",
+          "type": "object"
+        }
+      },
+      "required": [],
+      "title": "externalSecret",
+      "type": "object"
+    },
+    "extraObjects": {
+      "default": "",
+      "description": "Extra K8s manifests to deploy. Can be of type list or object. If object, keys are ignored and only values are used. The used values can be defined as object or string and are evaluated as templates.",
+      "title": "extraObjects",
+      "type": [
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "forecastle": {
+      "properties": {
+        "additionalLabels": {
+          "default": "",
+          "description": "Additional labels for ForecastleApp.",
+          "required": [],
+          "title": "additionalLabels",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "displayName": {
+          "default": "",
+          "description": "Application Name. Required if `forecastle.enabled` is set to `true`.",
+          "title": "displayName",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "enabled": {
+          "default": false,
+          "description": "Deploy a [ForecastleApp](https://github.com/stakater/Forecastle) resource.",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "group": {
+          "default": "`{{ .Release.Namespace }}`",
+          "description": "Application Group.",
+          "title": "group",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "icon": {
+          "default": "https://raw.githubusercontent.com/stakater/ForecastleIcons/master/stakater-big.png",
+          "description": "Icon URL.",
+          "title": "icon",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "networkRestricted": {
+          "default": false,
+          "description": "Is application network restricted?.",
+          "title": "networkRestricted",
+          "type": "boolean"
+        },
+        "properties": {
+          "default": "",
+          "description": "Custom properties.",
+          "required": [],
+          "title": "properties",
+          "type": [
+            "object",
+            "null"
+          ]
+        }
+      },
+      "required": [],
+      "title": "forecastle",
+      "type": "object"
+    },
+    "global": {
+      "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
+      "required": [],
+      "title": "global",
+      "type": "object"
+    },
+    "grafanaDashboard": {
+      "properties": {
+        "additionalLabels": {
+          "default": "",
+          "description": "Additional labels for GrafanaDashboard.",
+          "required": [],
+          "title": "additionalLabels",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "annotations": {
+          "default": "",
+          "description": "Annotations for GrafanaDashboard.",
+          "required": [],
+          "title": "annotations",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "contents": {
+          "default": "",
+          "description": "List of GrafanaDashboard entries. Key will be used as a name suffix for the GrafanaDashboard. Value is the GrafanaDashboard content. According to GrafanaDashboard behavior, `url` field takes precedence on the `json` field.",
+          "required": [],
+          "title": "contents",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "enabled": {
+          "default": false,
+          "description": "Deploy [GrafanaDashboard](https://github.com/grafana/grafana-operator) resources.",
+          "title": "enabled",
+          "type": "boolean"
+        }
+      },
+      "required": [],
+      "title": "grafanaDashboard",
+      "type": "object"
+    },
+    "httpRoute": {
+      "properties": {
+        "additionalLabels": {
+          "description": "Additional labels for HTTPRoute.",
+          "required": [],
+          "title": "additionalLabels",
+          "type": "object"
+        },
+        "annotations": {
+          "description": "Annotations for HTTPRoute.",
+          "required": [],
+          "title": "annotations",
+          "type": "object"
+        },
+        "enabled": {
+          "default": false,
+          "description": "Enable HTTPRoute (Gateway API).",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "gatewayNamespace": {
+          "default": "",
+          "description": "Namespace of the Gateway to attach this HTTPRoute to. If not set, the HTTPRoute will be attached to the Gateway in the same namespace as the HTTPRoute.",
+          "title": "gatewayNamespace",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "hostnames": {
+          "default": "",
+          "description": "Hostnames for the HTTPRoute. Values are evaluated as templates.",
+          "title": "hostnames",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "parentRefs": {
+          "default": "",
+          "description": "Parent references for the HTTPRoute. Keys and values are evaluated as templates.",
+          "title": "parentRefs",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "rules": {
+          "description": "Rules for HTTPRoute. Keys and values are evaluated as templates.",
+          "items": {
+            "anyOf": [
+              {
+                "properties": {
+                  "backendRefs": {
+                    "items": {
+                      "anyOf": [
+                        {
+                          "properties": {
+                            "name": {
+                              "default": "{{ include \"application.name\" $ }}",
+                              "title": "name",
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "port": {
+                              "default": "{{ (first $.Values.service.ports).port }}",
+                              "title": "port",
+                              "type": [
+                                "integer",
+                                "string",
+                                "null"
+                              ]
+                            }
+                          },
+                          "required": [],
+                          "type": "object"
+                        }
+                      ],
+                      "required": []
+                    },
+                    "title": "backendRefs",
+                    "type": "array"
+                  },
+                  "matches": {
+                    "items": {
+                      "anyOf": [
+                        {
+                          "properties": {
+                            "path": {
+                              "properties": {
+                                "type": {
+                                  "default": "PathPrefix",
+                                  "title": "type",
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "value": {
+                                  "default": "/",
+                                  "title": "value",
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                }
+                              },
+                              "required": [],
+                              "title": "path",
+                              "type": "object"
+                            }
+                          },
+                          "required": [],
+                          "type": "object"
+                        }
+                      ],
+                      "required": []
+                    },
+                    "title": "matches",
+                    "type": "array"
+                  }
+                },
+                "required": [],
+                "type": "object"
+              }
+            ],
+            "required": []
+          },
+          "title": "rules",
+          "type": "array"
+        },
+        "useDefaultGateways": {
+          "default": "",
+          "description": "The default Gateway scope to use for this Route. If unset (the default) or set to None, the Route will not be attached to any default Gateway; if set, it will be attached to any default Gateway supporting the named scope, subject to the usual rules about which Routes a Gateway is allowed to claim.",
+          "title": "useDefaultGateways",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [],
+      "title": "httpRoute",
+      "type": "object"
+    },
+    "ingress": {
+      "properties": {
+        "additionalLabels": {
+          "default": "",
+          "description": "Additional labels for ingress.",
+          "required": [],
+          "title": "additionalLabels",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "annotations": {
+          "default": "",
+          "description": "Annotations for ingress.",
+          "required": [],
+          "title": "annotations",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "enabled": {
+          "default": false,
+          "description": "Enable Ingress.",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "hosts": {
+          "items": {
+            "anyOf": [
+              {
+                "properties": {
+                  "host": {
+                    "default": "chart-example.local",
+                    "description": "Hostname.",
+                    "title": "host",
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "paths": {
+                    "items": {
+                      "anyOf": [
+                        {
+                          "properties": {
+                            "path": {
+                              "default": "/",
+                              "description": "Path.",
+                              "title": "path",
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "pathType": {
+                              "default": "`ImplementationSpecific`",
+                              "description": "Path type.",
+                              "title": "pathType",
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "serviceName": {
+                              "default": "`{{ include \"application.name\" $ }}`",
+                              "description": "Service name.",
+                              "title": "serviceName",
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "servicePort": {
+                              "default": "`http`",
+                              "description": "Service port.",
+                              "title": "servicePort",
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            }
+                          },
+                          "required": [],
+                          "type": "object"
+                        }
+                      ],
+                      "required": []
+                    },
+                    "title": "paths",
+                    "type": "array"
+                  }
+                },
+                "required": [],
+                "type": "object"
+              }
+            ],
+            "required": []
+          },
+          "title": "hosts",
+          "type": "array"
+        },
+        "ingressClassName": {
+          "default": "",
+          "description": "Name of the ingress class.",
+          "title": "ingressClassName",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "tls": {
+          "default": "",
+          "description": "TLS configuration for ingress. Secrets must exist in the namespace. You may also configure Certificate resource to generate the secret.",
+          "title": "tls",
+          "type": [
+            "array",
+            "null"
+          ]
+        }
+      },
+      "required": [],
+      "title": "ingress",
+      "type": "object"
+    },
+    "job": {
+      "properties": {
+        "enabled": {
+          "default": false,
+          "description": "Deploy Job resources.",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "jobs": {
+          "default": "",
+          "description": "Map of Job resources. Key will be used as a name suffix for the Job. Value is the Job configuration. See values for more details.",
+          "required": [],
+          "title": "jobs",
+          "type": [
+            "object",
+            "null"
+          ]
+        }
+      },
+      "required": [],
+      "title": "job",
+      "type": "object"
+    },
+    "namespaceOverride": {
+      "default": "",
+      "description": "Override the namespace for all resources.",
+      "title": "namespaceOverride",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "networkPolicy": {
+      "properties": {
+        "additionalLabels": {
+          "default": "",
+          "description": "Additional labels for Network Policy.",
+          "required": [],
+          "title": "additionalLabels",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "annotations": {
+          "default": "",
+          "description": "Annotations for Network Policy.",
+          "required": [],
+          "title": "annotations",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "egress": {
+          "default": "",
+          "description": "Egress rules for Network Policy.",
+          "title": "egress",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "enabled": {
+          "default": false,
+          "description": "Enable Network Policy.",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "ingress": {
+          "default": "",
+          "description": "Ingress rules for Network Policy.",
+          "title": "ingress",
+          "type": [
+            "array",
+            "null"
+          ]
+        }
+      },
+      "required": [],
+      "title": "networkPolicy",
+      "type": "object"
+    },
+    "partOfOverride": {
+      "default": "",
+      "description": "Override the partOf label for all resources.",
+      "title": "partOfOverride",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pdb": {
+      "properties": {
+        "enabled": {
+          "default": false,
+          "description": "Enable Pod Disruption Budget.",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "maxUnavailable": {
+          "default": "",
+          "description": "Maximum number of unavailable pods during voluntary disruptions.",
+          "title": "maxUnavailable",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "minAvailable": {
+          "default": 1,
+          "description": "Minimum number of pods that must be available after eviction.",
+          "title": "minAvailable",
+          "type": "integer"
+        }
+      },
+      "required": [],
+      "title": "pdb",
+      "type": "object"
+    },
+    "persistence": {
+      "properties": {
+        "accessMode": {
+          "default": "ReadWriteOnce",
+          "description": "Access mode for volume.",
+          "title": "accessMode",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "additionalLabels": {
+          "default": "",
+          "description": "Additional labels for persistent volume.",
+          "required": [],
+          "title": "additionalLabels",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "annotations": {
+          "default": "",
+          "description": "Annotations for persistent volume.",
+          "required": [],
+          "title": "annotations",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "enabled": {
+          "default": false,
+          "description": "Enable persistence.",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "mountPVC": {
+          "default": false,
+          "description": "Whether to mount the created PVC to the deployment.",
+          "title": "mountPVC",
+          "type": "boolean"
+        },
+        "mountPath": {
+          "default": "/",
+          "description": "If `persistence.mountPVC` is enabled, where to mount the volume in the containers.",
+          "title": "mountPath",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "name": {
+          "default": "`{{ include \"application.name\" $ }}-data`",
+          "description": "Name of the PVC.",
+          "title": "name",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "storageClass": {
+          "default": "null",
+          "description": "Storage class for volume. If defined, use that value If set to \"-\" or \"\", disable dynamic provisioning If undefined or set to null (the default), no storageClass spec is   set, choosing the default provisioner.",
+          "title": "storageClass",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "storageSize": {
+          "default": "8Gi",
+          "description": "Size of the persistent volume.",
+          "title": "storageSize",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "volumeMode": {
+          "default": "",
+          "description": "PVC Volume Mode.",
+          "title": "volumeMode",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "volumeName": {
+          "default": "",
+          "description": "Name of the volume.",
+          "title": "volumeName",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [],
+      "title": "persistence",
+      "type": "object"
+    },
+    "prometheusRule": {
+      "properties": {
+        "additionalLabels": {
+          "default": "",
+          "description": "Additional labels for PrometheusRule.",
+          "required": [],
+          "title": "additionalLabels",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "enabled": {
+          "default": false,
+          "description": "Deploy a PrometheusRule (Prometheus Operator) resource.",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "groups": {
+          "description": "Groups with alerting rules. Read more about it at [https://docs.openshift.com/container-platform/4.7/rest_api/monitoring_apis/prometheusrule-monitoring-coreos-com-v1.html](OpenShift's PrometheusRule documentation).",
+          "items": {
+            "required": []
+          },
+          "title": "groups",
+          "type": "array"
+        }
+      },
+      "required": [],
+      "title": "prometheusRule",
+      "type": "object"
+    },
+    "rbac": {
+      "properties": {
+        "additionalLabels": {
+          "default": "",
+          "description": "Additional labels for the Role, RoleBinding, ClusterRole, and ClusterRoleBinding resources.",
+          "required": [],
+          "title": "additionalLabels",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "annotations": {
+          "default": "",
+          "description": "Annotations for the Role, RoleBinding, ClusterRole, and ClusterRoleBinding resources.",
+          "required": [],
+          "title": "annotations",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "clusterRoles": {
+          "default": "",
+          "description": "ClusterRole definitions with cluster-wide permissions.",
+          "title": "clusterRoles",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "enabled": {
+          "default": true,
+          "description": "Enable RBAC.",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "roles": {
+          "default": "",
+          "description": "Role definitions scoped to a single namespace.",
+          "title": "roles",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "serviceAccount": {
+          "properties": {
+            "additionalLabels": {
+              "default": "",
+              "description": "Additional labels for Service Account. If `rbac.serviceAccount.create` is set to true, these labels are appended to the service account.",
+              "required": [],
+              "title": "additionalLabels",
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "annotations": {
+              "default": "",
+              "description": "Annotations for Service Account. If `rbac.serviceAccount.create` is set to true, these annotations are appended to the service account.",
+              "required": [],
+              "title": "annotations",
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "create": {
+              "default": false,
+              "description": "Specifies whether to create a dedicated service account. If set to `true`, a new service account will be created.",
+              "title": "create",
+              "type": "boolean"
+            },
+            "name": {
+              "default": "",
+              "description": "The name of the service account. Behavior based on its value and `rbac.serviceAccount.create`: If `rbac.serviceAccount.create` is `false` and `name` is empty, the default service account (\"default\") is used. If `rbac.serviceAccount.create` is `false` and `name` is set, the provided name is used. If `rbac.serviceAccount.create` is `true` and `name` is empty, a name is auto-generated using the fullname template. If `rbac.serviceAccount.create` is `true` and `name` is set, the provided name is used for creation.",
+              "title": "name",
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [],
+          "title": "serviceAccount",
+          "type": "object"
+        }
+      },
+      "required": [],
+      "title": "rbac",
+      "type": "object"
+    },
+    "route": {
+      "properties": {
+        "additionalLabels": {
+          "default": "",
+          "description": "Additional labels for Route.",
+          "required": [],
+          "title": "additionalLabels",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "alternateBackends": {
+          "default": "",
+          "description": "Alternate backend with it's weight.",
+          "required": [],
+          "title": "alternateBackends",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "annotations": {
+          "default": "",
+          "description": "Annotations for Route.",
+          "required": [],
+          "title": "annotations",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "enabled": {
+          "default": false,
+          "description": "Deploy a Route (OpenShift) resource.",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "host": {
+          "default": "",
+          "description": "Explicit host. If no host is added then openshift inserts the default hostname.",
+          "title": "host",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "path": {
+          "default": "",
+          "description": "Path.",
+          "title": "path",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "port": {
+          "description": "Service port.",
+          "properties": {
+            "targetPort": {
+              "default": "http",
+              "title": "targetPort",
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [],
+          "title": "port",
+          "type": "object"
+        },
+        "tls": {
+          "properties": {
+            "insecureEdgeTerminationPolicy": {
+              "default": "Redirect",
+              "description": "TLS insecure termination policy.",
+              "title": "insecureEdgeTerminationPolicy",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "termination": {
+              "default": "edge",
+              "description": "TLS termination strategy.",
+              "title": "termination",
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [],
+          "title": "tls",
+          "type": "object"
+        },
+        "to": {
+          "properties": {
+            "weight": {
+              "default": 100,
+              "description": "Service weight.",
+              "title": "weight",
+              "type": "integer"
+            }
+          },
+          "required": [],
+          "title": "to",
+          "type": "object"
+        },
+        "wildcardPolicy": {
+          "default": "None",
+          "description": "Wildcard policy.",
+          "title": "wildcardPolicy",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [],
+      "title": "route",
+      "type": "object"
+    },
+    "sealedSecret": {
+      "properties": {
+        "additionalLabels": {
+          "default": "",
+          "description": "Additional labels for SealedSecret.",
+          "required": [],
+          "title": "additionalLabels",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "annotations": {
+          "default": "",
+          "description": "Annotations for SealedSecret.",
+          "required": [],
+          "title": "annotations",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "enabled": {
+          "default": false,
+          "description": "Deploy [SealedSecret](https://github.com/bitnami-labs/sealed-secrets) resources.",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "files": {
+          "default": "",
+          "description": "List of SealedSecret entries. Key will be used as a name suffix for the SealedSecret. Value is the SealedSecret content.",
+          "required": [],
+          "title": "files",
+          "type": [
+            "object",
+            "null"
+          ]
+        }
+      },
+      "required": [],
+      "title": "sealedSecret",
+      "type": "object"
+    },
+    "secret": {
+      "properties": {
+        "additionalLabels": {
+          "default": "",
+          "description": "Additional labels for Secret.",
+          "required": [],
+          "title": "additionalLabels",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "annotations": {
+          "default": "",
+          "description": "Annotations for Secret.",
+          "required": [],
+          "title": "annotations",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "enabled": {
+          "default": false,
+          "description": "Deploy additional Secret resources.",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "files": {
+          "default": "",
+          "description": "List of Secrets entries. Key will be used as a name suffix for the Secret. There a three allowed modes: - `data`: Data is base64 encoded by the chart - `encodedData`: Use raw values (already base64ed) inside the data map - `stringData`: Use raw values inside the stringData map",
+          "required": [],
+          "title": "files",
+          "type": [
+            "object",
+            "null"
+          ]
+        }
+      },
+      "required": [],
+      "title": "secret",
+      "type": "object"
+    },
+    "secretProviderClass": {
+      "properties": {
+        "enabled": {
+          "default": false,
+          "description": "Deploy a [Secrets Store CSI Driver SecretProviderClass](https://secrets-store-csi-driver.sigs.k8s.io/) resource.",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "default": "",
+          "description": "Name of the SecretProviderClass. Required if `secretProviderClass.enabled` is set to `true`.",
+          "title": "name",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "objects": {
+          "default": "",
+          "description": "Objects definitions.",
+          "title": "objects",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "provider": {
+          "default": "",
+          "description": "Name of the provider. Required if `secretProviderClass.enabled` is set to `true`.",
+          "title": "provider",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "roleName": {
+          "default": "",
+          "description": "Vault Role Name. Required if `secretProviderClass.provider` is set to `vault`.",
+          "title": "roleName",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "secretObjects": {
+          "default": "",
+          "description": "Objects mapping.",
+          "title": "secretObjects",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "vaultAddress": {
+          "default": "",
+          "description": "Vault Address. Required if `secretProviderClass.provider` is set to `vault`.",
+          "title": "vaultAddress",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [],
+      "title": "secretProviderClass",
+      "type": "object"
+    },
+    "service": {
+      "properties": {
+        "additionalLabels": {
+          "default": "",
+          "description": "Additional labels for service.",
+          "required": [],
+          "title": "additionalLabels",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "annotations": {
+          "default": "",
+          "description": "Annotations for service.",
+          "required": [],
+          "title": "annotations",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "clusterIP": {
+          "default": "",
+          "description": "Fixed IP for a ClusterIP service. Set to `None` for an headless service",
+          "title": "clusterIP",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "enabled": {
+          "default": true,
+          "description": "Enable Service.",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "loadBalancerClass": {
+          "default": "",
+          "description": "LoadBalancer class name for LoadBalancer type services.",
+          "title": "loadBalancerClass",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ports": {
+          "description": "Ports for applications service.",
+          "items": {
+            "anyOf": [
+              {
+                "properties": {
+                  "name": {
+                    "default": "http",
+                    "title": "name",
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "port": {
+                    "default": 8080,
+                    "title": "port",
+                    "type": "integer"
+                  },
+                  "protocol": {
+                    "default": "TCP",
+                    "title": "protocol",
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "targetPort": {
+                    "default": 8080,
+                    "title": "targetPort",
+                    "type": "integer"
+                  }
+                },
+                "required": [],
+                "type": "object"
+              }
+            ],
+            "required": []
+          },
+          "title": "ports",
+          "type": "array"
+        },
+        "type": {
+          "default": "ClusterIP",
+          "description": "Type of service.",
+          "title": "type",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [],
+      "title": "service",
+      "type": "object"
+    },
+    "serviceMonitor": {
+      "properties": {
+        "additionalLabels": {
+          "default": "",
+          "description": "Additional labels for ServiceMonitor.",
+          "required": [],
+          "title": "additionalLabels",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "annotations": {
+          "default": "",
+          "description": "Annotations for ServiceMonitor.",
+          "required": [],
+          "title": "annotations",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "enabled": {
+          "default": false,
+          "description": "Deploy a ServiceMonitor (Prometheus Operator) resource.",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "endpoints": {
+          "description": "Service endpoints from which prometheus will scrape data.",
+          "items": {
+            "anyOf": [
+              {
+                "properties": {
+                  "interval": {
+                    "default": "5s",
+                    "title": "interval",
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "path": {
+                    "default": "/actuator/prometheus",
+                    "title": "path",
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "port": {
+                    "default": "http",
+                    "title": "port",
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [],
+                "type": "object"
+              }
+            ],
+            "required": []
+          },
+          "title": "endpoints",
+          "type": "array"
+        }
+      },
+      "required": [],
+      "title": "serviceMonitor",
+      "type": "object"
+    },
+    "vpa": {
+      "properties": {
+        "additionalLabels": {
+          "default": "",
+          "description": "Additional labels for VPA.",
+          "required": [],
+          "title": "additionalLabels",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "annotations": {
+          "default": "",
+          "description": "Annotations for VPA.",
+          "required": [],
+          "title": "annotations",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "containerPolicies": {
+          "description": "Container policies for individual containers.",
+          "items": {
+            "required": []
+          },
+          "title": "containerPolicies",
+          "type": "array"
+        },
+        "enabled": {
+          "default": false,
+          "description": "Enable Vertical Pod Autoscaling.",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "updatePolicy": {
+          "description": "Update policy.",
+          "properties": {
+            "updateMode": {
+              "default": "Auto",
+              "title": "updateMode",
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [],
+          "title": "updatePolicy",
+          "type": "object"
+        }
+      },
+      "required": [],
+      "title": "vpa",
+      "type": "object"
+    }
+  },
+  "required": [],
+  "type": "object"
+}

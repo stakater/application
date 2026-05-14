@@ -2,6 +2,8 @@
 prek = "0.4.0"
 helm = "4.2.0"
 helm-docs = "1.14.2"
+"github:dadav/helm-schema" = "0.23.2"
+jq = "1.8.1"
 "ubi:helm-unittest/helm-unittest" = { version = "1.1.0", exe = "untt", rename_exe = "helm-unittest" }
 
 [tasks.set-version]
@@ -23,10 +25,41 @@ helm-docs \\
   --sort-values-order=file
 """
 
+[tasks.gen-helm-schema]
+alias = "gen-schema"
+description = "Generate the Helm values schema"
+run = """
+helm-schema \\
+  --chart-search-root application \\
+  --helm-docs-compatibility-mode \\
+  --append-newline \\
+  --skip-auto-generation required \\
+  --skip-auto-generation additionalProperties
+
+tmp="$(mktemp)"
+# helm-schema infers types too strictly from defaults:
+# - optional string fields need "null" added
+# - httpRoute port is templated then casted to int so it accepts both int and string
+# - extraObjects can be list or object
+jq '
+  walk(
+    if type == "object" and (.default | type) == "string" and (.type | type) == "string" then
+      .type = [.type, "null"]
+    else
+      .
+    end
+  )
+  | .properties.httpRoute.properties.rules.items.anyOf[].properties.backendRefs.items.anyOf[].properties.port.type = ["integer", "string", "null"]
+  | .properties.extraObjects.type = ["object", "array", "null"]
+' \\
+  application/values.schema.json > "$tmp"
+mv "$tmp" application/values.schema.json
+"""
+
 [tasks.generate]
 alias = "gen"
 description = "Generate all files"
-depends = ["gen-docs"]
+depends = ["gen-docs", "gen-schema"]
 
 [tasks.helm-lint]
 description = "Lint the Helm chart"

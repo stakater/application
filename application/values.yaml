@@ -15,7 +15,7 @@ partOfOverride: ""
 # @section -- Parameters
 applicationName: ""
 
-# -- (tpl/object) Additional labels for all resources.
+# -- (object) Additional labels for all resources. Keys and values are evaluated as templates.
 # @section -- Parameters
 additionalLabels:
   # example.com/organization: organization-name
@@ -322,13 +322,13 @@ deployment:
   # @section -- Deployment Parameters
   revisionHistoryLimit: 2
   image:
-    # -- (tpl/string) Repository.
+    # -- (tpl) Repository.
     # @section -- Deployment Parameters
     repository: ""
-    # -- (tpl/string) Tag.
+    # -- (tpl) Tag.
     # @section -- Deployment Parameters
     tag: ""
-    # -- (tpl/string) Image digest. If resolved to a non-empty value, digest takes precedence on the tag.
+    # -- (tpl) Image digest. If resolved to a non-empty value, digest takes precedence on the tag.
     # @section -- Deployment Parameters
     digest: ""
     # -- (string) Image pull policy.
@@ -608,7 +608,7 @@ ingress:
   # @section -- Ingress Parameters
   ingressClassName: ""
   hosts:
-    - # -- (tpl/string) Hostname.
+    - # -- (tpl) Hostname.
       # @section -- Ingress Parameters
       host: chart-example.local
       paths:
@@ -649,7 +649,7 @@ httpRoute:
   # -- (bool) Enable HTTPRoute (Gateway API).
   # @section -- HTTPRoute Parameters
   enabled: false
-  # -- (tpl/list) Parent references for the HTTPRoute.
+  # -- (list) Parent references for the HTTPRoute. Keys and values are evaluated as templates.
   # @section -- HTTPRoute Parameters
   parentRefs:
     # - name: my-gateway
@@ -665,7 +665,7 @@ httpRoute:
   # If not set, the HTTPRoute will be attached to the Gateway in the same namespace as the HTTPRoute.
   # @section -- HTTPRoute Parameters
   gatewayNamespace: ""
-  # -- (tpl/list) Hostnames for the HTTPRoute.
+  # -- (list) Hostnames for the HTTPRoute. Values are evaluated as templates.
   # @section -- HTTPRoute Parameters
   hostnames:
   # -- (object) Additional labels for HTTPRoute.
@@ -674,7 +674,7 @@ httpRoute:
   # -- (object) Annotations for HTTPRoute.
   # @section -- HTTPRoute Parameters
   annotations: {}
-  # -- (tpl/list) Rules for HTTPRoute.
+  # -- (list) Rules for HTTPRoute. Keys and values are evaluated as templates.
   # @section -- HTTPRoute Parameters
   rules:
     - matches:
@@ -723,7 +723,7 @@ route:
     # -- (string) TLS insecure termination policy.
     # @section -- Route Parameters
     insecureEdgeTerminationPolicy: Redirect
-  # -- (list) Alternate backend with it's weight.
+  # -- (object) Alternate backend with it's weight.
   # @section -- Route Parameters
   alternateBackends:
     # kind: Service
@@ -748,14 +748,15 @@ secretProviderClass:
   # @section -- SecretProviderClass Parameters
   vaultAddress: ""
   # vaultAddress: http://vault:8200
-  # -- (tpl/string) Vault Role Name.
+  # -- (tpl) Vault Role Name.
   # Required if `secretProviderClass.provider` is set to `vault`.
   # @section -- SecretProviderClass Parameters
   roleName: ""
   # roleName: example-role
-  # -- (list) Objects definitions.
+  # -- (string) Objects definitions.
   # @section -- SecretProviderClass Parameters
   objects:
+    # |
     # - objectName: MONGO_HOST
     #   secretPath: testing/data/mongoDb
     #   secretKey: MONGO_HOST
@@ -1052,7 +1053,7 @@ certificate:
   # @section -- cert-manager Certificate Parameters
   annotations:
     # key: value
-  # -- (tpl/string) Name of the secret resource that will be automatically created and managed by this Certificate resource.
+  # -- (tpl) Name of the secret resource that will be automatically created and managed by this Certificate resource.
   # @section -- cert-manager Certificate Parameters
   secretName: tls-cert
   # -- (string) The requested "duration" (i.e. lifetime) of the Certificate.
@@ -1061,7 +1062,7 @@ certificate:
   # -- (string) The amount of time before the currently issued certificate's notAfter time that cert-manager will begin to attempt to renew the certificate.
   # @section -- cert-manager Certificate Parameters
   renewBefore: 720h0m0s # 30d
-  # -- (tpl/object) Full X509 name specification for certificate.
+  # -- (object) Full X509 name specification for certificate. Keys and values are evaluated as templates.
   # @section -- cert-manager Certificate Parameters
   subject:
   #  organizations:
@@ -1074,7 +1075,7 @@ certificate:
   #    - Stockholm
   #  provinces:
   #    - Stockholm
-  # -- (tpl/string) Common name as specified on the DER encoded CSR. This field is not recommended in cases when this certificate is an end-entity certificate. More information can be found in the [cert-manager documentation](https://cert-manager.io/docs/usage/certificate/#:~:text=%23%20Avoid%20using%20commonName,%3A%20example.com).
+  # -- (tpl) Common name as specified on the DER encoded CSR. This field is not recommended in cases when this certificate is an end-entity certificate. More information can be found in the [cert-manager documentation](https://cert-manager.io/docs/usage/certificate/#:~:text=%23%20Avoid%20using%20commonName,%3A%20example.com).
   # @section -- cert-manager Certificate Parameters
   commonName:
   # commonName: admin-app
@@ -1095,7 +1096,7 @@ certificate:
   usages:
   #  - digital signature
   #  - client auth
-  # -- (tpl/list) List of DNS subjectAltNames to be set on the certificate.
+  # -- (list) List of DNS subjectAltNames to be set on the certificate. Keys and values are evaluated as templates.
   # @section -- cert-manager Certificate Parameters
   dnsNames:
   #  - admin-app
@@ -1150,7 +1151,7 @@ certificate:
       # JKS configures options for storing a JKS keystore in the spec.secretName Secret resource.
       # @section -- cert-manager Certificate Parameters
       create: false
-      # -- (tpl/string) Key of the entry in the Secret resource's data field to be used.
+      # -- (tpl) Key of the entry in the Secret resource's data field to be used.
       # @section -- cert-manager Certificate Parameters
       key: test_key
       # -- (string) Name of the Secret resource being referred to.
@@ -1388,7 +1389,7 @@ backup:
   # -- (string) How long the Backup should be retained for.
   # @section -- Backup Parameters
   ttl: "1h0m0s"
-  # -- (tpl/list) List of namespaces to include objects from.
+  # -- (list) List of namespaces to include objects from. Keys and values are evaluated as templates.
   # @default -- `[ {{ include "application.namespace" $ }} ]`
   # @section -- Backup Parameters
   includedNamespaces:
@@ -1400,8 +1401,8 @@ backup:
   # @section -- Backup Parameters
   excludedResources:
 
-# -- ([list or object] of [tpl/object or tpl/string]) Extra K8s manifests to deploy.
-# Can be of type list or object. If object, keys are ignored and only values are used. The used values can be defined as object or string and are passed through tpl to render.
+# -- (list) Extra K8s manifests to deploy.
+# Can be of type list or object. If object, keys are ignored and only values are used. The used values can be defined as object or string and are evaluated as templates.
 # @section -- Parameters
 extraObjects:
   # - apiVersion: secrets-store.csi.x-k8s.io/v1

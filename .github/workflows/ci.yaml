@@ -191,6 +191,24 @@ jobs:
         run: |
           git diff --exit-code README.md || { echo; echo "error: README.md is out of date. Please run 'mise run gen-docs' and commit the resulting file."; exit 1; }
 
+  helm-schema:
+    name: Helm schema
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: jdx/mise-action@1648a7812b9aeae629881980618f079932869151 # v4
+        with:
+          install: false
+          cache: true
+
+      - name: Run helm-schema
+        run: mise run gen-schema
+
+      - name: Check diff
+        run: |
+          git diff --exit-code ${{ env.CHART_PATH }}/values.schema.json || { echo; echo "error: values.schema.json is out of date. Please run 'mise run gen-schema' and commit the resulting file."; exit 1; }
+
   kind-api-validation:
     name: Kind API validation
     runs-on: ubuntu-latest

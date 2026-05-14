@@ -1,0 +1,1858 @@
+should match snapshot:
+  1: |
+    apiVersion: monitoring.coreos.com/v1alpha1
+    kind: AlertmanagerConfig
+    metadata:
+      labels:
+        alertmanagerConfig: workload
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        team: stakater
+      name: application
+      namespace: NAMESPACE
+    spec:
+      inhibitRules:
+        - equal:
+            - cluster
+            - service
+          sourceMatch:
+            - name: severity
+              value: critical
+          targetMatch:
+            - name: severity
+              value: warning
+      receivers:
+        - name: "null"
+      route:
+        groupBy:
+          - job
+        groupInterval: 5m
+        groupWait: 30s
+        receiver: "null"
+        repeatInterval: 12h
+        routes:
+          - continue: true
+            groupBy:
+              - alertname
+              - severity
+            receiver: "null"
+  2: |
+    apiVersion: velero.io/v1
+    kind: Backup
+    metadata:
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        team: stakater
+      name: application-backup
+      namespace: openshift-adp
+    spec:
+      defaultVolumesToRestic: true
+      excludedResources:
+        - daemonsets
+        - statefulsets
+        - nodes
+        - apiservices
+        - events
+        - resourcequotas
+        - controllerrevisions.apps
+      includedNamespaces:
+        - NAMESPACE
+      includedResources:
+        - deployments
+        - services
+        - persistentvolumeclaims
+        - secrets
+        - configmaps
+      labelSelector:
+        matchLabels:
+          app.kubernetes.io/part-of: application
+      snapshotVolumes: true
+      storageLocation: dpa-1
+      ttl: 1h0m0s
+  3: |
+    apiVersion: cert-manager.io/v1
+    kind: Certificate
+    metadata:
+      annotations: null
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        key: value
+        team: stakater
+      name: application-certificate
+      namespace: NAMESPACE
+    spec:
+      commonName: admin-app
+      duration: 8760h0m0s
+      issuerRef:
+        kind: ClusterIssuer
+        name: ca-issuer
+      keystores:
+        pkcs12:
+          create: true
+          passwordSecretRef:
+            key: test_key
+            name: test-creds
+      privateKey:
+        algorithm: RSA
+        encoding: PKCS1
+        rotationPolicy: Always
+        size: 2048
+      renewBefore: 720h0m0s
+      secretName: tls-cert
+      usages: null
+  4: |
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        team: stakater
+      name: application-nodes
+    rules:
+      - apiGroups:
+          - ""
+        resources:
+          - nodes
+        verbs:
+          - get
+          - list
+          - watch
+  5: |
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        team: stakater
+      name: application-namespaces
+    rules:
+      - apiGroups:
+          - ""
+        resources:
+          - namespaces
+        verbs:
+          - get
+          - list
+  6: |
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRoleBinding
+    metadata:
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        team: stakater
+      name: application-nodes
+    roleRef:
+      apiGroup: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: application-nodes
+    subjects:
+      - kind: ServiceAccount
+        name: application
+        namespace: NAMESPACE
+  7: |
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRoleBinding
+    metadata:
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        team: stakater
+      name: application-namespaces
+    roleRef:
+      apiGroup: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: application-namespaces
+    subjects:
+      - kind: ServiceAccount
+        name: application
+        namespace: NAMESPACE
+  8: |
+    apiVersion: v1
+    data:
+      key1: value1
+      key2: value2
+    kind: ConfigMap
+    metadata:
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        key: value
+        team: stakater
+      name: application-code-config
+      namespace: NAMESPACE
+  9: |
+    apiVersion: v1
+    data:
+      key1: value1
+      key2: value2
+    kind: ConfigMap
+    metadata:
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        key: value
+        team: stakater
+      name: application-dev-config
+      namespace: NAMESPACE
+  10: |
+    apiVersion: batch/v1
+    kind: CronJob
+    metadata:
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        team: stakater
+      name: application-db-migration
+      namespace: NAMESPACE
+    spec:
+      jobTemplate:
+        spec:
+          template:
+            metadata:
+              labels:
+                app.kubernetes.io/instance: RELEASE-NAME
+                app.kubernetes.io/managed-by: Helm
+                app.kubernetes.io/name: application
+                app.kubernetes.io/version: image-tag
+                application.stakater.com/workload-class: scheduled
+                group: com.stakater.platform
+                helm.sh/chart: application-8.0.0
+                team: stakater
+            spec:
+              automountServiceAccountToken: false
+              containers:
+                - args:
+                    - -c
+                    - sleep 5000
+                  command:
+                    - /bin/bash
+                  env:
+                    - name: KEY
+                      value: VALUE
+                  envFrom:
+                    - configMapRef:
+                        name: my-existing-configmap
+                        optional: false
+                    - secretRef:
+                        name: my-existing-secret
+                        optional: false
+                  image: repository/image:image-tag
+                  name: db-migration
+                  resources:
+                    limits:
+                      cpu: 500m
+                      memory: 512Mi
+                    requests:
+                      cpu: 100m
+                      memory: 256Mi
+                  securityContext:
+                    allowPrivilegeEscalation: false
+                    capabilities:
+                      drop:
+                        - ALL
+                    readOnlyRootFilesystem: true
+                    runAsNonRoot: true
+                    runAsUser: 65534
+                    seccompProfile:
+                      type: RuntimeDefault
+              dnsConfig:
+                options:
+                  - name: ndots
+                    value: "1"
+              imagePullSecrets:
+                - name: nexus-secret
+              priorityClassName: high-priority
+              restartPolicy: OnFailure
+              securityContext:
+                runAsNonRoot: true
+                runAsUser: 65534
+                seccompProfile:
+                  type: RuntimeDefault
+              serviceAccountName: application
+      schedule: '* * * 8 *'
+  11: |
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      annotations:
+        reloader.stakater.com/auto: "true"
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        key: value
+        team: stakater
+      name: application
+      namespace: NAMESPACE
+    spec:
+      replicas: 2
+      revisionHistoryLimit: 2
+      selector:
+        matchLabels:
+          app.kubernetes.io/name: application
+          application.stakater.com/workload-class: serving
+      strategy:
+        rollingUpdate:
+          maxSurge: 25%
+          maxUnavailable: 25%
+        type: RollingUpdate
+      template:
+        metadata:
+          annotations:
+            fluentdConfiguration: |
+              [
+                {
+                  "containers":
+                  [
+                    {
+                      "expressionFirstLine": "",
+                      "expression": "",
+                      "timeFormat": "",
+                      "containerName": "application"
+                    }
+                  ]
+                }
+              ]
+            key: value
+          labels:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: application
+            app.kubernetes.io/version: image-tag
+            application.stakater.com/workload-class: serving
+            env: prod
+            group: com.stakater.platform
+            helm.sh/chart: application-8.0.0
+            team: stakater
+        spec:
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                  - matchExpressions:
+                      - key: disktype
+                        operator: In
+                        values:
+                          - ssd
+          automountServiceAccountToken: false
+          containers:
+            - args:
+                - --https-address=:8443
+                - --provider=openshift
+                - --upstream=http://localhost:8080
+                - --openshift-service-account=application
+                - --tls-cert=/etc/tls/private/tls.crt
+                - --tls-key=/etc/tls/private/tls.key
+                - --cookie-secret=SECRET
+              image: openshift/oauth-proxy:latest
+              imagePullPolicy: IfNotPresent
+              name: oauth-proxy
+              ports:
+                - containerPort: 8443
+                  name: proxy
+              volumeMounts:
+                - mountPath: /etc/tls/private
+                  name: proxy-tls
+            - env:
+                - name: ENVIRONMENT
+                  value: dev
+              envFrom:
+                - configMapRef:
+                    name: my-existing-configmap
+                    optional: false
+                - secretRef:
+                    name: my-existing-secret
+                    optional: false
+                - secretRef:
+                    name: application-nonexisting
+                    optional: true
+                - secretRef:
+                    name: application-postgres
+                    optional: false
+                - configMapRef:
+                    name: application-my-configmap
+                    optional: false
+              image: repository/image-name:image-tag
+              imagePullPolicy: IfNotPresent
+              lifecycle:
+                preStop:
+                  exec:
+                    command:
+                      - /bin/sh
+                      - -c
+                      - sleep 20
+              livenessProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: /path
+                  port: 8080
+                initialDelaySeconds: 10
+                periodSeconds: 10
+                successThreshold: 1
+                timeoutSeconds: 1
+              name: application
+              ports:
+                - containerPort: 8080
+                  name: http
+                  protocol: TCP
+                - containerPort: 8778
+                  name: jolokia
+                  protocol: TCP
+                - containerPort: 8443
+                  name: https
+                  protocol: TCP
+              readinessProbe:
+                exec:
+                  command:
+                    - cat
+                    - tmp/healthy
+                failureThreshold: 3
+                initialDelaySeconds: 10
+                periodSeconds: 10
+                successThreshold: 1
+                timeoutSeconds: 1
+              resources:
+                limits:
+                  cpu: 0.5
+                  memory: 256Mi
+                requests:
+                  cpu: 0.1
+                  memory: 128Mi
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                readOnlyRootFilesystem: true
+                runAsNonRoot: true
+                runAsUser: 65534
+                seccompProfile:
+                  type: RuntimeDefault
+              startupProbe:
+                failureThreshold: 30
+                httpGet:
+                  path: /path
+                  port: 8080
+                periodSeconds: 10
+                successThreshold: 1
+                timeoutSeconds: 1
+              volumeMounts:
+                - mountPath: /path1
+                  name: volume-name
+            - command:
+                - /bin/sh
+                - -c
+                - sleep 3600
+              image: repository/image:image-tag
+              imagePullPolicy: IfNotPresent
+              livenessProbe:
+                exec:
+                  command:
+                    - "true"
+              name: sidecar-container
+              readinessProbe:
+                exec:
+                  command:
+                    - "true"
+              resources:
+                limits:
+                  cpu: 50m
+                  memory: 32Mi
+                requests:
+                  cpu: 10m
+                  memory: 16Mi
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                readOnlyRootFilesystem: true
+                runAsNonRoot: true
+                runAsUser: 65534
+                seccompProfile:
+                  type: RuntimeDefault
+          dnsConfig:
+            options:
+              - name: ndots
+                value: "1"
+          dnsPolicy: ClusterFirst
+          enableServiceLinks: true
+          hostAliases:
+            - hostnames:
+                - foo.local
+                - bar.local
+              ip: 127.0.0.1
+            - hostnames:
+                - foo.remote
+                - bar.remote
+              ip: 10.1.2.3
+          hostNetwork: true
+          initContainers:
+            - command:
+                - /bin/sh
+              image: repository/image:image-tag
+              imagePullPolicy: IfNotPresent
+              name: init-container
+              resources:
+                limits:
+                  cpu: 50m
+                  memory: 32Mi
+                requests:
+                  cpu: 10m
+                  memory: 16Mi
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                readOnlyRootFilesystem: true
+                runAsNonRoot: true
+                runAsUser: 65534
+                seccompProfile:
+                  type: RuntimeDefault
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 65534
+            seccompProfile:
+              type: RuntimeDefault
+          serviceAccountName: application
+          terminationGracePeriodSeconds: 120
+          tolerations:
+            - effect: NoSchedule
+              key: dedicated
+              operator: Equal
+              value: app
+          volumes:
+            - name: proxy-tls
+              secret:
+                secretName: openshift-oauth-proxy-tls
+            - configMap:
+                name: configmap-name
+              name: config-volume
+            - configMap:
+                name: application-configmap-nameSuffix
+              name: configmap-volume
+            - name: persistent-volume-name
+              persistentVolumeClaim:
+                claimName: claim-name
+            - name: secret-volume
+              secret:
+                secretName: secret-name
+            - emptyDir: {}
+              name: volume-name
+  12: |
+    apiVersion: endpointmonitor.stakater.com/v1alpha1
+    kind: EndpointMonitor
+    metadata:
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        key: value
+        team: stakater
+      name: application
+      namespace: NAMESPACE
+    spec:
+      forceHttps: true
+      urlFrom:
+        ingressRef:
+          name: application
+        routeRef:
+          name: application
+  13: |
+    apiVersion: external-secrets.io/v1
+    kind: ExternalSecret
+    metadata:
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        team: stakater
+      name: application-secret-1-name
+      namespace: NAMESPACE
+    spec:
+      data:
+        - remoteRef:
+            key: example-provider-key
+            property: example-provider-key-property
+          secretKey: example-secret-key
+      refreshInterval: 1m
+      secretStoreRef:
+        kind: SecretStore
+        name: example-secret-store
+      target:
+        name: application-secret-1-name
+        template:
+          type: Opaque
+  14: |
+    apiVersion: external-secrets.io/v1
+    kind: ExternalSecret
+    metadata:
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        team: stakater
+      name: application-secret-2-name
+      namespace: NAMESPACE
+    spec:
+      dataFrom:
+        - extract:
+            key: example-provider-key
+      refreshInterval: 1m
+      secretStoreRef:
+        kind: SecretStore
+        name: example-secret-store
+      target:
+        name: application-secret-2-name
+        template:
+          metadata:
+            annotations:
+              key: value
+            labels:
+              key: value
+          type: Opaque
+  15: |
+    apiVersion: v1
+    data:
+      key1: value1-RELEASE-NAME
+      key2: value2
+    kind: ConfigMap
+    metadata:
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        team: stakater
+      name: RELEASE-NAME-extra-object-configmap-1
+      namespace: NAMESPACE
+  16: |
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        team: stakater
+      name: RELEASE-NAME-extra-object-secret-1
+      namespace: NAMESPACE
+    stringData:
+      key1: value1-RELEASE-NAME
+      key2: value2
+  17: |
+    apiVersion: forecastle.stakater.com/v1alpha1
+    kind: ForecastleApp
+    metadata:
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        key: value
+        team: stakater
+      name: application
+      namespace: NAMESPACE
+    spec:
+      group: NAMESPACE
+      icon: https://raw.githubusercontent.com/stakater/ForecastleIcons/master/stakater-big.png
+      name: application
+      networkRestricted: false
+      urlFrom:
+        ingressRef:
+          name: application
+  18: |
+    apiVersion: grafana.integreatly.org/v1beta1
+    kind: GrafanaDashboard
+    metadata:
+      annotations:
+        test-annoation: chart
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        grafanaDashboard: grafana-operator
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        team: stakater
+        test-label: chart
+      name: application-dashboard-test-name-1
+      namespace: NAMESPACE
+    spec:
+      json: |-
+        {
+          "annotations": {
+            "list": [
+              {
+                "builtIn": 1,
+                "datasource": "-- Grafana --",
+                "enable": true,
+                "hide": true,
+                "iconColor": "rgba(0, 211, 255, 1)",
+                "name": "Annotations & Alerts",
+                "type": "dashboard"
+              }
+            ]
+          },
+          "editable": true,
+          "gnetId": null,
+          "graphTooltip": 0,
+          "id": 9,
+          "iteration": 1592326712687,
+          "links": [],
+          "panels": [
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "prometheus",
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 9,
+                "w": 24,
+                "x": 0,
+                "y": 0
+              },
+              "id": 3,
+              "legend": {
+                "alignAsTable": true,
+                "avg": false,
+                "current": false,
+                "hideZero": true,
+                "max": false,
+                "min": false,
+                "rightSide": true,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "links": [],
+              "nullPointMode": "null",
+              "options": {
+                "dataLinks": []
+              },
+              "percentage": false,
+              "pointradius": 5,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "sum(irate(haproxy_server_http_responses_total{code=\"5xx\", route=~\"$route\", namespace=~\"$namespace\", pod=~\"$router\"}[$rate])) by (namespace, code, route)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "Route: {{route}}, Namespace: {{namespace}}",
+                  "refId": "A"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "Failure Requests Rate (5xx)",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "decimals": null,
+                  "format": "none",
+                  "label": "",
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "none",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "prometheus",
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 9,
+                "w": 24,
+                "x": 0,
+                "y": 9
+              },
+              "id": 4,
+              "legend": {
+                "alignAsTable": true,
+                "avg": false,
+                "current": false,
+                "hideEmpty": false,
+                "hideZero": true,
+                "max": false,
+                "min": false,
+                "rightSide": true,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "links": [],
+              "nullPointMode": "null",
+              "options": {
+                "dataLinks": []
+              },
+              "percentage": false,
+              "pointradius": 5,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "sum(irate(haproxy_server_http_responses_total{code=\"2xx\", route=~\"$route\", namespace=~\"$namespace\", pod=~\"$router\"}[$rate])) by (namespace, code, route)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "Route: {{route}}, Namespace: {{namespace}}",
+                  "refId": "A"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "Successful Requests Rate (2xx)",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "decimals": null,
+                  "format": "none",
+                  "label": "",
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "none",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "prometheus",
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 9,
+                "w": 24,
+                "x": 0,
+                "y": 18
+              },
+              "id": 2,
+              "legend": {
+                "alignAsTable": true,
+                "avg": false,
+                "current": false,
+                "hideZero": true,
+                "max": false,
+                "min": false,
+                "rightSide": true,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "links": [],
+              "nullPointMode": "null",
+              "options": {
+                "dataLinks": []
+              },
+              "percentage": false,
+              "pointradius": 5,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "sum(haproxy_server_http_responses_total{namespace=~\"$namespace\", route=~\"$route\", code=~\"$code\", pod=~\"$router\"}) by (namespace, route, code)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "Code: {{code}}, Route: {{route}}, Namespace: {{namespace}}",
+                  "refId": "A"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "Number of requests by HTTP codes",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "decimals": null,
+                  "format": "none",
+                  "label": "",
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "none",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            }
+          ],
+          "refresh": "5s",
+          "schemaVersion": 20,
+          "style": "dark",
+          "tags": [
+            "haproxy"
+          ],
+          "templating": {
+            "list": [
+              {
+                "allValue": null,
+                "current": {
+                  "tags": [],
+                  "text": "All",
+                  "value": "$__all"
+                },
+                "datasource": "prometheus",
+                "definition": "label_values(haproxy_server_http_responses_total, namespace)",
+                "hide": 0,
+                "includeAll": true,
+                "label": null,
+                "multi": false,
+                "name": "namespace",
+                "options": [],
+                "query": "label_values(haproxy_server_http_responses_total, namespace)",
+                "refresh": 1,
+                "regex": ".*",
+                "skipUrlSync": false,
+                "sort": 0,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+              },
+              {
+                "allValue": null,
+                "current": {
+                  "text": "All",
+                  "value": "$__all"
+                },
+                "datasource": "prometheus",
+                "definition": "label_values(haproxy_server_http_responses_total{namespace=~\"$namespace\"}, route)",
+                "hide": 0,
+                "includeAll": true,
+                "label": null,
+                "multi": false,
+                "name": "route",
+                "options": [],
+                "query": "label_values(haproxy_server_http_responses_total{namespace=~\"$namespace\"}, route)",
+                "refresh": 1,
+                "regex": ".*",
+                "skipUrlSync": false,
+                "sort": 0,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+              },
+              {
+                "allValue": null,
+                "current": {
+                  "tags": [],
+                  "text": "All",
+                  "value": "$__all"
+                },
+                "datasource": "prometheus",
+                "definition": "label_values(haproxy_server_http_responses_total, code)",
+                "hide": 0,
+                "includeAll": true,
+                "label": null,
+                "multi": false,
+                "name": "code",
+                "options": [],
+                "query": "label_values(haproxy_server_http_responses_total, code)",
+                "refresh": 1,
+                "regex": ".*",
+                "skipUrlSync": false,
+                "sort": 0,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+              },
+              {
+                "allValue": null,
+                "current": {
+                  "tags": [],
+                  "text": "5m",
+                  "value": "5m"
+                },
+                "hide": 0,
+                "includeAll": false,
+                "label": null,
+                "multi": false,
+                "name": "rate",
+                "options": [
+                  {
+                    "selected": false,
+                    "text": "1m",
+                    "value": "1m"
+                  },
+                  {
+                    "selected": true,
+                    "text": "5m",
+                    "value": "5m"
+                  },
+                  {
+                    "selected": false,
+                    "text": "30m",
+                    "value": "30m"
+                  },
+                  {
+                    "selected": false,
+                    "text": "1h",
+                    "value": "1h"
+                  }
+                ],
+                "query": "1m,5m,30m,1h",
+                "skipUrlSync": false,
+                "type": "custom"
+              },
+              {
+                "allValue": null,
+                "current": {
+                  "text": "All",
+                  "value": "$__all"
+                },
+                "datasource": "prometheus",
+                "definition": "label_values(haproxy_server_http_responses_total, pod)",
+                "hide": 0,
+                "includeAll": true,
+                "label": null,
+                "multi": false,
+                "name": "router",
+                "options": [],
+                "query": "label_values(haproxy_server_http_responses_total, pod)",
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 0,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+              }
+            ]
+          },
+          "time": {
+            "from": "now-3h",
+            "to": "now"
+          },
+          "timepicker": {
+            "refresh_intervals": [
+              "5s",
+              "10s",
+              "30s",
+              "1m",
+              "5m",
+              "15m",
+              "30m",
+              "1h",
+              "2h",
+              "1d"
+            ],
+            "time_options": [
+              "5m",
+              "15m",
+              "1h",
+              "6h",
+              "12h",
+              "24h",
+              "2d",
+              "7d",
+              "30d"
+            ]
+          },
+          "timezone": "",
+          "title": "HAProxy Dashboard Example from chart",
+          "uid": "OmHEcaFZz",
+          "version": 3
+        }
+  19: |
+    apiVersion: grafana.integreatly.org/v1beta1
+    kind: GrafanaDashboard
+    metadata:
+      annotations:
+        test-annoation: chart
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        grafanaDashboard: grafana-operator
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        team: stakater
+        test-label: chart
+      name: application-dashboard-test-name-2
+      namespace: NAMESPACE
+    spec:
+      allowCrossNamespaceImport: true
+      configMapRef:
+        key: json
+        name: storage-observability-definition
+      datasources:
+        - datasourceName: Test
+          inputName: DS_PROMETHEUS
+      folder: Storage Observability
+      instanceSelector:
+        matchLabels:
+          app: test-2
+  20: |
+    apiVersion: autoscaling/v2
+    kind: HorizontalPodAutoscaler
+    metadata:
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        key: value
+        team: stakater
+      name: application
+      namespace: NAMESPACE
+    spec:
+      maxReplicas: 10
+      metrics:
+        - resource:
+            name: cpu
+            target:
+              averageUtilization: 60
+              type: Utilization
+          type: Resource
+        - resource:
+            name: memory
+            target:
+              averageUtilization: 60
+              type: Utilization
+          type: Resource
+      minReplicas: 1
+      scaleTargetRef:
+        apiVersion: apps/v1
+        kind: Deployment
+        name: application
+  21: |
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      annotations:
+        ingress.kubernetes.io/force-ssl-redirect: "true"
+        ingress.kubernetes.io/rewrite-target: /
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        key: value
+        team: stakater
+      name: application
+      namespace: NAMESPACE
+    spec:
+      ingressClassName: nginx
+      rules:
+        - host: chart-example.local
+          http:
+            paths:
+              - backend:
+                  service:
+                    name: application
+                    port:
+                      name: http
+                path: /
+                pathType: ImplementationSpecific
+              - backend:
+                  service:
+                    name: application
+                    port:
+                      name: http
+                path: /subpath
+                pathType: ImplementationSpecific
+        - host: RELEASE-NAME.stakater.com
+          http:
+            paths:
+              - backend:
+                  service:
+                    name: application
+                    port:
+                      name: http
+                path: /
+                pathType: ImplementationSpecific
+      tls:
+        - hosts:
+            - chart-example.local
+            - RELEASE-NAME.stakater.com
+          secretName: chart-example-tls
+  22: |
+    apiVersion: batch/v1beta1
+    kind: Job
+    metadata:
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        team: stakater
+      name: application-db-migration
+      namespace: NAMESPACE
+    spec:
+      template:
+        metadata:
+          annotations:
+            helm.sh/hook: pre-install,pre-upgrade
+            helm.sh/hook-delete-policy: before-hook-creation
+            helm.sh/hook-weight: "-1"
+          labels:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: application
+            app.kubernetes.io/version: image-tag
+            application.stakater.com/workload-class: batch
+            group: com.stakater.platform
+            helm.sh/chart: application-8.0.0
+            team: stakater
+        spec:
+          automountServiceAccountToken: false
+          containers:
+            - args:
+                - -c
+                - sleep 5000
+              command:
+                - /bin/bash
+              env:
+                - name: KEY
+                  value: VALUE
+              envFrom:
+                - configMapRef:
+                    name: my-existing-configmap
+                    optional: false
+                - secretRef:
+                    name: my-existing-secret
+                    optional: false
+              image: docker.io/nginx:1.31.0@sha256:772053fe58eaa882734db7ad8d2327e982374ab3d17f302453cd850d975aba38
+              name: db-migration
+              resources:
+                limits:
+                  cpu: 500m
+                  memory: 512Mi
+                requests:
+                  cpu: 100m
+                  memory: 256Mi
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                readOnlyRootFilesystem: true
+                runAsNonRoot: true
+                runAsUser: 65534
+                seccompProfile:
+                  type: RuntimeDefault
+          dnsConfig:
+            options:
+              - name: ndots
+                value: "1"
+          imagePullSecrets:
+            - name: nexus-secret
+          restartPolicy: OnFailure
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 65534
+            seccompProfile:
+              type: RuntimeDefault
+          serviceAccountName: application
+  23: |
+    apiVersion: networking.k8s.io/v1
+    kind: NetworkPolicy
+    metadata:
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        key: value
+        team: stakater
+      name: application
+      namespace: NAMESPACE
+    spec:
+      egress:
+        - ports:
+            - port: 5978
+              protocol: TCP
+          to:
+            - ipBlock:
+                cidr: 10.0.0.0/24
+      ingress:
+        - from:
+            - ipBlock:
+                cidr: 172.17.0.0/16
+                except:
+                  - 172.17.1.0/24
+            - namespaceSelector:
+                matchLabels:
+                  project: myproject
+            - podSelector:
+                matchLabels:
+                  role: frontend
+          ports:
+            - port: 6379
+              protocol: TCP
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: application
+          application.stakater.com/workload-class: serving
+          env: prod
+      policyTypes:
+        - Ingress
+        - Egress
+  24: |
+    apiVersion: policy/v1
+    kind: PodDisruptionBudget
+    metadata:
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        team: stakater
+      name: application
+      namespace: NAMESPACE
+    spec:
+      minAvailable: 1
+      selector:
+        matchLabels:
+          app.kubernetes.io/name: application
+          application.stakater.com/workload-class: serving
+  25: |
+    apiVersion: monitoring.coreos.com/v1
+    kind: PrometheusRule
+    metadata:
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        prometheus: stakater-workload-monitoring
+        role: alert-rules
+        team: stakater
+      name: application
+      namespace: NAMESPACE
+    spec:
+      groups:
+        - name: example-app-uptime
+          rules:
+            - alert: ExampleAppDown
+              annotations:
+                message: The Example App is Down (Test Alert)
+              expr: up{namespace="test-app"} == 0
+              for: 1m
+              labels:
+                severity: critical
+  26: |
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        key: value
+        team: stakater
+      name: application-data
+      namespace: NAMESPACE
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 8Gi
+      storageClassName: ""
+      volumeMode: Filesystem
+  27: |
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        team: stakater
+      name: application-configmaps
+      namespace: NAMESPACE
+    rules:
+      - apiGroups:
+          - ""
+        resources:
+          - configmaps
+        verbs:
+          - get
+  28: |
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        team: stakater
+      name: application-secrets
+      namespace: NAMESPACE
+    rules:
+      - apiGroups:
+          - ""
+        resources:
+          - secrets
+        verbs:
+          - get
+  29: |
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: RoleBinding
+    metadata:
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        team: stakater
+      name: application-configmaps
+      namespace: NAMESPACE
+    roleRef:
+      apiGroup: rbac.authorization.k8s.io
+      kind: Role
+      name: application-configmaps
+    subjects:
+      - kind: ServiceAccount
+        name: application
+        namespace: NAMESPACE
+  30: |
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: RoleBinding
+    metadata:
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        team: stakater
+      name: application-secrets
+      namespace: NAMESPACE
+    roleRef:
+      apiGroup: rbac.authorization.k8s.io
+      kind: Role
+      name: application-secrets
+    subjects:
+      - kind: ServiceAccount
+        name: application
+        namespace: NAMESPACE
+  31: |
+    apiVersion: route.openshift.io/v1
+    kind: Route
+    metadata:
+      annotations:
+        ingress.kubernetes.io/force-ssl-redirect: "true"
+        ingress.kubernetes.io/rewrite-target: /
+        kubernetes.io/ingress.class: external-ingress
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        key: value
+        team: stakater
+      name: application
+      namespace: NAMESPACE
+    spec:
+      alternateBackends:
+        - kind: Service
+          name: alternate-application
+          weight: 20
+      path: /document
+      port:
+        targetPort: proxy
+      tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: edge
+      to:
+        kind: Service
+        name: application
+        weight: 80
+      wildcardPolicy: None
+  32: |
+    apiVersion: bitnami.com/v1alpha1
+    kind: SealedSecret
+    metadata:
+      annotations:
+        key: value
+        sealedsecrets.bitnami.com/cluster-wide: "true"
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        key: value
+        team: stakater
+      name: application-example
+      namespace: NAMESPACE
+    spec:
+      encryptedData:
+        name: AgBghrdepGMKmp/rdtJrkBv/CWpJbtmoMsbKQ7QiZZ2kUoLeeTbrDnhmJY03kWKkNW4kN/sQRf6r1vvBEaR4nkHt5f/ayAeaH3NveI3bdb0xv/svvWjyjehwqwr/kNEAVWxRoUij0Y7MyIEAr4hnV2UnrhgvcjPJLNA8bK6spA+kuT328Vpyceyvnm6yArNn1aYlEckaFHrnculHWRpG73iRYxS5GWAY7EdkLXx7OLLWoopHtLcupklYyPfraJzPvBNZ5/PsyjlUBvoQbGV3cZlrdEj1WHj2S1RQ13ddf2WGtMHmY83t9B3LFZAZuA7BBt4rjludbwQm3/tJ5Kas1dDsSIRIIF7MTeum9YfRB8XUz8IxVKQ/JDskeynrWe3VzN/3HFVnv9GGFy+BCVXZKVU/roIRancz+nXkyoOHS722ZpBi53dfLItoS5dG+0EzArMTQzK/KXHz3b1rxp5oWWDNt3WggTiSg2zwy5ZR8VV2ToTDof6UrFmbCZv/kKriyxbVSxIo3KFnvuRiUZ5MwC0TNut4mW3LKyJfHqkUuLa1mYV6tKF58qBnoj/+JaibAIBEudT9hms5U52p7/jKmgHuop7XPEsz4OVwER//Vbv7X6ctoXtyPu6mZyOfOyJHM8Qj/H7/gwMBYhZHQ96DWrVmZOsWSRpZGJni4Xm7rgt2cFj6UtWv6lvl8aOi/HSZVC3TwWZ9mQrk
+      template:
+        metadata:
+          annotations:
+            key: value
+            sealedsecrets.bitnami.com/cluster-wide: "true"
+          labels:
+            key: value
+          name: application-example
+          namespace: NAMESPACE
+        type: Opaque
+  33: |
+    apiVersion: v1
+    data:
+      secretKey1: c2VjcmV0VmFsdWUx
+      secretKey2: c2VjcmV0VmFsdWUy
+      secretKey3: c2VjcmV0VmFsdWUx
+      secretKey4: c2VjcmV0VmFsdWUy
+    kind: Secret
+    metadata:
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        key: value
+        team: stakater
+      name: application-secret1
+      namespace: NAMESPACE
+    stringData:
+      secretKey5: secretValue5
+      secretKey6: secretValue6
+  34: |
+    apiVersion: secrets-store.csi.x-k8s.io/v1alpha1
+    kind: SecretProviderClass
+    metadata:
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        team: stakater
+      name: application-mongo-host
+      namespace: NAMESPACE
+    spec:
+      parameters:
+        objects: |
+          - objectName: "MONGO_HOST"
+            secretPath: "testing/data/mongoDb"
+            secretKey: "MONGO_HOST"
+        roleName: RELEASE-NAME
+        vaultAddress: http://vault:8200
+      provider: vault
+      secretObjects:
+        - data:
+            - key: MONGO_HOST
+              objectName: host
+          secretName: secret-mongo-host
+          type: Opaque
+  35: |
+    apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        config.xposer.stakater.com/Domain: stakater.com
+        config.xposer.stakater.com/IngressNameTemplate: '{{.Service}}-{{.Namespace}}'
+        config.xposer.stakater.com/IngressURLPath: /
+        config.xposer.stakater.com/IngressURLTemplate: '{{.Service}}.{{.Namespace}}.{{.Domain}}'
+        service.alpha.openshift.io/serving-cert-secret-name: |
+          'application-tls'
+        xposer.stakater.com/annotations: |-
+          kubernetes.io/ingress.class: external-ingress
+          ingress.kubernetes.io/rewrite-target: /
+          ingress.kubernetes.io/force-ssl-redirect: "true"
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        expose: "true"
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        key: value
+        team: stakater
+      name: application
+      namespace: NAMESPACE
+    spec:
+      ports:
+        - name: proxy
+          port: 443
+          protocol: TCP
+          targetPort: 8443
+      selector:
+        app.kubernetes.io/name: application
+        application.stakater.com/workload-class: serving
+      type: ClusterIP
+  36: |
+    apiVersion: monitoring.coreos.com/v1
+    kind: ServiceMonitor
+    metadata:
+      annotations: null
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        key: value
+        team: stakater
+      name: application
+      namespace: NAMESPACE
+    spec:
+      endpoints:
+        - interval: 5s
+          path: /actuator/prometheus
+          port: http
+      namespaceSelector:
+        matchNames:
+          - NAMESPACE
+      selector:
+        matchLabels:
+          app.kubernetes.io/instance: RELEASE-NAME
+          app.kubernetes.io/managed-by: Helm
+          app.kubernetes.io/name: application
+          app.kubernetes.io/version: image-tag
+          group: com.stakater.platform
+          helm.sh/chart: application-8.0.0
+          team: stakater
+  37: |
+    apiVersion: autoscaling.k8s.io/v1
+    kind: VerticalPodAutoscaler
+    metadata:
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: image-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-8.0.0
+        team: stakater
+      name: application
+      namespace: NAMESPACE
+    spec:
+      resourcePolicy:
+        containerPolicies:
+          - containerName: '*'
+            maxAllowed:
+              cpu: 1
+              memory: 5Gi
+            minAllowed:
+              cpu: 0.5
+              memory: 1Gi
+      targetRef:
+        apiVersion: apps/v1
+        kind: Deployment
+        name: application
+      updatePolicy:
+        updateMode: Auto

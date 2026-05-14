@@ -89,7 +89,7 @@ tests:
           path: metadata.name
           pattern: ^myapp(?:-.+)?$
 
-  - it: Default common labels
+  - it: should distribute default common labels
     documentSelector:
       <<: *x-documentSelector
     asserts:
@@ -111,7 +111,7 @@ tests:
       - notExists:
           path: metadata.labels["app.kubernetes.io/component"]
 
-  - it: Common labels
+  - it: should distribute overridden common labels
     documentSelector:
       <<: *x-documentSelector
     set:
@@ -151,3 +151,9 @@ tests:
       - equal:
           path: metadata.labels["tpl-key"]
           value: tpl-value
+
+  - it: should match snapshot
+    documentSelector:
+      <<: *x-documentSelector
+    asserts:
+      - matchSnapshot: {}

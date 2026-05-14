@@ -27,7 +27,7 @@ deployment:
         - bar.remote
   initContainers:
     init-container:
-      image: busybox:1.37@sha256:1487d0af5f52b4ba31c7e465126ee2123fe3f2305d638e7827681e7cf6c83d5e
+      image: repository/image:image-tag
       imagePullPolicy: IfNotPresent
       command: ["/bin/sh"]
       resources:

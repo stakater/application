@@ -10,7 +10,7 @@ should match snapshot:
         app.kubernetes.io/name: application
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         team: stakater
       name: application
       namespace: NAMESPACE
@@ -50,7 +50,7 @@ should match snapshot:
         app.kubernetes.io/name: application
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         team: stakater
       name: application-backup
       namespace: openshift-adp
@@ -89,7 +89,7 @@ should match snapshot:
         app.kubernetes.io/name: application
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         key: value
         team: stakater
       name: application-certificate
@@ -124,7 +124,7 @@ should match snapshot:
         app.kubernetes.io/name: application
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         team: stakater
       name: application-nodes
     rules:
@@ -146,7 +146,7 @@ should match snapshot:
         app.kubernetes.io/name: application
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         team: stakater
       name: application-namespaces
     rules:
@@ -167,7 +167,7 @@ should match snapshot:
         app.kubernetes.io/name: application
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         team: stakater
       name: application-nodes
     roleRef:
@@ -188,7 +188,7 @@ should match snapshot:
         app.kubernetes.io/name: application
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         team: stakater
       name: application-namespaces
     roleRef:
@@ -212,7 +212,7 @@ should match snapshot:
         app.kubernetes.io/name: application
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         key: value
         team: stakater
       name: application-code-config
@@ -230,7 +230,7 @@ should match snapshot:
         app.kubernetes.io/name: application
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         key: value
         team: stakater
       name: application-dev-config
@@ -245,7 +245,7 @@ should match snapshot:
         app.kubernetes.io/name: application
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         team: stakater
       name: application-db-migration
       namespace: NAMESPACE
@@ -261,7 +261,7 @@ should match snapshot:
                 app.kubernetes.io/version: example-tag
                 application.stakater.com/workload-class: scheduled
                 group: com.stakater.platform
-                helm.sh/chart: application-8.0.0
+                helm.sh/chart: application-0.0.0
                 team: stakater
             spec:
               automountServiceAccountToken: false
@@ -327,7 +327,7 @@ should match snapshot:
         app.kubernetes.io/name: application
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         key: value
         team: stakater
       name: application
@@ -370,7 +370,7 @@ should match snapshot:
             application.stakater.com/workload-class: serving
             env: prod
             group: com.stakater.platform
-            helm.sh/chart: application-8.0.0
+            helm.sh/chart: application-0.0.0
             team: stakater
         spec:
           affinity:
@@ -598,7 +598,7 @@ should match snapshot:
         app.kubernetes.io/name: application
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         key: value
         team: stakater
       name: application
@@ -620,7 +620,7 @@ should match snapshot:
         app.kubernetes.io/name: application
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         team: stakater
       name: application-secret-1-name
       namespace: NAMESPACE
@@ -648,7 +648,7 @@ should match snapshot:
         app.kubernetes.io/name: application
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         team: stakater
       name: application-secret-2-name
       namespace: NAMESPACE
@@ -682,7 +682,7 @@ should match snapshot:
         app.kubernetes.io/name: application
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         team: stakater
       name: RELEASE-NAME-extra-object-configmap-1
       namespace: NAMESPACE
@@ -696,7 +696,7 @@ should match snapshot:
         app.kubernetes.io/name: application
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         team: stakater
       name: RELEASE-NAME-extra-object-secret-1
       namespace: NAMESPACE
@@ -713,7 +713,7 @@ should match snapshot:
         app.kubernetes.io/name: application
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         key: value
         team: stakater
       name: application
@@ -739,7 +739,7 @@ should match snapshot:
         app.kubernetes.io/version: example-tag
         grafanaDashboard: grafana-operator
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         team: stakater
         test-label: chart
       name: application-dashboard-test-name-1
@@ -1251,7 +1251,7 @@ should match snapshot:
         app.kubernetes.io/version: example-tag
         grafanaDashboard: grafana-operator
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         team: stakater
         test-label: chart
       name: application-dashboard-test-name-2
@@ -1278,7 +1278,7 @@ should match snapshot:
         app.kubernetes.io/name: application
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         key: value
         team: stakater
       name: application
@@ -1316,7 +1316,7 @@ should match snapshot:
         app.kubernetes.io/name: application
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         key: value
         team: stakater
       name: application
@@ -1366,7 +1366,7 @@ should match snapshot:
         app.kubernetes.io/name: application
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         team: stakater
       name: application-db-migration
       namespace: NAMESPACE
@@ -1384,7 +1384,7 @@ should match snapshot:
             app.kubernetes.io/version: example-tag
             application.stakater.com/workload-class: batch
             group: com.stakater.platform
-            helm.sh/chart: application-8.0.0
+            helm.sh/chart: application-0.0.0
             team: stakater
         spec:
           automountServiceAccountToken: false
@@ -1446,7 +1446,7 @@ should match snapshot:
         app.kubernetes.io/name: application
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         key: value
         team: stakater
       name: application
@@ -1492,7 +1492,7 @@ should match snapshot:
         app.kubernetes.io/name: application
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         team: stakater
       name: application
       namespace: NAMESPACE
@@ -1512,7 +1512,7 @@ should match snapshot:
         app.kubernetes.io/name: application
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         prometheus: stakater-workload-monitoring
         role: alert-rules
         team: stakater
@@ -1539,7 +1539,7 @@ should match snapshot:
         app.kubernetes.io/name: application
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         key: value
         team: stakater
       name: application-data
@@ -1562,7 +1562,7 @@ should match snapshot:
         app.kubernetes.io/name: application
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         team: stakater
       name: application-configmaps
       namespace: NAMESPACE
@@ -1583,7 +1583,7 @@ should match snapshot:
         app.kubernetes.io/name: application
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         team: stakater
       name: application-secrets
       namespace: NAMESPACE
@@ -1604,7 +1604,7 @@ should match snapshot:
         app.kubernetes.io/name: application
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         team: stakater
       name: application-configmaps
       namespace: NAMESPACE
@@ -1626,7 +1626,7 @@ should match snapshot:
         app.kubernetes.io/name: application
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         team: stakater
       name: application-secrets
       namespace: NAMESPACE
@@ -1652,7 +1652,7 @@ should match snapshot:
         app.kubernetes.io/name: application
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         key: value
         team: stakater
       name: application
@@ -1686,7 +1686,7 @@ should match snapshot:
         app.kubernetes.io/name: application
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         key: value
         team: stakater
       name: application-example
@@ -1719,7 +1719,7 @@ should match snapshot:
         app.kubernetes.io/name: application
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         key: value
         team: stakater
       name: application-secret1
@@ -1737,7 +1737,7 @@ should match snapshot:
         app.kubernetes.io/name: application
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         team: stakater
       name: application-mongo-host
       namespace: NAMESPACE
@@ -1778,7 +1778,7 @@ should match snapshot:
         app.kubernetes.io/version: example-tag
         expose: "true"
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         key: value
         team: stakater
       name: application
@@ -1804,7 +1804,7 @@ should match snapshot:
         app.kubernetes.io/name: application
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         key: value
         team: stakater
       name: application
@@ -1824,7 +1824,7 @@ should match snapshot:
           app.kubernetes.io/name: application
           app.kubernetes.io/version: example-tag
           group: com.stakater.platform
-          helm.sh/chart: application-8.0.0
+          helm.sh/chart: application-0.0.0
           team: stakater
   37: |
     apiVersion: autoscaling.k8s.io/v1
@@ -1836,7 +1836,7 @@ should match snapshot:
         app.kubernetes.io/name: application
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
-        helm.sh/chart: application-8.0.0
+        helm.sh/chart: application-0.0.0
         team: stakater
       name: application
       namespace: NAMESPACE

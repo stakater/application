@@ -8,7 +8,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
         team: stakater
@@ -48,7 +48,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
         team: stakater
@@ -87,7 +87,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
         key: value
@@ -122,7 +122,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
         team: stakater
@@ -144,7 +144,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
         team: stakater
@@ -165,7 +165,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
         team: stakater
@@ -186,7 +186,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
         team: stakater
@@ -210,7 +210,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
         key: value
@@ -228,7 +228,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
         key: value
@@ -243,7 +243,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
         team: stakater
@@ -258,7 +258,7 @@ should match snapshot:
                 app.kubernetes.io/instance: RELEASE-NAME
                 app.kubernetes.io/managed-by: Helm
                 app.kubernetes.io/name: application
-                app.kubernetes.io/version: image-tag
+                app.kubernetes.io/version: example-tag
                 application.stakater.com/workload-class: scheduled
                 group: com.stakater.platform
                 helm.sh/chart: application-8.0.0
@@ -281,7 +281,7 @@ should match snapshot:
                     - secretRef:
                         name: my-existing-secret
                         optional: false
-                  image: repository/image:image-tag
+                  image: registry/example-image:example-tag
                   name: db-migration
                   resources:
                     limits:
@@ -325,7 +325,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
         key: value
@@ -366,7 +366,7 @@ should match snapshot:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: application
-            app.kubernetes.io/version: image-tag
+            app.kubernetes.io/version: example-tag
             application.stakater.com/workload-class: serving
             env: prod
             group: com.stakater.platform
@@ -420,7 +420,7 @@ should match snapshot:
                 - configMapRef:
                     name: application-my-configmap
                     optional: false
-              image: repository/image-name:image-tag
+              image: registry/example-image:example-tag
               imagePullPolicy: IfNotPresent
               lifecycle:
                 preStop:
@@ -491,7 +491,7 @@ should match snapshot:
                 - /bin/sh
                 - -c
                 - sleep 3600
-              image: repository/image:image-tag
+              image: registry/example-image:example-tag
               imagePullPolicy: IfNotPresent
               livenessProbe:
                 exec:
@@ -538,7 +538,7 @@ should match snapshot:
           initContainers:
             - command:
                 - /bin/sh
-              image: repository/image:image-tag
+              image: registry/example-image:example-tag
               imagePullPolicy: IfNotPresent
               name: init-container
               resources:
@@ -596,7 +596,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
         key: value
@@ -618,7 +618,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
         team: stakater
@@ -646,7 +646,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
         team: stakater
@@ -680,7 +680,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
         team: stakater
@@ -694,7 +694,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
         team: stakater
@@ -711,7 +711,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
         key: value
@@ -736,7 +736,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         grafanaDashboard: grafana-operator
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
@@ -1248,7 +1248,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         grafanaDashboard: grafana-operator
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
@@ -1276,7 +1276,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
         key: value
@@ -1314,7 +1314,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
         key: value
@@ -1364,7 +1364,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
         team: stakater
@@ -1381,7 +1381,7 @@ should match snapshot:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: application
-            app.kubernetes.io/version: image-tag
+            app.kubernetes.io/version: example-tag
             application.stakater.com/workload-class: batch
             group: com.stakater.platform
             helm.sh/chart: application-8.0.0
@@ -1404,7 +1404,7 @@ should match snapshot:
                 - secretRef:
                     name: my-existing-secret
                     optional: false
-              image: docker.io/nginx:1.31.0@sha256:772053fe58eaa882734db7ad8d2327e982374ab3d17f302453cd850d975aba38
+              image: registry/example-image:example-tag@sha256:example-digest
               name: db-migration
               resources:
                 limits:
@@ -1444,7 +1444,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
         key: value
@@ -1490,7 +1490,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
         team: stakater
@@ -1510,7 +1510,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
         prometheus: stakater-workload-monitoring
@@ -1537,7 +1537,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
         key: value
@@ -1560,7 +1560,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
         team: stakater
@@ -1581,7 +1581,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
         team: stakater
@@ -1602,7 +1602,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
         team: stakater
@@ -1624,7 +1624,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
         team: stakater
@@ -1650,7 +1650,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
         key: value
@@ -1684,7 +1684,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
         key: value
@@ -1717,7 +1717,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
         key: value
@@ -1735,7 +1735,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
         team: stakater
@@ -1775,7 +1775,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         expose: "true"
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
@@ -1802,7 +1802,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
         key: value
@@ -1822,7 +1822,7 @@ should match snapshot:
           app.kubernetes.io/instance: RELEASE-NAME
           app.kubernetes.io/managed-by: Helm
           app.kubernetes.io/name: application
-          app.kubernetes.io/version: image-tag
+          app.kubernetes.io/version: example-tag
           group: com.stakater.platform
           helm.sh/chart: application-8.0.0
           team: stakater
@@ -1834,7 +1834,7 @@ should match snapshot:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: application
-        app.kubernetes.io/version: image-tag
+        app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-8.0.0
         team: stakater

@@ -127,8 +127,8 @@ jobs:
           args=()
           if [ -z "$VALUES" ]; then
             args+=(
-              "--set" "deployment.image.repository=nginx"
-              "--set" "deployment.image.tag=1.25"
+              "--set" "deployment.image.repository=registry/example-image"
+              "--set" "deployment.image.tag=example-tag"
             )
           else
             for f in $VALUES; do

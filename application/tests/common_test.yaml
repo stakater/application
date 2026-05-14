@@ -107,7 +107,7 @@ tests:
           value: RELEASE-NAME
       - equal:
           path: metadata.labels["app.kubernetes.io/version"]
-          value: image-tag
+          value: example-tag
       - notExists:
           path: metadata.labels["app.kubernetes.io/component"]
 

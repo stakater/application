@@ -55,7 +55,7 @@ cronJob:
     #       type: configmap
     #       name: my-existing-configmap
     #   image:
-    #     repository: docker.io/nginx
+    #     repository: docker.io/library/nginx
     #     tag: v1.0.0
     #     digest: '' # if set to a non empty value, digest takes precedence on the tag
     #     imagePullPolicy: IfNotPresent
@@ -120,7 +120,7 @@ job:
     #       type: configmap
     #       name: my-existing-configmap
     #   image:
-    #     repository: docker.io/nginx
+    #     repository: docker.io/library/nginx
     #     tag: v1.0.0
     #     digest: '' # if set to a non empty value, digest takes precedence on the tag
     #     imagePullPolicy: IfNotPresent
@@ -660,7 +660,7 @@ httpRoute:
   # default Gateway supporting the named scope, subject to the usual rules
   # about which Routes a Gateway is allowed to claim.
   # @section -- HTTPRoute Parameters
-  useDefaultGateways: 
+  useDefaultGateways:
   # -- (string) Namespace of the Gateway to attach this HTTPRoute to.
   # If not set, the HTTPRoute will be attached to the Gateway in the same namespace as the HTTPRoute.
   # @section -- HTTPRoute Parameters

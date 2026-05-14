@@ -25,7 +25,7 @@ skip-check:
   # Checkov does not recognize exec-based readiness/liveness probes.
   - CKV_K8S_8
   - CKV_K8S_9
-  # Image tag format (image-tag) is a placeholder for consumer substitution.
+  # Image tag format (example-tag) is a placeholder for consumer substitution.
   - CKV_K8S_14
   # Secrets as environment variables via envFrom is a consumer pattern.
   - CKV_K8S_35

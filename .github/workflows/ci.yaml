@@ -189,7 +189,7 @@ jobs:
 
       - name: Check diff
         run: |
-          git diff --exit-code README.md || { echo; echo "error: README.md is out of date. Please run 'mise run build-docs' and commit the resulting file."; exit 1; }
+          git diff --exit-code README.md || { echo; echo "error: README.md is out of date. Please run 'mise run gen-docs' and commit the resulting file."; exit 1; }
 
   kind-api-validation:
     name: Kind API validation

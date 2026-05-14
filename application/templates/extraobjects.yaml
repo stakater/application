@@ -7,7 +7,11 @@ metadata:
 {{- $extraObjects := .Values.extraObjects | default (list) -}}
 
 {{- if kindIs "map" $extraObjects -}}
-  {{- $extraObjects = values $extraObjects -}}
+  {{- $sorted := list -}}
+  {{- range $key := keys $extraObjects | sortAlpha -}}
+    {{- $sorted = append $sorted (index $extraObjects $key) -}}
+  {{- end -}}
+  {{- $extraObjects = $sorted -}}
 {{- end -}}
 
 {{- $extraObject := dict -}}

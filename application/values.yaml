@@ -1,26 +1,26 @@
-# -- (string) Override the namespace for all resources.
+# -- (string, null) Override the namespace for all resources.
 # @section -- Parameters
 namespaceOverride: ""
 
-# -- (string) Override the component label for all resources.
+# -- (string, null) Override the component label for all resources.
 # @section -- Parameters
 componentOverride: ""
 
-# -- (string) Override the partOf label for all resources.
+# -- (string, null) Override the partOf label for all resources.
 # @section -- Parameters
 partOfOverride: ""
 
-# -- (string) Application name. Used as a prefix for all resource names.
+# -- (string, null) Application name. Used as a prefix for all resource names.
 # @default -- `{{ .Release.Name }}`
 # @section -- Parameters
 applicationName: ""
 
-# -- (string) Override chart version used in helm.sh/chart label. Useful for stable snapshot testing.
+# -- (string, null) Override chart version used in helm.sh/chart label. Useful for stable snapshot testing.
 # @default -- `{{ .Chart.Version }}`
 # @ignore
 chartVersionOverride: ""
 
-# -- (object) Additional labels for all resources. Keys and values are evaluated as templates.
+# -- (object, null) Additional labels for all resources. Keys and values are evaluated as templates.
 # @section -- Parameters
 additionalLabels:
   # example.com/organization: organization-name
@@ -31,7 +31,7 @@ cronJob:
   # -- (bool) Deploy CronJob resources.
   # @section -- CronJob Parameters
   enabled: false
-  # -- (object) Map of CronJob resources.
+  # -- (object, null) Map of CronJob resources.
   # Key will be used as a name suffix for the CronJob. Value is the CronJob configuration.
   # See values for more details.
   # @section -- CronJob Parameters
@@ -95,7 +95,7 @@ job:
   # -- (bool) Deploy Job resources.
   # @section -- Job Parameters
   enabled: false
-  # -- (object) Map of Job resources.
+  # -- (object, null) Map of Job resources.
   # Key will be used as a name suffix for the Job. Value is the Job configuration.
   # See values for more details.
   # @section -- Job Parameters
@@ -160,16 +160,16 @@ deployment:
   # -- (bool) Enable Deployment.
   # @section -- Deployment Parameters
   enabled: true
-  # -- (object) Additional labels for Deployment.
+  # -- (object, null) Additional labels for Deployment.
   # @section -- Deployment Parameters
   additionalLabels:
-  # -- (object) Additional pod labels which are used in Service's Label Selector.
+  # -- (object, null) Additional pod labels which are used in Service's Label Selector.
   # @section -- Deployment Parameters
   podLabels:
-  # -- (object) Annotations for Deployment.
+  # -- (object, null) Annotations for Deployment.
   # @section -- Deployment Parameters
   annotations:
-  # -- (object) Additional pod annotations.
+  # -- (object, null) Additional pod annotations.
   # @section -- Deployment Parameters
   additionalPodAnnotations:
   strategy:
@@ -182,7 +182,7 @@ deployment:
   # -- (bool) Reload deployment if attached Secret/ConfigMap changes.
   # @section -- Deployment Parameters
   reloadOnChange: true
-  # -- (object) Select the node where the pods should be scheduled.
+  # -- (object, null) Select the node where the pods should be scheduled.
   # @section -- Deployment Parameters
   nodeSelector:
   # -- (list) Mapping between IP and hostnames that will be injected as entries in the pod's hosts files.
@@ -196,14 +196,14 @@ deployment:
   #   hostnames:
   #   - "foo.remote"
   #   - "bar.remote"
-  # -- (object) Add init containers to the pods.
+  # -- (object, null) Add init containers to the pods.
   # @section -- Deployment Parameters
   initContainers:
     # init-something:
     #   image: busybox
     #   imagePullPolicy: IfNotPresent
     #   command: ['/bin/sh']
-  # -- (object) Configuration details for fluentdConfigurations.
+  # -- (object, null) Configuration details for fluentdConfigurations.
   # Only works for specific setup, see <https://medium.com/stakater/dynamic-log-processing-with-fluentd-konfigurator-and-slack-935a5de4eddb>.
   # @section -- Deployment Parameters
   fluentdConfigAnnotations:
@@ -223,7 +223,7 @@ deployment:
   # @section -- Deployment Parameters
   imagePullSecrets: []
   #  - name: docker-pull
-  # -- (object) Mount environment variables from ConfigMap or Secret to the pod.
+  # -- (object, null) Mount environment variables from ConfigMap or Secret to the pod.
   # Use `nameSuffix` for resources managed by this chart (name will be prefixed with application name),
   # or `name` to reference an existing external ConfigMap or Secret not managed by this chart.
   # See the README "Consuming environment variable in application chart" section for more details.
@@ -246,7 +246,7 @@ deployment:
   #  external-configmap:
   #    type: configmap
   #    name: my-existing-configmap
-  # -- (object) Environment variables to be added to the pod. See the README "Consuming environment variable in application chart" section for more details.
+  # -- (object, null) Environment variables to be added to the pod. See the README "Consuming environment variable in application chart" section for more details.
   # @section -- Deployment Parameters
   env:
   #  ENVIRONMENT:
@@ -256,7 +256,7 @@ deployment:
   #        configMapKeyRef:
   #           name: config
   #           key: frequency
-  # -- (object) Volumes to be added to the pod.
+  # -- (object, null) Volumes to be added to the pod.
   # Key is the name of the volume. Value is the volume definition.
   # @section -- Deployment Parameters
   volumes:
@@ -269,7 +269,7 @@ deployment:
     # persistent-volume-name:
     #   persistentVolumeClaim:
     #     claimName: claim-name
-  # -- (object) Mount path for Volumes.
+  # -- (object, null) Mount path for Volumes.
   # Key is the name of the volume. Value is the volume mount definition.
   # @section -- Deployment Parameters
   volumeMounts:
@@ -278,10 +278,10 @@ deployment:
     #    subPath: szy
     # volume-name-2:
     #    mountPath: path-2
-  # -- (string) Define the priority class for the pod.
+  # -- (string, null) Define the priority class for the pod.
   # @section -- Deployment Parameters
   priorityClassName: ""
-  # -- (string) Set the runtimeClassName for the deployment's pods.
+  # -- (string, null) Set the runtimeClassName for the deployment's pods.
   # @section -- Deployment Parameters
   runtimeClassName: ""
   # -- (list) Taint tolerations for the pods.
@@ -291,7 +291,7 @@ deployment:
     #   operator: "Equal"
     #   value: "app"
     #   effect: "NoSchedule"
-  # -- (object) Affinity for the pods.
+  # -- (object, null) Affinity for the pods.
   # @section -- Deployment Parameters
   affinity:
   #  nodeAffinity:
@@ -339,19 +339,19 @@ deployment:
     # -- (string) Image pull policy.
     # @section -- Deployment Parameters
     pullPolicy: IfNotPresent
-  # -- (object) DNS config for the pods.
+  # -- (object, null) DNS config for the pods.
   # @section -- Deployment Parameters
   dnsConfig:
     # options:
     # - name: ndots
     #   value: '1'
-  # -- (string) DNS Policy.
+  # -- (string, null) DNS Policy.
   # @section -- Deployment Parameters
   dnsPolicy: ""
   # -- (bool) Enable Kubernetes service links.
   # @section -- Deployment Parameters
   enableServiceLinks: true
-  # -- (object) Startup probe.
+  # -- (object, null) Startup probe.
   # @default -- See below
   # Must specify either one of the following field when enabled: httpGet, exec, tcpSocket, grpc
   # @section -- Deployment Parameters
@@ -384,7 +384,7 @@ deployment:
     # @section -- Deployment Parameters
     grpc: {}
 
-  # -- (object) Readiness probe.
+  # -- (object, null) Readiness probe.
   # @default -- See below
   # Must specify either one of the following field when enabled: httpGet, exec, tcpSocket, grpc
   # @section -- Deployment Parameters
@@ -417,7 +417,7 @@ deployment:
     # @section -- Deployment Parameters
     grpc: {}
 
-  # -- (object) Liveness probe.
+  # -- (object, null) Liveness probe.
   # @default -- See below
   # Must specify either one of the following field when enabled: httpGet, exec, tcpSocket, grpc
   # @section -- Deployment Parameters
@@ -458,7 +458,7 @@ deployment:
     # requests:
     #   memory: 128Mi
     #   cpu: 0.1
-  # -- (object) Security Context at Container Level.
+  # -- (object, null) Security Context at Container Level.
   # @section -- Deployment Parameters
   containerSecurityContext:
     readOnlyRootFilesystem: true
@@ -480,7 +480,7 @@ deployment:
     # It can be useful when an ingress is enabled for the application.
     # @section -- Deployment Parameters
     disableTLSArg: false
-  # -- (object) Security Context for the pod.
+  # -- (object, null) Security Context for the pod.
   # @section -- Deployment Parameters
   securityContext:
     # fsGroup: 2000
@@ -535,7 +535,7 @@ persistence:
   # -- (string) If `persistence.mountPVC` is enabled, where to mount the volume in the containers.
   # @section -- Deployment Parameters
   mountPath: "/"
-  # -- (string) Name of the PVC.
+  # -- (string, null) Name of the PVC.
   # @default -- `{{ include "application.name" $ }}-data`
   # @section -- Deployment Parameters
   name: ""
@@ -549,21 +549,21 @@ persistence:
   #   set, choosing the default provisioner.
   # @section -- Deployment Parameters
   storageClass: null
-  # -- (object) Additional labels for persistent volume.
+  # -- (object, null) Additional labels for persistent volume.
   # @section -- Deployment Parameters
   additionalLabels:
     # key: value
-  # -- (object) Annotations for persistent volume.
+  # -- (object, null) Annotations for persistent volume.
   # @section -- Deployment Parameters
   annotations:
     # "helm.sh/resource-policy": keep
   # -- (string) Size of the persistent volume.
   # @section -- Deployment Parameters
   storageSize: 8Gi
-  # -- (string) PVC Volume Mode.
+  # -- (string, null) PVC Volume Mode.
   # @section -- Deployment Parameters
   volumeMode: ""
-  # -- (string) Name of the volume.
+  # -- (string, null) Name of the volume.
   # @section -- Deployment Parameters
   volumeName: ""
 
@@ -571,10 +571,10 @@ service:
   # -- (bool) Enable Service.
   # @section -- Service Parameters
   enabled: true
-  # -- (object) Additional labels for service.
+  # -- (object, null) Additional labels for service.
   # @section -- Service Parameters
   additionalLabels:
-  # -- (object) Annotations for service.
+  # -- (object, null) Annotations for service.
   # @section -- Service Parameters
   annotations:
     # config.xposer.stakater.com/Domain: stakater.com
@@ -593,15 +593,17 @@ service:
     - port: 8080
       name: http
       protocol: TCP
+      # -- (int, string, null) Target port on pods. Accepts port number or port name (IANA_SVC_NAME).
+      # @section -- Service Parameters
       targetPort: 8080
   # -- (string) Type of service.
   # @section -- Service Parameters
   type: ClusterIP
-  # -- (string) Fixed IP for a ClusterIP service.
+  # -- (string, null) Fixed IP for a ClusterIP service.
   # Set to `None` for an headless service
   # @section -- Service Parameters
   clusterIP:
-  # -- (string) LoadBalancer class name for LoadBalancer type services.
+  # -- (string, null) LoadBalancer class name for LoadBalancer type services.
   # @section -- Service Parameters
   loadBalancerClass:
 
@@ -609,7 +611,7 @@ ingress:
   # -- (bool) Enable Ingress.
   # @section -- Ingress Parameters
   enabled: false
-  # -- (string) Name of the ingress class.
+  # -- (string, null) Name of the ingress class.
   # @section -- Ingress Parameters
   ingressClassName: ""
   hosts:
@@ -620,22 +622,22 @@ ingress:
       - # -- (string) Path.
         # @section -- Ingress Parameters
         path: /
-        # -- (string) Path type.
+        # -- (string, null) Path type.
         # @default -- `ImplementationSpecific`
         # @section -- Ingress Parameters
         pathType:
-        # -- (string) Service name.
+        # -- (string, null) Service name.
         # @default -- `{{ include "application.name" $ }}`
         # @section -- Ingress Parameters
         serviceName:
-        # -- (string) Service port.
+        # -- (string, null) Service port.
         # @default -- `http`
         # @section -- Ingress Parameters
         servicePort:
-  # -- (object) Additional labels for ingress.
+  # -- (object, null) Additional labels for ingress.
   # @section -- Ingress Parameters
   additionalLabels:
-  # -- (object) Annotations for ingress.
+  # -- (object, null) Annotations for ingress.
   # @section -- Ingress Parameters
   annotations:
     # kubernetes.io/ingress.class: external-ingress
@@ -659,14 +661,14 @@ httpRoute:
   parentRefs:
     # - name: my-gateway
     #   sectionName: bar
-  # -- (string) The default Gateway scope to use for this Route.
+  # -- (string, null) The default Gateway scope to use for this Route.
   # If unset (the default) or set to None, the Route will not be attached
   # to any default Gateway; if set, it will be attached to any
   # default Gateway supporting the named scope, subject to the usual rules
   # about which Routes a Gateway is allowed to claim.
   # @section -- HTTPRoute Parameters
   useDefaultGateways:
-  # -- (string) Namespace of the Gateway to attach this HTTPRoute to.
+  # -- (string, null) Namespace of the Gateway to attach this HTTPRoute to.
   # If not set, the HTTPRoute will be attached to the Gateway in the same namespace as the HTTPRoute.
   # @section -- HTTPRoute Parameters
   gatewayNamespace: ""
@@ -688,29 +690,31 @@ httpRoute:
             value: /
       backendRefs:
         - name: '{{ include "application.name" $ }}'
+          # -- (int, tpl, null) Port number or template expression for the backend service.
+          # @section -- HTTPRoute Parameters
           port: '{{ (first $.Values.service.ports).port }}'
 
 route:
   # -- (bool) Deploy a Route (OpenShift) resource.
   # @section -- Route Parameters
   enabled: false
-  # -- (object) Additional labels for Route.
+  # -- (object, null) Additional labels for Route.
   # @section -- Route Parameters
   additionalLabels:
-  # -- (object) Annotations for Route.
+  # -- (object, null) Annotations for Route.
   # @section -- Route Parameters
   annotations:
     # kubernetes.io/ingress.class: external-ingress
     # ingress.kubernetes.io/rewrite-target: /
     # ingress.kubernetes.io/force-ssl-redirect: true
-  # -- (string) Explicit host.
+  # -- (string, null) Explicit host.
   # If no host is added then openshift inserts the default hostname.
   # @section -- Route Parameters
   host:
-  # -- (string) Path.
+  # -- (string, null) Path.
   # @section -- Route Parameters
   path:
-  # -- (object) Service port.
+  # -- (object, null) Service port.
   # @section -- Route Parameters
   port:
     targetPort: http
@@ -728,7 +732,7 @@ route:
     # -- (string) TLS insecure termination policy.
     # @section -- Route Parameters
     insecureEdgeTerminationPolicy: Redirect
-  # -- (object) Alternate backend with it's weight.
+  # -- (object, null) Alternate backend with it's weight.
   # @section -- Route Parameters
   alternateBackends:
     # kind: Service
@@ -739,16 +743,16 @@ secretProviderClass:
   # -- (bool) Deploy a [Secrets Store CSI Driver SecretProviderClass](https://secrets-store-csi-driver.sigs.k8s.io/) resource.
   # @section -- SecretProviderClass Parameters
   enabled: false
-  # -- (string) Name of the SecretProviderClass.
+  # -- (string, null) Name of the SecretProviderClass.
   # Required if `secretProviderClass.enabled` is set to `true`.
   # @section -- SecretProviderClass Parameters
   name: ""
-  # -- (string) Name of the provider.
+  # -- (string, null) Name of the provider.
   # Required if `secretProviderClass.enabled` is set to `true`.
   # @section -- SecretProviderClass Parameters
   provider: ""
   # provider: vault
-  # -- (string) Vault Address.
+  # -- (string, null) Vault Address.
   # Required if `secretProviderClass.provider` is set to `vault`.
   # @section -- SecretProviderClass Parameters
   vaultAddress: ""
@@ -758,7 +762,7 @@ secretProviderClass:
   # @section -- SecretProviderClass Parameters
   roleName: ""
   # roleName: example-role
-  # -- (string) Objects definitions.
+  # -- (string, null) Objects definitions.
   # @section -- SecretProviderClass Parameters
   objects:
     # |
@@ -778,21 +782,21 @@ forecastle:
   # -- (bool) Deploy a [ForecastleApp](https://github.com/stakater/Forecastle) resource.
   # @section -- ForecastleApp Parameters
   enabled: false
-  # -- (object) Additional labels for ForecastleApp.
+  # -- (object, null) Additional labels for ForecastleApp.
   # @section -- ForecastleApp Parameters
   additionalLabels:
   # -- (string) Icon URL.
   # @section -- ForecastleApp Parameters
   icon: https://raw.githubusercontent.com/stakater/ForecastleIcons/master/stakater-big.png
-  # -- (string) Application Name.
+  # -- (string, null) Application Name.
   # Required if `forecastle.enabled` is set to `true`.
   # @section -- ForecastleApp Parameters
   displayName: ""
-  # -- (string) Application Group.
+  # -- (string, null) Application Group.
   # @default -- `{{ .Release.Namespace }}`
   # @section -- ForecastleApp Parameters
   group: ""
-  # -- (object) Custom properties.
+  # -- (object, null) Custom properties.
   # @section -- ForecastleApp Parameters
   properties:
     # Owner: foo
@@ -808,18 +812,18 @@ rbac:
     # -- (bool) Specifies whether to create a dedicated service account. If set to `true`, a new service account will be created.
     # @section -- RBAC Parameters
     create: false
-    # -- (string) The name of the service account. Behavior based on its value and `rbac.serviceAccount.create`:
+    # -- (string, null) The name of the service account. Behavior based on its value and `rbac.serviceAccount.create`:
     # If `rbac.serviceAccount.create` is `false` and `name` is empty, the default service account ("default") is used.
     # If `rbac.serviceAccount.create` is `false` and `name` is set, the provided name is used.
     # If `rbac.serviceAccount.create` is `true` and `name` is empty, a name is auto-generated using the fullname template.
     # If `rbac.serviceAccount.create` is `true` and `name` is set, the provided name is used for creation.
     # @section -- RBAC Parameters
     name: ""
-    # -- (object) Additional labels for Service Account. If `rbac.serviceAccount.create` is set to true, these labels are appended to the service account.
+    # -- (object, null) Additional labels for Service Account. If `rbac.serviceAccount.create` is set to true, these labels are appended to the service account.
     # @section -- RBAC Parameters
     additionalLabels:
       # key: value
-    # -- (object) Annotations for Service Account. If `rbac.serviceAccount.create` is set to true, these annotations are appended to the service account.
+    # -- (object, null) Annotations for Service Account. If `rbac.serviceAccount.create` is set to true, these annotations are appended to the service account.
     # @section -- RBAC Parameters
     annotations:
       # key: value
@@ -863,11 +867,11 @@ rbac:
   #     - get
   #     - list
   #     - watch
-  # -- (object) Additional labels for the Role, RoleBinding, ClusterRole, and ClusterRoleBinding resources.
+  # -- (object, null) Additional labels for the Role, RoleBinding, ClusterRole, and ClusterRoleBinding resources.
   # @section -- RBAC Parameters
   additionalLabels:
     # key: value
-  # -- (object) Annotations for the Role, RoleBinding, ClusterRole, and ClusterRoleBinding resources.
+  # -- (object, null) Annotations for the Role, RoleBinding, ClusterRole, and ClusterRoleBinding resources.
   # @section -- RBAC Parameters
   annotations:
     # key: value
@@ -876,15 +880,15 @@ configMap:
   # -- (bool) Deploy additional ConfigMaps.
   # @section -- ConfigMap Parameters
   enabled: false
-  # -- (object) Additional labels for ConfigMaps.
+  # -- (object, null) Additional labels for ConfigMaps.
   # @section -- ConfigMap Parameters
   additionalLabels:
     # key: value
-  # -- (object) Annotations for ConfigMaps.
+  # -- (object, null) Annotations for ConfigMaps.
   # @section -- ConfigMap Parameters
   annotations:
     # key: value
-  # -- (object) List of ConfigMap entries.
+  # -- (object, null) List of ConfigMap entries.
   # Key will be used as a name suffix for the ConfigMap. Value is the ConfigMap content.
   # @section -- ConfigMap Parameters
   files:
@@ -899,15 +903,15 @@ sealedSecret:
   # -- (bool) Deploy [SealedSecret](https://github.com/bitnami-labs/sealed-secrets) resources.
   # @section -- SealedSecret Parameters
   enabled: false
-  # -- (object) Additional labels for SealedSecret.
+  # -- (object, null) Additional labels for SealedSecret.
   # @section -- SealedSecret Parameters
   additionalLabels:
     # key: value
-  # -- (object) Annotations for SealedSecret.
+  # -- (object, null) Annotations for SealedSecret.
   # @section -- SealedSecret Parameters
   annotations:
     # key: value
-  # -- (object) List of SealedSecret entries.
+  # -- (object, null) List of SealedSecret entries.
   # Key will be used as a name suffix for the SealedSecret. Value is the SealedSecret content.
   # @section -- SealedSecret Parameters
   files:
@@ -927,15 +931,15 @@ secret:
   # -- (bool) Deploy additional Secret resources.
   # @section -- Secret Parameters
   enabled: false
-  # -- (object) Additional labels for Secret.
+  # -- (object, null) Additional labels for Secret.
   # @section -- Secret Parameters
   additionalLabels:
     # key: value
-  # -- (object) Annotations for Secret.
+  # -- (object, null) Annotations for Secret.
   # @section -- Secret Parameters
   annotations:
     # key: value
-  # -- (object) List of Secrets entries.
+  # -- (object, null) List of Secrets entries.
   # Key will be used as a name suffix for the Secret.
   # There a three allowed modes:
   # - `data`: Data is base64 encoded by the chart
@@ -964,11 +968,11 @@ serviceMonitor:
   # -- (bool) Deploy a ServiceMonitor (Prometheus Operator) resource.
   # @section -- ServiceMonitor Parameters
   enabled: false
-  # -- (object) Additional labels for ServiceMonitor.
+  # -- (object, null) Additional labels for ServiceMonitor.
   # @section -- ServiceMonitor Parameters
   additionalLabels:
     # key: value
-  # -- (object) Annotations for ServiceMonitor.
+  # -- (object, null) Annotations for ServiceMonitor.
   # @section -- ServiceMonitor Parameters
   annotations:
     # key: value
@@ -983,11 +987,11 @@ autoscaling:
   # -- (bool) Enable Horizontal Pod Autoscaling.
   # @section -- Autoscaling - Horizontal Pod Autoscaling Parameters
   enabled: false
-  # -- (object) Additional labels for HPA.
+  # -- (object, null) Additional labels for HPA.
   # @section -- Autoscaling - Horizontal Pod Autoscaling Parameters
   additionalLabels:
     # key: value
-  # -- (object) Annotations for HPA.
+  # -- (object, null) Annotations for HPA.
   # @section -- Autoscaling - Horizontal Pod Autoscaling Parameters
   annotations:
     # key: value
@@ -1017,18 +1021,18 @@ vpa:
   # -- (bool) Enable Vertical Pod Autoscaling.
   # @section -- VPA - Vertical Pod Autoscaler Parameters
   enabled: false
-  # -- (object) Additional labels for VPA.
+  # -- (object, null) Additional labels for VPA.
   # @section -- VPA - Vertical Pod Autoscaler Parameters
   additionalLabels:
     # key: value
-  # -- (object) Annotations for VPA.
+  # -- (object, null) Annotations for VPA.
   # @section -- VPA - Vertical Pod Autoscaler Parameters
   annotations:
     # key: value
   # -- (list) Container policies for individual containers.
   # @section -- VPA - Vertical Pod Autoscaler Parameters
   containerPolicies: []
-  # -- (object) Update policy.
+  # -- (object, null) Update policy.
   # @section -- VPA - Vertical Pod Autoscaler Parameters
   updatePolicy:
     updateMode: Auto
@@ -1037,11 +1041,11 @@ endpointMonitor:
   # -- (bool) Deploy an [IMC EndpointMonitor](https://github.com/stakater/IngressMonitorController) resource.
   # @section -- EndpointMonitor Parameters
   enabled: false
-  # -- (object) Additional labels for EndpointMonitor.
+  # -- (object, null) Additional labels for EndpointMonitor.
   # @section -- EndpointMonitor Parameters
   additionalLabels:
     # key: value
-  # -- (object) Annotations for EndpointMonitor.
+  # -- (object, null) Annotations for EndpointMonitor.
   # @section -- EndpointMonitor Parameters
   annotations:
     # key: value
@@ -1050,11 +1054,11 @@ certificate:
   # -- (bool) Deploy a [cert-manager Certificate](https://cert-manager.io) resource.
   # @section -- cert-manager Certificate Parameters
   enabled: false
-  # -- (object) Additional labels for Certificate.
+  # -- (object, null) Additional labels for Certificate.
   # @section -- cert-manager Certificate Parameters
   additionalLabels:
     # key: value
-  # -- (object) Annotations for Certificate.
+  # -- (object, null) Annotations for Certificate.
   # @section -- cert-manager Certificate Parameters
   annotations:
     # key: value
@@ -1067,7 +1071,7 @@ certificate:
   # -- (string) The amount of time before the currently issued certificate's notAfter time that cert-manager will begin to attempt to renew the certificate.
   # @section -- cert-manager Certificate Parameters
   renewBefore: 720h0m0s # 30d
-  # -- (object) Full X509 name specification for certificate. Keys and values are evaluated as templates.
+  # -- (object, null) Full X509 name specification for certificate. Keys and values are evaluated as templates.
   # @section -- cert-manager Certificate Parameters
   subject:
   #  organizations:
@@ -1167,16 +1171,16 @@ alertmanagerConfig:
   # -- (bool) Deploy an AlertmanagerConfig (Prometheus Operator) resource.
   # @section -- AlertmanagerConfig Parameters
   enabled: false
-  # -- (object) Labels to be picked up by Alertmanager to add it to base config.
+  # -- (object, null) Labels to be picked up by Alertmanager to add it to base config.
   # Read more about it at [https://docs.openshift.com/container-platform/4.7/rest_api/monitoring_apis/alertmanager-monitoring-coreos-com-v1.html](OpenShift's AlermanagerConfig documentation) under .spec.alertmanagerConfigSelector.
   # @section -- AlertmanagerConfig Parameters
   selectionLabels:
     alertmanagerConfig: workload
-  # -- (object) AlertmanagerConfig spec.
+  # -- (object, null) AlertmanagerConfig spec.
   # Read more about it at [https://docs.openshift.com/container-platform/4.7/rest_api/monitoring_apis/alertmanagerconfig-monitoring-coreos-com-v1alpha1.html](OpenShift's AlermanagerConfig documentation).
   # @section -- AlertmanagerConfig Parameters
   spec:
-    # -- (object) Route definition for alerts matching the resource’s namespace.
+    # -- (object, null) Route definition for alerts matching the resource’s namespace.
     # It will be added to the generated Alertmanager configuration as a first-level route.
     # @section -- AlertmanagerConfig Parameters
     route:
@@ -1209,7 +1213,7 @@ prometheusRule:
   # -- (bool) Deploy a PrometheusRule (Prometheus Operator) resource.
   # @section -- PrometheusRule Parameters
   enabled: false
-  # -- (object) Additional labels for PrometheusRule.
+  # -- (object, null) Additional labels for PrometheusRule.
   # @section -- PrometheusRule Parameters
   additionalLabels:
     # prometheus: stakater-workload-monitoring
@@ -1233,15 +1237,15 @@ externalSecret:
   # -- (bool) Deploy [ExternalSecret](https://external-secrets.io/latest/) resources.
   # @section -- ExternalSecret Parameters
   enabled: false
-  # -- (object) Additional labels for ExternalSecret.
+  # -- (object, null) Additional labels for ExternalSecret.
   # @section -- ExternalSecret Parameters
   additionalLabels:
   #   key: value
-  # -- (object) Annotations for ExternalSecret.
+  # -- (object, null) Annotations for ExternalSecret.
   # @section -- ExternalSecret Parameters
   annotations:
   #   key: value
-  # -- (object) Default values for the SecretStore.
+  # -- (object, null) Default values for the SecretStore.
   # Can be overriden per ExternalSecret in the `externalSecret.files` object.
   # @section -- ExternalSecret Parameters
   secretStore:
@@ -1255,7 +1259,7 @@ externalSecret:
   # -- (string) RefreshInterval is the amount of time before the values are read again from the SecretStore provider.
   # @section -- ExternalSecret Parameters
   refreshInterval: "1m"
-  # -- (object) List of ExternalSecret entries.
+  # -- (object, null) List of ExternalSecret entries.
   # Key will be used as a name suffix for the ExternalSecret.
   # There a two allowed modes:
   # - `data`: Data defines the connection between the Kubernetes Secret keys and the Provider data
@@ -1282,11 +1286,11 @@ networkPolicy:
   # -- (bool) Enable Network Policy.
   # @section -- NetworkPolicy Parameters
   enabled: false
-  # -- (object) Additional labels for Network Policy.
+  # -- (object, null) Additional labels for Network Policy.
   # @section -- NetworkPolicy Parameters
   additionalLabels:
   #   key: value
-  # -- (object) Annotations for Network Policy.
+  # -- (object, null) Annotations for Network Policy.
   # @section -- NetworkPolicy Parameters
   annotations:
   #   key: value
@@ -1321,10 +1325,10 @@ pdb:
   # -- (bool) Enable Pod Disruption Budget.
   # @section -- PodDisruptionBudget Parameters
   enabled: false
-  # -- (int) Minimum number of pods that must be available after eviction. Accepts both integers and percentage strings (e.g. "25%").
+  # -- (int, string, null) Minimum number of pods that must be available after eviction. Accepts both integers and percentage strings (e.g. "25%").
   # @section -- PodDisruptionBudget Parameters
   minAvailable: 1
-  # -- (int) Maximum number of unavailable pods during voluntary disruptions. Accepts both integers and percentage strings (e.g. "25%").
+  # -- (int, string, null) Maximum number of unavailable pods during voluntary disruptions. Accepts both integers and percentage strings (e.g. "25%").
   # @section -- PodDisruptionBudget Parameters
   maxUnavailable:
   # maxUnavailable: 1
@@ -1333,15 +1337,15 @@ grafanaDashboard:
   # -- (bool) Deploy [GrafanaDashboard](https://github.com/grafana/grafana-operator) resources.
   # @section -- GrafanaDashboard Parameters
   enabled: false
-  # -- (object) Additional labels for GrafanaDashboard.
+  # -- (object, null) Additional labels for GrafanaDashboard.
   # @section -- GrafanaDashboard Parameters
   additionalLabels:
     # grafanaDashboard: grafana-operator
-  # -- (object) Annotations for GrafanaDashboard.
+  # -- (object, null) Annotations for GrafanaDashboard.
   # @section -- GrafanaDashboard Parameters
   annotations:
     # key: value
-  # -- (object) List of GrafanaDashboard entries.
+  # -- (object, null) List of GrafanaDashboard entries.
   # Key will be used as a name suffix for the GrafanaDashboard. Value is the GrafanaDashboard content.
   # According to GrafanaDashboard behavior, `url` field takes precedence on the `json` field.
   # @section -- GrafanaDashboard Parameters
@@ -1370,15 +1374,15 @@ backup:
   # -- (bool) Deploy a [Velero/OADP Backup](https://velero.io/docs/main/api-types/backup/) resource.
   # @section -- Backup Parameters
   enabled: false
-  # -- (string) Namespace for Backup.
+  # -- (string, null) Namespace for Backup.
   # @default -- `{{ .Release.Namespace }}`
   # @section -- Backup Parameters
   namespace:
-  # -- (object) Additional labels for Backup.
+  # -- (object, null) Additional labels for Backup.
   # @section -- Backup Parameters
   additionalLabels:
     # grafanaDashboard: grafana-operator
-  # -- (object) Annotations for Backup.
+  # -- (object, null) Annotations for Backup.
   # @section -- Backup Parameters
   annotations:
     # key: value
@@ -1388,7 +1392,7 @@ backup:
   # -- (bool) Whether to take snapshots of persistent volumes as part of the backup.
   # @section -- Backup Parameters
   snapshotVolumes: true
-  # -- (string) Name of the backup storage location where the backup should be stored.
+  # -- (string, null) Name of the backup storage location where the backup should be stored.
   # @section -- Backup Parameters
   storageLocation:
   # -- (string) How long the Backup should be retained for.
@@ -1406,7 +1410,7 @@ backup:
   # @section -- Backup Parameters
   excludedResources:
 
-# -- (list) Extra K8s manifests to deploy.
+# -- (list, object, null) Extra K8s manifests to deploy.
 # Can be of type list or object. If object, keys are ignored and only values are used. The used values can be defined as object or string and are evaluated as templates.
 # @section -- Parameters
 extraObjects:

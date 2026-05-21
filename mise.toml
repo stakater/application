@@ -3,7 +3,6 @@ prek = "0.4.1"
 helm = "4.2.0"
 helm-docs = "1.14.2"
 "github:dadav/helm-schema" = "0.23.3"
-jq = "1.8.1"
 "ubi:helm-unittest/helm-unittest" = { version = "1.1.0", exe = "untt", rename_exe = "helm-unittest" }
 
 [tasks.set-version]
@@ -35,29 +34,6 @@ helm-schema \\
   --append-newline \\
   --skip-auto-generation required \\
   --skip-auto-generation additionalProperties
-
-tmp="$(mktemp)"
-# helm-schema infers types too strictly from defaults:
-# - optional string fields need "null" added
-# - httpRoute port is templated then casted to int so it accepts both int and string
-# - service targetPort and pdb min/maxUnavailable are IntOrString in Kubernetes
-# - extraObjects can be list or object
-jq '
-  walk(
-    if type == "object" and (.default | type) == "string" and (.type | type) == "string" then
-      .type = [.type, "null"]
-    else
-      .
-    end
-  )
-  | .properties.httpRoute.properties.rules.items.anyOf[].properties.backendRefs.items.anyOf[].properties.port.type = ["integer", "string", "null"]
-  | .properties.service.properties.ports.items.anyOf[].properties.targetPort.type = ["integer", "string", "null"]
-  | .properties.pdb.properties.minAvailable.type = ["integer", "string", "null"]
-  | .properties.pdb.properties.maxUnavailable.type = ["integer", "string", "null"]
-  | .properties.extraObjects.type = ["object", "array", "null"]
-' \\
-  application/values.schema.json > "$tmp"
-mv "$tmp" application/values.schema.json
 """
 
 [tasks.generate]

@@ -9,6 +9,9 @@
   "mise": {
     "enabled": true
   },
+  "ignoreDeps": [
+    "registry/example-image"
+  ],
   "customManagers": [
     {
       "customType": "regex",

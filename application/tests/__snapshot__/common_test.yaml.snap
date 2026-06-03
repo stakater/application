@@ -55,7 +55,7 @@ should match snapshot:
       name: application-backup
       namespace: openshift-adp
     spec:
-      defaultVolumesToRestic: true
+      defaultVolumesToFsBackup: true
       excludedResources:
         - daemonsets
         - statefulsets
@@ -74,7 +74,8 @@ should match snapshot:
         - configmaps
       labelSelector:
         matchLabels:
-          app.kubernetes.io/part-of: application
+          app.kubernetes.io/name: application
+          application.stakater.com/workload-class: serving
       snapshotVolumes: true
       storageLocation: dpa-1
       ttl: 1h0m0s

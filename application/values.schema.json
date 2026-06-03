@@ -25,15 +25,15 @@
             "alertmanagerConfig": {
               "default": "workload",
               "title": "alertmanagerConfig",
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": "string"
             }
           },
           "required": [],
           "title": "selectionLabels",
-          "type": "object"
+          "type": [
+            "object",
+            "null"
+          ]
         },
         "spec": {
           "description": "AlertmanagerConfig spec. Read more about it at [https://docs.openshift.com/container-platform/4.7/rest_api/monitoring_apis/alertmanagerconfig-monitoring-coreos-com-v1alpha1.html](OpenShift's AlermanagerConfig documentation).",
@@ -67,7 +67,10 @@
           },
           "required": [],
           "title": "spec",
-          "type": "object"
+          "type": [
+            "object",
+            "null"
+          ]
         }
       },
       "required": [],
@@ -77,6 +80,7 @@
     "applicationName": {
       "default": "`{{ .Release.Name }}`",
       "description": "Application name. Used as a prefix for all resource names.",
+      "required": [],
       "title": "applicationName",
       "type": [
         "string",
@@ -128,10 +132,7 @@
                       "name": {
                         "default": "cpu",
                         "title": "name",
-                        "type": [
-                          "string",
-                          "null"
-                        ]
+                        "type": "string"
                       },
                       "target": {
                         "properties": {
@@ -143,10 +144,7 @@
                           "type": {
                             "default": "Utilization",
                             "title": "type",
-                            "type": [
-                              "string",
-                              "null"
-                            ]
+                            "type": "string"
                           }
                         },
                         "required": [],
@@ -161,10 +159,7 @@
                   "type": {
                     "default": "Resource",
                     "title": "type",
-                    "type": [
-                      "string",
-                      "null"
-                    ]
+                    "type": "string"
                   }
                 },
                 "required": [],
@@ -177,10 +172,7 @@
                       "name": {
                         "default": "memory",
                         "title": "name",
-                        "type": [
-                          "string",
-                          "null"
-                        ]
+                        "type": "string"
                       },
                       "target": {
                         "properties": {
@@ -192,10 +184,7 @@
                           "type": {
                             "default": "Utilization",
                             "title": "type",
-                            "type": [
-                              "string",
-                              "null"
-                            ]
+                            "type": "string"
                           }
                         },
                         "required": [],
@@ -210,10 +199,7 @@
                   "type": {
                     "default": "Resource",
                     "title": "type",
-                    "type": [
-                      "string",
-                      "null"
-                    ]
+                    "type": "string"
                   }
                 },
                 "required": [],
@@ -274,10 +260,7 @@
           "default": "",
           "description": "List of resource types to exclude from the backup.",
           "title": "excludedResources",
-          "type": [
-            "array",
-            "null"
-          ]
+          "type": "array"
         },
         "includedNamespaces": {
           "default": "`[ {{ include \"application.namespace\" $ }} ]`",
@@ -291,23 +274,18 @@
             "required": []
           },
           "title": "includedNamespaces",
-          "type": [
-            "array",
-            "null"
-          ]
+          "type": "array"
         },
         "includedResources": {
           "default": "",
           "description": "List of resource types to include in the backup.",
           "title": "includedResources",
-          "type": [
-            "array",
-            "null"
-          ]
+          "type": "array"
         },
         "namespace": {
           "default": "`{{ .Release.Namespace }}`",
           "description": "Namespace for Backup.",
+          "required": [],
           "title": "namespace",
           "type": [
             "string",
@@ -323,6 +301,7 @@
         "storageLocation": {
           "default": "",
           "description": "Name of the backup storage location where the backup should be stored.",
+          "required": [],
           "title": "storageLocation",
           "type": [
             "string",
@@ -333,10 +312,7 @@
           "default": "1h0m0s",
           "description": "How long the Backup should be retained for.",
           "title": "ttl",
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": "string"
         }
       },
       "required": [],
@@ -369,37 +345,25 @@
           "default": "",
           "description": "Common name as specified on the DER encoded CSR. This field is not recommended in cases when this certificate is an end-entity certificate. More information can be found in the [cert-manager documentation](https://cert-manager.io/docs/usage/certificate/#:~:text=%23%20Avoid%20using%20commonName,%3A%20example.com).",
           "title": "commonName",
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": "string"
         },
         "dnsNames": {
           "default": "",
           "description": "List of DNS subjectAltNames to be set on the certificate. Keys and values are evaluated as templates.",
           "title": "dnsNames",
-          "type": [
-            "array",
-            "null"
-          ]
+          "type": "array"
         },
         "duration": {
           "default": "8760h0m0s",
           "description": "The requested \"duration\" (i.e. lifetime) of the Certificate.",
           "title": "duration",
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": "string"
         },
         "emailSANs": {
           "default": "",
           "description": "List of email subjectAltNames to be set on the Certificate.",
           "title": "emailSANs",
-          "type": [
-            "array",
-            "null"
-          ]
+          "type": "array"
         },
         "enabled": {
           "default": false,
@@ -411,10 +375,7 @@
           "default": "",
           "description": "List of IP address subjectAltNames to be set on the certificate.",
           "title": "ipAddresses",
-          "type": [
-            "array",
-            "null"
-          ]
+          "type": "array"
         },
         "isCA": {
           "default": false,
@@ -428,28 +389,19 @@
               "default": "cert-manager.io",
               "description": "Group of the issuer resource being refered to.",
               "title": "group",
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": "string"
             },
             "kind": {
               "default": "ClusterIssuer",
               "description": "Kind of the issuer being referred to.",
               "title": "kind",
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": "string"
             },
             "name": {
               "default": "ca-issuer",
               "description": "Reference to the issuer for this certificate.",
               "title": "name",
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": "string"
             }
           },
           "required": [],
@@ -460,19 +412,13 @@
           "default": "RSA",
           "description": "Private key algorithm of the corresponding private key for this certificate.",
           "title": "keyAlgorithm",
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": "string"
         },
         "keyEncoding": {
           "default": "PKCS1",
           "description": "Private key cryptography standards (PKCS) for this certificate's private key to be encoded in.",
           "title": "keyEncoding",
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": "string"
         },
         "keySize": {
           "default": 2048,
@@ -500,19 +446,13 @@
                   "default": "test_key",
                   "description": "Key of the entry in the Secret resource's data field to be used.",
                   "title": "key",
-                  "type": [
-                    "string",
-                    "null"
-                  ]
+                  "type": "string"
                 },
                 "name": {
                   "default": "test-creds",
                   "description": "Name of the Secret resource being referred to.",
                   "title": "name",
-                  "type": [
-                    "string",
-                    "null"
-                  ]
+                  "type": "string"
                 }
               },
               "required": [],
@@ -531,19 +471,13 @@
                   "default": "test_key",
                   "description": "Key of the entry in the Secret resource's data field to be used.",
                   "title": "key",
-                  "type": [
-                    "string",
-                    "null"
-                  ]
+                  "type": "string"
                 },
                 "name": {
                   "default": "test-creds",
                   "description": "Name of the Secret resource being referred to.",
                   "title": "name",
-                  "type": [
-                    "string",
-                    "null"
-                  ]
+                  "type": "string"
                 }
               },
               "required": [],
@@ -568,10 +502,7 @@
               "default": "Always",
               "description": "Denotes how private keys should be generated or sourced when a certificate is being issued.",
               "title": "rotationPolicy",
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": "string"
             }
           },
           "required": [],
@@ -582,19 +513,13 @@
           "default": "720h0m0s",
           "description": "The amount of time before the currently issued certificate's notAfter time that cert-manager will begin to attempt to renew the certificate.",
           "title": "renewBefore",
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": "string"
         },
         "secretName": {
           "default": "tls-cert",
           "description": "Name of the secret resource that will be automatically created and managed by this Certificate resource.",
           "title": "secretName",
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": "string"
         },
         "subject": {
           "default": "",
@@ -610,19 +535,13 @@
           "default": "",
           "description": "List of URI subjectAltNames to be set on the certificate.",
           "title": "uriSANs",
-          "type": [
-            "array",
-            "null"
-          ]
+          "type": "array"
         },
         "usages": {
           "default": "",
           "description": "Set of x509 usages that are requested for the certificate.",
           "title": "usages",
-          "type": [
-            "array",
-            "null"
-          ]
+          "type": "array"
         }
       },
       "required": [],
@@ -632,6 +551,7 @@
     "chartVersionOverride": {
       "default": "`{{ .Chart.Version }}`",
       "description": "Override chart version used in helm.sh/chart label. Useful for stable snapshot testing. @ignore",
+      "required": [],
       "title": "chartVersionOverride",
       "type": [
         "string",
@@ -641,6 +561,7 @@
     "componentOverride": {
       "default": "",
       "description": "Override the component label for all resources.",
+      "required": [],
       "title": "componentOverride",
       "type": [
         "string",
@@ -719,10 +640,7 @@
           "default": "",
           "description": "Additional containers besides init and app containers (without templating).",
           "title": "additionalContainers",
-          "type": [
-            "array",
-            "null"
-          ]
+          "type": "array"
         },
         "additionalLabels": {
           "default": "",
@@ -802,7 +720,10 @@
           },
           "required": [],
           "title": "containerSecurityContext",
-          "type": "object"
+          "type": [
+            "object",
+            "null"
+          ]
         },
         "dnsConfig": {
           "default": "",
@@ -817,6 +738,7 @@
         "dnsPolicy": {
           "default": "",
           "description": "DNS Policy.",
+          "required": [],
           "title": "dnsPolicy",
           "type": [
             "string",
@@ -857,7 +779,7 @@
         },
         "fluentdConfigAnnotations": {
           "default": "",
-          "description": "Configuration details for fluentdConfigurations. Only works for specific setup, see <https://medium.com/stakater/dynamic-log-processing-with-fluentd-konfigurator-and-slack-935a5de4eddb>.",
+          "description": "Configuration details for fluentdConfigurations. Only works for specific setup, see \u003chttps://medium.com/stakater/dynamic-log-processing-with-fluentd-konfigurator-and-slack-935a5de4eddb\u003e.",
           "required": [],
           "title": "fluentdConfigAnnotations",
           "type": [
@@ -869,19 +791,13 @@
           "default": "",
           "description": "Mapping between IP and hostnames that will be injected as entries in the pod's hosts files.",
           "title": "hostAliases",
-          "type": [
-            "array",
-            "null"
-          ]
+          "type": "array"
         },
         "hostNetwork": {
           "default": "",
           "description": "Host network connectivity.",
           "title": "hostNetwork",
-          "type": [
-            "boolean",
-            "null"
-          ]
+          "type": "boolean"
         },
         "image": {
           "properties": {
@@ -889,37 +805,25 @@
               "default": "",
               "description": "Image digest. If resolved to a non-empty value, digest takes precedence on the tag.",
               "title": "digest",
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": "string"
             },
             "pullPolicy": {
               "default": "IfNotPresent",
               "description": "Image pull policy.",
               "title": "pullPolicy",
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": "string"
             },
             "repository": {
               "default": "",
               "description": "Repository.",
               "title": "repository",
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": "string"
             },
             "tag": {
               "default": "",
               "description": "Tag.",
               "title": "tag",
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": "string"
             }
           },
           "required": [],
@@ -1020,10 +924,7 @@
           "default": "",
           "description": "Minimum number of seconds for which a newly created Pod should be ready without any of its containers crashing.",
           "title": "minReadySeconds",
-          "type": [
-            "integer",
-            "null"
-          ]
+          "type": "integer"
         },
         "nodeSelector": {
           "default": "",
@@ -1053,10 +954,7 @@
               "default": "openshift/oauth-proxy:latest",
               "description": "Image for the OAuth Proxy.",
               "title": "image",
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": "string"
             },
             "port": {
               "default": 8080,
@@ -1068,10 +966,7 @@
               "default": "openshift-oauth-proxy-tls",
               "description": "Secret name for the OAuth Proxy TLS certificate.",
               "title": "secretName",
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": "string"
             }
           },
           "required": [],
@@ -1092,14 +987,12 @@
           "default": "",
           "description": "List of ports for the app container.",
           "title": "ports",
-          "type": [
-            "array",
-            "null"
-          ]
+          "type": "array"
         },
         "priorityClassName": {
           "default": "",
           "description": "Define the priority class for the pod.",
+          "required": [],
           "title": "priorityClassName",
           "type": [
             "string",
@@ -1182,10 +1075,7 @@
           "default": "",
           "description": "Number of replicas.",
           "title": "replicas",
-          "type": [
-            "integer",
-            "null"
-          ]
+          "type": "integer"
         },
         "resources": {
           "description": "Resource limits and requests for the pod.",
@@ -1202,6 +1092,7 @@
         "runtimeClassName": {
           "default": "",
           "description": "Set the runtimeClassName for the deployment's pods.",
+          "required": [],
           "title": "runtimeClassName",
           "type": [
             "string",
@@ -1290,10 +1181,7 @@
               "default": "RollingUpdate",
               "description": "Type of deployment strategy.",
               "title": "type",
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": "string"
             }
           },
           "required": [],
@@ -1304,28 +1192,19 @@
           "default": "",
           "description": "Gracefull termination period.",
           "title": "terminationGracePeriodSeconds",
-          "type": [
-            "integer",
-            "null"
-          ]
+          "type": "integer"
         },
         "tolerations": {
           "default": "",
           "description": "Taint tolerations for the pods.",
           "title": "tolerations",
-          "type": [
-            "array",
-            "null"
-          ]
+          "type": "array"
         },
         "topologySpreadConstraints": {
           "default": "",
           "description": "Topology spread constraints for the pods.",
           "title": "topologySpreadConstraints",
-          "type": [
-            "array",
-            "null"
-          ]
+          "type": "array"
         },
         "volumeMounts": {
           "default": "",
@@ -1427,10 +1306,7 @@
           "default": "1m",
           "description": "RefreshInterval is the amount of time before the values are read again from the SecretStore provider.",
           "title": "refreshInterval",
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": "string"
         },
         "secretStore": {
           "description": "Default values for the SecretStore. Can be overriden per ExternalSecret in the `externalSecret.files` object.",
@@ -1439,24 +1315,21 @@
               "default": "SecretStore",
               "description": "Kind of the SecretStore being refered to.",
               "title": "kind",
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": "string"
             },
             "name": {
               "default": "tenant-vault-secret-store",
               "description": "Name of the SecretStore to use.",
               "title": "name",
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": "string"
             }
           },
           "required": [],
           "title": "secretStore",
-          "type": "object"
+          "type": [
+            "object",
+            "null"
+          ]
         }
       },
       "required": [],
@@ -1466,10 +1339,11 @@
     "extraObjects": {
       "default": "",
       "description": "Extra K8s manifests to deploy. Can be of type list or object. If object, keys are ignored and only values are used. The used values can be defined as object or string and are evaluated as templates.",
+      "required": [],
       "title": "extraObjects",
       "type": [
-        "object",
         "array",
+        "object",
         "null"
       ]
     },
@@ -1488,6 +1362,7 @@
         "displayName": {
           "default": "",
           "description": "Application Name. Required if `forecastle.enabled` is set to `true`.",
+          "required": [],
           "title": "displayName",
           "type": [
             "string",
@@ -1503,6 +1378,7 @@
         "group": {
           "default": "`{{ .Release.Namespace }}`",
           "description": "Application Group.",
+          "required": [],
           "title": "group",
           "type": [
             "string",
@@ -1513,10 +1389,7 @@
           "default": "https://raw.githubusercontent.com/stakater/ForecastleIcons/master/stakater-big.png",
           "description": "Icon URL.",
           "title": "icon",
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": "string"
         },
         "networkRestricted": {
           "default": false,
@@ -1611,6 +1484,7 @@
         "gatewayNamespace": {
           "default": "",
           "description": "Namespace of the Gateway to attach this HTTPRoute to. If not set, the HTTPRoute will be attached to the Gateway in the same namespace as the HTTPRoute.",
+          "required": [],
           "title": "gatewayNamespace",
           "type": [
             "string",
@@ -1621,19 +1495,13 @@
           "default": "",
           "description": "Hostnames for the HTTPRoute. Values are evaluated as templates.",
           "title": "hostnames",
-          "type": [
-            "array",
-            "null"
-          ]
+          "type": "array"
         },
         "parentRefs": {
           "default": "",
           "description": "Parent references for the HTTPRoute. Keys and values are evaluated as templates.",
           "title": "parentRefs",
-          "type": [
-            "array",
-            "null"
-          ]
+          "type": "array"
         },
         "rules": {
           "description": "Rules for HTTPRoute. Keys and values are evaluated as templates.",
@@ -1649,13 +1517,12 @@
                             "name": {
                               "default": "{{ include \"application.name\" $ }}",
                               "title": "name",
-                              "type": [
-                                "string",
-                                "null"
-                              ]
+                              "type": "string"
                             },
                             "port": {
                               "default": "{{ (first $.Values.service.ports).port }}",
+                              "description": "Port number or template expression for the backend service.",
+                              "required": [],
                               "title": "port",
                               "type": [
                                 "integer",
@@ -1683,18 +1550,12 @@
                                 "type": {
                                   "default": "PathPrefix",
                                   "title": "type",
-                                  "type": [
-                                    "string",
-                                    "null"
-                                  ]
+                                  "type": "string"
                                 },
                                 "value": {
                                   "default": "/",
                                   "title": "value",
-                                  "type": [
-                                    "string",
-                                    "null"
-                                  ]
+                                  "type": "string"
                                 }
                               },
                               "required": [],
@@ -1724,6 +1585,7 @@
         "useDefaultGateways": {
           "default": "",
           "description": "The default Gateway scope to use for this Route. If unset (the default) or set to None, the Route will not be attached to any default Gateway; if set, it will be attached to any default Gateway supporting the named scope, subject to the usual rules about which Routes a Gateway is allowed to claim.",
+          "required": [],
           "title": "useDefaultGateways",
           "type": [
             "string",
@@ -1772,10 +1634,7 @@
                     "default": "chart-example.local",
                     "description": "Hostname.",
                     "title": "host",
-                    "type": [
-                      "string",
-                      "null"
-                    ]
+                    "type": "string"
                   },
                   "paths": {
                     "items": {
@@ -1786,14 +1645,12 @@
                               "default": "/",
                               "description": "Path.",
                               "title": "path",
-                              "type": [
-                                "string",
-                                "null"
-                              ]
+                              "type": "string"
                             },
                             "pathType": {
                               "default": "`ImplementationSpecific`",
                               "description": "Path type.",
+                              "required": [],
                               "title": "pathType",
                               "type": [
                                 "string",
@@ -1803,6 +1660,7 @@
                             "serviceName": {
                               "default": "`{{ include \"application.name\" $ }}`",
                               "description": "Service name.",
+                              "required": [],
                               "title": "serviceName",
                               "type": [
                                 "string",
@@ -1812,6 +1670,7 @@
                             "servicePort": {
                               "default": "`http`",
                               "description": "Service port.",
+                              "required": [],
                               "title": "servicePort",
                               "type": [
                                 "string",
@@ -1841,6 +1700,7 @@
         "ingressClassName": {
           "default": "",
           "description": "Name of the ingress class.",
+          "required": [],
           "title": "ingressClassName",
           "type": [
             "string",
@@ -1851,10 +1711,7 @@
           "default": "",
           "description": "TLS configuration for ingress. Secrets must exist in the namespace. You may also configure Certificate resource to generate the secret.",
           "title": "tls",
-          "type": [
-            "array",
-            "null"
-          ]
+          "type": "array"
         }
       },
       "required": [],
@@ -1887,6 +1744,7 @@
     "namespaceOverride": {
       "default": "",
       "description": "Override the namespace for all resources.",
+      "required": [],
       "title": "namespaceOverride",
       "type": [
         "string",
@@ -1919,10 +1777,7 @@
           "default": "",
           "description": "Egress rules for Network Policy.",
           "title": "egress",
-          "type": [
-            "array",
-            "null"
-          ]
+          "type": "array"
         },
         "enabled": {
           "default": false,
@@ -1934,10 +1789,7 @@
           "default": "",
           "description": "Ingress rules for Network Policy.",
           "title": "ingress",
-          "type": [
-            "array",
-            "null"
-          ]
+          "type": "array"
         }
       },
       "required": [],
@@ -1947,6 +1799,7 @@
     "partOfOverride": {
       "default": "",
       "description": "Override the partOf label for all resources.",
+      "required": [],
       "title": "partOfOverride",
       "type": [
         "string",
@@ -1964,6 +1817,7 @@
         "maxUnavailable": {
           "default": "",
           "description": "Maximum number of unavailable pods during voluntary disruptions. Accepts both integers and percentage strings (e.g. \"25%\").",
+          "required": [],
           "title": "maxUnavailable",
           "type": [
             "integer",
@@ -1974,6 +1828,7 @@
         "minAvailable": {
           "default": 1,
           "description": "Minimum number of pods that must be available after eviction. Accepts both integers and percentage strings (e.g. \"25%\").",
+          "required": [],
           "title": "minAvailable",
           "type": [
             "integer",
@@ -1992,10 +1847,7 @@
           "default": "ReadWriteOnce",
           "description": "Access mode for volume.",
           "title": "accessMode",
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": "string"
         },
         "additionalLabels": {
           "default": "",
@@ -2033,14 +1885,12 @@
           "default": "/",
           "description": "If `persistence.mountPVC` is enabled, where to mount the volume in the containers.",
           "title": "mountPath",
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": "string"
         },
         "name": {
           "default": "`{{ include \"application.name\" $ }}-data`",
           "description": "Name of the PVC.",
+          "required": [],
           "title": "name",
           "type": [
             "string",
@@ -2051,23 +1901,18 @@
           "default": "null",
           "description": "Storage class for volume. If defined, use that value If set to \"-\" or \"\", disable dynamic provisioning If undefined or set to null (the default), no storageClass spec is   set, choosing the default provisioner.",
           "title": "storageClass",
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": "string"
         },
         "storageSize": {
           "default": "8Gi",
           "description": "Size of the persistent volume.",
           "title": "storageSize",
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": "string"
         },
         "volumeMode": {
           "default": "",
           "description": "PVC Volume Mode.",
+          "required": [],
           "title": "volumeMode",
           "type": [
             "string",
@@ -2077,6 +1922,7 @@
         "volumeName": {
           "default": "",
           "description": "Name of the volume.",
+          "required": [],
           "title": "volumeName",
           "type": [
             "string",
@@ -2145,10 +1991,7 @@
           "default": "",
           "description": "ClusterRole definitions with cluster-wide permissions.",
           "title": "clusterRoles",
-          "type": [
-            "array",
-            "null"
-          ]
+          "type": "array"
         },
         "enabled": {
           "default": true,
@@ -2160,10 +2003,7 @@
           "default": "",
           "description": "Role definitions scoped to a single namespace.",
           "title": "roles",
-          "type": [
-            "array",
-            "null"
-          ]
+          "type": "array"
         },
         "serviceAccount": {
           "properties": {
@@ -2196,6 +2036,7 @@
             "name": {
               "default": "",
               "description": "The name of the service account. Behavior based on its value and `rbac.serviceAccount.create`: If `rbac.serviceAccount.create` is `false` and `name` is empty, the default service account (\"default\") is used. If `rbac.serviceAccount.create` is `false` and `name` is set, the provided name is used. If `rbac.serviceAccount.create` is `true` and `name` is empty, a name is auto-generated using the fullname template. If `rbac.serviceAccount.create` is `true` and `name` is set, the provided name is used for creation.",
+              "required": [],
               "title": "name",
               "type": [
                 "string",
@@ -2253,6 +2094,7 @@
         "host": {
           "default": "",
           "description": "Explicit host. If no host is added then openshift inserts the default hostname.",
+          "required": [],
           "title": "host",
           "type": [
             "string",
@@ -2262,6 +2104,7 @@
         "path": {
           "default": "",
           "description": "Path.",
+          "required": [],
           "title": "path",
           "type": [
             "string",
@@ -2274,15 +2117,15 @@
             "targetPort": {
               "default": "http",
               "title": "targetPort",
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": "string"
             }
           },
           "required": [],
           "title": "port",
-          "type": "object"
+          "type": [
+            "object",
+            "null"
+          ]
         },
         "tls": {
           "properties": {
@@ -2290,19 +2133,13 @@
               "default": "Redirect",
               "description": "TLS insecure termination policy.",
               "title": "insecureEdgeTerminationPolicy",
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": "string"
             },
             "termination": {
               "default": "edge",
               "description": "TLS termination strategy.",
               "title": "termination",
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": "string"
             }
           },
           "required": [],
@@ -2326,10 +2163,7 @@
           "default": "None",
           "description": "Wildcard policy.",
           "title": "wildcardPolicy",
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": "string"
         }
       },
       "required": [],
@@ -2433,6 +2267,7 @@
         "name": {
           "default": "",
           "description": "Name of the SecretProviderClass. Required if `secretProviderClass.enabled` is set to `true`.",
+          "required": [],
           "title": "name",
           "type": [
             "string",
@@ -2442,6 +2277,7 @@
         "objects": {
           "default": "",
           "description": "Objects definitions.",
+          "required": [],
           "title": "objects",
           "type": [
             "string",
@@ -2451,6 +2287,7 @@
         "provider": {
           "default": "",
           "description": "Name of the provider. Required if `secretProviderClass.enabled` is set to `true`.",
+          "required": [],
           "title": "provider",
           "type": [
             "string",
@@ -2461,23 +2298,18 @@
           "default": "",
           "description": "Vault Role Name. Required if `secretProviderClass.provider` is set to `vault`.",
           "title": "roleName",
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": "string"
         },
         "secretObjects": {
           "default": "",
           "description": "Objects mapping.",
           "title": "secretObjects",
-          "type": [
-            "array",
-            "null"
-          ]
+          "type": "array"
         },
         "vaultAddress": {
           "default": "",
           "description": "Vault Address. Required if `secretProviderClass.provider` is set to `vault`.",
+          "required": [],
           "title": "vaultAddress",
           "type": [
             "string",
@@ -2514,6 +2346,7 @@
         "clusterIP": {
           "default": "",
           "description": "Fixed IP for a ClusterIP service. Set to `None` for an headless service",
+          "required": [],
           "title": "clusterIP",
           "type": [
             "string",
@@ -2529,6 +2362,7 @@
         "loadBalancerClass": {
           "default": "",
           "description": "LoadBalancer class name for LoadBalancer type services.",
+          "required": [],
           "title": "loadBalancerClass",
           "type": [
             "string",
@@ -2544,10 +2378,7 @@
                   "name": {
                     "default": "http",
                     "title": "name",
-                    "type": [
-                      "string",
-                      "null"
-                    ]
+                    "type": "string"
                   },
                   "port": {
                     "default": 8080,
@@ -2557,13 +2388,12 @@
                   "protocol": {
                     "default": "TCP",
                     "title": "protocol",
-                    "type": [
-                      "string",
-                      "null"
-                    ]
+                    "type": "string"
                   },
                   "targetPort": {
                     "default": 8080,
+                    "description": "Target port on pods. Accepts port number or port name (IANA_SVC_NAME).",
+                    "required": [],
                     "title": "targetPort",
                     "type": [
                       "integer",
@@ -2585,10 +2415,7 @@
           "default": "ClusterIP",
           "description": "Type of service.",
           "title": "type",
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": "string"
         }
       },
       "required": [],
@@ -2632,26 +2459,17 @@
                   "interval": {
                     "default": "5s",
                     "title": "interval",
-                    "type": [
-                      "string",
-                      "null"
-                    ]
+                    "type": "string"
                   },
                   "path": {
                     "default": "/actuator/prometheus",
                     "title": "path",
-                    "type": [
-                      "string",
-                      "null"
-                    ]
+                    "type": "string"
                   },
                   "port": {
                     "default": "http",
                     "title": "port",
-                    "type": [
-                      "string",
-                      "null"
-                    ]
+                    "type": "string"
                   }
                 },
                 "required": [],
@@ -2710,15 +2528,15 @@
             "updateMode": {
               "default": "Auto",
               "title": "updateMode",
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": "string"
             }
           },
           "required": [],
           "title": "updatePolicy",
-          "type": "object"
+          "type": [
+            "object",
+            "null"
+          ]
         }
       },
       "required": [],

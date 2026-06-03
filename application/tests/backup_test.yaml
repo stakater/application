@@ -71,7 +71,7 @@ tests:
           path: spec.ttl
           value: "1h0m0s"
 
-  - it: uses restic integration is explicitly enabled
+  - it: uses restic integration if explicitly enabled
     set:
       backup:
         enabled: true

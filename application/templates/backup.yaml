@@ -1,4 +1,7 @@
-{{- if and .Values.backup .Values.backup.enabled (.Capabilities.APIVersions.Has "velero.io/v1") -}}
+{{- if and .Values.backup .Values.backup.enabled }}
+  {{- if not (.Capabilities.APIVersions.Has "velero.io/v1") }}
+    {{- fail "velero.io/v1 not found on the target cluster, set backup.enabled to false" }}
+  {{- end }}
 apiVersion: velero.io/v1
 kind: Backup
 metadata:

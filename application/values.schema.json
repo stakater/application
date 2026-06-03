@@ -259,8 +259,12 @@
         "excludedResources": {
           "default": "",
           "description": "List of resource types to exclude from the backup.",
+          "required": [],
           "title": "excludedResources",
-          "type": "array"
+          "type": [
+            "array",
+            "null"
+          ]
         },
         "includedNamespaces": {
           "default": "`[ {{ include \"application.namespace\" $ }} ]`",
@@ -279,8 +283,12 @@
         "includedResources": {
           "default": "",
           "description": "List of resource types to include in the backup.",
+          "required": [],
           "title": "includedResources",
-          "type": "array"
+          "type": [
+            "array",
+            "null"
+          ]
         },
         "namespace": {
           "default": "`{{ .Release.Namespace }}`",
@@ -344,14 +352,22 @@
         "commonName": {
           "default": "",
           "description": "Common name as specified on the DER encoded CSR. This field is not recommended in cases when this certificate is an end-entity certificate. More information can be found in the [cert-manager documentation](https://cert-manager.io/docs/usage/certificate/#:~:text=%23%20Avoid%20using%20commonName,%3A%20example.com).",
+          "required": [],
           "title": "commonName",
-          "type": "string"
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "dnsNames": {
           "default": "",
           "description": "List of DNS subjectAltNames to be set on the certificate. Keys and values are evaluated as templates.",
+          "required": [],
           "title": "dnsNames",
-          "type": "array"
+          "type": [
+            "array",
+            "null"
+          ]
         },
         "duration": {
           "default": "8760h0m0s",
@@ -362,8 +378,12 @@
         "emailSANs": {
           "default": "",
           "description": "List of email subjectAltNames to be set on the Certificate.",
+          "required": [],
           "title": "emailSANs",
-          "type": "array"
+          "type": [
+            "array",
+            "null"
+          ]
         },
         "enabled": {
           "default": false,
@@ -374,8 +394,12 @@
         "ipAddresses": {
           "default": "",
           "description": "List of IP address subjectAltNames to be set on the certificate.",
+          "required": [],
           "title": "ipAddresses",
-          "type": "array"
+          "type": [
+            "array",
+            "null"
+          ]
         },
         "isCA": {
           "default": false,
@@ -534,14 +558,22 @@
         "uriSANs": {
           "default": "",
           "description": "List of URI subjectAltNames to be set on the certificate.",
+          "required": [],
           "title": "uriSANs",
-          "type": "array"
+          "type": [
+            "array",
+            "null"
+          ]
         },
         "usages": {
           "default": "",
           "description": "Set of x509 usages that are requested for the certificate.",
+          "required": [],
           "title": "usages",
-          "type": "array"
+          "type": [
+            "array",
+            "null"
+          ]
         }
       },
       "required": [],
@@ -639,8 +671,12 @@
         "additionalContainers": {
           "default": "",
           "description": "Additional containers besides init and app containers (without templating).",
+          "required": [],
           "title": "additionalContainers",
-          "type": "array"
+          "type": [
+            "array",
+            "null"
+          ]
         },
         "additionalLabels": {
           "default": "",
@@ -790,14 +826,22 @@
         "hostAliases": {
           "default": "",
           "description": "Mapping between IP and hostnames that will be injected as entries in the pod's hosts files.",
+          "required": [],
           "title": "hostAliases",
-          "type": "array"
+          "type": [
+            "array",
+            "null"
+          ]
         },
         "hostNetwork": {
           "default": "",
           "description": "Host network connectivity.",
+          "required": [],
           "title": "hostNetwork",
-          "type": "boolean"
+          "type": [
+            "boolean",
+            "null"
+          ]
         },
         "image": {
           "properties": {
@@ -923,8 +967,12 @@
         "minReadySeconds": {
           "default": "",
           "description": "Minimum number of seconds for which a newly created Pod should be ready without any of its containers crashing.",
+          "required": [],
           "title": "minReadySeconds",
-          "type": "integer"
+          "type": [
+            "integer",
+            "null"
+          ]
         },
         "nodeSelector": {
           "default": "",
@@ -986,8 +1034,12 @@
         "ports": {
           "default": "",
           "description": "List of ports for the app container.",
+          "required": [],
           "title": "ports",
-          "type": "array"
+          "type": [
+            "array",
+            "null"
+          ]
         },
         "priorityClassName": {
           "default": "",
@@ -1074,8 +1126,12 @@
         "replicas": {
           "default": "",
           "description": "Number of replicas.",
+          "required": [],
           "title": "replicas",
-          "type": "integer"
+          "type": [
+            "integer",
+            "null"
+          ]
         },
         "resources": {
           "description": "Resource limits and requests for the pod.",
@@ -1191,20 +1247,32 @@
         "terminationGracePeriodSeconds": {
           "default": "",
           "description": "Gracefull termination period.",
+          "required": [],
           "title": "terminationGracePeriodSeconds",
-          "type": "integer"
+          "type": [
+            "integer",
+            "null"
+          ]
         },
         "tolerations": {
           "default": "",
           "description": "Taint tolerations for the pods.",
+          "required": [],
           "title": "tolerations",
-          "type": "array"
+          "type": [
+            "array",
+            "null"
+          ]
         },
         "topologySpreadConstraints": {
           "default": "",
           "description": "Topology spread constraints for the pods.",
+          "required": [],
           "title": "topologySpreadConstraints",
-          "type": "array"
+          "type": [
+            "array",
+            "null"
+          ]
         },
         "volumeMounts": {
           "default": "",
@@ -1494,14 +1562,22 @@
         "hostnames": {
           "default": "",
           "description": "Hostnames for the HTTPRoute. Values are evaluated as templates.",
+          "required": [],
           "title": "hostnames",
-          "type": "array"
+          "type": [
+            "array",
+            "null"
+          ]
         },
         "parentRefs": {
           "default": "",
           "description": "Parent references for the HTTPRoute. Keys and values are evaluated as templates.",
+          "required": [],
           "title": "parentRefs",
-          "type": "array"
+          "type": [
+            "array",
+            "null"
+          ]
         },
         "rules": {
           "description": "Rules for HTTPRoute. Keys and values are evaluated as templates.",
@@ -1710,8 +1786,12 @@
         "tls": {
           "default": "",
           "description": "TLS configuration for ingress. Secrets must exist in the namespace. You may also configure Certificate resource to generate the secret.",
+          "required": [],
           "title": "tls",
-          "type": "array"
+          "type": [
+            "array",
+            "null"
+          ]
         }
       },
       "required": [],
@@ -1776,8 +1856,12 @@
         "egress": {
           "default": "",
           "description": "Egress rules for Network Policy.",
+          "required": [],
           "title": "egress",
-          "type": "array"
+          "type": [
+            "array",
+            "null"
+          ]
         },
         "enabled": {
           "default": false,
@@ -1788,8 +1872,12 @@
         "ingress": {
           "default": "",
           "description": "Ingress rules for Network Policy.",
+          "required": [],
           "title": "ingress",
-          "type": "array"
+          "type": [
+            "array",
+            "null"
+          ]
         }
       },
       "required": [],
@@ -1900,8 +1988,12 @@
         "storageClass": {
           "default": "null",
           "description": "Storage class for volume. If defined, use that value If set to \"-\" or \"\", disable dynamic provisioning If undefined or set to null (the default), no storageClass spec is   set, choosing the default provisioner.",
+          "required": [],
           "title": "storageClass",
-          "type": "string"
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "storageSize": {
           "default": "8Gi",
@@ -1990,8 +2082,12 @@
         "clusterRoles": {
           "default": "",
           "description": "ClusterRole definitions with cluster-wide permissions.",
+          "required": [],
           "title": "clusterRoles",
-          "type": "array"
+          "type": [
+            "array",
+            "null"
+          ]
         },
         "enabled": {
           "default": true,
@@ -2002,8 +2098,12 @@
         "roles": {
           "default": "",
           "description": "Role definitions scoped to a single namespace.",
+          "required": [],
           "title": "roles",
-          "type": "array"
+          "type": [
+            "array",
+            "null"
+          ]
         },
         "serviceAccount": {
           "properties": {
@@ -2303,8 +2403,12 @@
         "secretObjects": {
           "default": "",
           "description": "Objects mapping.",
+          "required": [],
           "title": "secretObjects",
-          "type": "array"
+          "type": [
+            "array",
+            "null"
+          ]
         },
         "vaultAddress": {
           "default": "",

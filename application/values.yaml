@@ -185,7 +185,7 @@ deployment:
   # -- (object, null) Select the node where the pods should be scheduled.
   # @section -- Deployment Parameters
   nodeSelector:
-  # -- (list) Mapping between IP and hostnames that will be injected as entries in the pod's hosts files.
+  # -- (list, null) Mapping between IP and hostnames that will be injected as entries in the pod's hosts files.
   # @section -- Deployment Parameters
   hostAliases:
   # - ip: "127.0.0.1"
@@ -216,7 +216,7 @@ deployment:
     #   slack:
     #     webhookURL: https://hooks.slack.com/services/XXXXX/XXXXX/XXXXX
     #     channelName: "#channel"
-  # -- (int) Number of replicas.
+  # -- (int, null) Number of replicas.
   # @section -- Deployment Parameters
   replicas:
   # -- (list) List of secrets to be used for pulling the images.
@@ -284,7 +284,7 @@ deployment:
   # -- (string, null) Set the runtimeClassName for the deployment's pods.
   # @section -- Deployment Parameters
   runtimeClassName: ""
-  # -- (list) Taint tolerations for the pods.
+  # -- (list, null) Taint tolerations for the pods.
   # @section -- Deployment Parameters
   tolerations:
     # - key: "dedicated"
@@ -302,7 +302,7 @@ deployment:
   #          operator: In
   #          values:
   #          - ssd
-  # -- (list) Topology spread constraints for the pods.
+  # -- (list, null) Topology spread constraints for the pods.
   # @section -- Deployment Parameters
   topologySpreadConstraints:
     # - maxSkew: 1
@@ -493,7 +493,7 @@ deployment:
   # -- (bool) Mount Service Account token.
   # @section -- Deployment Parameters
   automountServiceAccountToken: false
-  # -- (list) List of ports for the app container.
+  # -- (list, null) List of ports for the app container.
   # @section -- Deployment Parameters
   ports:
   # - containerPort: 8080
@@ -502,13 +502,13 @@ deployment:
   # - containerPort: 8443
   #   name: https
   #   protocol: TCP
-  # -- (bool) Host network connectivity.
+  # -- (bool, null) Host network connectivity.
   # @section -- Deployment Parameters
   hostNetwork:
-  # -- (int) Gracefull termination period.
+  # -- (int, null) Gracefull termination period.
   # @section -- Deployment Parameters
   terminationGracePeriodSeconds:
-  # -- (int) Minimum number of seconds for which a newly created Pod should be ready without any of its containers crashing.
+  # -- (int, null) Minimum number of seconds for which a newly created Pod should be ready without any of its containers crashing.
   # @section -- Deployment Parameters
   minReadySeconds:
   # -- (object) Lifecycle configuration for the pod.
@@ -517,7 +517,7 @@ deployment:
     # preStop:
     #   exec:
     #     command: ["/bin/bash", "-c", "sleep 20"]
-  # -- (list) Additional containers besides init and app containers (without templating).
+  # -- (list, null) Additional containers besides init and app containers (without templating).
   # @section -- Deployment Parameters
   additionalContainers:
   # - name: sidecar-container
@@ -542,7 +542,7 @@ persistence:
   # -- (string) Access mode for volume.
   # @section -- Deployment Parameters
   accessMode: ReadWriteOnce
-  # -- (string) Storage class for volume.
+  # -- (string, null) Storage class for volume.
   # If defined, use that value
   # If set to "-" or "", disable dynamic provisioning
   # If undefined or set to null (the default), no storageClass spec is
@@ -643,7 +643,7 @@ ingress:
     # kubernetes.io/ingress.class: external-ingress
     # ingress.kubernetes.io/rewrite-target: /
     # ingress.kubernetes.io/force-ssl-redirect: true
-  # -- (list) TLS configuration for ingress.
+  # -- (list, null) TLS configuration for ingress.
   # Secrets must exist in the namespace.
   # You may also configure Certificate resource to generate the secret.
   # @section -- Ingress Parameters
@@ -656,7 +656,7 @@ httpRoute:
   # -- (bool) Enable HTTPRoute (Gateway API).
   # @section -- HTTPRoute Parameters
   enabled: false
-  # -- (list) Parent references for the HTTPRoute. Keys and values are evaluated as templates.
+  # -- (list, null) Parent references for the HTTPRoute. Keys and values are evaluated as templates.
   # @section -- HTTPRoute Parameters
   parentRefs:
     # - name: my-gateway
@@ -672,7 +672,7 @@ httpRoute:
   # If not set, the HTTPRoute will be attached to the Gateway in the same namespace as the HTTPRoute.
   # @section -- HTTPRoute Parameters
   gatewayNamespace: ""
-  # -- (list) Hostnames for the HTTPRoute. Values are evaluated as templates.
+  # -- (list, null) Hostnames for the HTTPRoute. Values are evaluated as templates.
   # @section -- HTTPRoute Parameters
   hostnames:
   # -- (object) Additional labels for HTTPRoute.
@@ -769,7 +769,7 @@ secretProviderClass:
     # - objectName: MONGO_HOST
     #   secretPath: testing/data/mongoDb
     #   secretKey: MONGO_HOST
-  # -- (list) Objects mapping.
+  # -- (list, null) Objects mapping.
   # @section -- SecretProviderClass Parameters
   secretObjects:
     # - data:
@@ -827,7 +827,7 @@ rbac:
     # @section -- RBAC Parameters
     annotations:
       # key: value
-  # -- (list) Role definitions scoped to a single namespace.
+  # -- (list, null) Role definitions scoped to a single namespace.
   # @section -- RBAC Parameters
   roles:
   # - name: configmaps
@@ -846,7 +846,7 @@ rbac:
   #     - secrets
   #     verbs:
   #     - get
-  # -- (list) ClusterRole definitions with cluster-wide permissions.
+  # -- (list, null) ClusterRole definitions with cluster-wide permissions.
   # @section -- RBAC Parameters
   clusterRoles:
   # - name: configmaps
@@ -1084,7 +1084,7 @@ certificate:
   #    - Stockholm
   #  provinces:
   #    - Stockholm
-  # -- (tpl) Common name as specified on the DER encoded CSR. This field is not recommended in cases when this certificate is an end-entity certificate. More information can be found in the [cert-manager documentation](https://cert-manager.io/docs/usage/certificate/#:~:text=%23%20Avoid%20using%20commonName,%3A%20example.com).
+  # -- (tpl, null) Common name as specified on the DER encoded CSR. This field is not recommended in cases when this certificate is an end-entity certificate. More information can be found in the [cert-manager documentation](https://cert-manager.io/docs/usage/certificate/#:~:text=%23%20Avoid%20using%20commonName,%3A%20example.com).
   # @section -- cert-manager Certificate Parameters
   commonName:
   # commonName: admin-app
@@ -1100,24 +1100,24 @@ certificate:
   # -- (bool) Mark this Certificate as valid for certificate signing.
   # @section -- cert-manager Certificate Parameters
   isCA: false
-  # -- (list) Set of x509 usages that are requested for the certificate.
+  # -- (list, null) Set of x509 usages that are requested for the certificate.
   # @section -- cert-manager Certificate Parameters
   usages:
   #  - digital signature
   #  - client auth
-  # -- (list) List of DNS subjectAltNames to be set on the certificate. Keys and values are evaluated as templates.
+  # -- (list, null) List of DNS subjectAltNames to be set on the certificate. Keys and values are evaluated as templates.
   # @section -- cert-manager Certificate Parameters
   dnsNames:
   #  - admin-app
-  # -- (list) List of IP address subjectAltNames to be set on the certificate.
+  # -- (list, null) List of IP address subjectAltNames to be set on the certificate.
   # @section -- cert-manager Certificate Parameters
   ipAddresses:
   #  - 192.168.0.5
-  # -- (list) List of URI subjectAltNames to be set on the certificate.
+  # -- (list, null) List of URI subjectAltNames to be set on the certificate.
   # @section -- cert-manager Certificate Parameters
   uriSANs:
   #  - spiffe://cluster.local/ns/sandbox/sa/example
-  # -- (list) List of email subjectAltNames to be set on the Certificate.
+  # -- (list, null) List of email subjectAltNames to be set on the Certificate.
   # @section -- cert-manager Certificate Parameters
   emailSANs:
   #  - foo@bar.tld
@@ -1294,7 +1294,7 @@ networkPolicy:
   # @section -- NetworkPolicy Parameters
   annotations:
   #   key: value
-  # -- (list) Ingress rules for Network Policy.
+  # -- (list, null) Ingress rules for Network Policy.
   # @section -- NetworkPolicy Parameters
   ingress:
   # - from:
@@ -1311,7 +1311,7 @@ networkPolicy:
   #   ports:
   #   - protocol: TCP
   #     port: 6379
-  # -- (list) Egress rules for Network Policy.
+  # -- (list, null) Egress rules for Network Policy.
   # @section -- NetworkPolicy Parameters
   egress:
   #   - to:
@@ -1403,10 +1403,10 @@ backup:
   # @section -- Backup Parameters
   includedNamespaces:
   - '{{ include "application.namespace" $ }}'
-  # -- (list) List of resource types to include in the backup.
+  # -- (list, null) List of resource types to include in the backup.
   # @section -- Backup Parameters
   includedResources:
-  # -- (list) List of resource types to exclude from the backup.
+  # -- (list, null) List of resource types to exclude from the backup.
   # @section -- Backup Parameters
   excludedResources:
 

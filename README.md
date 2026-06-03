@@ -89,10 +89,10 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | deployment.strategy.type | string | `"RollingUpdate"` | Type of deployment strategy. |
 | deployment.reloadOnChange | bool | `true` | Reload deployment if attached Secret/ConfigMap changes. |
 | deployment.nodeSelector | object, null | `nil` | Select the node where the pods should be scheduled. |
-| deployment.hostAliases | list | `nil` | Mapping between IP and hostnames that will be injected as entries in the pod's hosts files. |
+| deployment.hostAliases | list, null | `nil` | Mapping between IP and hostnames that will be injected as entries in the pod's hosts files. |
 | deployment.initContainers | object, null | `nil` | Add init containers to the pods. |
 | deployment.fluentdConfigAnnotations | object, null | `nil` | Configuration details for fluentdConfigurations. Only works for specific setup, see <https://medium.com/stakater/dynamic-log-processing-with-fluentd-konfigurator-and-slack-935a5de4eddb>. |
-| deployment.replicas | int | `nil` | Number of replicas. |
+| deployment.replicas | int, null | `nil` | Number of replicas. |
 | deployment.imagePullSecrets | list | `[]` | List of secrets to be used for pulling the images. |
 | deployment.envFrom | object, null | `nil` | Mount environment variables from ConfigMap or Secret to the pod. Use `nameSuffix` for resources managed by this chart (name will be prefixed with application name), or `name` to reference an existing external ConfigMap or Secret not managed by this chart. See the README "Consuming environment variable in application chart" section for more details. |
 | deployment.env | object, null | `nil` | Environment variables to be added to the pod. See the README "Consuming environment variable in application chart" section for more details. |
@@ -100,9 +100,9 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | deployment.volumeMounts | object, null | `nil` | Mount path for Volumes. Key is the name of the volume. Value is the volume mount definition. |
 | deployment.priorityClassName | string, null | `""` | Define the priority class for the pod. |
 | deployment.runtimeClassName | string, null | `""` | Set the runtimeClassName for the deployment's pods. |
-| deployment.tolerations | list | `nil` | Taint tolerations for the pods. |
+| deployment.tolerations | list, null | `nil` | Taint tolerations for the pods. |
 | deployment.affinity | object, null | `nil` | Affinity for the pods. |
-| deployment.topologySpreadConstraints | list | `nil` | Topology spread constraints for the pods. |
+| deployment.topologySpreadConstraints | list, null | `nil` | Topology spread constraints for the pods. |
 | deployment.revisionHistoryLimit | int | `2` | Number of ReplicaSet revisions to retain. |
 | deployment.image.repository | tpl | `""` | Repository. |
 | deployment.image.tag | tpl | `""` | Tag. |
@@ -152,18 +152,18 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | deployment.command | list | `[]` | Command for the app container. |
 | deployment.args | list | `[]` | Args for the app container. |
 | deployment.automountServiceAccountToken | bool | `false` | Mount Service Account token. |
-| deployment.ports | list | `nil` | List of ports for the app container. |
-| deployment.hostNetwork | bool | `nil` | Host network connectivity. |
-| deployment.terminationGracePeriodSeconds | int | `nil` | Gracefull termination period. |
-| deployment.minReadySeconds | int | `nil` | Minimum number of seconds for which a newly created Pod should be ready without any of its containers crashing. |
+| deployment.ports | list, null | `nil` | List of ports for the app container. |
+| deployment.hostNetwork | bool, null | `nil` | Host network connectivity. |
+| deployment.terminationGracePeriodSeconds | int, null | `nil` | Gracefull termination period. |
+| deployment.minReadySeconds | int, null | `nil` | Minimum number of seconds for which a newly created Pod should be ready without any of its containers crashing. |
 | deployment.lifecycle | object | `{}` | Lifecycle configuration for the pod. |
-| deployment.additionalContainers | list | `nil` | Additional containers besides init and app containers (without templating). |
+| deployment.additionalContainers | list, null | `nil` | Additional containers besides init and app containers (without templating). |
 | persistence.enabled | bool | `false` | Enable persistence. |
 | persistence.mountPVC | bool | `false` | Whether to mount the created PVC to the deployment. |
 | persistence.mountPath | string | `"/"` | If `persistence.mountPVC` is enabled, where to mount the volume in the containers. |
 | persistence.name | string, null | `{{ include "application.name" $ }}-data` | Name of the PVC. |
 | persistence.accessMode | string | `"ReadWriteOnce"` | Access mode for volume. |
-| persistence.storageClass | string | `nil` | Storage class for volume. If defined, use that value If set to "-" or "", disable dynamic provisioning If undefined or set to null (the default), no storageClass spec is   set, choosing the default provisioner. |
+| persistence.storageClass | string, null | `nil` | Storage class for volume. If defined, use that value If set to "-" or "", disable dynamic provisioning If undefined or set to null (the default), no storageClass spec is   set, choosing the default provisioner. |
 | persistence.additionalLabels | object, null | `nil` | Additional labels for persistent volume. |
 | persistence.annotations | object, null | `nil` | Annotations for persistent volume. |
 | persistence.storageSize | string | `"8Gi"` | Size of the persistent volume. |
@@ -196,17 +196,17 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | ingress.hosts[0].paths[0].servicePort | string, null | `http` | Service port. |
 | ingress.additionalLabels | object, null | `nil` | Additional labels for ingress. |
 | ingress.annotations | object, null | `nil` | Annotations for ingress. |
-| ingress.tls | list | `nil` | TLS configuration for ingress. Secrets must exist in the namespace. You may also configure Certificate resource to generate the secret. |
+| ingress.tls | list, null | `nil` | TLS configuration for ingress. Secrets must exist in the namespace. You may also configure Certificate resource to generate the secret. |
 
 ### HTTPRoute Parameters
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | httpRoute.enabled | bool | `false` | Enable HTTPRoute (Gateway API). |
-| httpRoute.parentRefs | list | `nil` | Parent references for the HTTPRoute. Keys and values are evaluated as templates. |
+| httpRoute.parentRefs | list, null | `nil` | Parent references for the HTTPRoute. Keys and values are evaluated as templates. |
 | httpRoute.useDefaultGateways | string, null | `nil` | The default Gateway scope to use for this Route. If unset (the default) or set to None, the Route will not be attached to any default Gateway; if set, it will be attached to any default Gateway supporting the named scope, subject to the usual rules about which Routes a Gateway is allowed to claim. |
 | httpRoute.gatewayNamespace | string, null | `""` | Namespace of the Gateway to attach this HTTPRoute to. If not set, the HTTPRoute will be attached to the Gateway in the same namespace as the HTTPRoute. |
-| httpRoute.hostnames | list | `nil` | Hostnames for the HTTPRoute. Values are evaluated as templates. |
+| httpRoute.hostnames | list, null | `nil` | Hostnames for the HTTPRoute. Values are evaluated as templates. |
 | httpRoute.additionalLabels | object | `{}` | Additional labels for HTTPRoute. |
 | httpRoute.annotations | object | `{}` | Annotations for HTTPRoute. |
 | httpRoute.rules | list | `[{"backendRefs":[{"name":"{{ include \"application.name\" $ }}","port":"{{ (first $.Values.service.ports).port }}"}],"matches":[{"path":{"type":"PathPrefix","value":"/"}}]}]` | Rules for HTTPRoute. Keys and values are evaluated as templates. |
@@ -238,7 +238,7 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | secretProviderClass.vaultAddress | string, null | `""` | Vault Address. Required if `secretProviderClass.provider` is set to `vault`. |
 | secretProviderClass.roleName | tpl | `""` | Vault Role Name. Required if `secretProviderClass.provider` is set to `vault`. |
 | secretProviderClass.objects | string, null | `nil` | Objects definitions. |
-| secretProviderClass.secretObjects | list | `nil` | Objects mapping. |
+| secretProviderClass.secretObjects | list, null | `nil` | Objects mapping. |
 
 ### ForecastleApp Parameters
 
@@ -261,8 +261,8 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | rbac.serviceAccount.name | string, null | `""` | The name of the service account. Behavior based on its value and `rbac.serviceAccount.create`: If `rbac.serviceAccount.create` is `false` and `name` is empty, the default service account ("default") is used. If `rbac.serviceAccount.create` is `false` and `name` is set, the provided name is used. If `rbac.serviceAccount.create` is `true` and `name` is empty, a name is auto-generated using the fullname template. If `rbac.serviceAccount.create` is `true` and `name` is set, the provided name is used for creation. |
 | rbac.serviceAccount.additionalLabels | object, null | `nil` | Additional labels for Service Account. If `rbac.serviceAccount.create` is set to true, these labels are appended to the service account. |
 | rbac.serviceAccount.annotations | object, null | `nil` | Annotations for Service Account. If `rbac.serviceAccount.create` is set to true, these annotations are appended to the service account. |
-| rbac.roles | list | `nil` | Role definitions scoped to a single namespace. |
-| rbac.clusterRoles | list | `nil` | ClusterRole definitions with cluster-wide permissions. |
+| rbac.roles | list, null | `nil` | Role definitions scoped to a single namespace. |
+| rbac.clusterRoles | list, null | `nil` | ClusterRole definitions with cluster-wide permissions. |
 | rbac.additionalLabels | object, null | `nil` | Additional labels for the Role, RoleBinding, ClusterRole, and ClusterRoleBinding resources. |
 | rbac.annotations | object, null | `nil` | Annotations for the Role, RoleBinding, ClusterRole, and ClusterRoleBinding resources. |
 
@@ -342,16 +342,16 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | certificate.duration | string | `"8760h0m0s"` | The requested "duration" (i.e. lifetime) of the Certificate. |
 | certificate.renewBefore | string | `"720h0m0s"` | The amount of time before the currently issued certificate's notAfter time that cert-manager will begin to attempt to renew the certificate. |
 | certificate.subject | object, null | `nil` | Full X509 name specification for certificate. Keys and values are evaluated as templates. |
-| certificate.commonName | tpl | `nil` | Common name as specified on the DER encoded CSR. This field is not recommended in cases when this certificate is an end-entity certificate. More information can be found in the [cert-manager documentation](https://cert-manager.io/docs/usage/certificate/#:~:text=%23%20Avoid%20using%20commonName,%3A%20example.com). |
+| certificate.commonName | tpl, null | `nil` | Common name as specified on the DER encoded CSR. This field is not recommended in cases when this certificate is an end-entity certificate. More information can be found in the [cert-manager documentation](https://cert-manager.io/docs/usage/certificate/#:~:text=%23%20Avoid%20using%20commonName,%3A%20example.com). |
 | certificate.keyAlgorithm | string | `"RSA"` | Private key algorithm of the corresponding private key for this certificate. |
 | certificate.keyEncoding | string | `"PKCS1"` | Private key cryptography standards (PKCS) for this certificate's private key to be encoded in. |
 | certificate.keySize | int | `2048` | Key bit size of the corresponding private key for this certificate. |
 | certificate.isCA | bool | `false` | Mark this Certificate as valid for certificate signing. |
-| certificate.usages | list | `nil` | Set of x509 usages that are requested for the certificate. |
-| certificate.dnsNames | list | `nil` | List of DNS subjectAltNames to be set on the certificate. Keys and values are evaluated as templates. |
-| certificate.ipAddresses | list | `nil` | List of IP address subjectAltNames to be set on the certificate. |
-| certificate.uriSANs | list | `nil` | List of URI subjectAltNames to be set on the certificate. |
-| certificate.emailSANs | list | `nil` | List of email subjectAltNames to be set on the Certificate. |
+| certificate.usages | list, null | `nil` | Set of x509 usages that are requested for the certificate. |
+| certificate.dnsNames | list, null | `nil` | List of DNS subjectAltNames to be set on the certificate. Keys and values are evaluated as templates. |
+| certificate.ipAddresses | list, null | `nil` | List of IP address subjectAltNames to be set on the certificate. |
+| certificate.uriSANs | list, null | `nil` | List of URI subjectAltNames to be set on the certificate. |
+| certificate.emailSANs | list, null | `nil` | List of email subjectAltNames to be set on the Certificate. |
 | certificate.privateKey.enabled | bool | `false` | Enable Private Key for the certificate. |
 | certificate.privateKey.rotationPolicy | string | `"Always"` | Denotes how private keys should be generated or sourced when a certificate is being issued. |
 | certificate.issuerRef.name | string | `"ca-issuer"` | Reference to the issuer for this certificate. |
@@ -404,8 +404,8 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | networkPolicy.enabled | bool | `false` | Enable Network Policy. |
 | networkPolicy.additionalLabels | object, null | `nil` | Additional labels for Network Policy. |
 | networkPolicy.annotations | object, null | `nil` | Annotations for Network Policy. |
-| networkPolicy.ingress | list | `nil` | Ingress rules for Network Policy. |
-| networkPolicy.egress | list | `nil` | Egress rules for Network Policy. |
+| networkPolicy.ingress | list, null | `nil` | Ingress rules for Network Policy. |
+| networkPolicy.egress | list, null | `nil` | Egress rules for Network Policy. |
 
 ### PodDisruptionBudget Parameters
 
@@ -437,8 +437,8 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | backup.storageLocation | string, null | `nil` | Name of the backup storage location where the backup should be stored. |
 | backup.ttl | string | `"1h0m0s"` | How long the Backup should be retained for. |
 | backup.includedNamespaces | list | `[ {{ include "application.namespace" $ }} ]` | List of namespaces to include objects from. Keys and values are evaluated as templates. |
-| backup.includedResources | list | `nil` | List of resource types to include in the backup. |
-| backup.excludedResources | list | `nil` | List of resource types to exclude from the backup. |
+| backup.includedResources | list, null | `nil` | List of resource types to include in the backup. |
+| backup.excludedResources | list, null | `nil` | List of resource types to exclude from the backup. |
 
 ## Naming convention for ConfigMap, Secret, SealedSecret and ExternalSecret
 

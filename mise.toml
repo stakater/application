@@ -2,7 +2,7 @@
 prek = "0.4.3"
 helm = "4.2.0"
 helm-docs = "1.14.2"
-"github:dadav/helm-schema" = "0.23.3"
+"github:dadav/helm-schema" = "0.23.4"
 "ubi:helm-unittest/helm-unittest" = { version = "1.1.0", exe = "untt", rename_exe = "helm-unittest" }
 
 [tasks.set-version]

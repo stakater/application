@@ -244,17 +244,57 @@
             "null"
           ]
         },
-        "defaultVolumesToRestic": {
+        "csiSnapshotTimeout": {
+          "default": "",
+          "description": "Time to wait for CSI VolumeSnapshot status to turn ReadyToUse during creation (e.g., \"10m\").",
+          "required": [],
+          "title": "csiSnapshotTimeout",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "datamover": {
+          "default": "",
+          "description": "Data mover to be used by the backup. If empty or \"velero\", the built-in data mover will be used.",
+          "required": [],
+          "title": "datamover",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "defaultVolumesToFsBackup": {
           "default": true,
-          "description": "Whether to use Restic to take snapshots of all pod volumes by default.",
-          "title": "defaultVolumesToRestic",
+          "description": "Whether to use filesystem backup to take snapshots of all pod volumes by default.",
+          "title": "defaultVolumesToFsBackup",
           "type": "boolean"
+        },
+        "defaultVolumesToRestic": {
+          "default": "",
+          "description": "Whether to use Restic to take snapshots of all pod volumes by default. Deprecated: Use `defaultVolumesToFsBackup` instead.",
+          "required": [],
+          "title": "defaultVolumesToRestic",
+          "type": [
+            "boolean",
+            "null"
+          ]
         },
         "enabled": {
           "default": false,
           "description": "Deploy a [Velero/OADP Backup](https://velero.io/docs/main/api-types/backup/) resource.",
           "title": "enabled",
           "type": "boolean"
+        },
+        "excludedNamespaceScopedResources": {
+          "default": "",
+          "description": "List of namespace-scoped resource types to exclude from the backup.",
+          "required": [],
+          "title": "excludedNamespaceScopedResources",
+          "type": [
+            "array",
+            "null"
+          ]
         },
         "excludedResources": {
           "default": "",
@@ -266,9 +306,19 @@
             "null"
           ]
         },
+        "includedNamespaceScopedResources": {
+          "default": "",
+          "description": "List of namespace-scoped resource types to include in the backup.",
+          "required": [],
+          "title": "includedNamespaceScopedResources",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
         "includedNamespaces": {
           "default": "`[ {{ include \"application.namespace\" $ }} ]`",
-          "description": "List of namespaces to include objects from. Keys and values are evaluated as templates.",
+          "description": "List of namespaces to include objects from. Values are evaluated as templates.",
           "items": {
             "anyOf": [
               {
@@ -277,8 +327,12 @@
             ],
             "required": []
           },
+          "required": [],
           "title": "includedNamespaces",
-          "type": "array"
+          "type": [
+            "array",
+            "null"
+          ]
         },
         "includedResources": {
           "default": "",
@@ -290,6 +344,16 @@
             "null"
           ]
         },
+        "itemOperationTimeout": {
+          "default": "",
+          "description": "Time to wait for asynchronous BackupItemAction operations (e.g., \"1h\").",
+          "required": [],
+          "title": "itemOperationTimeout",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
         "namespace": {
           "default": "`{{ .Release.Namespace }}`",
           "description": "Namespace for Backup.",
@@ -297,6 +361,26 @@
           "title": "namespace",
           "type": [
             "string",
+            "null"
+          ]
+        },
+        "orderedResources": {
+          "default": "",
+          "description": "Specifies the backup order of resources of specific Kind. The map key is the resource name and the value is a list of object names in the order they should be backed up.",
+          "required": [],
+          "title": "orderedResources",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "snapshotMoveData": {
+          "default": "",
+          "description": "Whether to move the data of the snapshot after it's taken.",
+          "required": [],
+          "title": "snapshotMoveData",
+          "type": [
+            "boolean",
             "null"
           ]
         },
@@ -321,6 +405,16 @@
           "description": "How long the Backup should be retained for.",
           "title": "ttl",
           "type": "string"
+        },
+        "volumeSnapshotLocations": {
+          "default": "",
+          "description": "Names of VolumeSnapshotLocations associated with this backup.",
+          "required": [],
+          "title": "volumeSnapshotLocations",
+          "type": [
+            "array",
+            "null"
+          ]
         }
       },
       "required": [],

@@ -47,7 +47,7 @@ jobs:
       - name: Install helm-unittest
         env:
           # renovate: datasource=github-releases depName=helm-unittest/helm-unittest
-          HELM_UNITTEST_VERSION: v1.1.0
+          HELM_UNITTEST_VERSION: v1.1.1
         # TODO: Remove --verify=false once helm-unittest publishes signed releases
         # Tracking: https://github.com/helm-unittest/helm-unittest/issues/362
         run: helm plugin install --verify=false https://github.com/helm-unittest/helm-unittest.git --version "$HELM_UNITTEST_VERSION"

@@ -123,7 +123,7 @@ jobs:
         run: cosign sign --yes ${{ env.OCI_REGISTRY }}/${{ env.CHART_PATH }}@${{ steps.push-chart.outputs.digest }}
 
       - name: Publish Helm chart to GitHub Pages
-        uses: stefanprodan/helm-gh-pages@0ad2bb377311d61ac04ad9eb6f252fb68e207260 # v1.7.0
+        uses: step-security/helm-gh-pages@3a91c620f61e0120377cfd94e19f04292ddd8e67 # v1.7.8
         with:
           branch: master
           repository: stakater-charts

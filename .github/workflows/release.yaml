@@ -54,7 +54,7 @@ jobs:
 
       - name: Generate next version
         id: get-next-version
-        uses: thenativeweb/get-next-version@0cfafef003741641ee52a2a37fdfc27ce5e857f5 # 2.7.2
+        uses: thenativeweb/get-next-version@7914838558689219caf7fa01501038383d2d6116 # 2.7.3
 
       - name: Show next version
         run: |

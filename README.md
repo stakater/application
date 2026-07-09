@@ -212,6 +212,16 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | httpRoute.rules | list | `[{"backendRefs":[{"name":"{{ include \"application.name\" $ }}","port":"{{ (first $.Values.service.ports).port }}"}],"matches":[{"path":{"type":"PathPrefix","value":"/"}}]}]` | Rules for HTTPRoute. Keys and values are evaluated as templates. |
 | httpRoute.rules[0].backendRefs[0].port | int, tpl, null | `"{{ (first $.Values.service.ports).port }}"` | Port number or template expression for the backend service. |
 
+### ListenerSet Parameters
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| listenerSet.enabled | bool | `false` | Enable ListenerSet (Gateway API). |
+| listenerSet.listeners | list, null | `nil` | Logical endpoints that are bound on this referenced parent Gateway's addresses. Keys and values are evaluated as templates. |
+| listenerSet.parentRef | object, null | `nil` | Parent Gateway reference for the ListenerSet. Keys and values are evaluated as templates. |
+| listenerSet.additionalLabels | object | `{}` | Additional labels for ListenerSet. |
+| listenerSet.annotations | object | `{}` | Annotations for ListenerSet. |
+
 ### Route Parameters
 
 | Key | Type | Default | Description |

@@ -1,0 +1,22 @@
+{{- if and .Values.listenerSet .Values.listenerSet.enabled -}}
+{{- if not (.Capabilities.APIVersions.Has "gateway.networking.k8s.io/v1") }}
+{{- fail "There is no Gateway API resource definitions in the target cluster!" }}
+{{- end }}
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: ListenerSet
+metadata:
+  name: {{ template "application.name" . }}
+  namespace: {{ include "application.namespace" . }}
+  labels:
+    {{- include "application.labels" $ | nindent 4 }}
+    {{- if .Values.listenerSet.additionalLabels }}
+      {{ toYaml .Values.listenerSet.additionalLabels | nindent 4 }}
+    {{- end }}
+  {{- if .Values.listenerSet.annotations }}
+  annotations: {{- toYaml .Values.listenerSet.annotations | nindent 4 }}
+  {{- end }}
+spec:
+  listeners: {{- include "application.tplvalues.render" ( dict "value" .Values.listenerSet.listeners "context" $ ) | nindent 4 }}
+  parentRef: {{- include "application.tplvalues.render" ( dict "value" .Values.listenerSet.parentRef "context" $ ) | nindent 4 }}
+{{- end }}

@@ -1,0 +1,237 @@
+suite: APIGateway-ListenerSet
+
+templates:
+  - listenerset.yaml
+
+tests:
+  - it: does not render when listenerSet is not enabled
+    set:
+      listenerSet:
+        enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: does not render when Gateway API is not available
+    set:
+      listenerSet:
+        enabled: true
+    capabilities:
+      majorVersion: 1
+      minorVersion: 34
+    asserts:
+      - failedTemplate:
+          errorMessage: "There is no Gateway API resource definitions in the target cluster!"
+
+  - it: renders a basic ListenerSet with minimal configuration
+    set:
+      applicationName: "my-app"
+      listenerSet:
+        enabled: true
+        parentRef:
+          name: my-gateway
+        listeners:
+          - name: http
+            protocol: HTTP
+            port: 80
+    capabilities:
+      apiVersions:
+        - gateway.networking.k8s.io/v1
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: ListenerSet
+      - equal:
+          path: metadata.name
+          value: my-app
+      - equal:
+          path: spec.parentRef.name
+          value: my-gateway
+      - equal:
+          path: spec.listeners[0].name
+          value: http
+      - equal:
+          path: spec.listeners[0].protocol
+          value: HTTP
+      - equal:
+          path: spec.listeners[0].port
+          value: 80
+
+  - it: renders ListenerSet with additional labels
+    set:
+      listenerSet:
+        enabled: true
+        additionalLabels:
+          custom: label
+        parentRef:
+          name: my-gateway
+        listeners:
+          - name: http
+            protocol: HTTP
+            port: 80
+    capabilities:
+      apiVersions:
+        - gateway.networking.k8s.io/v1
+    asserts:
+      - equal:
+          path: metadata.labels.custom
+          value: label
+
+  - it: renders ListenerSet with annotations
+    set:
+      listenerSet:
+        enabled: true
+        parentRef:
+          name: my-gateway
+        annotations:
+          custom: annotation
+        listeners:
+          - name: http
+            protocol: HTTP
+            port: 80
+    capabilities:
+      apiVersions:
+        - gateway.networking.k8s.io/v1
+    asserts:
+      - equal:
+          path: metadata.annotations.custom
+          value: annotation
+
+  - it: renders ListenerSet with custom gatewayName and gatewayNamespace
+    set:
+      listenerSet:
+        enabled: true
+        parentRef:
+          name: custom-gateway
+          namespace: custom-ns
+        listeners:
+          - name: http
+            protocol: HTTP
+            port: 80
+    capabilities:
+      apiVersions:
+        - gateway.networking.k8s.io/v1
+    asserts:
+      - equal:
+          path: spec.parentRef.name
+          value: custom-gateway
+      - equal:
+          path: spec.parentRef.namespace
+          value: custom-ns
+
+  - it: renders ListenerSet with a custom parentRef kind and group
+    set:
+      listenerSet:
+        enabled: true
+        parentRef:
+          name: my-gateway
+          kind: Gateway
+          group: gateway.networking.k8s.io
+        listeners:
+          - name: http
+            protocol: HTTP
+            port: 80
+    capabilities:
+      apiVersions:
+        - gateway.networking.k8s.io/v1
+    asserts:
+      - equal:
+          path: spec.parentRef.kind
+          value: Gateway
+      - equal:
+          path: spec.parentRef.group
+          value: gateway.networking.k8s.io
+
+  - it: renders ListenerSet with multiple listeners
+    set:
+      listenerSet:
+        parentRef:
+          name: my-gateway
+        enabled: true
+        listeners:
+          - name: http
+            protocol: HTTP
+            port: 80
+          - name: https
+            protocol: HTTPS
+            port: 443
+    capabilities:
+      apiVersions:
+        - gateway.networking.k8s.io/v1
+    asserts:
+      - equal:
+          path: spec.listeners[0].name
+          value: http
+      - equal:
+          path: spec.listeners[0].port
+          value: 80
+      - equal:
+          path: spec.listeners[1].name
+          value: https
+      - equal:
+          path: spec.listeners[1].port
+          value: 443
+
+  - it: renders ListenerSet with a TLS listener
+    set:
+      applicationName: "tls-listener"
+      listenerSet:
+        enabled: true
+        parentRef:
+          name: example-gateway
+        listeners:
+          - name: second
+            hostname: second.foo.com
+            protocol: HTTPS
+            port: 443
+            tls:
+              mode: Terminate
+              certificateRefs:
+                - kind: Secret
+                  group: ""
+                  name: second-workload-cert
+    capabilities:
+      apiVersions:
+        - gateway.networking.k8s.io/v1
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: ListenerSet
+      - equal:
+          path: metadata.name
+          value: tls-listener
+      - equal:
+          path: spec.parentRef.name
+          value: example-gateway
+      - equal:
+          path: spec.listeners[0].hostname
+          value: second.foo.com
+      - equal:
+          path: spec.listeners[0].tls.mode
+          value: Terminate
+      - equal:
+          path: spec.listeners[0].tls.certificateRefs[0].name
+          value: second-workload-cert
+
+  - it: renders ListenerSet with parentRef name using template expression
+    set:
+      applicationName: "test-app"
+      listenerSet:
+        enabled: true
+        parentRef:
+          name: '{{ include "application.name" $ }}'
+        listeners:
+          - name: http
+            protocol: HTTP
+            port: 80
+    capabilities:
+      apiVersions:
+        - gateway.networking.k8s.io/v1
+    asserts:
+      - equal:
+          path: spec.parentRef.name
+          value: test-app
+      - isKind:
+          of: ListenerSet

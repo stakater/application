@@ -198,7 +198,7 @@ jobs:
     if: ${{ always() && (needs.push-version.result == 'success' || github.event_name == 'workflow_dispatch') }}
     steps:
       - name: Create GitHub release
-        uses: softprops/action-gh-release@718ea10b132b3b2eba29c1007bb80653f286566b # v3
+        uses: softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228 # v3
         with:
           name: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || format('v{0}', needs.bump-version.outputs.version) }}
           tag_name: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || format('v{0}', needs.bump-version.outputs.version) }}

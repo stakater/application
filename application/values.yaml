@@ -694,6 +694,35 @@ httpRoute:
           # @section -- HTTPRoute Parameters
           port: '{{ (first $.Values.service.ports).port }}'
 
+listenerSet:
+  # -- (bool) Enable ListenerSet (Gateway API).
+  # @section -- ListenerSet Parameters
+  enabled: false
+  # -- (list, null) Logical endpoints that are bound on this referenced parent Gateway's addresses. Keys and values are evaluated as templates.
+  # @section -- ListenerSet Parameters
+  listeners:
+    # - name: second
+    #   hostname: second.foo.com
+    #   protocol: HTTPS
+    #   port: 443
+    #   tls:
+    #     mode: Terminate
+    #     certificateRefs:
+    #     - kind: Secret
+    #       group: ""
+    #       name: second-workload-cert
+  # -- (object, null) Parent Gateway reference for the ListenerSet. Keys and values are evaluated as templates.
+  # @section -- ListenerSet Parameters
+  parentRef:
+    # name: my-gateway
+    # namespace: my-namespace
+  # -- (object) Additional labels for ListenerSet.
+  # @section -- ListenerSet Parameters
+  additionalLabels: {}
+  # -- (object) Annotations for ListenerSet.
+  # @section -- ListenerSet Parameters
+  annotations: {}
+
 route:
   # -- (bool) Deploy a Route (OpenShift) resource.
   # @section -- Route Parameters

@@ -307,3 +307,57 @@ tests:
       - equal:
           path: spec.template.spec.containers[0].image
           value: another-example-registry/another-example-image
+
+  - it: renders additionalContainers from list format
+    set:
+      deployment.additionalContainers:
+        - name: sidecar
+          image: busybox
+          command: ['/bin/sh']
+    asserts: &additionalContainersAsserts
+      - contains:
+          path: &containersPath spec.template.spec.containers
+          content:
+            name: sidecar
+            image: busybox
+            command: ['/bin/sh']
+          any: true
+
+  - it: renders additionalContainers from map format (key becomes name)
+    set:
+      deployment.additionalContainers:
+        sidecar:
+          image: busybox
+          command: ['/bin/sh']
+    asserts: *additionalContainersAsserts
+
+  - it: renders multiple additionalContainers from map format
+    set:
+      deployment.additionalContainers:
+        sidecar:
+          image: busybox
+        another:
+          image: nginx
+    asserts:
+      - contains:
+          path: *containersPath
+          content:
+            name: sidecar
+            image: busybox
+          any: true
+      - contains:
+          path: *containersPath
+          content:
+            name: another
+            image: nginx
+          any: true
+
+  - it: does not render a sidecar when additionalContainers is empty
+    set:
+      deployment.additionalContainers: {}
+    asserts:
+      - notContains:
+          path: spec.template.spec.containers
+          content:
+            name: sidecar
+          any: true

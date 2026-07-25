@@ -517,13 +517,20 @@ deployment:
     # preStop:
     #   exec:
     #     command: ["/bin/bash", "-c", "sleep 20"]
-  # -- (list, null) Additional containers besides init and app containers (without templating).
+  # -- (list, object, null) Additional containers besides init and app containers (without templating).
+  # Supports both list and map formats. Map format makes overrides easier (e.g. ArgoCD),
+  # where the key becomes the container name:
+  #   additionalContainers:
+  #     sidecar:
+  #       image: busybox
+  #       imagePullPolicy: IfNotPresent
+  #       command: ['/bin/sh']
+  # List format is also supported:
+  #   additionalContainers:
+  #     - name: sidecar-container
+  #       image: busybox
   # @section -- Deployment Parameters
   additionalContainers:
-  # - name: sidecar-container
-  #   image: busybox
-  #   imagePullPolicy: IfNotPresent
-  #   command: ['/bin/sh']
 
 persistence:
   # -- (bool) Enable persistence.

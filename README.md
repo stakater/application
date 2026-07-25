@@ -157,7 +157,7 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | deployment.terminationGracePeriodSeconds | int, null | `nil` | Gracefull termination period. |
 | deployment.minReadySeconds | int, null | `nil` | Minimum number of seconds for which a newly created Pod should be ready without any of its containers crashing. |
 | deployment.lifecycle | object | `{}` | Lifecycle configuration for the pod. |
-| deployment.additionalContainers | list, null | `nil` | Additional containers besides init and app containers (without templating). |
+| deployment.additionalContainers | list, object, null | `nil` | Additional containers besides init and app containers (without templating). Supports both list and map formats. Map format makes overrides easier (e.g. ArgoCD), where the key becomes the container name:   additionalContainers:     sidecar:       image: busybox       imagePullPolicy: IfNotPresent       command: ['/bin/sh'] List format is also supported:   additionalContainers:     - name: sidecar-container       image: busybox |
 | persistence.enabled | bool | `false` | Enable persistence. |
 | persistence.mountPVC | bool | `false` | Whether to mount the created PVC to the deployment. |
 | persistence.mountPath | string | `"/"` | If `persistence.mountPVC` is enabled, where to mount the volume in the containers. |

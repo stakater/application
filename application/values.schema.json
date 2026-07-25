@@ -764,11 +764,12 @@
       "properties": {
         "additionalContainers": {
           "default": "",
-          "description": "Additional containers besides init and app containers (without templating).",
+          "description": "Additional containers besides init and app containers (without templating). Supports both list and map formats. Map format makes overrides easier (e.g. ArgoCD), where the key becomes the container name:   additionalContainers:     sidecar:       image: busybox       imagePullPolicy: IfNotPresent       command: ['/bin/sh'] List format is also supported:   additionalContainers:     - name: sidecar-container       image: busybox",
           "required": [],
           "title": "additionalContainers",
           "type": [
             "array",
+            "object",
             "null"
           ]
         },

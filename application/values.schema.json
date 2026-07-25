@@ -1915,6 +1915,51 @@
       "title": "job",
       "type": "object"
     },
+    "listenerSet": {
+      "properties": {
+        "additionalLabels": {
+          "description": "Additional labels for ListenerSet.",
+          "required": [],
+          "title": "additionalLabels",
+          "type": "object"
+        },
+        "annotations": {
+          "description": "Annotations for ListenerSet.",
+          "required": [],
+          "title": "annotations",
+          "type": "object"
+        },
+        "enabled": {
+          "default": false,
+          "description": "Enable ListenerSet (Gateway API).",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "listeners": {
+          "default": "",
+          "description": "Logical endpoints that are bound on this referenced parent Gateway's addresses. Keys and values are evaluated as templates.",
+          "required": [],
+          "title": "listeners",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "parentRef": {
+          "default": "",
+          "description": "Parent Gateway reference for the ListenerSet. Keys and values are evaluated as templates.",
+          "required": [],
+          "title": "parentRef",
+          "type": [
+            "object",
+            "null"
+          ]
+        }
+      },
+      "required": [],
+      "title": "listenerSet",
+      "type": "object"
+    },
     "namespaceOverride": {
       "default": "",
       "description": "Override the namespace for all resources.",

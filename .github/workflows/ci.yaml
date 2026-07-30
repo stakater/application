@@ -127,7 +127,7 @@ jobs:
           args=()
           if [ -z "$VALUES" ]; then
             args+=(
-              "--set" "deployment.image.repository=registry/example-image"
+              "--set" "deployment.image.repository=example-registry/example-image"
               "--set" "deployment.image.tag=example-tag"
             )
           else

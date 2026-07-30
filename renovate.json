@@ -10,7 +10,10 @@
     "enabled": true
   },
   "ignoreDeps": [
-    "registry/example-image"
+    "example-registry/example-image",
+    "example-registry/another-example-image",
+    "another-example-registry/example-image",
+    "another-example-registry/another-example-image"
   ],
   "customManagers": [
     {

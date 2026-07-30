@@ -28,7 +28,7 @@ deployment:
         - bar.remote
   initContainers:
     init-container:
-      image: registry/example-image:example-tag
+      image: example-registry/example-image:example-tag
       imagePullPolicy: IfNotPresent
       command: ["/bin/sh"]
       resources:
@@ -115,7 +115,7 @@ deployment:
                   - ssd
   automountServiceAccountToken: false
   image:
-    repository: registry/example-image
+    repository: example-registry/example-image
     tag: example-tag
     pullPolicy: IfNotPresent
   startupProbe:
@@ -173,7 +173,7 @@ deployment:
     enabled: false
   additionalContainers:
     - name: sidecar-container
-      image: registry/example-image:example-tag
+      image: example-registry/example-image:example-tag
       imagePullPolicy: IfNotPresent
       command: ["/bin/sh", "-c", "sleep 3600"]
       securityContext:
@@ -413,7 +413,7 @@ cronJob:
       imagePullSecrets:
         - name: nexus-secret
       image:
-        repository: registry/example-image
+        repository: example-registry/example-image
         tag: example-tag
       env:
         KEY:
@@ -466,7 +466,7 @@ job:
       imagePullSecrets:
         - name: nexus-secret
       image:
-        repository: registry/example-image
+        repository: example-registry/example-image
         tag: example-tag@sha256:example-digest
       env:
         KEY:

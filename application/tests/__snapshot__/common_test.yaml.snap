@@ -282,7 +282,7 @@ should match snapshot:
                     - secretRef:
                         name: my-existing-secret
                         optional: false
-                  image: registry/example-image:example-tag
+                  image: example-registry/example-image:example-tag
                   name: db-migration
                   resources:
                     limits:
@@ -421,7 +421,7 @@ should match snapshot:
                 - configMapRef:
                     name: application-my-configmap
                     optional: false
-              image: registry/example-image:example-tag
+              image: example-registry/example-image:example-tag
               imagePullPolicy: IfNotPresent
               lifecycle:
                 preStop:
@@ -492,7 +492,7 @@ should match snapshot:
                 - /bin/sh
                 - -c
                 - sleep 3600
-              image: registry/example-image:example-tag
+              image: example-registry/example-image:example-tag
               imagePullPolicy: IfNotPresent
               livenessProbe:
                 exec:
@@ -539,7 +539,7 @@ should match snapshot:
           initContainers:
             - command:
                 - /bin/sh
-              image: registry/example-image:example-tag
+              image: example-registry/example-image:example-tag
               imagePullPolicy: IfNotPresent
               name: init-container
               resources:
@@ -1405,7 +1405,7 @@ should match snapshot:
                 - secretRef:
                     name: my-existing-secret
                     optional: false
-              image: registry/example-image:example-tag@sha256:example-digest
+              image: example-registry/example-image:example-tag@sha256:example-digest
               name: db-migration
               resources:
                 limits:

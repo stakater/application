@@ -294,7 +294,8 @@ spec:
         {{- end }}
         {{- with .Values.deployment.additionalContainers }}
         {{- if kindIs "map" . }}
-        {{- range $name, $container := . }}
+        {{- range $name := keys . | sortAlpha }}
+        {{- $container := index . $name }}
       - {{- merge (dict "name" $name) $container | toYaml | nindent 8 }}
         {{- end }}
         {{- else }}

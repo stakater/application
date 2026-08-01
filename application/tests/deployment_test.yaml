@@ -359,9 +359,19 @@ tests:
             image: example-registry/example-image2:example-tag
           any: true
 
-  - it: does not render a sidecar when additionalContainers is empty
+  - it: does not render a sidecar when additionalContainers as a map is empty
     set:
       deployment.additionalContainers: {}
+    asserts:
+      - notContains:
+          path: spec.template.spec.containers
+          content:
+            name: sidecar
+          any: true
+
+  - it: does not render a sidecar when additionalContainers as a list is empty
+    set:
+      deployment.additionalContainers: []
     asserts:
       - notContains:
           path: spec.template.spec.containers

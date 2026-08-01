@@ -307,3 +307,87 @@ tests:
       - equal:
           path: spec.template.spec.containers[0].image
           value: another-example-registry/another-example-image
+
+  - it: renders additionalContainers from list format
+    set:
+      deployment.additionalContainers:
+        - name: sidecar
+          image: example-registry/example-image:example-tag
+          command: ['/bin/sh']
+    asserts:
+      - contains:
+          path: spec.template.spec.containers
+          content:
+            name: sidecar
+            image: example-registry/example-image:example-tag
+            command: ['/bin/sh']
+          any: true
+
+  - it: renders additionalContainers from map format (key becomes name)
+    set:
+      deployment.additionalContainers:
+        sidecar:
+          image: example-registry/example-image:example-tag
+          command: ['/bin/sh']
+    asserts:
+      - contains:
+          path: spec.template.spec.containers
+          content:
+            name: sidecar
+            image: example-registry/example-image:example-tag
+            command: ['/bin/sh']
+          any: true
+
+  - it: renders multiple additionalContainers from map format
+    set:
+      deployment.additionalContainers:
+        sidecar:
+          image: example-registry/example-image:example-tag
+        another:
+          image: example-registry/example-image2:example-tag
+    asserts:
+      - contains:
+          path: spec.template.spec.containers
+          content:
+            name: sidecar
+            image: example-registry/example-image:example-tag
+          any: true
+      - contains:
+          path: spec.template.spec.containers
+          content:
+            name: another
+            image: example-registry/example-image2:example-tag
+          any: true
+      # map keys are rendered in alphabetical order, after the application container
+      - lengthEqual:
+          path: spec.template.spec.containers
+          count: 3
+      - equal:
+          path: spec.template.spec.containers[0].name
+          value: RELEASE-NAME
+      - equal:
+          path: spec.template.spec.containers[1].name
+          value: another
+      - equal:
+          path: spec.template.spec.containers[2].name
+          value: sidecar
+
+  - it: does not render a sidecar when additionalContainers as a map is empty
+    set:
+      deployment.additionalContainers: {}
+    asserts:
+      - notContains:
+          path: spec.template.spec.containers
+          content:
+            name: sidecar
+          any: true
+
+  - it: does not render a sidecar when additionalContainers as a list is empty
+    set:
+      deployment.additionalContainers: []
+    asserts:
+      - notContains:
+          path: spec.template.spec.containers
+          content:
+            name: sidecar
+          any: true

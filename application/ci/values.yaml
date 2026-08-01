@@ -172,7 +172,7 @@ deployment:
   openshiftOAuthProxy:
     enabled: false
   additionalContainers:
-    - name: sidecar-container
+    sidecar-container:
       image: example-registry/example-image:example-tag
       imagePullPolicy: IfNotPresent
       command: ["/bin/sh", "-c", "sleep 3600"]

@@ -292,8 +292,16 @@ spec:
         securityContext:
           {{- toYaml .Values.deployment.containerSecurityContext | nindent 10 }}
         {{- end }}
-        {{- if .Values.deployment.additionalContainers }}
-{{ toYaml .Values.deployment.additionalContainers | indent 6 }}
+        {{- with .Values.deployment.additionalContainers }}
+        {{- if kindIs "map" . }}
+        {{- $containers := . }}
+        {{- range $name := keys . | sortAlpha }}
+        {{- $container := index $containers $name }}
+      - {{- merge (dict "name" $name) $container | toYaml | nindent 8 }}
+        {{- end }}
+        {{- else }}
+{{ toYaml . | indent 6 }}
+        {{- end }}
         {{- end }}
         {{- if .Values.deployment.securityContext }}
       securityContext:

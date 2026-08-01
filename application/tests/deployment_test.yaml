@@ -312,14 +312,14 @@ tests:
     set:
       deployment.additionalContainers:
         - name: sidecar
-          image: busybox
+          image: example-registry/example-image:example-tag
           command: ['/bin/sh']
-    asserts: &additionalContainersAsserts
+    asserts:
       - contains:
-          path: &containersPath spec.template.spec.containers
+          path: spec.template.spec.containers
           content:
             name: sidecar
-            image: busybox
+            image: example-registry/example-image:example-tag
             command: ['/bin/sh']
           any: true
 
@@ -327,29 +327,36 @@ tests:
     set:
       deployment.additionalContainers:
         sidecar:
-          image: busybox
+          image: example-registry/example-image:example-tag
           command: ['/bin/sh']
-    asserts: *additionalContainersAsserts
+    asserts:
+      - contains:
+          path: spec.template.spec.containers
+          content:
+            name: sidecar
+            image: example-registry/example-image:example-tag
+            command: ['/bin/sh']
+          any: true
 
   - it: renders multiple additionalContainers from map format
     set:
       deployment.additionalContainers:
         sidecar:
-          image: busybox
+          image: example-registry/example-image:example-tag
         another:
-          image: nginx
+          image: example-registry/example-image2:example-tag
     asserts:
       - contains:
-          path: *containersPath
+          path: spec.template.spec.containers
           content:
             name: sidecar
-            image: busybox
+            image: example-registry/example-image:example-tag
           any: true
       - contains:
-          path: *containersPath
+          path: spec.template.spec.containers
           content:
             name: another
-            image: nginx
+            image: example-registry/example-image2:example-tag
           any: true
 
   - it: does not render a sidecar when additionalContainers is empty

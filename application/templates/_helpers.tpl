@@ -140,12 +140,15 @@ Usage:
   {{- if $rule.backendRefs }}
   backendRefs:
   {{- range $rule.backendRefs }}
+  {{- $kind := .kind | default "Service" }}
   {{- $portVal := 0 }}
   {{- if .port }}
     {{- $portVal = .port | int }}
     {{- if or (lt $portVal 1) (gt $portVal 65535) }}
       {{- fail (printf "Invalid port value: %v. Port must be between 1 and 65535" .port) }}
     {{- end }}
+  {{- else if eq $kind "Service" }}
+    {{- fail (printf "backendRef %q: port is required when kind is Service" .name) }}
   {{- end }}
   - name: {{ .name }}
     {{- if .port }}

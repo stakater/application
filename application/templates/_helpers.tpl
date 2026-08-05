@@ -140,12 +140,17 @@ Usage:
   {{- if $rule.backendRefs }}
   backendRefs:
   {{- range $rule.backendRefs }}
-  {{- $portVal := .port | int }}
-  {{- if or (lt $portVal 1) (gt $portVal 65535) }}
-    {{- fail (printf "Invalid port value: %v. Port must be between 1 and 65535" .port) }}
+  {{- $portVal := 0 }}
+  {{- if .port }}
+    {{- $portVal = .port | int }}
+    {{- if or (lt $portVal 1) (gt $portVal 65535) }}
+      {{- fail (printf "Invalid port value: %v. Port must be between 1 and 65535" .port) }}
+    {{- end }}
   {{- end }}
   - name: {{ .name }}
+    {{- if .port }}
     port: {{ $portVal }}
+    {{- end }}
     {{- if .weight }}
     weight: {{ .weight | int }}
     {{- end }}

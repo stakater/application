@@ -281,6 +281,118 @@ tests:
           path: spec.rules[0].filters[0].requestRedirect.port
           value: 443
 
+  - it: renders HTTPRoute backendRef without a port when port is omitted
+    set:
+      applicationName: "no-port-app"
+      httpRoute:
+        enabled: true
+        parentRefs:
+          - name: my-gateway
+        hostnames:
+          - example.com
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - name: example-service
+    capabilities:
+      apiVersions:
+        - gateway.networking.k8s.io/v1
+    asserts:
+      - equal:
+          path: spec.rules[0].backendRefs[0].name
+          value: example-service
+      - notExists:
+          path: spec.rules[0].backendRefs[0].port
+
+  - it: renders HTTPRoute backendRef with a port when port is provided
+    set:
+      applicationName: "with-port-app"
+      httpRoute:
+        enabled: true
+        parentRefs:
+          - name: my-gateway
+        hostnames:
+          - example.com
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - name: example-service
+                port: 80
+    capabilities:
+      apiVersions:
+        - gateway.networking.k8s.io/v1
+    asserts:
+      - equal:
+          path: spec.rules[0].backendRefs[0].name
+          value: example-service
+      - equal:
+          path: spec.rules[0].backendRefs[0].port
+          value: 80
+
+  - it: fails when backendRef port is out of valid range
+    set:
+      applicationName: "invalid-port-app"
+      httpRoute:
+        enabled: true
+        parentRefs:
+          - name: my-gateway
+        hostnames:
+          - example.com
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - name: example-service
+                port: 70000
+    capabilities:
+      apiVersions:
+        - gateway.networking.k8s.io/v1
+    asserts:
+      - failedTemplate:
+          errorMessage: "Invalid port value: 70000. Port must be between 1 and 65535"
+
+  - it: renders HTTPRoute with mixed backendRefs where only some have a port
+    set:
+      applicationName: "mixed-port-app"
+      httpRoute:
+        enabled: true
+        parentRefs:
+          - name: my-gateway
+        hostnames:
+          - example.com
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - name: example-service
+                port: 80
+              - name: fallback-service
+    capabilities:
+      apiVersions:
+        - gateway.networking.k8s.io/v1
+    asserts:
+      - equal:
+          path: spec.rules[0].backendRefs[0].name
+          value: example-service
+      - equal:
+          path: spec.rules[0].backendRefs[0].port
+          value: 80
+      - equal:
+          path: spec.rules[0].backendRefs[1].name
+          value: fallback-service
+      - notExists:
+          path: spec.rules[0].backendRefs[1].port
+
   - it: renders HTTPRoute with default service port when using template expression
     set:
       applicationName: "test-app"

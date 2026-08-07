@@ -283,7 +283,7 @@ tests:
 
   - it: renders HTTPRoute backendRef without a port when kind is not Service
     set:
-      applicationName: "no-port-app"
+      applicationName: no-port-app
       httpRoute:
         enabled: true
         parentRefs:
@@ -310,7 +310,7 @@ tests:
 
   - it: fails when backendRef port is omitted and kind defaults to Service
     set:
-      applicationName: "no-port-default-kind-app"
+      applicationName: no-port-default-kind-app
       httpRoute:
         enabled: true
         parentRefs:
@@ -329,11 +329,11 @@ tests:
         - gateway.networking.k8s.io/v1
     asserts:
       - failedTemplate:
-          errorMessage: 'backendRef "example-service": port is required when kind is Service'
+          errorMessage: 'backendRef "example-service": port is required when the referent is a Kubernetes Service'
 
   - it: fails when backendRef port is omitted and kind is explicitly Service
     set:
-      applicationName: "no-port-explicit-kind-app"
+      applicationName: no-port-explicit-kind-app
       httpRoute:
         enabled: true
         parentRefs:
@@ -353,11 +353,11 @@ tests:
         - gateway.networking.k8s.io/v1
     asserts:
       - failedTemplate:
-          errorMessage: 'backendRef "example-service": port is required when kind is Service'
+          errorMessage: 'backendRef "example-service": port is required when the referent is a Kubernetes Service'
 
   - it: renders HTTPRoute backendRef with a port when port is provided
     set:
-      applicationName: "with-port-app"
+      applicationName: with-port-app
       httpRoute:
         enabled: true
         parentRefs:
@@ -385,7 +385,7 @@ tests:
 
   - it: fails when backendRef port is out of valid range
     set:
-      applicationName: "invalid-port-app"
+      applicationName: invalid-port-app
       httpRoute:
         enabled: true
         parentRefs:
@@ -407,9 +407,58 @@ tests:
       - failedTemplate:
           errorMessage: "Invalid port value: 70000. Port must be between 1 and 65535"
 
+  - it: fails when backendRef port is explicitly 0 for a Service
+    set:
+      applicationName: zero-port-service-app
+      httpRoute:
+        enabled: true
+        parentRefs:
+          - name: my-gateway
+        hostnames:
+          - example.com
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - name: example-service
+                port: 0
+    capabilities:
+      apiVersions:
+        - gateway.networking.k8s.io/v1
+    asserts:
+      - failedTemplate:
+          errorMessage: "Invalid port value: 0. Port must be between 1 and 65535"
+
+  - it: fails when backendRef port is explicitly 0 for a non-Service kind
+    set:
+      applicationName: zero-port-non-service-app
+      httpRoute:
+        enabled: true
+        parentRefs:
+          - name: my-gateway
+        hostnames:
+          - example.com
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - name: example-service
+                kind: test
+                port: 0
+    capabilities:
+      apiVersions:
+        - gateway.networking.k8s.io/v1
+    asserts:
+      - failedTemplate:
+          errorMessage: "Invalid port value: 0. Port must be between 1 and 65535"
+
   - it: renders HTTPRoute with mixed backendRefs where only some have a port
     set:
-      applicationName: "mixed-port-app"
+      applicationName: mixed-port-app
       httpRoute:
         enabled: true
         parentRefs:

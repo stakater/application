@@ -140,12 +140,23 @@ Usage:
   {{- if $rule.backendRefs }}
   backendRefs:
   {{- range $rule.backendRefs }}
-  {{- $portVal := .port | int }}
-  {{- if or (lt $portVal 1) (gt $portVal 65535) }}
-    {{- fail (printf "Invalid port value: %v. Port must be between 1 and 65535" .port) }}
+  {{- $group := .group | default "" }}
+  {{- $kind := .kind | default "Service" }}
+  {{- $hasPort := not (kindIs "invalid" .port) }}
+  {{- $isKubernetesService := and (eq $group "") (eq $kind "Service") }}
+  {{- $portVal := 0 }}
+  {{- if $hasPort }}
+    {{- $portVal = .port | int }}
+    {{- if or (lt $portVal 1) (gt $portVal 65535) }}
+      {{- fail (printf "Invalid port value: %v. Port must be between 1 and 65535" .port) }}
+    {{- end }}
+  {{- else if $isKubernetesService }}
+    {{- fail (printf "backendRef %q: port is required when the referent is a Kubernetes Service" .name) }}
   {{- end }}
   - name: {{ .name }}
+    {{- if .port }}
     port: {{ $portVal }}
+    {{- end }}
     {{- if .weight }}
     weight: {{ .weight | int }}
     {{- end }}

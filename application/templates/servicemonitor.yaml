@@ -20,6 +20,9 @@ spec:
   selector:
     matchLabels:
 {{ include "application.labels" $ | indent 6 }}
+{{- if .Values.service.additionalLabels }}
+{{- toYaml .Values.service.additionalLabels | nindent 6 }}
+{{- end }}
   namespaceSelector:
     matchNames:
     - {{ include "application.namespace" . }}

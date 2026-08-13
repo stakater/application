@@ -1,6 +1,6 @@
 [tools]
 prek = "0.4.13"
-helm = "4.2.3"
+helm = "4.2.4"
 helm-docs = "1.14.2"
 "github:dadav/helm-schema" = "0.23.4"
 "github:helm-unittest/helm-unittest" = { version = "1.1.2", rename_exe = { "untt-*" = "helm-unittest" } }

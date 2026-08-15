@@ -165,7 +165,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - name: Run Checkov
-        uses: bridgecrewio/checkov-action@358405ddafaa109ad35d3d607bbc7cf933c742d9 # v12.3116.0
+        uses: bridgecrewio/checkov-action@1246d92f57abae29d5db5f9aeeed2a9813e52d7d # v12.3117.0
         with:
           quiet: true
           soft_fail: false

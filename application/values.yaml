@@ -31,6 +31,20 @@ cronJob:
   # -- (bool) Deploy CronJob resources.
   # @section -- CronJob Parameters
   enabled: false
+  # -- (object, null) Default Security Context at pod level for all CronJobs. Can be overridden per job with `securityContext`.
+  # @section -- CronJob Parameters
+  securityContext:
+    seccompProfile:
+      type: RuntimeDefault
+  # -- (object, null) Default Security Context at container level for all CronJobs. Can be overridden per job with `containerSecurityContext`.
+  # @section -- CronJob Parameters
+  containerSecurityContext:
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
   # -- (object, null) Map of CronJob resources.
   # Key will be used as a name suffix for the CronJob. Value is the CronJob configuration.
   # See values for more details.
@@ -95,6 +109,20 @@ job:
   # -- (bool) Deploy Job resources.
   # @section -- Job Parameters
   enabled: false
+  # -- (object, null) Default Security Context at pod level for all Jobs. Can be overridden per job with `securityContext`.
+  # @section -- Job Parameters
+  securityContext:
+    seccompProfile:
+      type: RuntimeDefault
+  # -- (object, null) Default Security Context at container level for all Jobs. Can be overridden per job with `containerSecurityContext`.
+  # @section -- Job Parameters
+  containerSecurityContext:
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
   # -- (object, null) Map of Job resources.
   # Key will be used as a name suffix for the Job. Value is the Job configuration.
   # See values for more details.

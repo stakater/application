@@ -68,6 +68,8 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | cronJob.enabled | bool | `false` | Deploy CronJob resources. |
+| cronJob.securityContext | object, null | `{"seccompProfile":{"type":"RuntimeDefault"}}` | Default Security Context at pod level for all CronJobs. Can be overridden per job with `securityContext`. |
+| cronJob.containerSecurityContext | object, null | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true,"runAsNonRoot":true}` | Default Security Context at container level for all CronJobs. Can be overridden per job with `containerSecurityContext`. |
 | cronJob.jobs | object, null | `nil` | Map of CronJob resources. Key will be used as a name suffix for the CronJob. Value is the CronJob configuration. See values for more details. |
 
 ### Job Parameters
@@ -75,6 +77,8 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | job.enabled | bool | `false` | Deploy Job resources. |
+| job.securityContext | object, null | `{"seccompProfile":{"type":"RuntimeDefault"}}` | Default Security Context at pod level for all Jobs. Can be overridden per job with `securityContext`. |
+| job.containerSecurityContext | object, null | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true,"runAsNonRoot":true}` | Default Security Context at container level for all Jobs. Can be overridden per job with `containerSecurityContext`. |
 | job.jobs | object, null | `nil` | Map of Job resources. Key will be used as a name suffix for the Job. Value is the Job configuration. See values for more details. |
 
 ### Deployment Parameters

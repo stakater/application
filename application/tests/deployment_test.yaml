@@ -20,6 +20,66 @@ tests:
               drop:
                 - ALL
 
+  - it: applies the default security context to init containers unless overridden
+    set:
+      deployment.initContainers:
+        plain:
+          image: busybox
+        custom:
+          image: busybox
+          securityContext:
+            runAsNonRoot: false
+    asserts:
+      - contains:
+          path: spec.template.spec.initContainers
+          content:
+            name: plain
+            image: busybox
+            securityContext:
+              readOnlyRootFilesystem: true
+              runAsNonRoot: true
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+      - contains:
+          path: spec.template.spec.initContainers
+          content:
+            name: custom
+            image: busybox
+            securityContext:
+              runAsNonRoot: false
+
+  - it: applies the default security context to additional containers unless overridden
+    set:
+      deployment.additionalContainers:
+        plain:
+          image: busybox
+        custom:
+          image: busybox
+          securityContext:
+            runAsNonRoot: false
+    asserts:
+      - contains:
+          path: spec.template.spec.containers
+          content:
+            name: plain
+            image: busybox
+            securityContext:
+              readOnlyRootFilesystem: true
+              runAsNonRoot: true
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+      - contains:
+          path: spec.template.spec.containers
+          content:
+            name: custom
+            image: busybox
+            securityContext:
+              runAsNonRoot: false
+
   - it: applies the runtime default seccomp profile at pod level by default
     asserts:
       - equal:

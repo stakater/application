@@ -15,7 +15,7 @@ tests:
       - notContains:
           path: spec.template.spec.containers
           content:
-            image: openshift/oauth-proxy:latest
+            image: quay.io/openshift/origin-oauth-proxy:latest
           any: true
 
   - it: includes OAuth proxy container when enabled
@@ -25,7 +25,7 @@ tests:
       - contains:
           path: spec.template.spec.containers
           content:
-            image: openshift/oauth-proxy:latest
+            image: quay.io/openshift/origin-oauth-proxy:latest
           any: true
 
   - it: does not fail to render when image tag and digest are not given

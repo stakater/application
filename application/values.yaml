@@ -475,7 +475,7 @@ deployment:
     secretName: "openshift-oauth-proxy-tls"
     # -- (string) Image for the OAuth Proxy.
     # @section -- Deployment Parameters
-    image: openshift/oauth-proxy:latest
+    image: quay.io/openshift/origin-oauth-proxy:latest
     # -- (bool) If disabled `--http-address=:8081` will be used instead of `--https-address=:8443`.
     # It can be useful when an ingress is enabled for the application.
     # @section -- Deployment Parameters

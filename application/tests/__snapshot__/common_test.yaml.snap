@@ -393,7 +393,7 @@ should match snapshot:
                 - --tls-cert=/etc/tls/private/tls.crt
                 - --tls-key=/etc/tls/private/tls.key
                 - --cookie-secret=SECRET
-              image: openshift/oauth-proxy:latest
+              image: quay.io/openshift/origin-oauth-proxy:latest
               imagePullPolicy: IfNotPresent
               name: oauth-proxy
               ports:

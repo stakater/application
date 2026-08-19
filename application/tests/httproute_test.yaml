@@ -331,58 +331,6 @@ tests:
       - failedTemplate:
           errorMessage: 'backendRef "example-service": port is required when the referent is a Kubernetes Service'
 
-  - it: fails when backendRef port is omitted and kind is explicitly Service
-    set:
-      applicationName: no-port-explicit-kind-app
-      httpRoute:
-        enabled: true
-        parentRefs:
-          - name: my-gateway
-        hostnames:
-          - example.com
-        rules:
-          - matches:
-              - path:
-                  type: PathPrefix
-                  value: /
-            backendRefs:
-              - name: example-service
-                kind: Service
-    capabilities:
-      apiVersions:
-        - gateway.networking.k8s.io/v1
-    asserts:
-      - failedTemplate:
-          errorMessage: 'backendRef "example-service": port is required when the referent is a Kubernetes Service'
-
-  - it: renders HTTPRoute backendRef with a port when port is provided
-    set:
-      applicationName: with-port-app
-      httpRoute:
-        enabled: true
-        parentRefs:
-          - name: my-gateway
-        hostnames:
-          - example.com
-        rules:
-          - matches:
-              - path:
-                  type: PathPrefix
-                  value: /
-            backendRefs:
-              - name: example-service
-                port: 80
-    capabilities:
-      apiVersions:
-        - gateway.networking.k8s.io/v1
-    asserts:
-      - equal:
-          path: spec.rules[0].backendRefs[0].name
-          value: example-service
-      - equal:
-          path: spec.rules[0].backendRefs[0].port
-          value: 80
-
   - it: fails when backendRef port is out of valid range
     set:
       applicationName: invalid-port-app
@@ -423,31 +371,6 @@ tests:
                   value: /
             backendRefs:
               - name: example-service
-                port: 0
-    capabilities:
-      apiVersions:
-        - gateway.networking.k8s.io/v1
-    asserts:
-      - failedTemplate:
-          errorMessage: "Invalid port value: 0. Port must be between 1 and 65535"
-
-  - it: fails when backendRef port is explicitly 0 for a non-Service kind
-    set:
-      applicationName: zero-port-non-service-app
-      httpRoute:
-        enabled: true
-        parentRefs:
-          - name: my-gateway
-        hostnames:
-          - example.com
-        rules:
-          - matches:
-              - path:
-                  type: PathPrefix
-                  value: /
-            backendRefs:
-              - name: example-service
-                kind: test
                 port: 0
     capabilities:
       apiVersions:

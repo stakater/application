@@ -1094,7 +1094,7 @@
               "type": "boolean"
             },
             "image": {
-              "default": "quay.io/openshift/origin-oauth-proxy:latest",
+              "default": "quay.io/openshift/origin-oauth-proxy:latest@sha256:35967c4d152d7b21167e3ba0aae57e29d3a46a75a738329073ef2227cbc33bde",
               "description": "Image for the OAuth Proxy.",
               "title": "image",
               "type": "string"

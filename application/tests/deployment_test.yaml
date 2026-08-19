@@ -15,7 +15,7 @@ tests:
       - notContains:
           path: spec.template.spec.containers
           content:
-            image: quay.io/openshift/origin-oauth-proxy:latest
+            image: quay.io/openshift/origin-oauth-proxy:latest@sha256:35967c4d152d7b21167e3ba0aae57e29d3a46a75a738329073ef2227cbc33bde
           any: true
 
   - it: includes OAuth proxy container when enabled
@@ -25,7 +25,7 @@ tests:
       - contains:
           path: spec.template.spec.containers
           content:
-            image: quay.io/openshift/origin-oauth-proxy:latest
+            image: quay.io/openshift/origin-oauth-proxy:latest@sha256:35967c4d152d7b21167e3ba0aae57e29d3a46a75a738329073ef2227cbc33bde
           any: true
 
   - it: does not fail to render when image tag and digest are not given

@@ -695,6 +695,9 @@ httpRoute:
       backendRefs:
         - name: '{{ include "application.name" $ }}'
           # -- (int, tpl, null) Port number or template expression for the backend service.
+          # Required when the referent is a Kubernetes Service (the default kind);
+          # optional for other kinds such as ServiceImport, where it is omitted
+          # from the manifest when unset or when a template expression renders empty.
           # @section -- HTTPRoute Parameters
           port: '{{ (first $.Values.service.ports).port }}'
 

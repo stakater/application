@@ -1692,7 +1692,7 @@
                             },
                             "port": {
                               "default": "{{ (first $.Values.service.ports).port }}",
-                              "description": "Port number or template expression for the backend service.",
+                              "description": "Port number or template expression for the backend service. Required when the referent is a Kubernetes Service (the default kind); optional for other kinds such as ServiceImport, where it is omitted from the manifest when unset or when a template expression renders empty.",
                               "required": [],
                               "title": "port",
                               "type": [

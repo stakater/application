@@ -128,7 +128,7 @@ spec:
         - --tls-cert=/etc/tls/private/tls.crt
         - --tls-key=/etc/tls/private/tls.key
         - --cookie-secret=SECRET
-        image: {{ .Values.deployment.openshiftOAuthProxy.image | default "quay.io/openshift/origin-oauth-proxy:latest" }}
+        image: {{ .Values.deployment.openshiftOAuthProxy.image }}
         imagePullPolicy: IfNotPresent
         name: oauth-proxy
         ports:

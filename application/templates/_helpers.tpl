@@ -142,11 +142,11 @@ Usage:
   {{- range $rule.backendRefs }}
   {{- $group := .group | default "" }}
   {{- $kind := .kind | default "Service" }}
-  {{- $hasPort := not (kindIs "invalid" .port) }}
+  {{- /* A templated port may render to an empty string; treat it as unset. */}}
+  {{- $hasPort := not (or (kindIs "invalid" .port) (eq (toString .port) "")) }}
   {{- $isKubernetesService := and (eq $group "") (eq $kind "Service") }}
-  {{- $portVal := 0 }}
   {{- if $hasPort }}
-    {{- $portVal = .port | int }}
+    {{- $portVal := .port | int }}
     {{- if or (lt $portVal 1) (gt $portVal 65535) }}
       {{- fail (printf "Invalid port value: %v. Port must be between 1 and 65535" .port) }}
     {{- end }}
@@ -154,8 +154,8 @@ Usage:
     {{- fail (printf "backendRef %q: port is required when the referent is a Kubernetes Service" .name) }}
   {{- end }}
   - name: {{ .name }}
-    {{- if .port }}
-    port: {{ $portVal }}
+    {{- if $hasPort }}
+    port: {{ .port | int }}
     {{- end }}
     {{- if .weight }}
     weight: {{ .weight | int }}

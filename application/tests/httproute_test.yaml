@@ -491,6 +491,58 @@ tests:
       - notExists:
           path: spec.rules[0].backendRefs[1].port
 
+  - it: treats an empty templated backendRef port as unset for non-Service kinds
+    set:
+      applicationName: empty-tpl-port-app
+      httpRoute:
+        enabled: true
+        parentRefs:
+          - name: my-gateway
+        hostnames:
+          - example.com
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - name: example-service
+                kind: ServiceImport
+                port: '{{ .Values.optionalPort }}'
+    capabilities:
+      apiVersions:
+        - gateway.networking.k8s.io/v1
+    asserts:
+      - equal:
+          path: spec.rules[0].backendRefs[0].name
+          value: example-service
+      - notExists:
+          path: spec.rules[0].backendRefs[0].port
+
+  - it: fails when a templated backendRef port renders empty for a Service
+    set:
+      applicationName: empty-tpl-port-service-app
+      httpRoute:
+        enabled: true
+        parentRefs:
+          - name: my-gateway
+        hostnames:
+          - example.com
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - name: example-service
+                port: '{{ .Values.optionalPort }}'
+    capabilities:
+      apiVersions:
+        - gateway.networking.k8s.io/v1
+    asserts:
+      - failedTemplate:
+          errorMessage: 'backendRef "example-service": port is required when the referent is a Kubernetes Service'
+
   - it: renders HTTPRoute with default service port when using template expression
     set:
       applicationName: "test-app"

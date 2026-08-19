@@ -463,6 +463,10 @@ deployment:
   containerSecurityContext:
     readOnlyRootFilesystem: true
     runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
   openshiftOAuthProxy:
     # -- (bool) Enable [OpenShift OAuth Proxy](https://github.com/openshift/oauth-proxy).
     # @section -- Deployment Parameters

@@ -142,7 +142,7 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | deployment.livenessProbe.tcpSocket | object | `{}` | TCP Socket probe. |
 | deployment.livenessProbe.grpc | object | `{}` | gRPC probe. |
 | deployment.resources | object | `{}` | Resource limits and requests for the pod. |
-| deployment.containerSecurityContext | object, null | `{"readOnlyRootFilesystem":true,"runAsNonRoot":true}` | Security Context at Container Level. |
+| deployment.containerSecurityContext | object, null | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true,"runAsNonRoot":true}` | Security Context at Container Level. |
 | deployment.openshiftOAuthProxy.enabled | bool | `false` | Enable [OpenShift OAuth Proxy](https://github.com/openshift/oauth-proxy). |
 | deployment.openshiftOAuthProxy.port | int | `8080` | Port on which application is running inside container. |
 | deployment.openshiftOAuthProxy.secretName | string | `"openshift-oauth-proxy-tls"` | Secret name for the OAuth Proxy TLS certificate. |

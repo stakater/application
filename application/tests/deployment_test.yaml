@@ -8,6 +8,18 @@ set:
   deployment.image.tag: example-tag
 
 tests:
+  - it: applies a restricted container security context by default
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].securityContext
+          value:
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+
   - it: does not include OAuth proxy container if disabled
     set:
       deployment.openshiftOAuthProxy.enabled: false

@@ -146,7 +146,7 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | deployment.openshiftOAuthProxy.enabled | bool | `false` | Enable [OpenShift OAuth Proxy](https://github.com/openshift/oauth-proxy). |
 | deployment.openshiftOAuthProxy.port | int | `8080` | Port on which application is running inside container. |
 | deployment.openshiftOAuthProxy.secretName | string | `"openshift-oauth-proxy-tls"` | Secret name for the OAuth Proxy TLS certificate. |
-| deployment.openshiftOAuthProxy.image | string | `"openshift/oauth-proxy:latest"` | Image for the OAuth Proxy. |
+| deployment.openshiftOAuthProxy.image | string | `"quay.io/openshift/origin-oauth-proxy:latest"` | Image for the OAuth Proxy. |
 | deployment.openshiftOAuthProxy.disableTLSArg | bool | `false` | If disabled `--http-address=:8081` will be used instead of `--https-address=:8443`. It can be useful when an ingress is enabled for the application. |
 | deployment.securityContext | object, null | `nil` | Security Context for the pod. |
 | deployment.command | list | `[]` | Command for the app container. |

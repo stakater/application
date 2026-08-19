@@ -497,6 +497,91 @@ tests:
       - notExists:
           path: spec.rules[0].backendRefs[0].port
 
+  - it: renders an explicit backendRef weight of 0
+    set:
+      applicationName: zero-weight-app
+      httpRoute:
+        enabled: true
+        parentRefs:
+          - name: my-gateway
+        hostnames:
+          - example.com
+        rules:
+          - backendRefs:
+              - name: blue
+                port: 80
+                weight: 0
+              - name: green
+                port: 80
+                weight: 100
+    capabilities:
+      apiVersions:
+        - gateway.networking.k8s.io/v1
+    asserts:
+      - equal:
+          path: spec.rules[0].backendRefs[0].weight
+          value: 0
+      - equal:
+          path: spec.rules[0].backendRefs[1].weight
+          value: 100
+
+  - it: treats an empty templated backendRef weight as unset
+    set:
+      applicationName: empty-tpl-weight-app
+      httpRoute:
+        enabled: true
+        parentRefs:
+          - name: my-gateway
+        hostnames:
+          - example.com
+        rules:
+          - backendRefs:
+              - name: example-service
+                port: 80
+                weight: '{{ .Values.optionalWeight }}'
+    capabilities:
+      apiVersions:
+        - gateway.networking.k8s.io/v1
+    asserts:
+      - equal:
+          path: spec.rules[0].backendRefs[0].name
+          value: example-service
+      - notExists:
+          path: spec.rules[0].backendRefs[0].weight
+
+  - it: renders per-backendRef filters
+    set:
+      applicationName: backend-filters-app
+      httpRoute:
+        enabled: true
+        parentRefs:
+          - name: my-gateway
+        hostnames:
+          - example.com
+        rules:
+          - backendRefs:
+              - name: example-service
+                port: 80
+                filters:
+                  - type: RequestHeaderModifier
+                    requestHeaderModifier:
+                      add:
+                        - name: x-canary
+                          value: "true"
+    capabilities:
+      apiVersions:
+        - gateway.networking.k8s.io/v1
+    asserts:
+      - equal:
+          path: spec.rules[0].backendRefs[0].filters[0].type
+          value: RequestHeaderModifier
+      - equal:
+          path: spec.rules[0].backendRefs[0].filters[0].requestHeaderModifier.add[0].name
+          value: x-canary
+      - equal:
+          path: spec.rules[0].backendRefs[0].filters[0].requestHeaderModifier.add[0].value
+          value: "true"
+
   - it: renders HTTPRoute with default service port when using template expression
     set:
       applicationName: "test-app"

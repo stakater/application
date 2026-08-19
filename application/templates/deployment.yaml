@@ -138,6 +138,10 @@ spec:
         - containerPort: 8443
         {{- end }}
           name: proxy
+        {{- with .Values.deployment.openshiftOAuthProxy.containerSecurityContext }}
+        securityContext:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
         volumeMounts:
         - mountPath: /etc/tls/private
           name: proxy-tls

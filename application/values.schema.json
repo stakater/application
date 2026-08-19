@@ -1105,6 +1105,51 @@
         },
         "openshiftOAuthProxy": {
           "properties": {
+            "containerSecurityContext": {
+              "description": "Security Context for the OAuth Proxy container.",
+              "properties": {
+                "allowPrivilegeEscalation": {
+                  "default": false,
+                  "title": "allowPrivilegeEscalation",
+                  "type": "boolean"
+                },
+                "capabilities": {
+                  "properties": {
+                    "drop": {
+                      "items": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          }
+                        ],
+                        "required": []
+                      },
+                      "title": "drop",
+                      "type": "array"
+                    }
+                  },
+                  "required": [],
+                  "title": "capabilities",
+                  "type": "object"
+                },
+                "readOnlyRootFilesystem": {
+                  "default": true,
+                  "title": "readOnlyRootFilesystem",
+                  "type": "boolean"
+                },
+                "runAsNonRoot": {
+                  "default": true,
+                  "title": "runAsNonRoot",
+                  "type": "boolean"
+                }
+              },
+              "required": [],
+              "title": "containerSecurityContext",
+              "type": [
+                "object",
+                "null"
+              ]
+            },
             "disableTLSArg": {
               "default": false,
               "description": "If disabled `--http-address=:8081` will be used instead of `--https-address=:8443`. It can be useful when an ingress is enabled for the application.",
@@ -1275,8 +1320,21 @@
           ]
         },
         "securityContext": {
-          "default": "",
           "description": "Security Context for the pod.",
+          "properties": {
+            "seccompProfile": {
+              "properties": {
+                "type": {
+                  "default": "RuntimeDefault",
+                  "title": "type",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "seccompProfile",
+              "type": "object"
+            }
+          },
           "required": [],
           "title": "securityContext",
           "type": [

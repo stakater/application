@@ -20,6 +20,31 @@ tests:
               drop:
                 - ALL
 
+  - it: applies the runtime default seccomp profile at pod level by default
+    asserts:
+      - equal:
+          path: spec.template.spec.securityContext
+          value:
+            seccompProfile:
+              type: RuntimeDefault
+
+  - it: applies a restricted security context to the OAuth proxy container
+    set:
+      deployment.openshiftOAuthProxy.enabled: true
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].name
+          value: oauth-proxy
+      - equal:
+          path: spec.template.spec.containers[0].securityContext
+          value:
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+
   - it: does not include OAuth proxy container if disabled
     set:
       deployment.openshiftOAuthProxy.enabled: false

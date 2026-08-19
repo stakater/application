@@ -474,6 +474,15 @@ deployment:
     # -- (int) Port on which application is running inside container.
     # @section -- Deployment Parameters
     port: 8080
+    # -- (object, null) Security Context for the OAuth Proxy container.
+    # @section -- Deployment Parameters
+    containerSecurityContext:
+      readOnlyRootFilesystem: true
+      runAsNonRoot: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
     # -- (string) Secret name for the OAuth Proxy TLS certificate.
     # @section -- Deployment Parameters
     secretName: "openshift-oauth-proxy-tls"
@@ -487,6 +496,8 @@ deployment:
   # -- (object, null) Security Context for the pod.
   # @section -- Deployment Parameters
   securityContext:
+    seccompProfile:
+      type: RuntimeDefault
     # fsGroup: 2000
   # -- (list) Command for the app container.
   # @section -- Deployment Parameters

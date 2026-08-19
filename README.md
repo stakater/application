@@ -145,10 +145,11 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | deployment.containerSecurityContext | object, null | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true,"runAsNonRoot":true}` | Security Context at Container Level. |
 | deployment.openshiftOAuthProxy.enabled | bool | `false` | Enable [OpenShift OAuth Proxy](https://github.com/openshift/oauth-proxy). |
 | deployment.openshiftOAuthProxy.port | int | `8080` | Port on which application is running inside container. |
+| deployment.openshiftOAuthProxy.containerSecurityContext | object, null | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true,"runAsNonRoot":true}` | Security Context for the OAuth Proxy container. |
 | deployment.openshiftOAuthProxy.secretName | string | `"openshift-oauth-proxy-tls"` | Secret name for the OAuth Proxy TLS certificate. |
 | deployment.openshiftOAuthProxy.image | string | `"quay.io/openshift/origin-oauth-proxy:latest@sha256:35967c4d152d7b21167e3ba0aae57e29d3a46a75a738329073ef2227cbc33bde"` | Image for the OAuth Proxy. |
 | deployment.openshiftOAuthProxy.disableTLSArg | bool | `false` | If disabled `--http-address=:8081` will be used instead of `--https-address=:8443`. It can be useful when an ingress is enabled for the application. |
-| deployment.securityContext | object, null | `nil` | Security Context for the pod. |
+| deployment.securityContext | object, null | `{"seccompProfile":{"type":"RuntimeDefault"}}` | Security Context for the pod. |
 | deployment.command | list | `[]` | Command for the app container. |
 | deployment.args | list | `[]` | Args for the app container. |
 | deployment.automountServiceAccountToken | bool | `false` | Mount Service Account token. |

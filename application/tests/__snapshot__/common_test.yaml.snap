@@ -1824,8 +1824,10 @@ should match snapshot:
           app.kubernetes.io/managed-by: Helm
           app.kubernetes.io/name: application
           app.kubernetes.io/version: example-tag
+          expose: "true"
           group: com.stakater.platform
           helm.sh/chart: application-0.0.0
+          key: value
           team: stakater
   37: |
     apiVersion: autoscaling.k8s.io/v1

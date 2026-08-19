@@ -66,6 +66,24 @@ tests:
           path: metadata.labels.custom
           value: label
 
+  - it: renders ServiceMonitor selector with service additionalLabels
+    set:
+      serviceMonitor:
+        enabled: true
+        endpoints:
+          - port: http
+            interval: 30s
+      service:
+        additionalLabels:
+          custom: label
+    capabilities:
+        apiVersions:
+          - "monitoring.coreos.com/v1"
+    asserts:
+      - equal:
+          path: spec.selector.matchLabels.custom
+          value: label
+
   - it: renders ServiceMonitor with annotations
     set:
       serviceMonitor:

@@ -160,6 +160,10 @@ deployment:
   # -- (bool) Enable Deployment.
   # @section -- Deployment Parameters
   enabled: true
+  # -- (string) Define the kind of workload.
+  # Must specify either one of the following field when enabled: Deployment, StatefulSet, DaemonSet
+  # @section -- Deployment Parameters
+  kind: "Deployment"
   # -- (object, null) Additional labels for Deployment.
   # @section -- Deployment Parameters
   additionalLabels:
@@ -610,6 +614,30 @@ service:
   # -- (string, null) LoadBalancer class name for LoadBalancer type services.
   # @section -- Service Parameters
   loadBalancerClass:
+
+headlessService:
+  # -- (bool) Enable Headless Service for StatefulSet.
+  # @section -- Headless Service Parameters
+  enabled: false
+  # -- (string, null) Optional override for service name
+  # Defaults to application.name-headless
+  # @section -- Service Parameters
+  name:
+  # -- (object, null) Additional labels for headless service.
+  # @section -- Headless Service Parameters
+  additionalLabels:
+  # -- (object, null) Annotations for headless service.
+  # @section -- Headless Service Parameters
+  annotations:
+  # -- (list) Ports for applications service.
+  # @section -- Headless Service Parameters
+  ports:
+    - port: 8080
+      name: http
+      protocol: TCP
+      # -- (int, string, null) Target port on pods. Accepts port number or port name (IANA_SVC_NAME).
+      # @section -- Headless Service Parameters
+      targetPort: 8080
 
 ingress:
   # -- (bool) Enable Ingress.

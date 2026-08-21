@@ -1,7 +1,8 @@
 {{- if .Values.deployment.enabled }}
+{{- $kindsWithHeadlessService := list "StatefulSet" -}}
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: {{ .Values.deployment.kind  | default "Deployment" }}
 metadata:
   labels:
   {{- include "application.labels" $ | nindent 4 }}
@@ -20,6 +21,9 @@ metadata:
   name: {{ template "application.name" . }}
   namespace: {{ include "application.namespace" . }}
 spec:
+{{- if and (has .Values.deployment.kind $kindsWithHeadlessService) ((.Values.headlessService).enabled) }}
+  serviceName: {{ .Values.headlessService.name | default (printf "%s-headless" (include "application.name" .)) }}
+{{- end }}
 {{- if not (eq .Values.deployment.replicas nil) }}
   replicas: {{ .Values.deployment.replicas }}
 {{- end }}

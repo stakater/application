@@ -987,6 +987,12 @@
             "null"
           ]
         },
+        "kind": {
+          "default": "Deployment",
+          "description": "Define the kind of workload. Must specify either one of the following field when enabled: Deployment, StatefulSet, DaemonSet",
+          "title": "kind",
+          "type": "string"
+        },
         "lifecycle": {
           "description": "Lifecycle configuration for the pod.",
           "required": [],
@@ -1622,6 +1628,91 @@
       },
       "required": [],
       "title": "grafanaDashboard",
+      "type": "object"
+    },
+    "headlessService": {
+      "properties": {
+        "additionalLabels": {
+          "default": "",
+          "description": "Additional labels for headless service.",
+          "required": [],
+          "title": "additionalLabels",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "annotations": {
+          "default": "",
+          "description": "Annotations for headless service.",
+          "required": [],
+          "title": "annotations",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "enabled": {
+          "default": false,
+          "description": "Enable Headless Service for StatefulSet.",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "default": "",
+          "description": "Optional override for service name Defaults to application.name-headless",
+          "required": [],
+          "title": "name",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ports": {
+          "description": "Ports for applications service.",
+          "items": {
+            "anyOf": [
+              {
+                "properties": {
+                  "name": {
+                    "default": "http",
+                    "title": "name",
+                    "type": "string"
+                  },
+                  "port": {
+                    "default": 8080,
+                    "title": "port",
+                    "type": "integer"
+                  },
+                  "protocol": {
+                    "default": "TCP",
+                    "title": "protocol",
+                    "type": "string"
+                  },
+                  "targetPort": {
+                    "default": 8080,
+                    "description": "Target port on pods. Accepts port number or port name (IANA_SVC_NAME).",
+                    "required": [],
+                    "title": "targetPort",
+                    "type": [
+                      "integer",
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [],
+                "type": "object"
+              }
+            ],
+            "required": []
+          },
+          "title": "ports",
+          "type": "array"
+        }
+      },
+      "required": [],
+      "title": "headlessService",
       "type": "object"
     },
     "httpRoute": {

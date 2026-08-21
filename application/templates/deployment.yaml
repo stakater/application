@@ -1,5 +1,10 @@
 {{- if .Values.deployment.enabled }}
 {{- $kindsWithHeadlessService := list "StatefulSet" -}}
+{{- $kindsWithPodManagementPolicy := list "StatefulSet" -}}
+{{- $kindsWithReplicas := list "Deployment" "StatefulSet" -}}
+{{- $kindsWithStrategy := list "Deployment" -}}
+{{- $kindsWithUpdateStrategy := list "DaemonSet" "StatefulSet" -}}
+{{- $kindsWithVolumeClaimTemplates := list "StatefulSet" -}}
 ---
 apiVersion: apps/v1
 kind: {{ .Values.deployment.kind  | default "Deployment" }}
@@ -24,13 +29,23 @@ spec:
 {{- if and (has .Values.deployment.kind $kindsWithHeadlessService) ((.Values.headlessService).enabled) }}
   serviceName: {{ .Values.headlessService.name | default (printf "%s-headless" (include "application.name" .)) }}
 {{- end }}
+{{- if has .Values.deployment.kind $kindsWithReplicas }}
 {{- if not (eq .Values.deployment.replicas nil) }}
   replicas: {{ .Values.deployment.replicas }}
+{{- end }}
 {{- end }}
   selector:
     matchLabels:
 {{ include "application.selectorLabels" . | indent 6 }}
-  {{- if .Values.deployment.strategy }}
+  {{- if has .Values.deployment.kind $kindsWithPodManagementPolicy }}
+  {{- with .Values.deployment.podManagementPolicy }}
+  podManagementPolicy: {{ . }}
+  {{- end }}
+  {{- end }}
+  {{- if and (has .Values.deployment.kind $kindsWithUpdateStrategy) .Values.deployment.updateStrategy }}
+  updateStrategy:
+{{ toYaml .Values.deployment.updateStrategy | indent 4 }}
+  {{- else if and (has .Values.deployment.kind $kindsWithStrategy) .Values.deployment.strategy }}
   strategy:
 {{ toYaml .Values.deployment.strategy | indent 4 }}
   {{- end }}
@@ -348,4 +363,17 @@ spec:
       {{- if not (kindIs "invalid" .Values.deployment.minReadySeconds) }}
       minReadySeconds: {{ .Values.deployment.minReadySeconds }}
       {{- end }}
+  {{- if and (has .Values.deployment.kind $kindsWithVolumeClaimTemplates) .Values.deployment.volumeClaimTemplates }}
+  volumeClaimTemplates:
+    {{- range $key, $value := .Values.deployment.volumeClaimTemplates }}
+  - metadata:
+      name: {{ $key }}
+    spec:
+{{ include "application.tplvalues.render" ( dict "value" $value "context" $ ) | indent 6 }}
+    {{- end }}
+    {{- if .Values.deployment.persistentVolumeClaimRetentionPolicy }}
+  persistentVolumeClaimRetentionPolicy:
+{{ toYaml .Values.deployment.persistentVolumeClaimRetentionPolicy | indent 4 }}
+    {{- end }}
+  {{- end }}
 {{- end }}

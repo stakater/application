@@ -87,7 +87,9 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | deployment.podLabels | object, null | `nil` | Additional pod labels which are used in Service's Label Selector. |
 | deployment.annotations | object, null | `nil` | Annotations for Deployment. |
 | deployment.additionalPodAnnotations | object, null | `nil` | Additional pod annotations. |
-| deployment.strategy.type | string | `"RollingUpdate"` | Type of deployment strategy. |
+| deployment.strategy.type | string | `"RollingUpdate"` | Type of deployment strategy. Only for Deployments. |
+| deployment.updateStrategy.type | string | `"RollingUpdate"` | Type of deployment.updateStrategy. Only works for StatefulSets and DaemonSets |
+| deployment.podManagementPolicy | string | `"OrderedReady"` | Type of deployment.podManagementPolicy. Only works for StatefulSets. One of OrderedReady or Parallel |
 | deployment.reloadOnChange | bool | `true` | Reload deployment if attached Secret/ConfigMap changes. |
 | deployment.nodeSelector | object, null | `nil` | Select the node where the pods should be scheduled. |
 | deployment.hostAliases | list, null | `nil` | Mapping between IP and hostnames that will be injected as entries in the pod's hosts files. |
@@ -98,7 +100,9 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | deployment.envFrom | object, null | `nil` | Mount environment variables from ConfigMap or Secret to the pod. Use `nameSuffix` for resources managed by this chart (name will be prefixed with application name), or `name` to reference an existing external ConfigMap or Secret not managed by this chart. See the README "Consuming environment variable in application chart" section for more details. |
 | deployment.env | object, null | `nil` | Environment variables to be added to the pod. See the README "Consuming environment variable in application chart" section for more details. |
 | deployment.volumes | object, null | `nil` | Volumes to be added to the pod. Key is the name of the volume. Value is the volume definition. |
+| deployment.volumeClaimTemplates | object, null | `nil` | VolumeClaimTemplates to be added to the pods. Key is the name of the volume. Value is the spec for volumeClaimTemplate. Use only for StatefulSets. |
 | deployment.volumeMounts | object, null | `nil` | Mount path for Volumes. Key is the name of the volume. Value is the volume mount definition. |
+| deployment.persistentVolumeClaimRetentionPolicy | object, null | `nil` | Rules on what to do with residual PVCs for StatefulSets. No-op for Deployments or DaemonSets. |
 | deployment.priorityClassName | string, null | `""` | Define the priority class for the pod. |
 | deployment.runtimeClassName | string, null | `""` | Set the runtimeClassName for the deployment's pods. |
 | deployment.tolerations | list, null | `nil` | Taint tolerations for the pods. |

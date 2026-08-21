@@ -1122,6 +1122,16 @@
           "title": "openshiftOAuthProxy",
           "type": "object"
         },
+        "persistentVolumeClaimRetentionPolicy": {
+          "default": "",
+          "description": "Rules on what to do with residual PVCs for StatefulSets. No-op for Deployments or DaemonSets.",
+          "required": [],
+          "title": "persistentVolumeClaimRetentionPolicy",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
         "podLabels": {
           "default": "",
           "description": "Additional pod labels which are used in Service's Label Selector.",
@@ -1131,6 +1141,12 @@
             "object",
             "null"
           ]
+        },
+        "podManagementPolicy": {
+          "default": "OrderedReady",
+          "description": "Type of deployment.podManagementPolicy. Only works for StatefulSets. One of OrderedReady or Parallel",
+          "title": "podManagementPolicy",
+          "type": "string"
         },
         "ports": {
           "default": "",
@@ -1336,7 +1352,7 @@
           "properties": {
             "type": {
               "default": "RollingUpdate",
-              "description": "Type of deployment strategy.",
+              "description": "Type of deployment strategy. Only for Deployments.",
               "title": "type",
               "type": "string"
             }
@@ -1372,6 +1388,29 @@
           "title": "topologySpreadConstraints",
           "type": [
             "array",
+            "null"
+          ]
+        },
+        "updateStrategy": {
+          "properties": {
+            "type": {
+              "default": "RollingUpdate",
+              "description": "Type of deployment.updateStrategy. Only works for StatefulSets and DaemonSets",
+              "title": "type",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "title": "updateStrategy",
+          "type": "object"
+        },
+        "volumeClaimTemplates": {
+          "default": "",
+          "description": "VolumeClaimTemplates to be added to the pods. Key is the name of the volume. Value is the spec for volumeClaimTemplate. Use only for StatefulSets.",
+          "required": [],
+          "title": "volumeClaimTemplates",
+          "type": [
+            "object",
             "null"
           ]
         },

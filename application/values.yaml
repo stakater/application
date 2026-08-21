@@ -178,11 +178,24 @@ deployment:
   additionalPodAnnotations:
   strategy:
     # -- (string) Type of deployment strategy.
+    # Only for Deployments.
     # @section -- Deployment Parameters
     type: RollingUpdate
     # rollingUpdate:
     #   maxUnavailable: 25%
     #   maxSurge: 25%
+  updateStrategy:
+    # -- (string) Type of deployment.updateStrategy.
+    # Only works for StatefulSets and DaemonSets
+    # @section -- Deployment Parameters
+    type: RollingUpdate
+    # rollingUpdate:
+    #   maxUnavailable: 25%
+    #   maxSurge: 25%
+  # -- (string) Type of deployment.podManagementPolicy.
+  # Only works for StatefulSets. One of OrderedReady or Parallel
+  # @section -- Deployment Parameters
+  podManagementPolicy: OrderedReady
   # -- (bool) Reload deployment if attached Secret/ConfigMap changes.
   # @section -- Deployment Parameters
   reloadOnChange: true
@@ -273,6 +286,16 @@ deployment:
     # persistent-volume-name:
     #   persistentVolumeClaim:
     #     claimName: claim-name
+  # -- (object, null) VolumeClaimTemplates to be added to the pods.
+  # Key is the name of the volume. Value is the spec for volumeClaimTemplate. Use only for StatefulSets.
+  # @section -- Deployment Parameters
+  volumeClaimTemplates:
+    # persistent-volume-name:
+    #   accessModes: [ "ReadWriteOnce" ]
+    #   storageClassName: "my-storage-class"
+    #   resources:
+    #     requests:
+    #       storage: 1Gi
   # -- (object, null) Mount path for Volumes.
   # Key is the name of the volume. Value is the volume mount definition.
   # @section -- Deployment Parameters
@@ -282,6 +305,12 @@ deployment:
     #    subPath: szy
     # volume-name-2:
     #    mountPath: path-2
+  # -- (object, null) Rules on what to do with residual PVCs for StatefulSets.
+  # No-op for Deployments or DaemonSets.
+  # @section -- Deployment Parameters
+  persistentVolumeClaimRetentionPolicy:
+    # whenDeleted: Retain
+    # whenScaled: Retain
   # -- (string, null) Define the priority class for the pod.
   # @section -- Deployment Parameters
   priorityClassName: ""
@@ -1491,6 +1520,8 @@ backup:
   # @section -- Backup Parameters
   includedResources:
     # - deployments
+    # - statefulsets
+    # - daemonsets
     # - services
   # -- (list, null) List of resource types to exclude from the backup.
   # @section -- Backup Parameters
@@ -1501,6 +1532,8 @@ backup:
   # @section -- Backup Parameters
   includedNamespaceScopedResources:
     # - deployments
+    # - statefulsets
+    # - daemonsets
     # - services
   # -- (list, null) List of namespace-scoped resource types to exclude from the backup.
   # @section -- Backup Parameters
@@ -1513,6 +1546,12 @@ backup:
     # deployments:
     #   - my-deployment-1
     #   - my-deployment-2
+    # statefulsets:
+    #   - my-statefulset-1
+    #   - my-statefulset-2
+    # daemonsets:
+    #   - my-daemonset-1
+    #   - my-daemonset-2
 
 # -- (list, object, null) Extra K8s manifests to deploy.
 # Can be of type list or object. If object, keys are ignored and only values are used. The used values can be defined as object or string and are evaluated as templates.

@@ -75,7 +75,7 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | job.enabled | bool | `false` | Deploy Job resources. |
-| job.jobs | object, null | `nil` | Map of Job resources. Key will be used as a name suffix for the Job. Value is the Job configuration. See values for more details. |
+| job.jobs | object, null | `nil` | Map of Job resources. Key will be used as a name suffix for the Job. Value is the Job configuration. Each Job inherits `image`, `imagePullSecrets`, `automountServiceAccountToken`, `containerSecurityContext` and `securityContext` from `deployment` unless overridden, and mounts the chart-managed PVC when `persistence.enabled` and `persistence.mountPVC` are set. Set `inheritFromDeployment: false` on a Job to opt out of the inherited defaults. See values for more details. |
 
 ### Deployment Parameters
 

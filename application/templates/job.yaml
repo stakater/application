@@ -1,5 +1,29 @@
 {{- if (.Values.job).enabled }}
+{{- $deployment := (.Values.deployment | default dict) }}
+{{- $mountPVC := and ((.Values.persistence).enabled) ((.Values.persistence).mountPVC) }}
+{{- $pvcVolumeName := printf "%s-%s" (include "application.name" $) "data" | trunc 63 | trimSuffix "-" }}
 {{- range $name, $job := .Values.job.jobs }}
+{{- $job = ($job | default dict) }}
+{{- /* Defaults inherited from `.Values.deployment`. Anything set on the job itself always wins. */}}
+{{- if not (eq false $job.inheritFromDeployment) }}
+{{- $inherited := dict }}
+{{- range $key := list "imagePullSecrets" "automountServiceAccountToken" "containerSecurityContext" "securityContext" }}
+{{- if not (kindIs "invalid" (index $deployment $key)) }}
+{{- $_ := set $inherited $key (index $deployment $key) }}
+{{- end }}
+{{- end }}
+{{- /* Image: inherit the full block only when the job defines no repository of its own. */}}
+{{- $deploymentImage := ($deployment.image | default dict) }}
+{{- $jobImage := ($job.image | default dict) }}
+{{- $inheritedImage := dict "imagePullPolicy" $deploymentImage.pullPolicy }}
+{{- if not $jobImage.repository }}
+{{- $_ := set $inheritedImage "repository" $deploymentImage.repository }}
+{{- $_ := set $inheritedImage "tag" $deploymentImage.tag }}
+{{- $_ := set $inheritedImage "digest" $deploymentImage.digest }}
+{{- end }}
+{{- $_ := set $inherited "image" (merge (deepCopy $jobImage) $inheritedImage) }}
+{{- $job = merge (deepCopy $job) $inherited }}
+{{- end }}
 ---
 {{ if $.Capabilities.APIVersions.Has "batch/v1/Job" -}}
 apiVersion: batch/v1
@@ -115,9 +139,15 @@ spec:
         securityContext:
           {{- toYaml . | nindent 10 }}
         {{- end }}
-        {{- with $job.volumeMounts }}
+        {{- if or $job.volumeMounts $mountPVC }}
         volumeMounts:
+        {{- if $mountPVC }}
+        - mountPath: {{ $.Values.persistence.mountPath }}
+          name: {{ $pvcVolumeName }}
+        {{- end }}
+        {{- with $job.volumeMounts }}
 {{ toYaml . | indent 8 }}
+        {{- end }}
         {{- end }}
       {{- with $job.nodeSelector }}
       nodeSelector:
@@ -159,9 +189,16 @@ spec:
       {{- with $job.hostAliases }}
       hostAliases: {{- toYaml . | nindent 6 }}
       {{- end }}
-      {{- with $job.volumes }}
+      {{- if or $job.volumes $mountPVC }}
       volumes:
+      {{- if $mountPVC }}
+        - name: {{ $pvcVolumeName }}
+          persistentVolumeClaim:
+            claimName: {{ $.Values.persistence.name | default $pvcVolumeName }}
+      {{- end }}
+      {{- with $job.volumes }}
 {{ toYaml . | indent 8 }}
+      {{- end }}
       {{- end }}
 {{- end }}
 {{- end }}

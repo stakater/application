@@ -17,6 +17,7 @@ metadata:
 spec:
   clusterIP: None
   type: ClusterIP
+  publishNotReadyAddresses: {{ .Values.headlessService.publishNotReadyAddresses | default false }}
   selector:
 {{ include "application.selectorLabels" . | indent 4 }}
   ports:

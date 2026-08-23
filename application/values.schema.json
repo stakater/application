@@ -1748,6 +1748,12 @@
           },
           "title": "ports",
           "type": "array"
+        },
+        "publishNotReadyAddresses": {
+          "default": "",
+          "description": "Propagate SRV DNS records for Pods to enable peer discovery, by disregarding any indications of ready/not-ready for Pods.",
+          "title": "publishNotReadyAddresses",
+          "type": "boolean"
         }
       },
       "required": [],

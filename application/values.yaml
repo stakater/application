@@ -667,7 +667,7 @@ headlessService:
       # -- (int, string, null) Target port on pods. Accepts port number or port name (IANA_SVC_NAME).
       # @section -- Headless Service Parameters
       targetPort: 8080
-  # -- (bool) Propagate SRV DNS records for Pods to enable peer discovery, by disregarding any indications of ready/not-ready for Pods.
+  # -- (bool, null) Propagate SRV DNS records for Pods to enable peer discovery, by disregarding any indications of ready/not-ready for Pods.
   # @section -- Headless Service Parameters
   publishNotReadyAddresses:
 

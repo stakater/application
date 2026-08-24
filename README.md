@@ -198,7 +198,7 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | headlessService.annotations | object, null | `nil` | Annotations for headless service. |
 | headlessService.ports | list | `[{"name":"http","port":8080,"protocol":"TCP","targetPort":8080}]` | Ports for applications service. |
 | headlessService.ports[0].targetPort | int, string, null | `8080` | Target port on pods. Accepts port number or port name (IANA_SVC_NAME). |
-| headlessService.publishNotReadyAddresses | bool | `nil` | Propagate SRV DNS records for Pods to enable peer discovery, by disregarding any indications of ready/not-ready for Pods. |
+| headlessService.publishNotReadyAddresses | bool, null | `nil` | Propagate SRV DNS records for Pods to enable peer discovery, by disregarding any indications of ready/not-ready for Pods. |
 
 ### Ingress Parameters
 

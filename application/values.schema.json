@@ -1752,8 +1752,12 @@
         "publishNotReadyAddresses": {
           "default": "",
           "description": "Propagate SRV DNS records for Pods to enable peer discovery, by disregarding any indications of ready/not-ready for Pods.",
+          "required": [],
           "title": "publishNotReadyAddresses",
-          "type": "boolean"
+          "type": [
+            "boolean",
+            "null"
+          ]
         }
       },
       "required": [],

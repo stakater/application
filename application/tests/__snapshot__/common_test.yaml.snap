@@ -592,7 +592,6 @@ should match snapshot:
               name: volume-name
       updateStrategy:
         rollingUpdate:
-          maxSurge: 25%
           maxUnavailable: 25%
         type: RollingUpdate
       volumeClaimTemplates:

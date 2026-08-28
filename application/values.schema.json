@@ -2786,6 +2786,113 @@
       "required": [],
       "title": "vpa",
       "type": "object"
+    },
+    "virtualService": {
+      "description": "Deploy an Istio VirtualService resource. Requires Istio to be installed (networking.istio.io CRDs). Uses networking.istio.io/v1 if available, falls back to v1beta1.",
+      "properties": {
+        "enabled": {
+          "default": false,
+          "description": "Deploy an Istio VirtualService resource.",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "hosts": {
+          "default": [],
+          "description": "Hostnames this VirtualService applies to. Can be a DNS name, wildcard (*.example.com), or short name resolved relative to the VS namespace.",
+          "items": {
+            "type": "string"
+          },
+          "title": "hosts",
+          "type": "array"
+        },
+        "gateways": {
+          "default": [],
+          "description": "Gateways this VirtualService is bound to. Use <namespace>/<name> format. Omit to apply rules to mesh-internal sidecar traffic only.",
+          "items": {
+            "type": "string"
+          },
+          "title": "gateways",
+          "type": "array"
+        },
+        "exportTo": {
+          "default": [],
+          "description": "Namespaces this VirtualService is exported to. '.' = same namespace only, '*' = all namespaces (default when omitted).",
+          "items": {
+            "type": "string"
+          },
+          "title": "exportTo",
+          "type": "array"
+        },
+        "http": {
+          "default": [],
+          "description": "Ordered HTTP route rules. First matching rule wins. Supports the full Istio HTTPRoute spec: match, route, rewrite, redirect, retries, timeout, fault, corsPolicy, headers, mirror, directResponse, delegate.",
+          "items": {
+            "required": [],
+            "type": "object"
+          },
+          "title": "http",
+          "type": "array"
+        },
+        "tls": {
+          "default": [],
+          "description": "Ordered TLS route rules for non-terminated TLS/HTTPS traffic (SNI-based routing).",
+          "items": {
+            "required": [],
+            "type": "object"
+          },
+          "title": "tls",
+          "type": "array"
+        },
+        "tcp": {
+          "default": [],
+          "description": "Ordered TCP route rules for opaque TCP traffic (non-HTTP, non-TLS ports).",
+          "items": {
+            "required": [],
+            "type": "object"
+          },
+          "title": "tcp",
+          "type": "array"
+        },
+        "routes": {
+          "default": {},
+          "description": "Multiple VirtualServices — use when you need more than one VS for this app. Each key produces a separate VS named <app>-<key>. When routes is set, the top-level hosts/gateways/http/tls/tcp fields are ignored.",
+          "additionalProperties": {
+            "properties": {
+              "hosts": {
+                "items": { "type": "string" },
+                "type": "array"
+              },
+              "gateways": {
+                "items": { "type": "string" },
+                "type": "array"
+              },
+              "exportTo": {
+                "items": { "type": "string" },
+                "type": "array"
+              },
+              "http": {
+                "items": { "type": "object", "required": [] },
+                "type": "array"
+              },
+              "tls": {
+                "items": { "type": "object", "required": [] },
+                "type": "array"
+              },
+              "tcp": {
+                "items": { "type": "object", "required": [] },
+                "type": "array"
+              }
+            },
+            "required": [],
+            "type": "object"
+          },
+          "title": "routes",
+          "type": "object"
+        }
+      },
+      "required": [],
+      "title": "virtualService",
+      "type": "object"
     }
   },
   "required": [],

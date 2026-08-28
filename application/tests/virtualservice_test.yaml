@@ -1,0 +1,259 @@
+suite: IstioVirtualService
+
+templates:
+  - virtualservice.yaml
+
+tests:
+  - it: does not render when virtualService is not enabled
+    set:
+      virtualService:
+        enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: renders a single VirtualService when enabled with no routes map
+    set:
+      applicationName: my-app
+      virtualService:
+        enabled: true
+        hosts:
+          - my-app.example.com
+        gateways:
+          - istio-system/istio-gateway
+        http:
+          - match:
+              - uri:
+                  prefix: /
+            route:
+              - destination:
+                  host: my-app
+                  port:
+                    number: 80
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: VirtualService
+      - equal:
+          path: metadata.name
+          value: my-app
+      - equal:
+          path: spec.hosts[0]
+          value: my-app.example.com
+      - equal:
+          path: spec.gateways[0]
+          value: istio-system/istio-gateway
+
+  - it: uses networking.istio.io/v1 when the API version is available
+    set:
+      virtualService:
+        enabled: true
+        hosts:
+          - my-app.example.com
+    capabilities:
+      apiVersions:
+        - networking.istio.io/v1/VirtualService
+    asserts:
+      - isAPIVersion:
+          of: networking.istio.io/v1
+
+  - it: falls back to networking.istio.io/v1beta1 when v1 is unavailable
+    set:
+      virtualService:
+        enabled: true
+        hosts:
+          - my-app.example.com
+    capabilities:
+      apiVersions:
+        - apps/v1
+    asserts:
+      - isAPIVersion:
+          of: networking.istio.io/v1beta1
+
+  - it: renders http routes as pass-through YAML
+    set:
+      applicationName: my-app
+      virtualService:
+        enabled: true
+        hosts:
+          - my-app.example.com
+        http:
+          - match:
+              - uri:
+                  prefix: /api
+            route:
+              - destination:
+                  host: my-app
+                  port:
+                    number: 8080
+    asserts:
+      - equal:
+          path: spec.http[0].match[0].uri.prefix
+          value: /api
+      - equal:
+          path: spec.http[0].route[0].destination.port.number
+          value: 8080
+
+  - it: renders exportTo when specified
+    set:
+      virtualService:
+        enabled: true
+        hosts:
+          - my-app.example.com
+        exportTo:
+          - "."
+          - istio-system
+    asserts:
+      - equal:
+          path: spec.exportTo[0]
+          value: "."
+      - equal:
+          path: spec.exportTo[1]
+          value: istio-system
+
+  - it: omits spec.gateways when not provided
+    set:
+      virtualService:
+        enabled: true
+        hosts:
+          - my-app.example.com
+    asserts:
+      - isNull:
+          path: spec.gateways
+
+  - it: omits spec.http when not provided
+    set:
+      virtualService:
+        enabled: true
+        hosts:
+          - my-app.example.com
+    asserts:
+      - isNull:
+          path: spec.http
+
+  - it: renders multiple VirtualServices from the routes map
+    set:
+      applicationName: my-app
+      virtualService:
+        enabled: true
+        routes:
+          web:
+            hosts:
+              - web.example.com
+            gateways:
+              - istio-system/istio-gateway
+            http:
+              - route:
+                  - destination:
+                      host: my-app
+                      port:
+                        number: 80
+          grpc:
+            hosts:
+              - grpc.example.com
+            gateways:
+              - istio-system/istio-gateway
+            http:
+              - route:
+                  - destination:
+                      host: my-app
+                      port:
+                        number: 9090
+    asserts:
+      - hasDocuments:
+          count: 2
+
+  - it: appends the route key as a name suffix for non-default routes
+    set:
+      applicationName: my-app
+      virtualService:
+        enabled: true
+        routes:
+          api:
+            hosts:
+              - api.example.com
+            http:
+              - route:
+                  - destination:
+                      host: my-app
+                      port:
+                        number: 8080
+    documentIndex: 0
+    asserts:
+      - equal:
+          path: metadata.name
+          value: my-app-api
+
+  - it: does not append a suffix for the default route key
+    set:
+      applicationName: my-app
+      virtualService:
+        enabled: true
+        routes:
+          default:
+            hosts:
+              - my-app.example.com
+            http:
+              - route:
+                  - destination:
+                      host: my-app
+                      port:
+                        number: 80
+    documentIndex: 0
+    asserts:
+      - equal:
+          path: metadata.name
+          value: my-app
+
+  - it: renders tls routes when specified
+    set:
+      virtualService:
+        enabled: true
+        hosts:
+          - my-app.example.com
+        tls:
+          - match:
+              - port: 443
+                sniHosts:
+                  - my-app.example.com
+            route:
+              - destination:
+                  host: my-app
+                  port:
+                    number: 443
+    asserts:
+      - equal:
+          path: spec.tls[0].match[0].port
+          value: 443
+
+  - it: renders tcp routes when specified
+    set:
+      virtualService:
+        enabled: true
+        hosts:
+          - my-app.example.com
+        tcp:
+          - match:
+              - port: 5432
+            route:
+              - destination:
+                  host: my-app
+                  port:
+                    number: 5432
+    asserts:
+      - equal:
+          path: spec.tcp[0].match[0].port
+          value: 5432
+
+  - it: includes standard labels on the VirtualService
+    set:
+      applicationName: my-app
+      virtualService:
+        enabled: true
+        hosts:
+          - my-app.example.com
+    asserts:
+      - isNotNull:
+          path: metadata.labels["app.kubernetes.io/name"]
+

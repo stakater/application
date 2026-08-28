@@ -1,0 +1,49 @@
+{{- $root := . -}}
+{{- if (.Values.virtualService).enabled -}}
+{{- $routes := .Values.virtualService.routes | default (dict "default" (omit .Values.virtualService "enabled" "routes")) -}}
+{{- range $name, $vs := $routes }}
+---
+{{- if $root.Capabilities.APIVersions.Has "networking.istio.io/v1/VirtualService" }}
+apiVersion: networking.istio.io/v1
+{{- else }}
+apiVersion: networking.istio.io/v1beta1
+{{- end }}
+kind: VirtualService
+metadata:
+  name: {{ template "application.name" $root }}{{ if ne $name "default" }}-{{ $name }}{{ end }}
+  namespace: {{ include "application.namespace" $root }}
+  labels:
+    {{- include "application.labels" $root | nindent 4 }}
+spec:
+  {{- if $vs.hosts }}
+  hosts:
+  {{- range $vs.hosts }}
+  - {{ . }}
+  {{- end }}
+  {{- end }}
+  {{- if $vs.gateways }}
+  gateways:
+  {{- range $vs.gateways }}
+  - {{ . }}
+  {{- end }}
+  {{- end }}
+  {{- if $vs.exportTo }}
+  exportTo:
+  {{- range $vs.exportTo }}
+  - {{ . }}
+  {{- end }}
+  {{- end }}
+  {{- if $vs.http }}
+  http:
+  {{- toYaml $vs.http | nindent 2 }}
+  {{- end }}
+  {{- if $vs.tls }}
+  tls:
+  {{- toYaml $vs.tls | nindent 2 }}
+  {{- end }}
+  {{- if $vs.tcp }}
+  tcp:
+  {{- toYaml $vs.tcp | nindent 2 }}
+  {{- end }}
+{{- end }}
+{{- end -}}

@@ -740,6 +740,51 @@
     "cronJob": {
       "description": " example.com/team: team-name example.com/owner: owner-name",
       "properties": {
+        "containerSecurityContext": {
+          "description": "Default Security Context at container level for all CronJobs. Can be overridden per job with `containerSecurityContext`.",
+          "properties": {
+            "allowPrivilegeEscalation": {
+              "default": false,
+              "title": "allowPrivilegeEscalation",
+              "type": "boolean"
+            },
+            "capabilities": {
+              "properties": {
+                "drop": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      }
+                    ],
+                    "required": []
+                  },
+                  "title": "drop",
+                  "type": "array"
+                }
+              },
+              "required": [],
+              "title": "capabilities",
+              "type": "object"
+            },
+            "readOnlyRootFilesystem": {
+              "default": true,
+              "title": "readOnlyRootFilesystem",
+              "type": "boolean"
+            },
+            "runAsNonRoot": {
+              "default": true,
+              "title": "runAsNonRoot",
+              "type": "boolean"
+            }
+          },
+          "required": [],
+          "title": "containerSecurityContext",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
         "enabled": {
           "default": false,
           "description": "Deploy CronJob resources.",
@@ -751,6 +796,29 @@
           "description": "Map of CronJob resources. Key will be used as a name suffix for the CronJob. Value is the CronJob configuration. See values for more details.",
           "required": [],
           "title": "jobs",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "securityContext": {
+          "description": "Default Security Context at pod level for all CronJobs. Can be overridden per job with `securityContext`.",
+          "properties": {
+            "seccompProfile": {
+              "properties": {
+                "type": {
+                  "default": "RuntimeDefault",
+                  "title": "type",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "seccompProfile",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "securityContext",
           "type": [
             "object",
             "null"
@@ -838,6 +906,30 @@
         "containerSecurityContext": {
           "description": "Security Context at Container Level.",
           "properties": {
+            "allowPrivilegeEscalation": {
+              "default": false,
+              "title": "allowPrivilegeEscalation",
+              "type": "boolean"
+            },
+            "capabilities": {
+              "properties": {
+                "drop": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      }
+                    ],
+                    "required": []
+                  },
+                  "title": "drop",
+                  "type": "array"
+                }
+              },
+              "required": [],
+              "title": "capabilities",
+              "type": "object"
+            },
             "readOnlyRootFilesystem": {
               "default": true,
               "title": "readOnlyRootFilesystem",
@@ -1081,6 +1173,51 @@
         },
         "openshiftOAuthProxy": {
           "properties": {
+            "containerSecurityContext": {
+              "description": "Security Context for the OAuth Proxy container.",
+              "properties": {
+                "allowPrivilegeEscalation": {
+                  "default": false,
+                  "title": "allowPrivilegeEscalation",
+                  "type": "boolean"
+                },
+                "capabilities": {
+                  "properties": {
+                    "drop": {
+                      "items": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          }
+                        ],
+                        "required": []
+                      },
+                      "title": "drop",
+                      "type": "array"
+                    }
+                  },
+                  "required": [],
+                  "title": "capabilities",
+                  "type": "object"
+                },
+                "readOnlyRootFilesystem": {
+                  "default": true,
+                  "title": "readOnlyRootFilesystem",
+                  "type": "boolean"
+                },
+                "runAsNonRoot": {
+                  "default": true,
+                  "title": "runAsNonRoot",
+                  "type": "boolean"
+                }
+              },
+              "required": [],
+              "title": "containerSecurityContext",
+              "type": [
+                "object",
+                "null"
+              ]
+            },
             "disableTLSArg": {
               "default": false,
               "description": "If disabled `--http-address=:8081` will be used instead of `--https-address=:8443`. It can be useful when an ingress is enabled for the application.",
@@ -1251,8 +1388,21 @@
           ]
         },
         "securityContext": {
-          "default": "",
           "description": "Security Context for the pod.",
+          "properties": {
+            "seccompProfile": {
+              "properties": {
+                "type": {
+                  "default": "RuntimeDefault",
+                  "title": "type",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "seccompProfile",
+              "type": "object"
+            }
+          },
           "required": [],
           "title": "securityContext",
           "type": [
@@ -1895,6 +2045,51 @@
     },
     "job": {
       "properties": {
+        "containerSecurityContext": {
+          "description": "Default Security Context at container level for all Jobs. Can be overridden per job with `containerSecurityContext`.",
+          "properties": {
+            "allowPrivilegeEscalation": {
+              "default": false,
+              "title": "allowPrivilegeEscalation",
+              "type": "boolean"
+            },
+            "capabilities": {
+              "properties": {
+                "drop": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      }
+                    ],
+                    "required": []
+                  },
+                  "title": "drop",
+                  "type": "array"
+                }
+              },
+              "required": [],
+              "title": "capabilities",
+              "type": "object"
+            },
+            "readOnlyRootFilesystem": {
+              "default": true,
+              "title": "readOnlyRootFilesystem",
+              "type": "boolean"
+            },
+            "runAsNonRoot": {
+              "default": true,
+              "title": "runAsNonRoot",
+              "type": "boolean"
+            }
+          },
+          "required": [],
+          "title": "containerSecurityContext",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
         "enabled": {
           "default": false,
           "description": "Deploy Job resources.",
@@ -1906,6 +2101,29 @@
           "description": "Map of Job resources. Key will be used as a name suffix for the Job. Value is the Job configuration. See values for more details.",
           "required": [],
           "title": "jobs",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "securityContext": {
+          "description": "Default Security Context at pod level for all Jobs. Can be overridden per job with `securityContext`.",
+          "properties": {
+            "seccompProfile": {
+              "properties": {
+                "type": {
+                  "default": "RuntimeDefault",
+                  "title": "type",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "seccompProfile",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "securityContext",
           "type": [
             "object",
             "null"

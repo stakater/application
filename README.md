@@ -68,6 +68,8 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | cronJob.enabled | bool | `false` | Deploy CronJob resources. |
+| cronJob.securityContext | object, null | `{"seccompProfile":{"type":"RuntimeDefault"}}` | Default Security Context at pod level for all CronJobs. Can be overridden per job with `securityContext`. |
+| cronJob.containerSecurityContext | object, null | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true,"runAsNonRoot":true}` | Default Security Context at container level for all CronJobs. Can be overridden per job with `containerSecurityContext`. |
 | cronJob.jobs | object, null | `nil` | Map of CronJob resources. Key will be used as a name suffix for the CronJob. Value is the CronJob configuration. See values for more details. |
 
 ### Job Parameters
@@ -75,6 +77,8 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | job.enabled | bool | `false` | Deploy Job resources. |
+| job.securityContext | object, null | `{"seccompProfile":{"type":"RuntimeDefault"}}` | Default Security Context at pod level for all Jobs. Can be overridden per job with `securityContext`. |
+| job.containerSecurityContext | object, null | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true,"runAsNonRoot":true}` | Default Security Context at container level for all Jobs. Can be overridden per job with `containerSecurityContext`. |
 | job.jobs | object, null | `nil` | Map of Job resources. Key will be used as a name suffix for the Job. Value is the Job configuration. See values for more details. |
 
 ### Deployment Parameters
@@ -142,13 +146,14 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | deployment.livenessProbe.tcpSocket | object | `{}` | TCP Socket probe. |
 | deployment.livenessProbe.grpc | object | `{}` | gRPC probe. |
 | deployment.resources | object | `{}` | Resource limits and requests for the pod. |
-| deployment.containerSecurityContext | object, null | `{"readOnlyRootFilesystem":true,"runAsNonRoot":true}` | Security Context at Container Level. |
+| deployment.containerSecurityContext | object, null | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true,"runAsNonRoot":true}` | Security Context at Container Level. |
 | deployment.openshiftOAuthProxy.enabled | bool | `false` | Enable [OpenShift OAuth Proxy](https://github.com/openshift/oauth-proxy). |
 | deployment.openshiftOAuthProxy.port | int | `8080` | Port on which application is running inside container. |
+| deployment.openshiftOAuthProxy.containerSecurityContext | object, null | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true,"runAsNonRoot":true}` | Security Context for the OAuth Proxy container. |
 | deployment.openshiftOAuthProxy.secretName | string | `"openshift-oauth-proxy-tls"` | Secret name for the OAuth Proxy TLS certificate. |
 | deployment.openshiftOAuthProxy.image | string | `"quay.io/openshift/origin-oauth-proxy:latest@sha256:35967c4d152d7b21167e3ba0aae57e29d3a46a75a738329073ef2227cbc33bde"` | Image for the OAuth Proxy. |
 | deployment.openshiftOAuthProxy.disableTLSArg | bool | `false` | If disabled `--http-address=:8081` will be used instead of `--https-address=:8443`. It can be useful when an ingress is enabled for the application. |
-| deployment.securityContext | object, null | `nil` | Security Context for the pod. |
+| deployment.securityContext | object, null | `{"seccompProfile":{"type":"RuntimeDefault"}}` | Security Context for the pod. |
 | deployment.command | list | `[]` | Command for the app container. |
 | deployment.args | list | `[]` | Args for the app container. |
 | deployment.automountServiceAccountToken | bool | `false` | Mount Service Account token. |

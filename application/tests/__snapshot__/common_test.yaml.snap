@@ -399,6 +399,13 @@ should match snapshot:
               ports:
                 - containerPort: 8443
                   name: proxy
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                readOnlyRootFilesystem: true
+                runAsNonRoot: true
               volumeMounts:
                 - mountPath: /etc/tls/private
                   name: proxy-tls

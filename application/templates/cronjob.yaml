@@ -69,6 +69,12 @@ spec:
           {{- range $key, $value := . }}
           - name: {{ $key }}
             {{- dict "value" (omit $value "name") "context" $ | include "application.tplvalues.render" | nindent 12 }}
+            {{- if not (hasKey $value "securityContext") }}
+            {{- with $job.containerSecurityContext | default $.Values.cronJob.containerSecurityContext }}
+            securityContext:
+              {{- toYaml . | nindent 14 }}
+            {{- end }}
+            {{- end }}
           {{- end }}
           {{- end }}
           containers:
@@ -135,7 +141,7 @@ spec:
             volumeMounts:
 {{ toYaml . | indent 12 }}
             {{- end }}
-            {{- with $job.containerSecurityContext }}
+            {{- with $job.containerSecurityContext | default $.Values.cronJob.containerSecurityContext }}
             securityContext:
               {{- toYaml . | nindent 14 }}
             {{- end }}
@@ -165,7 +171,7 @@ spec:
           imagePullSecrets:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with $job.securityContext }}
+          {{- with $job.securityContext | default $.Values.cronJob.securityContext }}
           securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}

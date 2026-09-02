@@ -220,8 +220,8 @@ deployment:
 
 persistence:
   enabled: true
-  mountPVC: false
-  mountPath: /
+  mountPVC: true
+  mountPath: /data
   accessMode: ReadWriteOnce
   storageClass: "-"
   additionalLabels:

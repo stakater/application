@@ -1,0 +1,162 @@
+suite: Headless Service
+templates:
+  - headlessservice.yaml
+
+tests:
+  - it: includes correct metadata name
+    set:
+      workload:
+        kind: StatefulSet
+      headlessService:
+        enabled: true
+      applicationName: my-app
+    asserts:
+      - equal:
+          path: metadata.name
+          value: my-app-headless
+
+  - it: includes correct namespace
+    set:
+      workload:
+        kind: StatefulSet
+      headlessService:
+        enabled: true
+      applicationName: my-app
+    release:
+      namespace: test-namespace
+    asserts:
+      - equal:
+          path: metadata.namespace
+          value: test-namespace
+
+  - it: includes additional labels when defined
+    set:
+      workload:
+        kind: StatefulSet
+      headlessService:
+        enabled: true
+        additionalLabels:
+          foo: bar
+          test: ing
+    asserts:
+      - equal:
+          path: metadata.labels.foo
+          value: bar
+      - equal:
+          path: metadata.labels.test
+          value: ing
+
+  - it: includes annotations when defined
+    set:
+      workload:
+        kind: StatefulSet
+      headlessService:
+        enabled: true
+        annotations:
+          custom: annotation
+    asserts:
+      - equal:
+          path: metadata.annotations.custom
+          value: annotation
+
+  - it: does not include annotations if none are defined
+    set:
+      workload:
+        kind: StatefulSet
+      headlessService:
+        enabled: true
+        annotations: {}
+    asserts:
+      - notExists:
+          path: metadata.annotations
+
+  - it: clusterIP is always None regardless of input
+    set:
+      workload:
+        kind: StatefulSet
+      headlessService:
+        enabled: true
+        clusterIP: 10.0.0.1
+    asserts:
+      - equal:
+          path: spec.clusterIP
+          value: None
+
+  - it: service type is always ClusterIP regardless of input
+    set:
+      workload:
+        kind: StatefulSet
+      headlessService:
+        enabled: true
+        type: LoadBalancer
+    asserts:
+      - equal:
+          path: spec.type
+          value: ClusterIP
+
+  - it: metadata name can be overridden
+    set:
+      workload:
+        kind: StatefulSet
+      headlessService:
+        enabled: true
+        name: my-svc
+      applicationName: my-app
+    asserts:
+      - equal:
+          path: metadata.name
+          value: my-svc
+
+  - it: includes ports when defined
+    set:
+      workload:
+        kind: StatefulSet
+      headlessService:
+        enabled: true
+        ports:
+          - name: http
+            port: 80
+            targetPort: 8080
+    asserts:
+      - equal:
+          path: spec.ports[0].name
+          value: http
+      - equal:
+          path: spec.ports[0].port
+          value: 80
+      - equal:
+          path: spec.ports[0].targetPort
+          value: 8080
+
+  - it: uses app.kubernetes.io/name and application.stakater.com/workload-class as selector labels
+    set:
+      workload:
+        kind: StatefulSet
+      headlessService:
+        enabled: true
+      applicationName: my-app
+    asserts:
+      - equal:
+          path: spec.selector["app.kubernetes.io/name"]
+          value: my-app
+      - equal:
+          path: spec.selector["application.stakater.com/workload-class"]
+          value: serving
+
+  - it: service selector specifically requires workload-class serving to exclude batch and scheduled workloads
+    set:
+      workload:
+        kind: StatefulSet
+      headlessService:
+        enabled: true
+      applicationName: my-app
+    asserts:
+      - equal:
+          path: spec.selector["application.stakater.com/workload-class"]
+          value: serving
+      - notEqual:
+          path: spec.selector["application.stakater.com/workload-class"]
+          value: batch
+      - notEqual:
+          path: spec.selector["application.stakater.com/workload-class"]
+          value: scheduled

@@ -1,0 +1,27 @@
+{{- if (.Values.headlessService).enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.headlessService.name | default (printf "%s-headless" (include "application.name" .)) }}
+  namespace: {{ template "application.namespace" $ }}
+  labels:
+  {{- include "application.labels" $ | nindent 4 }}
+  {{- if .Values.headlessService.additionalLabels }}
+    {{- toYaml .Values.headlessService.additionalLabels | nindent 4 }}
+  {{- end }}
+  {{- if .Values.headlessService.annotations }}
+  annotations:
+    {{- include "application.tplvalues.render" ( dict "value" .Values.headlessService.annotations  "context" $ ) | nindent 4 }}
+{{- end }}
+spec:
+  clusterIP: None
+  type: ClusterIP
+  {{- if .Values.headlessService.publishNotReadyAddresses }}
+  publishNotReadyAddresses: {{ .Values.headlessService.publishNotReadyAddresses | default false }}
+  {{- end }}
+  selector:
+{{ include "application.selectorLabels" . | indent 4 }}
+  ports:
+{{ toYaml .Values.headlessService.ports | indent 4 }}
+{{- end }}

@@ -2,7 +2,7 @@
 
 # Application
 
-Generic Helm chart for deploying stateless applications on Kubernetes. Supports Deployments, Jobs, and CronJobs along with common companion resources (Services, Ingress, RBAC, autoscaling, monitoring, certificates, and more).
+Generic Helm chart for deploying applications on Kubernetes. Supports Deployments, StatefulSets, DaemonSets, Jobs, and CronJobs along with common companion resources (Services, Ingress, RBAC, autoscaling, monitoring, certificates, and more).
 
 ## Installing the Chart
 

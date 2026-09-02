@@ -391,3 +391,17 @@ tests:
           content:
             name: sidecar
           any: true
+
+  - it: workload type defaults to Deployment if not set
+    asserts:
+      - equal:
+          path: kind
+          value: Deployment
+
+  - it: sets correct workload type if given
+    set:
+      deployment.kind: StatefulSet
+    asserts:
+      - equal:
+          path: kind
+          value: StatefulSet

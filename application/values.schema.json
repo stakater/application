@@ -2730,6 +2730,80 @@
       "title": "serviceMonitor",
       "type": "object"
     },
+    "virtualService": {
+      "properties": {
+        "enabled": {
+          "default": false,
+          "description": "Deploy an Istio VirtualService resource. Requires Istio to be installed in the cluster (networking.istio.io CRDs). Uses networking.istio.io/v1 if available, falls back to v1beta1.",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "exportTo": {
+          "description": "Namespaces this VirtualService is exported to. \".\" = same namespace only, \"*\" = all namespaces (default when omitted).",
+          "items": {
+            "required": []
+          },
+          "required": [],
+          "title": "exportTo",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "gateways": {
+          "description": "Gateways this VirtualService is bound to. Use \u003cnamespace\u003e/\u003cname\u003e format (e.g. istio-system/istio-gateway). Omit to apply rules to mesh-internal sidecar traffic only (mesh gateway).",
+          "items": {
+            "required": []
+          },
+          "title": "gateways",
+          "type": "array"
+        },
+        "hosts": {
+          "description": "Hostnames this VirtualService applies to. Can be a DNS name, wildcard (*.example.com), or short name (resolved relative to the VS namespace).",
+          "items": {
+            "required": []
+          },
+          "title": "hosts",
+          "type": "array"
+        },
+        "http": {
+          "description": "Ordered HTTP route rules. First matching rule wins. Supports the full Istio HTTPRoute spec: match, route, rewrite, redirect, retries, timeout, fault, corsPolicy, headers, mirror, directResponse, delegate.",
+          "items": {
+            "required": []
+          },
+          "title": "http",
+          "type": "array"
+        },
+        "routes": {
+          "description": "Multiple VirtualServices — use when you need more than one VS for this app (e.g. external gateway + internal mesh-only rules). Each key produces a separate VS named \u003capp\u003e-\u003ckey\u003e. Each entry supports the same fields as the top-level (hosts, gateways, exportTo, http, tls, tcp). When routes is set, the top-level hosts/gateways/http/tls/tcp fields are ignored.",
+          "required": [],
+          "title": "routes",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "tcp": {
+          "description": "Ordered TCP route rules for opaque TCP traffic (non-HTTP, non-TLS ports).",
+          "items": {
+            "required": []
+          },
+          "title": "tcp",
+          "type": "array"
+        },
+        "tls": {
+          "description": "Ordered TLS route rules for non-terminated TLS/HTTPS (SNI-based routing).",
+          "items": {
+            "required": []
+          },
+          "title": "tls",
+          "type": "array"
+        }
+      },
+      "required": [],
+      "title": "virtualService",
+      "type": "object"
+    },
     "vpa": {
       "properties": {
         "additionalLabels": {

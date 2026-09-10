@@ -198,6 +198,19 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | ingress.annotations | object, null | `nil` | Annotations for ingress. |
 | ingress.tls | list, null | `nil` | TLS configuration for ingress. Secrets must exist in the namespace. You may also configure Certificate resource to generate the secret. |
 
+### VirtualService Parameters
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| virtualService.enabled | bool | `false` | Deploy an Istio VirtualService resource. Requires Istio to be installed in the cluster (networking.istio.io CRDs). Uses networking.istio.io/v1 if available, falls back to v1beta1. |
+| virtualService.hosts | list | `[]` | Hostnames this VirtualService applies to. Can be a DNS name, wildcard (*.example.com), or short name (resolved relative to the VS namespace). |
+| virtualService.gateways | list | `[]` | Gateways this VirtualService is bound to. Use <namespace>/<name> format (e.g. istio-system/istio-gateway). Omit to apply rules to mesh-internal sidecar traffic only (mesh gateway). |
+| virtualService.exportTo | list, null | `[]` | Namespaces this VirtualService is exported to. "." = same namespace only, "*" = all namespaces (default when omitted). |
+| virtualService.http | list | `[]` | Ordered HTTP route rules. First matching rule wins. Supports the full Istio HTTPRoute spec: match, route, rewrite, redirect, retries, timeout, fault, corsPolicy, headers, mirror, directResponse, delegate. |
+| virtualService.tls | list | `[]` | Ordered TLS route rules for non-terminated TLS/HTTPS (SNI-based routing). |
+| virtualService.tcp | list | `[]` | Ordered TCP route rules for opaque TCP traffic (non-HTTP, non-TLS ports). |
+| virtualService.routes | object, null | `{}` | Multiple VirtualServices — use when you need more than one VS for this app (e.g. external gateway + internal mesh-only rules). Each key produces a separate VS named <app>-<key>. Each entry supports the same fields as the top-level (hosts, gateways, exportTo, http, tls, tcp). When routes is set, the top-level hosts/gateways/http/tls/tcp fields are ignored. |
+
 ### HTTPRoute Parameters
 
 | Key | Type | Default | Description |

@@ -656,6 +656,95 @@ ingress:
     #   hosts:
     #     - chart-example.local
 
+virtualService:
+  # -- (bool) Deploy an Istio VirtualService resource.
+  # Requires Istio to be installed in the cluster (networking.istio.io CRDs).
+  # Uses networking.istio.io/v1 if available, falls back to v1beta1.
+  # @section -- VirtualService Parameters
+  enabled: false
+  # -- (list) Hostnames this VirtualService applies to.
+  # Can be a DNS name, wildcard (*.example.com), or short name (resolved relative to the VS namespace).
+  # @section -- VirtualService Parameters
+  hosts: []
+  # - devops.example.com
+  # -- (list) Gateways this VirtualService is bound to.
+  # Use <namespace>/<name> format (e.g. istio-system/istio-gateway).
+  # Omit to apply rules to mesh-internal sidecar traffic only (mesh gateway).
+  # @section -- VirtualService Parameters
+  gateways: []
+  # - istio-system/istio-gateway
+  # -- (list, null) Namespaces this VirtualService is exported to.
+  # "." = same namespace only, "*" = all namespaces (default when omitted).
+  # @section -- VirtualService Parameters
+  exportTo: []
+  # - "."
+  # -- (list) Ordered HTTP route rules. First matching rule wins.
+  # Supports the full Istio HTTPRoute spec: match, route, rewrite, redirect,
+  # retries, timeout, fault, corsPolicy, headers, mirror, directResponse, delegate.
+  # @section -- VirtualService Parameters
+  http: []
+  # - match:
+  #     - uri:
+  #         prefix: /myapp
+  #   rewrite:
+  #     uri: /
+  #   route:
+  #     - destination:
+  #         host: myapp          # short name resolved to myapp.<namespace>.svc.cluster.local
+  #         port:
+  #           number: 8080
+  # -- (list) Ordered TLS route rules for non-terminated TLS/HTTPS (SNI-based routing).
+  # @section -- VirtualService Parameters
+  tls: []
+  # - match:
+  #     - port: 443
+  #       sniHosts:
+  #         - myapp.example.com
+  #   route:
+  #     - destination:
+  #         host: myapp
+  #         port:
+  #           number: 443
+  # -- (list) Ordered TCP route rules for opaque TCP traffic (non-HTTP, non-TLS ports).
+  # @section -- VirtualService Parameters
+  tcp: []
+  # - match:
+  #     - port: 5432
+  #   route:
+  #     - destination:
+  #         host: postgres
+  #         port:
+  #           number: 5432
+  # -- (object, null) Multiple VirtualServices — use when you need more than one VS for this app
+  # (e.g. external gateway + internal mesh-only rules). Each key produces a separate VS named
+  # <app>-<key>. Each entry supports the same fields as the top-level (hosts, gateways, exportTo, http, tls, tcp).
+  # When routes is set, the top-level hosts/gateways/http/tls/tcp fields are ignored.
+  # @section -- VirtualService Parameters
+  routes: {}
+  # external:
+  #   hosts:
+  #     - devops.example.com
+  #   gateways:
+  #     - istio-system/istio-gateway
+  #   http:
+  #     - match:
+  #         - uri:
+  #             prefix: /myapp
+  #       route:
+  #         - destination:
+  #             host: myapp
+  #             port:
+  #               number: 8080
+  # internal:
+  #   hosts:
+  #     - myapp.svc.cluster.local
+  #   http:
+  #     - route:
+  #         - destination:
+  #             host: myapp
+  #             port:
+  #               number: 8080
+
 httpRoute:
   # -- (bool) Enable HTTPRoute (Gateway API).
   # @section -- HTTPRoute Parameters

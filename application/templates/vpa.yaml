@@ -20,7 +20,7 @@ metadata:
 spec:
   targetRef:
     apiVersion: apps/v1
-    kind: Deployment
+    kind: {{ .Values.deployment.kind }}
     name: {{ template "application.name" . }}
   resourcePolicy:
     containerPolicies:

@@ -153,11 +153,15 @@ Usage:
   {{- else if $isKubernetesService }}
     {{- fail (printf "backendRef %q: port is required when the referent is a Kubernetes Service" .name) }}
   {{- end }}
+  {{- /* A templated weight may render to an empty string; treat it as unset.
+       An explicit weight of 0 is meaningful (drains the backend), so use a
+       presence check rather than truthiness. */}}
+  {{- $hasWeight := not (or (kindIs "invalid" .weight) (eq (toString .weight) "")) }}
   - name: {{ .name }}
     {{- if $hasPort }}
     port: {{ .port | int }}
     {{- end }}
-    {{- if .weight }}
+    {{- if $hasWeight }}
     weight: {{ .weight | int }}
     {{- end }}
     {{- if .namespace }}
@@ -168,6 +172,9 @@ Usage:
     {{- end }}
     {{- if .group }}
     group: {{ .group }}
+    {{- end }}
+    {{- if .filters }}
+    filters: {{ .filters | toYaml | nindent 6 }}
     {{- end }}
   {{- end }}
   {{- end }}

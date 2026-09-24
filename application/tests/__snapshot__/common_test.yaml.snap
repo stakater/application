@@ -486,6 +486,8 @@ should match snapshot:
                 successThreshold: 1
                 timeoutSeconds: 1
               volumeMounts:
+                - mountPath: /data
+                  name: application-data
                 - mountPath: /path1
                   name: volume-name
             - command:
@@ -575,6 +577,9 @@ should match snapshot:
             - name: proxy-tls
               secret:
                 secretName: openshift-oauth-proxy-tls
+            - name: application-data
+              persistentVolumeClaim:
+                claimName: application-data
             - configMap:
                 name: configmap-name
               name: config-volume
@@ -1406,6 +1411,7 @@ should match snapshot:
                     name: my-existing-secret
                     optional: false
               image: example-registry/example-image:example-tag@sha256:example-digest
+              imagePullPolicy: IfNotPresent
               name: db-migration
               resources:
                 limits:
@@ -1424,6 +1430,9 @@ should match snapshot:
                 runAsUser: 65534
                 seccompProfile:
                   type: RuntimeDefault
+              volumeMounts:
+                - mountPath: /data
+                  name: application-data
           dnsConfig:
             options:
               - name: ndots
@@ -1437,6 +1446,10 @@ should match snapshot:
             seccompProfile:
               type: RuntimeDefault
           serviceAccountName: application
+          volumes:
+            - name: application-data
+              persistentVolumeClaim:
+                claimName: application-data
   23: |
     apiVersion: networking.k8s.io/v1
     kind: NetworkPolicy

@@ -2,7 +2,7 @@
 
 # Application
 
-Generic Helm chart for deploying stateless applications on Kubernetes. Supports Deployments, Jobs, and CronJobs along with common companion resources (Services, Ingress, RBAC, autoscaling, monitoring, certificates, and more).
+Generic Helm chart for deploying applications on Kubernetes. Supports Deployments, StatefulSets, DaemonSets, Jobs, and CronJobs along with common companion resources (Services, Ingress, RBAC, autoscaling, monitoring, certificates, and more).
 
 ## Installing the Chart
 
@@ -82,11 +82,14 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | deployment.enabled | bool | `true` | Enable Deployment. |
+| deployment.kind | string | `"Deployment"` | Define the kind of workload. Must specify either one of the following field when enabled: Deployment, StatefulSet, DaemonSet |
 | deployment.additionalLabels | object, null | `nil` | Additional labels for Deployment. |
 | deployment.podLabels | object, null | `nil` | Additional pod labels which are used in Service's Label Selector. |
 | deployment.annotations | object, null | `nil` | Annotations for Deployment. |
 | deployment.additionalPodAnnotations | object, null | `nil` | Additional pod annotations. |
-| deployment.strategy.type | string | `"RollingUpdate"` | Type of deployment strategy. |
+| deployment.strategy.type | string | `"RollingUpdate"` | Type of deployment strategy. Only for Deployments. |
+| deployment.updateStrategy.type | string | `"RollingUpdate"` | Type of deployment.updateStrategy. Only works for StatefulSets and DaemonSets |
+| deployment.podManagementPolicy | string | `"OrderedReady"` | Type of deployment.podManagementPolicy. Only works for StatefulSets. One of OrderedReady or Parallel |
 | deployment.reloadOnChange | bool | `true` | Reload deployment if attached Secret/ConfigMap changes. |
 | deployment.nodeSelector | object, null | `nil` | Select the node where the pods should be scheduled. |
 | deployment.hostAliases | list, null | `nil` | Mapping between IP and hostnames that will be injected as entries in the pod's hosts files. |
@@ -97,7 +100,9 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | deployment.envFrom | object, null | `nil` | Mount environment variables from ConfigMap or Secret to the pod. Use `nameSuffix` for resources managed by this chart (name will be prefixed with application name), or `name` to reference an existing external ConfigMap or Secret not managed by this chart. See the README "Consuming environment variable in application chart" section for more details. |
 | deployment.env | object, null | `nil` | Environment variables to be added to the pod. See the README "Consuming environment variable in application chart" section for more details. |
 | deployment.volumes | object, null | `nil` | Volumes to be added to the pod. Key is the name of the volume. Value is the volume definition. |
+| deployment.volumeClaimTemplates | object, null | `nil` | VolumeClaimTemplates to be added to the pods. Key is the name of the volume. Value is the spec for volumeClaimTemplate. Use only for StatefulSets. |
 | deployment.volumeMounts | object, null | `nil` | Mount path for Volumes. Key is the name of the volume. Value is the volume mount definition. |
+| deployment.persistentVolumeClaimRetentionPolicy | object, null | `nil` | Rules on what to do with residual PVCs for StatefulSets. No-op for Deployments or DaemonSets. |
 | deployment.priorityClassName | string, null | `""` | Define the priority class for the pod. |
 | deployment.runtimeClassName | string, null | `""` | Set the runtimeClassName for the deployment's pods. |
 | deployment.tolerations | list, null | `nil` | Taint tolerations for the pods. |
@@ -182,6 +187,18 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | service.type | string | `"ClusterIP"` | Type of service. |
 | service.clusterIP | string, null | `nil` | Fixed IP for a ClusterIP service. Set to `None` for an headless service |
 | service.loadBalancerClass | string, null | `nil` | LoadBalancer class name for LoadBalancer type services. |
+| headlessService.name | string, null | `nil` | Optional override for service name Defaults to application.name-headless |
+
+### Headless Service Parameters
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| headlessService.enabled | bool | `false` | Enable Headless Service for StatefulSet. |
+| headlessService.additionalLabels | object, null | `nil` | Additional labels for headless service. |
+| headlessService.annotations | object, null | `nil` | Annotations for headless service. |
+| headlessService.ports | list | `[{"name":"http","port":8080,"protocol":"TCP","targetPort":8080}]` | Ports for applications service. |
+| headlessService.ports[0].targetPort | int, string, null | `8080` | Target port on pods. Accepts port number or port name (IANA_SVC_NAME). |
+| headlessService.publishNotReadyAddresses | bool, null | `nil` | Propagate SRV DNS records for Pods to enable peer discovery, by disregarding any indications of ready/not-ready for Pods. |
 
 ### Ingress Parameters
 

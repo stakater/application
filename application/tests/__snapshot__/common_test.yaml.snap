@@ -746,6 +746,9 @@ should match snapshot:
       name: application-dashboard-test-name-1
       namespace: NAMESPACE
     spec:
+      instanceSelector:
+        matchLabels:
+          app: test-1
       json: |-
         {
           "annotations": {
@@ -1851,7 +1854,7 @@ should match snapshot:
               cpu: 1
               memory: 5Gi
             minAllowed:
-              cpu: 0.5
+              cpu: 500m
               memory: 1Gi
       targetRef:
         apiVersion: apps/v1

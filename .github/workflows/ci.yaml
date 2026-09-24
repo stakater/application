@@ -303,7 +303,17 @@ jobs:
 
       - name: Validate CRD profile
         run: |
+          # Some resources declare their own namespace (Velero backups live in
+          # the Velero namespace). Create every namespace the render mentions
+          # so the server-side dry run can resolve them, and rely on the
+          # context namespace for the rest instead of --namespace, which
+          # rejects objects whose namespace differs.
+          grep -E '^\s+namespace: ' rendered-crds.yaml \
+            | awk '{ print $2 }' | tr -d '"' | sort -u \
+            | while read -r ns; do
+                kubectl create namespace "$ns" --dry-run=client -o yaml | kubectl apply -f -
+              done
+          kubectl config set-context --current --namespace "$TEST_NAMESPACE"
           kubectl apply \
-            --namespace "$TEST_NAMESPACE" \
             --dry-run=server \
             -f rendered-crds.yaml

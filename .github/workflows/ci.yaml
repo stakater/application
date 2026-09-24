@@ -257,8 +257,9 @@ jobs:
           EXTERNAL_SECRETS_VERSION: v2.11.0
           # renovate: datasource=github-releases depName=stakater/Forecastle
           FORECASTLE_VERSION: v2.0.2
+          # v5.25.0 adds a CEL rule using the `format` library, which Kubernetes 1.31 rejects.
           # renovate: datasource=github-releases depName=grafana/grafana-operator
-          GRAFANA_OPERATOR_VERSION: v5.25.0
+          GRAFANA_OPERATOR_VERSION: v5.24.0
           # renovate: datasource=github-releases depName=prometheus-operator/prometheus-operator
           PROMETHEUS_OPERATOR_VERSION: v0.94.1
           # openshift/api publishes no releases; pinned to a commit on master.

@@ -34,7 +34,7 @@ capabilities:
     - monitoring.coreos.com/v1/ServiceMonitor
     - monitoring.coreos.com/v1/PrometheusRule
     - monitoring.coreos.com/v1alpha1
-    - monitoring.coreos.com/v1alpha1/AlertManagerConfig
+    - monitoring.coreos.com/v1alpha1/AlertmanagerConfig
     - route.openshift.io/v1
     - route.openshift.io/v1/Route
     - secrets-store.csi.x-k8s.io/v1alpha1

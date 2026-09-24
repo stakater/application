@@ -3,6 +3,7 @@ deployment:
     enabled: true
     port: 8080
     secretName: openshift-oauth-proxy-tls
+    image: example-registry/example-image:example-tag
 
 route:
   enabled: true

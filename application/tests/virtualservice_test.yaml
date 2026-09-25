@@ -112,6 +112,31 @@ tests:
           path: spec.exportTo[1]
           value: istio-system
 
+  - it: renders wildcard hosts and exportTo as valid quoted YAML
+    set:
+      applicationName: my-app
+      virtualService:
+        enabled: true
+        hosts:
+          - "*.example.com"
+        gateways:
+          - istio-system/istio-gateway
+        exportTo:
+          - "*"
+        http:
+          - route:
+              - destination:
+                  host: my-app
+                  port:
+                    number: 80
+    asserts:
+      - equal:
+          path: spec.hosts[0]
+          value: "*.example.com"
+      - equal:
+          path: spec.exportTo[0]
+          value: "*"
+
   - it: omits spec.gateways when not provided
     set:
       virtualService:

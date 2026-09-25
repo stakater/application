@@ -18,19 +18,19 @@ spec:
   {{- if $vs.hosts }}
   hosts:
   {{- range $vs.hosts }}
-  - {{ . }}
+  - {{ . | quote }}
   {{- end }}
   {{- end }}
   {{- if $vs.gateways }}
   gateways:
   {{- range $vs.gateways }}
-  - {{ . }}
+  - {{ . | quote }}
   {{- end }}
   {{- end }}
   {{- if $vs.exportTo }}
   exportTo:
   {{- range $vs.exportTo }}
-  - {{ . }}
+  - {{ . | quote }}
   {{- end }}
   {{- end }}
   {{- if $vs.http }}

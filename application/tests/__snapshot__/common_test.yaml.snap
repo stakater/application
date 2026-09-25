@@ -1830,6 +1830,71 @@ should match snapshot:
           key: value
           team: stakater
   37: |
+    apiVersion: networking.istio.io/v1
+    kind: VirtualService
+    metadata:
+      annotations:
+        key: value
+        route: external
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: example-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-0.0.0
+        key: value
+        route: external
+        team: stakater
+      name: application-external
+      namespace: NAMESPACE
+    spec:
+      exportTo:
+        - '*'
+      gateways:
+        - istio-system/istio-gateway
+      hosts:
+        - devops.example.com
+      http:
+        - match:
+            - uri:
+                prefix: /myapp
+          rewrite:
+            uri: /
+          route:
+            - destination:
+                host: myapp
+                port:
+                  number: 8080
+  38: |
+    apiVersion: networking.istio.io/v1
+    kind: VirtualService
+    metadata:
+      annotations:
+        key: value
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: application
+        app.kubernetes.io/version: example-tag
+        group: com.stakater.platform
+        helm.sh/chart: application-0.0.0
+        key: value
+        team: stakater
+      name: application-internal
+      namespace: NAMESPACE
+    spec:
+      exportTo:
+        - .
+      hosts:
+        - myapp.svc.cluster.local
+      http:
+        - route:
+            - destination:
+                host: myapp
+                port:
+                  number: 8080
+  39: |
     apiVersion: autoscaling.k8s.io/v1
     kind: VerticalPodAutoscaler
     metadata:

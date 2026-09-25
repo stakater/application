@@ -2732,6 +2732,24 @@
     },
     "virtualService": {
       "properties": {
+        "additionalLabels": {
+          "description": "Additional labels for VirtualService. Applied to every rendered VirtualService. Can be overridden or extended per route via `routes.\u003cname\u003e.additionalLabels`.",
+          "required": [],
+          "title": "additionalLabels",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "annotations": {
+          "description": "Annotations for VirtualService. Applied to every rendered VirtualService. Can be overridden or extended per route via `routes.\u003cname\u003e.annotations`.",
+          "required": [],
+          "title": "annotations",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
         "enabled": {
           "default": false,
           "description": "Deploy an Istio VirtualService resource. Requires Istio to be installed in the cluster (networking.istio.io CRDs). Uses networking.istio.io/v1 if available, falls back to v1beta1.",
@@ -2775,7 +2793,7 @@
           "type": "array"
         },
         "routes": {
-          "description": "Multiple VirtualServices — use when you need more than one VS for this app (e.g. external gateway + internal mesh-only rules). Each key produces a separate VS named \u003capp\u003e-\u003ckey\u003e. Each entry supports the same fields as the top-level (hosts, gateways, exportTo, http, tls, tcp). When routes is set, the top-level hosts/gateways/http/tls/tcp fields are ignored.",
+          "description": "Multiple VirtualServices — use when you need more than one VS for this app (e.g. external gateway + internal mesh-only rules). Each key produces a separate VS named \u003capp\u003e-\u003ckey\u003e. Each entry supports the same fields as the top-level (hosts, gateways, exportTo, http, tls, tcp, additionalLabels, annotations). Per-route additionalLabels and annotations are merged on top of the top-level ones. When routes is set, the top-level hosts/gateways/http/tls/tcp fields are ignored.",
           "required": [],
           "title": "routes",
           "type": [

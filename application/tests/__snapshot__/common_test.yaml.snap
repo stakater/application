@@ -1833,6 +1833,9 @@ should match snapshot:
     apiVersion: networking.istio.io/v1
     kind: VirtualService
     metadata:
+      annotations:
+        key: value
+        route: external
       labels:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
@@ -1840,6 +1843,8 @@ should match snapshot:
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-0.0.0
+        key: value
+        route: external
         team: stakater
       name: application-external
       namespace: NAMESPACE
@@ -1865,6 +1870,8 @@ should match snapshot:
     apiVersion: networking.istio.io/v1
     kind: VirtualService
     metadata:
+      annotations:
+        key: value
       labels:
         app.kubernetes.io/instance: RELEASE-NAME
         app.kubernetes.io/managed-by: Helm
@@ -1872,6 +1879,7 @@ should match snapshot:
         app.kubernetes.io/version: example-tag
         group: com.stakater.platform
         helm.sh/chart: application-0.0.0
+        key: value
         team: stakater
       name: application-internal
       namespace: NAMESPACE

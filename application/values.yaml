@@ -662,6 +662,14 @@ virtualService:
   # Uses networking.istio.io/v1 if available, falls back to v1beta1.
   # @section -- VirtualService Parameters
   enabled: false
+  # -- (object, null) Additional labels for VirtualService. Applied to every rendered VirtualService.
+  # Can be overridden or extended per route via `routes.<name>.additionalLabels`.
+  # @section -- VirtualService Parameters
+  additionalLabels: {}
+  # -- (object, null) Annotations for VirtualService. Applied to every rendered VirtualService.
+  # Can be overridden or extended per route via `routes.<name>.annotations`.
+  # @section -- VirtualService Parameters
+  annotations: {}
   # -- (list) Hostnames this VirtualService applies to.
   # Can be a DNS name, wildcard (*.example.com), or short name (resolved relative to the VS namespace).
   # @section -- VirtualService Parameters
@@ -717,7 +725,8 @@ virtualService:
   #           number: 5432
   # -- (object, null) Multiple VirtualServices — use when you need more than one VS for this app
   # (e.g. external gateway + internal mesh-only rules). Each key produces a separate VS named
-  # <app>-<key>. Each entry supports the same fields as the top-level (hosts, gateways, exportTo, http, tls, tcp).
+  # <app>-<key>. Each entry supports the same fields as the top-level (hosts, gateways, exportTo, http, tls, tcp,
+  # additionalLabels, annotations). Per-route additionalLabels and annotations are merged on top of the top-level ones.
   # When routes is set, the top-level hosts/gateways/http/tls/tcp fields are ignored.
   # @section -- VirtualService Parameters
   routes: {}

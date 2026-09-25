@@ -731,8 +731,16 @@ httpRoute:
 
 virtualService:
   enabled: true
+  additionalLabels:
+    key: value
+  annotations:
+    key: value
   routes:
     external:
+      additionalLabels:
+        route: external
+      annotations:
+        route: external
       hosts:
         - devops.example.com
       gateways:

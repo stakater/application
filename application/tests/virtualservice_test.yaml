@@ -282,3 +282,57 @@ tests:
       - isNotNull:
           path: metadata.labels["app.kubernetes.io/name"]
 
+  - it: renders additionalLabels and annotations
+    set:
+      virtualService:
+        enabled: true
+        hosts:
+          - my-app.example.com
+        additionalLabels:
+          my-label: my-value
+        annotations:
+          my-annotation: my-value
+    asserts:
+      - equal:
+          path: metadata.labels["my-label"]
+          value: my-value
+      - equal:
+          path: metadata.annotations["my-annotation"]
+          value: my-value
+
+  - it: merges top-level and per-route labels and annotations with route taking precedence
+    set:
+      virtualService:
+        enabled: true
+        additionalLabels:
+          scope: global
+          shared: top
+        annotations:
+          scope: global
+        routes:
+          external:
+            hosts:
+              - my-app.example.com
+            additionalLabels:
+              shared: route
+              route-only: yes
+            annotations:
+              route-only: yes
+    documentIndex: 0
+    asserts:
+      - equal:
+          path: metadata.labels["scope"]
+          value: global
+      - equal:
+          path: metadata.labels["shared"]
+          value: route
+      - equal:
+          path: metadata.labels["route-only"]
+          value: "yes"
+      - equal:
+          path: metadata.annotations["scope"]
+          value: global
+      - equal:
+          path: metadata.annotations["route-only"]
+          value: "yes"
+

@@ -14,6 +14,15 @@ metadata:
   namespace: {{ include "application.namespace" $root }}
   labels:
     {{- include "application.labels" $root | nindent 4 }}
+    {{- $vsLabels := merge (deepCopy ($vs.additionalLabels | default dict)) ($root.Values.virtualService.additionalLabels | default dict) }}
+    {{- if $vsLabels }}
+    {{- toYaml $vsLabels | nindent 4 }}
+    {{- end }}
+  {{- $vsAnnotations := merge (deepCopy ($vs.annotations | default dict)) ($root.Values.virtualService.annotations | default dict) }}
+  {{- if $vsAnnotations }}
+  annotations:
+    {{- toYaml $vsAnnotations | nindent 4 }}
+  {{- end }}
 spec:
   {{- if $vs.hosts }}
   hosts:

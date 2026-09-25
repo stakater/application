@@ -11,7 +11,7 @@ apiVersion: networking.istio.io/v1beta1
 {{- end }}
 kind: VirtualService
 metadata:
-  name: {{ template "application.name" $root }}{{ if ne $name "default" }}-{{ $name }}{{ end }}
+  name: {{ printf "%s%s" (include "application.name" $root) (ternary (printf "-%s" $name) "" (ne $name "default")) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "application.namespace" $root }}
   labels:
     {{- include "application.labels" $root | nindent 4 }}

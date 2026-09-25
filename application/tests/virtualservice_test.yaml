@@ -218,6 +218,21 @@ tests:
           path: metadata.name
           value: my-app-api
 
+  - it: truncates the name to 63 characters in routes mode
+    set:
+      applicationName: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      virtualService:
+        enabled: true
+        routes:
+          api:
+            hosts:
+              - api.example.com
+    documentIndex: 0
+    asserts:
+      - matchRegex:
+          path: metadata.name
+          pattern: ^a{63}$
+
   - it: does not append a suffix for the default route key
     set:
       applicationName: my-app

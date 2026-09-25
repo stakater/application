@@ -728,3 +728,36 @@ httpRoute:
     - name: example-gateway
   hostnames:
     - www.example.com
+
+virtualService:
+  enabled: true
+  routes:
+    external:
+      hosts:
+        - devops.example.com
+      gateways:
+        - istio-system/istio-gateway
+      exportTo:
+        - "*"
+      http:
+        - match:
+            - uri:
+                prefix: /myapp
+          rewrite:
+            uri: /
+          route:
+            - destination:
+                host: myapp
+                port:
+                  number: 8080
+    internal:
+      hosts:
+        - myapp.svc.cluster.local
+      exportTo:
+        - "."
+      http:
+        - route:
+            - destination:
+                host: myapp
+                port:
+                  number: 8080

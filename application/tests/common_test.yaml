@@ -43,6 +43,8 @@ capabilities:
     - velero.io/v1/Backup
     - gateway.networking.k8s.io/v1
     - gateway.networking.k8s.io/v1/HTTPRoute
+    - networking.istio.io/v1
+    - networking.istio.io/v1/VirtualService
 
 x-keys:
   documentSelector: &x-documentSelector

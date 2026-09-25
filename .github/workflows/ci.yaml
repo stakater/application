@@ -111,6 +111,8 @@ jobs:
               velero.io/v1/Backup
               gateway.networking.k8s.io/v1
               gateway.networking.k8s.io/v1/HTTPRoute
+              networking.istio.io/v1
+              networking.istio.io/v1/VirtualService
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 

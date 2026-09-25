@@ -681,7 +681,7 @@ virtualService:
   # @section -- VirtualService Parameters
   gateways: []
   # - istio-system/istio-gateway
-  # -- (list, null) Namespaces this VirtualService is exported to.
+  # -- (list) Namespaces this VirtualService is exported to.
   # "." = same namespace only, "*" = all namespaces (default when omitted).
   # @section -- VirtualService Parameters
   exportTo: []

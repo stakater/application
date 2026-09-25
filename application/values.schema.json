@@ -2761,12 +2761,8 @@
           "items": {
             "required": []
           },
-          "required": [],
           "title": "exportTo",
-          "type": [
-            "array",
-            "null"
-          ]
+          "type": "array"
         },
         "gateways": {
           "description": "Gateways this VirtualService is bound to. Use \u003cnamespace\u003e/\u003cname\u003e format (e.g. istio-system/istio-gateway). Omit to apply rules to mesh-internal sidecar traffic only (mesh gateway).",

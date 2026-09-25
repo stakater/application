@@ -207,7 +207,7 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md) for details on how to 
 | virtualService.annotations | object, null | `{}` | Annotations for VirtualService. Applied to every rendered VirtualService. Can be overridden or extended per route via `routes.<name>.annotations`. |
 | virtualService.hosts | list | `[]` | Hostnames this VirtualService applies to. Can be a DNS name, wildcard (*.example.com), or short name (resolved relative to the VS namespace). |
 | virtualService.gateways | list | `[]` | Gateways this VirtualService is bound to. Use <namespace>/<name> format (e.g. istio-system/istio-gateway). Omit to apply rules to mesh-internal sidecar traffic only (mesh gateway). |
-| virtualService.exportTo | list, null | `[]` | Namespaces this VirtualService is exported to. "." = same namespace only, "*" = all namespaces (default when omitted). |
+| virtualService.exportTo | list | `[]` | Namespaces this VirtualService is exported to. "." = same namespace only, "*" = all namespaces (default when omitted). |
 | virtualService.http | list | `[]` | Ordered HTTP route rules. First matching rule wins. Supports the full Istio HTTPRoute spec: match, route, rewrite, redirect, retries, timeout, fault, corsPolicy, headers, mirror, directResponse, delegate. |
 | virtualService.tls | list | `[]` | Ordered TLS route rules for non-terminated TLS/HTTPS (SNI-based routing). |
 | virtualService.tcp | list | `[]` | Ordered TCP route rules for opaque TCP traffic (non-HTTP, non-TLS ports). |

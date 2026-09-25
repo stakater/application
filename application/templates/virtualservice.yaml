@@ -2,6 +2,7 @@
 {{- if (.Values.virtualService).enabled -}}
 {{- $routes := .Values.virtualService.routes | default (dict "default" (omit .Values.virtualService "enabled" "routes")) -}}
 {{- range $name, $vs := $routes }}
+{{- if empty $vs.hosts }}{{ fail (printf "virtualService.hosts is required (route %q)" $name) }}{{ end }}
 ---
 {{- if $root.Capabilities.APIVersions.Has "networking.istio.io/v1/VirtualService" }}
 apiVersion: networking.istio.io/v1

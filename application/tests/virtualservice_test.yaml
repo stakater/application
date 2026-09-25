@@ -12,6 +12,14 @@ tests:
       - hasDocuments:
           count: 0
 
+  - it: fails when enabled without hosts
+    set:
+      virtualService:
+        enabled: true
+    asserts:
+      - failedTemplate:
+          errorMessage: 'virtualService.hosts is required (route "default")'
+
   - it: renders a single VirtualService when enabled with no routes map
     set:
       applicationName: my-app

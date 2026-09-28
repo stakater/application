@@ -69,6 +69,9 @@ grafanaDashboard:
     test-annoation: chart
   contents:
     dashboard-test-name-1:
+      instanceSelector:
+        matchLabels:
+          app: test-1
       json: |-
         {
           "annotations": {
@@ -696,7 +699,7 @@ vpa:
   containerPolicies:
     - containerName: "*"
       minAllowed:
-        cpu: 0.5
+        cpu: 500m
         memory: 1Gi
       maxAllowed:
         cpu: 1

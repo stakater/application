@@ -213,11 +213,13 @@ tests:
           content:
             name: example1
             image: another-example-registry/another-example-image:another-example-tag
+          any: true
       - contains:
           path: spec.template.spec.initContainers
           content:
             name: example2
             image: another-example-registry/another-example-image:another-example-tag
+          any: true
       - notContains:
           path: spec.template.spec.initContainers
           content:
@@ -394,7 +396,44 @@ tests:
           path: spec.template.spec.serviceAccountName
           value: example-app
 
-  - it: does not include container security context by default
+  - it: applies the default security context to init containers unless overridden
+    set:
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-registry/example-image
+              tag: example-tag
+            initContainers:
+              plain:
+                image: busybox
+              custom:
+                image: busybox
+                securityContext:
+                  runAsNonRoot: false
+    asserts:
+      - contains:
+          path: spec.template.spec.initContainers
+          content:
+            name: plain
+            image: busybox
+            securityContext:
+              readOnlyRootFilesystem: true
+              runAsNonRoot: true
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+      - contains:
+          path: spec.template.spec.initContainers
+          content:
+            name: custom
+            image: busybox
+            securityContext:
+              runAsNonRoot: false
+
+  - it: applies a restricted container security context by default
     set:
       job:
         enabled: true
@@ -404,8 +443,15 @@ tests:
               repository: example-registry/example-image
               tag: example-tag
     asserts:
-      - notExists:
+      - equal:
           path: spec.template.spec.containers[0].securityContext
+          value:
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
 
   - it: enable container security context when configured
     set:
@@ -461,7 +507,7 @@ tests:
           path: spec.template.spec.automountServiceAccountToken
           value: true
 
-  - it: does not include pod security context by default
+  - it: applies the runtime default seccomp profile at pod level by default
     set:
       job:
         enabled: true
@@ -471,8 +517,11 @@ tests:
               repository: example-registry/example-image
               tag: example-tag
     asserts:
-      - notExists:
+      - equal:
           path: spec.template.spec.securityContext
+          value:
+            seccompProfile:
+              type: RuntimeDefault
 
   - it: enable pod security context when configured
     set:

@@ -49,6 +49,12 @@ spec:
       {{- range $key, $value := . }}
       - name: {{ $key }}
         {{- dict "value" (omit $value "name") "context" $ | include "application.tplvalues.render" | nindent 8 }}
+        {{- if not (hasKey $value "securityContext") }}
+        {{- with $job.containerSecurityContext | default $.Values.job.containerSecurityContext }}
+        securityContext:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- end }}
       {{- end }}
       {{- end }}
       containers:
@@ -111,7 +117,7 @@ spec:
         resources:
 {{ toYaml . | indent 10 }}
         {{- end }}
-        {{- with $job.containerSecurityContext }}
+        {{- with $job.containerSecurityContext | default $.Values.job.containerSecurityContext }}
         securityContext:
           {{- toYaml . | nindent 10 }}
         {{- end }}
@@ -133,7 +139,7 @@ spec:
       {{- with $job.topologySpreadConstraints }}
       topologySpreadConstraints: {{ toYaml . | nindent 8 }}
       {{- end }}
-      {{- with $job.securityContext }}
+      {{- with $job.securityContext | default $.Values.job.securityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}

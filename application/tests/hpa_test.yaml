@@ -80,3 +80,16 @@ tests:
     asserts:
       - isAPIVersion:
           of: autoscaling/v2beta2
+
+  - it: scales proper target
+    set:
+      deployment:
+        enabled: true
+        kind: StatefulSet
+      autoscaling:
+        enabled: true
+    asserts:
+      - equal:
+          path: spec.scaleTargetRef.kind
+          value: StatefulSet
+

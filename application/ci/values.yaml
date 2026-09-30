@@ -6,15 +6,16 @@ additionalLabels:
   team: stakater
 
 deployment:
+  kind: StatefulSet
   dnsConfig:
     options:
       - name: ndots
         value: "1"
   dnsPolicy: ClusterFirst
-  strategy:
+  updateStrategy:
     type: RollingUpdate
     rollingUpdate:
-      maxSurge: 25%
+      # maxSurge: 25%
       maxUnavailable: 25%
   reloadOnChange: true
   hostAliases:
@@ -99,6 +100,17 @@ deployment:
   volumeMounts:
     volume-name:
       mountPath: /path1
+    volume-claim-template-name:
+      mountPath: /path2
+  volumeClaimTemplates:
+    volume-claim-template-name:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: Delete
+    whenScaled: Retain
   tolerations:
     - key: dedicated
       operator: Equal

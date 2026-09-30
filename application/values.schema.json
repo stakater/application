@@ -987,6 +987,12 @@
             "null"
           ]
         },
+        "kind": {
+          "default": "Deployment",
+          "description": "Define the kind of workload. Must specify either one of the following field when enabled: Deployment, StatefulSet, DaemonSet",
+          "title": "kind",
+          "type": "string"
+        },
         "lifecycle": {
           "description": "Lifecycle configuration for the pod.",
           "required": [],
@@ -1116,6 +1122,16 @@
           "title": "openshiftOAuthProxy",
           "type": "object"
         },
+        "persistentVolumeClaimRetentionPolicy": {
+          "default": "",
+          "description": "Rules on what to do with residual PVCs for StatefulSets. No-op for Deployments or DaemonSets.",
+          "required": [],
+          "title": "persistentVolumeClaimRetentionPolicy",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
         "podLabels": {
           "default": "",
           "description": "Additional pod labels which are used in Service's Label Selector.",
@@ -1125,6 +1141,12 @@
             "object",
             "null"
           ]
+        },
+        "podManagementPolicy": {
+          "default": "OrderedReady",
+          "description": "Type of deployment.podManagementPolicy. Only works for StatefulSets. One of OrderedReady or Parallel",
+          "title": "podManagementPolicy",
+          "type": "string"
         },
         "ports": {
           "default": "",
@@ -1330,7 +1352,7 @@
           "properties": {
             "type": {
               "default": "RollingUpdate",
-              "description": "Type of deployment strategy.",
+              "description": "Type of deployment strategy. Only for Deployments.",
               "title": "type",
               "type": "string"
             }
@@ -1366,6 +1388,29 @@
           "title": "topologySpreadConstraints",
           "type": [
             "array",
+            "null"
+          ]
+        },
+        "updateStrategy": {
+          "properties": {
+            "type": {
+              "default": "RollingUpdate",
+              "description": "Type of deployment.updateStrategy. Only works for StatefulSets and DaemonSets",
+              "title": "type",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "title": "updateStrategy",
+          "type": "object"
+        },
+        "volumeClaimTemplates": {
+          "default": "",
+          "description": "VolumeClaimTemplates to be added to the pods. Key is the name of the volume. Value is the spec for volumeClaimTemplate. Use only for StatefulSets.",
+          "required": [],
+          "title": "volumeClaimTemplates",
+          "type": [
+            "object",
             "null"
           ]
         },
@@ -1622,6 +1667,101 @@
       },
       "required": [],
       "title": "grafanaDashboard",
+      "type": "object"
+    },
+    "headlessService": {
+      "properties": {
+        "additionalLabels": {
+          "default": "",
+          "description": "Additional labels for headless service.",
+          "required": [],
+          "title": "additionalLabels",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "annotations": {
+          "default": "",
+          "description": "Annotations for headless service.",
+          "required": [],
+          "title": "annotations",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "enabled": {
+          "default": false,
+          "description": "Enable Headless Service for StatefulSet.",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "default": "",
+          "description": "Optional override for service name Defaults to application.name-headless",
+          "required": [],
+          "title": "name",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ports": {
+          "description": "Ports for applications service.",
+          "items": {
+            "anyOf": [
+              {
+                "properties": {
+                  "name": {
+                    "default": "http",
+                    "title": "name",
+                    "type": "string"
+                  },
+                  "port": {
+                    "default": 8080,
+                    "title": "port",
+                    "type": "integer"
+                  },
+                  "protocol": {
+                    "default": "TCP",
+                    "title": "protocol",
+                    "type": "string"
+                  },
+                  "targetPort": {
+                    "default": 8080,
+                    "description": "Target port on pods. Accepts port number or port name (IANA_SVC_NAME).",
+                    "required": [],
+                    "title": "targetPort",
+                    "type": [
+                      "integer",
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [],
+                "type": "object"
+              }
+            ],
+            "required": []
+          },
+          "title": "ports",
+          "type": "array"
+        },
+        "publishNotReadyAddresses": {
+          "default": "",
+          "description": "Propagate SRV DNS records for Pods to enable peer discovery, by disregarding any indications of ready/not-ready for Pods.",
+          "required": [],
+          "title": "publishNotReadyAddresses",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      },
+      "required": [],
+      "title": "headlessService",
       "type": "object"
     },
     "httpRoute": {

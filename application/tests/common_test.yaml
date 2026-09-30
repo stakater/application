@@ -10,6 +10,7 @@ values:
 capabilities:
   apiVersions:
     # TODO: auto add all/used apiVersions
+    - apps/v1
     - batch/v1
     - batch/v1/CronJob
     - policy/v1

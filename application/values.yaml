@@ -476,7 +476,7 @@ deployment:
     # -- (string) Image for the OAuth Proxy.
     # @section -- Deployment Parameters
     # @default -- `quay.io/openshift/origin-oauth-proxy:latest` pinned by digest
-    image: quay.io/openshift/origin-oauth-proxy:latest@sha256:502dc73e5438f0d61fb3d285e462dcabc82e705754dde53c644c02684f1c429b
+    image: quay.io/openshift/origin-oauth-proxy:latest@sha256:ae82f73b18f9f0634f60796c9279d8b193745b98f501de56758a714fc8cb7f27
     # -- (bool) If disabled `--http-address=:8081` will be used instead of `--https-address=:8443`.
     # It can be useful when an ingress is enabled for the application.
     # @section -- Deployment Parameters

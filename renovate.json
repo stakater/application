@@ -22,7 +22,7 @@
         "/^\\.github/workflows/.+\\.ya?ml$/"
       ],
       "matchStrings": [
-        "#\\s*renovate:\\s*datasource=(?<datasource>\\S+)\\s+depName=(?<depName>\\S+)\\n\\s*\\w+[=:]\\s*[\"']?(?<currentValue>v?\\d+[^\"'\\s]+)"
+        "#\\s*renovate:\\s*datasource=(?<datasource>\\S+)\\s+depName=(?<depName>\\S+)(?:\\s+extractVersion=(?<extractVersion>\\S+))?\\n\\s*\\w+[=:]\\s*[\"']?(?<currentValue>v?\\d+[^\"'\\s]+)"
       ]
     }
   ]

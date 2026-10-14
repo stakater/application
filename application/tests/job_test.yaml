@@ -394,8 +394,26 @@ tests:
           path: spec.template.spec.serviceAccountName
           value: example-app
 
-  - it: does not include container security context by default
+  - it: inherits the container security context from the deployment by default
     set:
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-registry/example-image
+              tag: example-tag
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].securityContext
+          value:
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+
+  - it: does not include container security context when the deployment defines none
+    set:
+      deployment:
+        containerSecurityContext: null
       job:
         enabled: true
         jobs:
@@ -406,6 +424,187 @@ tests:
     asserts:
       - notExists:
           path: spec.template.spec.containers[0].securityContext
+
+  - it: does not inherit from the deployment when inheritFromDeployment is disabled
+    set:
+      deployment:
+        image:
+          repository: deployment-registry/deployment-image
+          tag: deployment-tag
+        securityContext:
+          fsGroup: 2000
+      job:
+        enabled: true
+        jobs:
+          example:
+            inheritFromDeployment: false
+            image:
+              repository: example-registry/example-image
+              tag: example-tag
+    asserts:
+      - notExists:
+          path: spec.template.spec.containers[0].securityContext
+      - notExists:
+          path: spec.template.spec.securityContext
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: example-registry/example-image:example-tag
+
+  - it: inherits image, pull policy, pull secrets and pod security context from the deployment
+    set:
+      deployment:
+        image:
+          repository: deployment-registry/deployment-image
+          tag: deployment-tag
+          pullPolicy: Always
+        imagePullSecrets:
+          - name: docker-pull
+        securityContext:
+          fsGroup: 2000
+      job:
+        enabled: true
+        jobs:
+          example: {}
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: deployment-registry/deployment-image:deployment-tag
+      - equal:
+          path: spec.template.spec.containers[0].imagePullPolicy
+          value: Always
+      - equal:
+          path: spec.template.spec.imagePullSecrets
+          value:
+            - name: docker-pull
+      - equal:
+          path: spec.template.spec.securityContext
+          value:
+            fsGroup: 2000
+
+  - it: prefers the job image over the inherited deployment image
+    set:
+      deployment:
+        image:
+          repository: deployment-registry/deployment-image
+          tag: deployment-tag
+          pullPolicy: Always
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-registry/example-image
+              tag: example-tag
+              imagePullPolicy: IfNotPresent
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: example-registry/example-image:example-tag
+      - equal:
+          path: spec.template.spec.containers[0].imagePullPolicy
+          value: IfNotPresent
+
+  - it: mounts the chart managed PVC when persistence is enabled
+    set:
+      applicationName: example-app
+      persistence:
+        enabled: true
+        mountPVC: true
+        mountPath: /data
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-registry/example-image
+              tag: example-tag
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].volumeMounts
+          value:
+            - mountPath: /data
+              name: example-app-data
+      - equal:
+          path: spec.template.spec.volumes
+          value:
+            - name: example-app-data
+              persistentVolumeClaim:
+                claimName: example-app-data
+
+  - it: uses the configured PVC name when persistence name is set
+    set:
+      applicationName: example-app
+      persistence:
+        enabled: true
+        mountPVC: true
+        mountPath: /data
+        name: existing-claim
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-registry/example-image
+              tag: example-tag
+    asserts:
+      - equal:
+          path: spec.template.spec.volumes[0].persistentVolumeClaim.claimName
+          value: existing-claim
+
+  - it: keeps job volumes and volumeMounts alongside the persistence mount
+    set:
+      applicationName: example-app
+      persistence:
+        enabled: true
+        mountPVC: true
+        mountPath: /data
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-registry/example-image
+              tag: example-tag
+            volumeMounts:
+              - name: extra
+                mountPath: /tmp/extra
+            volumes:
+              - name: extra
+                emptyDir: {}
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].volumeMounts
+          value:
+            - mountPath: /data
+              name: example-app-data
+            - name: extra
+              mountPath: /tmp/extra
+      - equal:
+          path: spec.template.spec.volumes
+          value:
+            - name: example-app-data
+              persistentVolumeClaim:
+                claimName: example-app-data
+            - name: extra
+              emptyDir: {}
+
+  - it: does not mount the PVC when persistence is enabled but mountPVC is disabled
+    set:
+      persistence:
+        enabled: true
+        mountPVC: false
+      job:
+        enabled: true
+        jobs:
+          example:
+            image:
+              repository: example-registry/example-image
+              tag: example-tag
+    asserts:
+      - notExists:
+          path: spec.template.spec.containers[0].volumeMounts
+      - notExists:
+          path: spec.template.spec.volumes
 
   - it: enable container security context when configured
     set:

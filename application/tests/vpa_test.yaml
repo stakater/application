@@ -26,6 +26,9 @@ tests:
   - it: renders a basic VerticalPodAutoscaler with minimal configuration
     set:
       applicationName: example
+      deployment:
+        enabled: true
+        kind: Deployment
       vpa:
         enabled: true
         containerPolicies:

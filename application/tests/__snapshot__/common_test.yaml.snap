@@ -318,7 +318,7 @@ should match snapshot:
       schedule: '* * * 8 *'
   11: |
     apiVersion: apps/v1
-    kind: Deployment
+    kind: StatefulSet
     metadata:
       annotations:
         reloader.stakater.com/auto: "true"
@@ -334,17 +334,16 @@ should match snapshot:
       name: application
       namespace: NAMESPACE
     spec:
+      persistentVolumeClaimRetentionPolicy:
+        whenDeleted: Delete
+        whenScaled: Retain
+      podManagementPolicy: OrderedReady
       replicas: 2
       revisionHistoryLimit: 2
       selector:
         matchLabels:
           app.kubernetes.io/name: application
           application.stakater.com/workload-class: serving
-      strategy:
-        rollingUpdate:
-          maxSurge: 25%
-          maxUnavailable: 25%
-        type: RollingUpdate
       template:
         metadata:
           annotations:
@@ -486,6 +485,8 @@ should match snapshot:
                 successThreshold: 1
                 timeoutSeconds: 1
               volumeMounts:
+                - mountPath: /path2
+                  name: volume-claim-template-name
                 - mountPath: /path1
                   name: volume-name
             - command:
@@ -589,6 +590,19 @@ should match snapshot:
                 secretName: secret-name
             - emptyDir: {}
               name: volume-name
+      updateStrategy:
+        rollingUpdate:
+          maxUnavailable: 25%
+        type: RollingUpdate
+      volumeClaimTemplates:
+        - metadata:
+            name: volume-claim-template-name
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: 1Gi
   12: |
     apiVersion: endpointmonitor.stakater.com/v1alpha1
     kind: EndpointMonitor
@@ -1302,7 +1316,7 @@ should match snapshot:
       minReplicas: 1
       scaleTargetRef:
         apiVersion: apps/v1
-        kind: Deployment
+        kind: StatefulSet
         name: application
   21: |
     apiVersion: networking.k8s.io/v1
@@ -1855,7 +1869,7 @@ should match snapshot:
               memory: 1Gi
       targetRef:
         apiVersion: apps/v1
-        kind: Deployment
+        kind: StatefulSet
         name: application
       updatePolicy:
         updateMode: Auto

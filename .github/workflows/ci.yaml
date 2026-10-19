@@ -102,7 +102,7 @@ jobs:
               monitoring.coreos.com/v1/ServiceMonitor
               monitoring.coreos.com/v1/PrometheusRule
               monitoring.coreos.com/v1alpha1
-              monitoring.coreos.com/v1alpha1/AlertManagerConfig
+              monitoring.coreos.com/v1alpha1/AlertmanagerConfig
               route.openshift.io/v1
               route.openshift.io/v1/Route
               secrets-store.csi.x-k8s.io/v1alpha1
@@ -229,39 +229,92 @@ jobs:
         with:
           node_image: kindest/node:${{ matrix.kubernetes }}
 
-      - name: Render Kubernetes-compatible chart
-        shell: bash
-        run: |
-          set -euo pipefail
+      - name: Render base profile
+        run: .github/scripts/helm-template-cluster.sh rendered-base.yaml ci/values.yaml
 
-          args=()
-          # group/version entries (e.g. batch/v1)
-          for v in $(kubectl api-versions); do
-            args+=("--api-versions" "$v")
-          done
-          # group/version/Kind entries (e.g. batch/v1/CronJob)
-          while IFS= read -r gvk; do
-            args+=("--api-versions" "$gvk")
-          done < <(
-            kubectl api-resources --no-headers \
-              | awk '{ print $(NF-2) "/" $NF }' \
-              | sort -u
-          )
-
-          set -x
-          helm template "$RELEASE_NAME" "$CHART_PATH" \
-            -f "$CHART_PATH/ci/values.yaml" \
-            "${args[@]}" \
-            --namespace "$TEST_NAMESPACE" \
-            --debug > rendered.yaml
-          set +x
-
-          cat rendered.yaml
-
-      - name: Server-side API validation
+      - name: Validate base profile
         run: |
           kubectl create namespace "$TEST_NAMESPACE"
           kubectl apply \
             --namespace "$TEST_NAMESPACE" \
             --dry-run=server \
-            -f rendered.yaml
+            -f rendered-base.yaml
+
+      # Only the CRDs are installed, never the controllers, so the CRD profile
+      # gets schema validation from the API server without any operator running.
+      # Keep this list in sync with the crds matrix entry of the render job.
+      - name: Install CRDs
+        env:
+          # renovate: datasource=github-tags depName=kubernetes/autoscaler extractVersion=^vertical-pod-autoscaler-(?<version>\d+\.\d+\.\d+)$
+          VPA_VERSION: 1.8.0
+          # renovate: datasource=github-releases depName=bitnami-labs/sealed-secrets
+          SEALED_SECRETS_VERSION: v0.40.0
+          # renovate: datasource=github-releases depName=cert-manager/cert-manager
+          CERT_MANAGER_VERSION: v1.21.2
+          # renovate: datasource=github-releases depName=stakater/IngressMonitorController
+          INGRESS_MONITOR_CONTROLLER_VERSION: v2.2.13
+          # renovate: datasource=github-releases depName=external-secrets/external-secrets
+          EXTERNAL_SECRETS_VERSION: v2.11.0
+          # renovate: datasource=github-releases depName=stakater/Forecastle
+          FORECASTLE_VERSION: v2.0.2
+          # v5.25.0 adds a CEL rule using the `format` library, which Kubernetes 1.31 rejects.
+          # renovate: datasource=github-releases depName=grafana/grafana-operator
+          GRAFANA_OPERATOR_VERSION: v5.24.0
+          # renovate: datasource=github-releases depName=prometheus-operator/prometheus-operator
+          PROMETHEUS_OPERATOR_VERSION: v0.94.1
+          # openshift/api publishes no releases; pinned to a commit on master.
+          OPENSHIFT_API_REF: 03ac57f9648604bea9665391d6f4de5d8545db38
+          # renovate: datasource=github-releases depName=kubernetes-sigs/secrets-store-csi-driver
+          SECRETS_STORE_CSI_VERSION: v1.6.1
+          # renovate: datasource=github-releases depName=vmware-tanzu/velero
+          VELERO_VERSION: v1.18.3
+          # renovate: datasource=github-releases depName=kubernetes-sigs/gateway-api
+          GATEWAY_API_VERSION: v1.6.2
+        run: |
+          set -euo pipefail
+
+          crds=(
+            "https://raw.githubusercontent.com/kubernetes/autoscaler/vertical-pod-autoscaler-${VPA_VERSION}/vertical-pod-autoscaler/deploy/vpa-v1-crd-gen.yaml"
+            "https://raw.githubusercontent.com/bitnami-labs/sealed-secrets/${SEALED_SECRETS_VERSION}/helm/sealed-secrets/crds/bitnami.com_sealedsecrets.yaml"
+            "https://github.com/cert-manager/cert-manager/releases/download/${CERT_MANAGER_VERSION}/cert-manager.crds.yaml"
+            "https://raw.githubusercontent.com/stakater/IngressMonitorController/${INGRESS_MONITOR_CONTROLLER_VERSION}/config/crd/bases/endpointmonitor.stakater.com_endpointmonitors.yaml"
+            "https://raw.githubusercontent.com/external-secrets/external-secrets/${EXTERNAL_SECRETS_VERSION}/deploy/crds/bundle.yaml"
+            "https://raw.githubusercontent.com/stakater/Forecastle/${FORECASTLE_VERSION}/deployments/kubernetes/chart/forecastle/crds/forecastleApp.yaml"
+            "https://github.com/grafana/grafana-operator/releases/download/${GRAFANA_OPERATOR_VERSION}/crds.yaml"
+            "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/${PROMETHEUS_OPERATOR_VERSION}/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml"
+            "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/${PROMETHEUS_OPERATOR_VERSION}/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml"
+            "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/${PROMETHEUS_OPERATOR_VERSION}/example/prometheus-operator-crd/monitoring.coreos.com_alertmanagerconfigs.yaml"
+            "https://raw.githubusercontent.com/openshift/api/${OPENSHIFT_API_REF}/route/v1/zz_generated.crd-manifests/routes.crd.yaml"
+            "https://raw.githubusercontent.com/kubernetes-sigs/secrets-store-csi-driver/${SECRETS_STORE_CSI_VERSION}/deploy/secrets-store.csi.x-k8s.io_secretproviderclasses.yaml"
+            "https://raw.githubusercontent.com/vmware-tanzu/velero/${VELERO_VERSION}/config/crd/v1/bases/velero.io_backups.yaml"
+            "https://github.com/kubernetes-sigs/gateway-api/releases/download/${GATEWAY_API_VERSION}/standard-install.yaml"
+          )
+
+          # Server-side apply: some CRDs exceed the last-applied annotation size limit.
+          for url in "${crds[@]}"; do
+            echo "::group::$url"
+            kubectl apply --server-side -f "$url"
+            echo "::endgroup::"
+          done
+
+          kubectl wait --for=condition=Established --all crd --timeout=120s
+
+      - name: Render CRD profile
+        run: .github/scripts/helm-template-cluster.sh rendered-crds.yaml ci/values.yaml ci/values-crds.yaml
+
+      - name: Validate CRD profile
+        run: |
+          # Some resources declare their own namespace (Velero backups live in
+          # the Velero namespace). Create every namespace the render mentions
+          # so the server-side dry run can resolve them, and rely on the
+          # context namespace for the rest instead of --namespace, which
+          # rejects objects whose namespace differs.
+          grep -E '^\s+namespace: ' rendered-crds.yaml \
+            | awk '{ print $2 }' | tr -d '"' | sort -u \
+            | while read -r ns; do
+                kubectl create namespace "$ns" --dry-run=client -o yaml | kubectl apply -f -
+              done
+          kubectl config set-context --current --namespace "$TEST_NAMESPACE"
+          kubectl apply \
+            --dry-run=server \
+            -f rendered-crds.yaml

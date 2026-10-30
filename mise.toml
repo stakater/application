@@ -1,5 +1,5 @@
 [tools]
-prek = "0.5.6"
+prek = "0.5.9"
 helm = "4.3.1"
 helm-docs = "1.14.2"
 "github:dadav/helm-schema" = "0.24.0"

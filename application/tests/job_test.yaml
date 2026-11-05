@@ -133,7 +133,7 @@ tests:
           path: spec.activeDeadlineSeconds
           value: 0
 
-  - it: includes startingDeadlineSeconds when set to 0
+  - it: does not render startingDeadlineSeconds because Job spec does not support it
     set:
       job:
         enabled: true
@@ -144,34 +144,8 @@ tests:
               tag: example-tag
             startingDeadlineSeconds: 0
     asserts:
-      - isNotNull:
+      - notExists:
           path: spec.startingDeadlineSeconds
-      - equal:
-          path: spec.startingDeadlineSeconds
-          value: 0
-
-  - it: includes both activeDeadlineSeconds and startingDeadlineSeconds when set to 0
-    set:
-      job:
-        enabled: true
-        jobs:
-          example:
-            image:
-              repository: example-registry/example-image
-              tag: example-tag
-            activeDeadlineSeconds: 0
-            startingDeadlineSeconds: 0
-    asserts:
-      - isNotNull:
-          path: spec.activeDeadlineSeconds
-      - equal:
-          path: spec.activeDeadlineSeconds
-          value: 0
-      - isNotNull:
-          path: spec.startingDeadlineSeconds
-      - equal:
-          path: spec.startingDeadlineSeconds
-          value: 0
 
   - it: includes activeDeadlineSeconds when set to positive integer
     set:

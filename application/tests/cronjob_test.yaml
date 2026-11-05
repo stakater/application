@@ -133,7 +133,7 @@ tests:
           path: spec.jobTemplate.spec.activeDeadlineSeconds
           value: 0
 
-  - it: includes startingDeadlineSeconds when set to 0
+  - it: includes startingDeadlineSeconds in the CronJob spec when set to 0
     set:
       cronJob:
         enabled: true
@@ -145,10 +145,12 @@ tests:
             startingDeadlineSeconds: 0
     asserts:
       - isNotNull:
-          path: spec.jobTemplate.spec.startingDeadlineSeconds
+          path: spec.startingDeadlineSeconds
       - equal:
-          path: spec.jobTemplate.spec.startingDeadlineSeconds
+          path: spec.startingDeadlineSeconds
           value: 0
+      - notExists:
+          path: spec.jobTemplate.spec.startingDeadlineSeconds
 
   - it: includes both activeDeadlineSeconds and startingDeadlineSeconds when set to 0
     set:
@@ -168,9 +170,9 @@ tests:
           path: spec.jobTemplate.spec.activeDeadlineSeconds
           value: 0
       - isNotNull:
-          path: spec.jobTemplate.spec.startingDeadlineSeconds
+          path: spec.startingDeadlineSeconds
       - equal:
-          path: spec.jobTemplate.spec.startingDeadlineSeconds
+          path: spec.startingDeadlineSeconds
           value: 0
 
   - it: includes activeDeadlineSeconds when set to positive integer

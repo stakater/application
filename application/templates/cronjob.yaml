@@ -38,11 +38,11 @@ spec:
 {{- if $job.failedJobsHistoryLimit }}
   failedJobsHistoryLimit: {{ $job.failedJobsHistoryLimit }}
 {{ end }}
+  {{- if not (kindIs "invalid" $job.startingDeadlineSeconds) }}
+  startingDeadlineSeconds: {{ $job.startingDeadlineSeconds }}
+  {{- end }}
   jobTemplate:
     spec:
-      {{- if not (kindIs "invalid" $job.startingDeadlineSeconds) }}
-      startingDeadlineSeconds: {{ $job.startingDeadlineSeconds }}
-      {{- end }}
       {{- if not (kindIs "invalid" $job.activeDeadlineSeconds) }}
       activeDeadlineSeconds: {{ $job.activeDeadlineSeconds }}
       {{- end }}

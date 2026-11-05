@@ -20,9 +20,6 @@ metadata:
   name: {{ printf "%s-%s" (include "application.name" $) $name | trunc 63 | trimSuffix "-" }}
   namespace: {{ template "application.namespace" $ }}
 spec:
-  {{- if not (kindIs "invalid" $job.startingDeadlineSeconds) }}
-  startingDeadlineSeconds: {{ $job.startingDeadlineSeconds }}
-  {{- end }}
   {{- if not (kindIs "invalid" $job.activeDeadlineSeconds) }}
   activeDeadlineSeconds: {{ $job.activeDeadlineSeconds }}
   {{- end }}

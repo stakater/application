@@ -213,6 +213,7 @@ deployment:
       protocol: TCP
   hostNetwork: true
   terminationGracePeriodSeconds: 120
+  minReadySeconds: 10
   lifecycle:
     preStop:
       exec:

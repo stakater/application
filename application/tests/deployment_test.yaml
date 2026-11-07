@@ -394,3 +394,27 @@ tests:
           content:
             name: sidecar
           any: true
+  - it: renders minReadySeconds on the Deployment spec
+    set:
+      deployment.minReadySeconds: 10
+    asserts:
+      - equal:
+          path: spec.minReadySeconds
+          value: 10
+      - notExists:
+          path: spec.template.spec.minReadySeconds
+
+  - it: renders minReadySeconds when set to 0
+    set:
+      deployment.minReadySeconds: 0
+    asserts:
+      - equal:
+          path: spec.minReadySeconds
+          value: 0
+
+  - it: does not render minReadySeconds by default
+    asserts:
+      - notExists:
+          path: spec.minReadySeconds
+      - notExists:
+          path: spec.template.spec.minReadySeconds
